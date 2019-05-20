@@ -1,0 +1,152 @@
+﻿@page
+@model BsslProcurement.Pages.Staff.WPSetupModel
+@{
+    ViewData["Title"] = "Workflow Process Setup";
+}
+
+<div class="row mt-5">
+    <div class="col-md-1"></div>
+    <div class="col-md-10">
+        <form method="post" class="panel panel-login">
+            <div class="panel-heading">
+                <div class="row">
+                    <p class="header-text">@ViewData["Title"]</p>
+                </div>
+                <hr>
+            </div>
+            <div asp-validation-summary="All" class="text-danger"></div>
+            @*@if (!string.IsNullOrWhiteSpace(Model.Message))
+        {
+            <div class="alert alert-success alert-dismissible">@Model.Message</div>
+        }*@
+            <div class="form-group">
+                <label>Type : </label>
+                <select class="form-control-sm">
+                    <option>Approve Rating PV</option>
+                    <option>Approve Rating PV</option>
+                </select>
+                <button class="btn btn-outline-primary btn-sm"><i class="fas fa-search"></i></button>
+                <label class="ml-4"><input type="checkbox" /> Compulsory Requirement</label>
+            </div>
+            <div class="form-group">
+                <label>Process Name : </label>
+                <select class="form-control-sm">
+                    <option>Approve Rating PV</option>
+                    <option>Approve Rating PV</option>
+                </select>
+                <label class="ml-4"><input type="checkbox" /> Suspend Approval</label>
+                <label class="ml-4"><input type="checkbox" /> Delete Approval</label>
+            </div>
+            <div class="form-group">
+                <label>Authorizer/Approver ID : </label>
+                <input class="form-control-sm" />
+                <button class="btn btn-outline-primary btn-sm"><i class="fas fa-search"></i></button>
+                <input class="form-control-sm ml-4" readonly="readonly"/>
+                <label class="ml-4"><input type="checkbox" /> Must Approve (<i>Also check this for final approval process</i>)</label>
+            </div>
+            <div class="form-group">
+                <label>Authorizer/Approver ID 2 : </label>
+                <input class="form-control-sm" />
+                <button class="btn btn-outline-primary btn-sm"><i class="fas fa-search"></i></button>
+                <input class="form-control-sm ml-4" readonly="readonly"/>
+            </div>
+
+            <div class="row">
+                <div class="col-sm-6">
+                    <div class="form-group">
+                        <label>Approval Limits :</label>
+                        <input class="form-control-sm" placeholder="0.00" />
+                    </div>
+                </div>
+                <div class="col-sm-6">
+                    <div class="form-group">
+                        <label>Authorization Limits :</label>
+                        <input class="form-control-sm" placeholder="0.00" />
+                    </div>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <div class="row">
+                    <div class="col-sm-4">
+                        <button type="submit" class="btn form-btn">Save</button>
+                    </div>
+                    <div class="col-sm-4">
+                        <button type="submit" class="btn form-btn">Add New</button>
+                    </div>
+                    <div class="col-sm-4">
+                        <button type="submit" class="btn form-btn">Reset</button>
+                    </div>
+                </div>
+            </div>
+
+            <hr />
+
+            <div class="col-12">
+                <table class="table table-responsive table-striped">
+                    <thead>
+                        <tr class="table-primary">
+                            <th>Select</th>
+                            <th>S/N</th>
+                            <th>Type</th>
+                            <th>Authorizer/<br />Approver ID</th>
+                            <th>Name</th>
+                            <th>Approval Limit</th>
+                            <th>Suspended</th>
+                            <th>Must<br />Approve</th>
+                            <th></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><input type="checkbox" checked /></td>
+                            <td>1</td>
+                            <td></td>
+                            <td>03245</td>
+                            <td>ADAMU HARUNA JOHN</td>
+                            <td>10000.00</td>
+                            <td><input type="checkbox" /></td>
+                            <td><input type="checkbox" checked /></td>
+                            <td><button class="btn btn-outline-primary">Delete</button></td>
+                        </tr>
+
+                        <tr>
+                            <td><input type="checkbox" /></td>
+                            <td>2</td>
+                            <td>Approve Rating PV</td>
+                            <td>05883</td>
+                            <td>ADAMU HARUNA JOHN</td>
+                            <td>19988.00</td>
+                            <td><input type="checkbox" /></td>
+                            <td><input type="checkbox" /></td>
+                            <td><button class="btn btn-outline-primary">Delete</button></td>
+                        </tr>
+
+                        <tr>
+                            <td><input type="checkbox" /></td>
+                            <td>3</td>
+                            <td></td>
+                            <td>23248</td>
+                            <td>ADAMU HARUNA JOHN</td>
+                            <td>30998.00</td>
+                            <td><input type="checkbox" /></td>
+                            <td><input type="checkbox" /></td>
+                            <td><button class="btn btn-outline-primary">Delete</button></td>
+                        </tr>
+                    </tbody>
+                </table>
+
+
+            </div>
+
+            <div class="form-group">
+                <div class="row">
+                    <div class="col-sm-3"> </div>
+                    <div class="col-sm-6 col-sm-offset-3">
+                        <button type="submit" class="btn form-btn">Save</button>
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>

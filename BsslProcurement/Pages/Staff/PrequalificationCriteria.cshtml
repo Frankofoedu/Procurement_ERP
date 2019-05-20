@@ -1,0 +1,106 @@
+﻿@page
+@model BsslProcurement.Pages.Staff.PrequalificationCriteriaModel
+@{
+    ViewData["Title"] = "Setup Pre-qualification Verification Criteria";
+}
+
+<div class="row mt-5">
+    <div class="col-md-1"></div>
+    <div class="col-md-10">
+        <form method="post" class="panel panel-login">
+            <div class="panel-heading">
+                <div class="row">
+                    <p class="header-text">@ViewData["Title"]</p>
+                </div>
+                <hr>
+            </div>
+            <div asp-validation-summary="All" class="text-danger"></div>
+            @*@if (!string.IsNullOrWhiteSpace(Model.Message))
+        {
+            <div class="alert alert-success alert-dismissible">@Model.Message</div>
+        }*@
+            <div class="row">
+                <div class="col-sm-6">
+                    <div class="form-group">
+                        <label>Criteria Code</label>
+                        <input class="form-control-sm" placeholder="Enter Criteria Code" />
+                        <button class="btn btn-outline-primary btn-sm"><i class="fas fa-search"></i></button>
+                        <label><input type="checkbox" /> Compulsory Requirement</label>
+                    </div>
+                </div>
+                <div class="col-sm-6">
+                    <div class="form-group">
+                        <label>Criteria Description</label>
+                        <input class="form-control-sm" placeholder="Enter Criteria Description" />
+                        <label><input type="checkbox" /> Use for Document</label>
+                    </div>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <div class="row">
+                    <div class="col-sm-3"> </div>
+                    <div class="col-sm-6">
+                        <button type="submit" class="btn form-btn">Add Criteria</button>
+                    </div>
+                </div>
+            </div>
+
+            <hr />
+
+            <div class="col-12">
+                <table class="table table-responsive table-striped">
+                    <thead>
+                        <tr class="table-primary">
+                            <th>S/N</th>
+                            <th>Criteria<br />Code</th>
+                            <th>Criteria Description</th>
+                            <th>Compulsory<br />Requirement</th>
+                            <th>Use of <br />Document</th>
+                            <th>Min Value</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>1</td>
+                            <td>001</td>
+                            <td>Total Annual Payroll</td>
+                            <td><input type="checkbox" checked /></td>
+                            <td><input type="checkbox" /></td>
+                            <td><input class="form-control-sm" /></td>
+                        </tr>
+
+                        <tr>
+                            <td>2</td>
+                            <td>002</td>
+                            <td>Companys Staff Strength</td>
+                            <td><input type="checkbox" /></td>
+                            <td><input type="checkbox" checked /></td>
+                            <td><input class="form-control-sm" /></td>
+                        </tr>
+
+                        <tr>
+                            <td>3</td>
+                            <td>003</td>
+                            <td>Companys Audited Account for paarticular year</td>
+                            <td><input type="checkbox" /></td>
+                            <td><input type="checkbox" checked /></td>
+                            <td><input class="form-control-sm" /></td>
+                        </tr>
+                    </tbody>
+                </table>
+
+
+            </div>
+
+            <div class="form-group">
+                <div class="row">
+                    <div class="col-sm-3"> </div>
+                    <div class="col-sm-6 col-sm-offset-3">
+                        <button type="submit" class="btn form-btn">Save</button>
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>

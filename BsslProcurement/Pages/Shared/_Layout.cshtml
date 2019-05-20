@@ -1,0 +1,145 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>@ViewData["Title"] - BsslProcurement</title>
+
+    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.css" />
+    <link rel="stylesheet" href="~/css/site.css" />
+    <link href="~/lib/font-awesome/css/all.css" rel="stylesheet">
+    <link href="~/lib/jquery/dist/jquery.mCustomScrollbar.min.css" rel="stylesheet" />
+    <link href="~/lib/jqueryui/themes/ui-lightness/jquery-ui.css" rel="stylesheet" />
+
+
+    <script src="~/lib/jquery/dist/jquery.js"></script>
+</head>
+<body>
+
+    <div class="wrapper" style="transform: none !important;">
+
+        <!---- Sidebar ---->
+        <nav id="sidebar" style="transform: none !important;">
+            <div class="sidebar-header">
+                <h3>DcProcurement</h3>
+            </div>
+
+            <ul class="list-unstyled components">
+
+                <li class="active mt-5">
+                    <a href="#projectSubmenu" data-toggle="collapse" aria-expanded="true" class="dropdown-toggle">
+                        <i class="fas fa-cog mr-1"></i> Setting
+                    </a>
+                    <ul class="collapse list-unstyled" id="projectSubmenu">
+                        <li>
+                            <a href="#"><i class="fas fa-file-contract mr-1"></i> Upload and Download T/C</a>
+                        </li>
+                        <li>
+                            <a href="#"><i class="fas fa-list-alt mr-1"></i> Purchase Category Setup</a>
+                        </li>
+                        <li>
+                            <a href="#"><i class="fas fa-list-alt mr-1"></i> Source of Order</a>
+                        </li>
+                        <li>
+                            <a href="#"><i class="fas fa-sort-numeric-up mr-1"></i> Setup LPO Numbering</a>
+                        </li>
+                        <li>
+                            <a href="#"><i class="fas fa-file mr-1"></i> Tutorial Form</a>
+                        </li>
+                    </ul>
+                </li>
+                <li>
+                    <a href="" data-toggle="modal" data-target="#AnalysisList"> <i class="fas fa-chart-pie mr-1"></i> Purchase Requisition</a>
+                </li>
+                <li>
+                    <a href="" data-toggle="modal" data-target="#PostList"> <i class="fas fa-comment mr-1"></i> Purchase Order</a>
+                </li>
+                <li>
+                    <a href="#accountSubmenu" data-toggle="collapse" aria-expanded="true" class="dropdown-toggle">
+                        <i class="fas fa-file-alt mr-1"></i> Reports/Inquiry
+                    </a>
+                    <ul class="collapse list-unstyled" id="accountSubmenu">
+                        <li>
+                            <a href="#"><i class="fas fa-file-archive mr-1"></i> Procurement Report</a>
+                        </li>
+                        <li>
+                            <a href="#"><i class="fas fa-file-invoice mr-1"></i> PR Inquiry Form</a>
+                        </li>
+                    </ul>
+                </li>
+                <li>
+                    <a href="#pagesSubmenu" data-toggle="collapse" aria-expanded="true" class="dropdown-toggle">
+                        <i class="fas fa-file-alt mr-1"></i> Pages
+                    </a>
+                    <ul class="collapse list-unstyled" id="pagesSubmenu">
+                        <li>
+                            <a asp-page="/Staff/BCSetup"><i class="fas fa-file-archive mr-1"></i> B C Setup</a>
+                        </li>
+                        <li>
+                            <a asp-page="/Staff/CCSG"><i class="fas fa-file-invoice mr-1"></i> CCSG</a>
+                        </li>
+                        <li>
+                            <a asp-page="/Staff/PrequalificationCriteria"><i class="fas fa-file-archive mr-1"></i> Pre-qualification Criteria</a>
+                        </li>
+                        <li>
+                            <a asp-page="/Staff/ProPolicy"><i class="fas fa-file-invoice mr-1"></i> Procurement Policy</a>
+                        </li>
+                        <li>
+                            <a asp-page="/Staff/PSISS"><i class="fas fa-file-invoice mr-1"></i> PSISS</a>
+                        </li>
+                        <li>
+                            <a asp-page="/Staff/WorkForce"><i class="fas fa-file-archive mr-1"></i> Work Force</a>
+                        </li>
+                        <li>
+                            <a asp-page="/Staff/WPSetup"><i class="fas fa-file-invoice mr-1"></i> W P Setup</a>
+                        </li>
+                    </ul>
+                </li>
+            </ul>
+        </nav>
+        <!----End Sidebar ---->
+        <button type="button" id="sidebarCollapse" class="navbar-btn">
+            <span></span>
+            <span></span>
+            <span></span>
+        </button>
+
+        <div id="content" class="container-fluid">
+            <nav id="navbar" class="navbar navbar-expand-lg navbar-light bg-white">
+                <div class="container-fluid">
+                    <button class="btn btn-dark d-inline-block d-lg-none ml-auto" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+                        <i class="fas fa-bars"></i>
+                    </button>
+                    <div class="collapse navbar-collapse w-100" id="navbarSupportedContent">
+                        <ul class="nav navbar-nav ml-auto">
+                            <li class="nav-item mr-2">
+                                <a href="#">Login</a>
+                            </li>
+                            <li class="nav-item mr-2">
+                                <a href="#">Register</a>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </nav>
+            <div class="container-fluid">
+                @RenderBody()
+            </div>
+            <hr />
+            <footer>
+                <p>&copy; 2018 - INSYT</p>
+            </footer>
+        </div>
+
+    </div>
+
+
+    <script src="~/lib/popper/popper.js"></script>
+    <script src="~/lib/bootstrap/dist/js/bootstrap.js"></script>
+    <script src="~/js/site.js" asp-append-version="true"></script>
+    <script src="~/lib/jquery/dist/jquery.mCustomScrollbar.concat.min.js"></script>
+    <script src="~/lib/jqueryui/jquery-ui.min.js"></script>
+
+    @RenderSection("Scripts", required: false)
+</body>
+</html>

@@ -1,0 +1,46 @@
+﻿@page
+@model BsslProcurement.Pages.Staff.WorkForceModel
+@{
+    ViewData["Title"] = "Work Force";
+}
+
+<div class="row mt-5">
+    <div class="col-md-3"></div>
+    <div class="col-md-6 my-5">
+        <form method="post" class="panel panel-login">
+            <div class="panel-heading">
+                <div class="row">
+                    <p class="header-text">Work Force/Decision Category Setup</p>
+                </div>
+                <hr>
+            </div>
+            <div asp-validation-summary="All" class="text-danger"></div>
+            @*@if (!string.IsNullOrWhiteSpace(Model.Message))
+        {
+            <div class="alert alert-success alert-dismissible">@Model.Message</div>
+        }*@
+
+            <div class="form-group">
+                <label>Category Code : </label>
+                <input class="form-control-sm" />
+                <button class="btn btn-outline-primary btn-sm"><i class="fas fa-search"></i></button>
+            </div>
+            <div class="form-group">
+                <label>Description</label>
+                <input class="form-control" />
+            </div>
+            <div class="form-group">
+                <label>Order No. &nbsp;&nbsp;&nbsp; :</label>
+                <input type="number" class="form-control-sm" />
+            </div>
+            <div class="form-group">
+                <div class="row">
+                    <div class="col-sm-3"> </div>
+                    <div class="col-sm-6 col-sm-offset-3">
+                        <button type="submit" class="btn form-btn">Save</button>
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>

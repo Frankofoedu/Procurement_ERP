@@ -1,0 +1,55 @@
+﻿@page
+@model BsslProcurement.Pages.Staff.ProPolicyModel
+@{
+    ViewData["Title"] = "Procurement Policy";
+}
+
+<div class="row mt-5">
+    <div class="col-md-3"></div>
+    <div class="col-md-6 my-5">
+        <form method="post" class="panel panel-login">
+            <div class="panel-heading">
+                <div class="row">
+                    <p class="header-text">@ViewData["Title"]</p>
+                </div>
+                <hr>
+            </div>
+            <div asp-validation-summary="All" class="text-danger"></div>
+            @*@if (!string.IsNullOrWhiteSpace(Model.Message))
+                {
+                    <div class="alert alert-success alert-dismissible">@Model.Message</div>
+                }*@
+            <div class="form-group">
+                <input type="checkbox" class="checkbox" />
+                Application for prequalification can only submit for maximum of
+                <input class="form-control-sm" />
+                category of contract.
+                @*<span asp-validation-for="Input.AccountName" class="text-danger"></span>*@
+            </div>
+            <div class="form-group">
+                <label>Prequalification submission opening date</label>
+                <input id="openingDate" class="form-control ml-1" placeholder="mm/dd/yyyy" style="width:160px" />
+            </div>
+            <div class="form-group">
+                <label>Prequalification submission closing date</label>
+                <input id="closingDate" class="form-control ml-1" placeholder="mm/dd/yyyy" style="width:160px" />
+            </div>
+            <div class="form-group">
+                <div class="row">
+                    <div class="col-sm-3"> </div>
+                    <div class="col-sm-6 col-sm-offset-3">
+                        <button type="submit" class="btn form-btn">Save</button>
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+
+<script>
+
+    $(document).ready(function () {
+        $("#openingDate").datepicker();
+        $("#closingDate").datepicker();
+    });
+</script>
