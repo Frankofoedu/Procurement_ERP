@@ -9,6 +9,7 @@ namespace DcProcurement
            : base(options)
         { }
 
-
+        public DbSet<ProcurementGroup> ProcurementGroups { get; set; }
+        public DbSet<ProcurementItem> ProcurementItems { get; set; }
     }
 }
