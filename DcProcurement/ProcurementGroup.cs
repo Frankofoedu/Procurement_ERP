@@ -12,5 +12,6 @@ namespace DcProcurement
         public DateTime? OpeningDate { get; set; }
         public DateTime? ClosingDate { get; set; }
 
+        public ICollection<ProcurementItem> ProcurementItems { get; set; }
     }
 }

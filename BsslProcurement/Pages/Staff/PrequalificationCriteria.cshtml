@@ -3,6 +3,20 @@
 @{
     ViewData["Title"] = "Setup Pre-qualification Verification Criteria";
 }
+@if (!string.IsNullOrWhiteSpace(Model.Message))
+{
+    <div class="alert alert-success alert-dismissable fade show">
+        <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+        @Model.Message
+    </div>
+}
+@if (!string.IsNullOrWhiteSpace(Model.Error))
+{
+    <div class="alert alert-danger alert-dismissable fade show">
+        <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+        @Model.Error
+    </div>
+}
 
 <div class="row mt-5">
     <div class="col-md-1"></div>
@@ -15,24 +29,34 @@
                 <hr>
             </div>
             <div asp-validation-summary="All" class="text-danger"></div>
-            @*@if (!string.IsNullOrWhiteSpace(Model.Message))
-        {
-            <div class="alert alert-success alert-dismissible">@Model.Message</div>
-        }*@
+
+            <input type="hidden" asp-for="itemId" />
+
             <div class="row">
                 <div class="col-sm-6">
                     <div class="form-group">
-                        <label>Criteria Code</label>
-                        <input class="form-control-sm" placeholder="Enter Criteria Code" />
-                        <button class="btn btn-outline-primary btn-sm"><i class="fas fa-search"></i></button>
-                        <label><input type="checkbox" /> Compulsory Requirement</label>
+                        <label>Criteria Description</label>
+                        <input class="form-control" placeholder="Enter Criteria Description" asp-for="ProcurementCriteria.CriteriaDescription" />
+                    </div>
+                    <div class="form-group">
+                        <div class="form-check-inline btn btn-outline-primary">
+                            <label class="form-check-label">
+                                <input asp-for="ProcurementCriteria.isCompulsory" type="checkbox" class="form-check-input"> Is Compulsory Requirement
+                            </label>
+                        </div>
                     </div>
                 </div>
                 <div class="col-sm-6">
                     <div class="form-group">
-                        <label>Criteria Description</label>
-                        <input class="form-control-sm" placeholder="Enter Criteria Description" />
-                        <label><input type="checkbox" /> Use for Document</label>
+                        <label>Minimum Value</label>
+                        <input class="form-control" type="number" asp-for="ProcurementCriteria.MinValue" />
+                    </div>
+                    <div class="form-group">
+                        <div class="form-check-inline btn btn-outline-primary">
+                            <label class="form-check-label">
+                                <input asp-for="ProcurementCriteria.NeedsDocument" type="checkbox" class="form-check-input"> Request Document
+                            </label>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -45,62 +69,53 @@
                     </div>
                 </div>
             </div>
+        </form>
 
-            <hr />
+        <hr />
 
-            <div class="col-12">
-                <table class="table table-responsive table-striped">
-                    <thead>
-                        <tr class="table-primary">
-                            <th>S/N</th>
-                            <th>Criteria<br />Code</th>
-                            <th>Criteria Description</th>
-                            <th>Compulsory<br />Requirement</th>
-                            <th>Use of <br />Document</th>
-                            <th>Min Value</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr>
-                            <td>1</td>
-                            <td>001</td>
-                            <td>Total Annual Payroll</td>
-                            <td><input type="checkbox" checked /></td>
-                            <td><input type="checkbox" /></td>
-                            <td><input class="form-control-sm" /></td>
-                        </tr>
+        <div class="col-12">
+            <table class="table table-responsive table-striped">
+                <thead>
+                    <tr class="table-primary">
+                        <th>S/N</th>
+                        <th>Criteria Description</th>
+                        <th>Is <br />Compulsory?</th>
+                        <th>Use <br />Document</th>
+                        <th>Min <br />Value</th>
+                        <th></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @for (int i = 0; i < Model.ProcurementCriterias.Count; i++)
+                    {
+                        var item = Model.ProcurementCriterias[i];
 
                         <tr>
-                            <td>2</td>
-                            <td>002</td>
-                            <td>Companys Staff Strength</td>
-                            <td><input type="checkbox" /></td>
-                            <td><input type="checkbox" checked /></td>
-                            <td><input class="form-control-sm" /></td>
+                            <td>@(i + 1)</td>
+                            <td>@item.CriteriaDescription</td>
+                            <td>@item.isCompulsory</td>
+                            <td>@item.NeedsDocument</td>
+                            <td>@item.MinValue</td>
+                            <td>
+                                <a asp-page="./PrequalificationCriteria" asp-route-id="@Model.itemId" asp-route-delId="@item.Id" class="btn btn-outline-danger" data-toggle="tooltip" title="Delete Criteria">
+                                    Delete
+                                </a>
+                            </td>
                         </tr>
 
-                        <tr>
-                            <td>3</td>
-                            <td>003</td>
-                            <td>Companys Audited Account for paarticular year</td>
-                            <td><input type="checkbox" /></td>
-                            <td><input type="checkbox" checked /></td>
-                            <td><input class="form-control-sm" /></td>
-                        </tr>
-                    </tbody>
-                </table>
+                    }
 
+                </tbody>
+            </table>
+        </div>
 
-            </div>
-
-            <div class="form-group">
-                <div class="row">
-                    <div class="col-sm-3"> </div>
-                    <div class="col-sm-6 col-sm-offset-3">
-                        <button type="submit" class="btn form-btn">Save</button>
-                    </div>
+        <div class="form-group">
+            <div class="row">
+                <div class="col-sm-3"> </div>
+                <div class="col-sm-6 col-sm-offset-3">
+                    <button type="submit" class="btn form-btn">Save</button>
                 </div>
             </div>
-        </form>
+        </div>
     </div>
 </div>

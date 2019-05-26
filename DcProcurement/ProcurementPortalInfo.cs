@@ -4,7 +4,7 @@ using System.Text;
 
 namespace DcProcurement
 {
-    class ProcurementPortalInfo
+    public class ProcurementPortalInfo
     {
         public int Id { get; set; }
         public string PortalName { get; set; }

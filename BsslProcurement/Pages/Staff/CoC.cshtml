@@ -1,7 +1,7 @@
 ﻿@page
-@model BsslProcurement.Pages.Staff.CCSGModel
+@model BsslProcurement.Pages.Staff.CoCModel
 @{
-    ViewData["Title"] = "Contract Category Sub Group";
+    ViewData["Title"] = "Category of Contract";
 }
 
 <div class="row mt-5">
@@ -32,18 +32,13 @@
             }
 
             <div class="form-group">
-                <label>Category : </label>
-                <input readonly="readonly" class="form-control ml-1" asp-for="ContractSubcategory.ContractCategory.CategoryName" />
-            </div>
-            <div class="form-group">
-                <label>Subcategory Name : </label>
-                <input class="form-control ml-1" asp-for="ContractSubcategory.SubcategoryName" />
+                <label>Name : </label>
+                <input class="form-control ml-1" asp-for="ContractCategory.CategoryName" />
             </div>
             <div class="form-group">
                 <label>Description</label>
-                <textarea class="form-control ml-1" asp-for="ContractSubcategory.SubcategoryDescription"></textarea>
+                <textarea class="form-control ml-1" asp-for="ContractCategory.CategoryDescription"></textarea>
             </div>
-            <input type="hidden" asp-for="ContractSubcategory.ContractCategoryId" />
             <div class="form-group">
                 <div class="row">
                     <div class="col-sm-3"> </div>
@@ -57,13 +52,13 @@
 </div>
 
 
-<div class="row my-3">
+<div class="row mt-3">
     <div class="col-md-3"></div>
     <div class="col-md-6">
         <div class="panel panel-login">
             <div class="panel-heading">
                 <div class="row">
-                    <p class="header-text">@Model.ContractSubcategory.ContractCategory.CategoryName Subcategories</p>
+                    <p class="header-text">Category List</p>
                 </div>
                 <hr>
             </div>
@@ -79,16 +74,16 @@
                         </tr>
                     </thead>
                     <tbody>
-                        @for (int i = 0; i < Model.ContractSubcategories.Count; i++)
+                        @for (int i = 0; i < Model.ContractCategories.Count; i++)
                         {
-                            var item = Model.ContractSubcategories[i];
+                            var item = Model.ContractCategories[i];
                             <tr>
                                 <td>@(i + 1)</td>
-                                <td>@item.SubcategoryName</td>
-                                <td>@item.SubcategoryDescription</td>
+                                <td>@item.CategoryName</td>
+                                <td>@item.CategoryDescription</td>
                                 <td>
-                                    <a asp-page="./CCSG" asp-route-id="@Model.ContractSubcategory.Id" asp-route-delId="@item.Id" class="btn btn-outline-danger" data-toggle="tooltip" title="Delete Sub-category">
-                                        Delete
+                                    <a asp-page="./CCSG" asp-route-id="@item.Id" class="btn btn-outline-primary btn-sm" data-toggle="tooltip" title="Add and Edit Sub-categories">
+                                        Sub-Categories
                                     </a>
                                 </td>
                             </tr>

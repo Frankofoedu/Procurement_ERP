@@ -1,7 +1,7 @@
 ﻿@page
-@model BsslProcurement.Pages.Staff.CCSGModel
+@model BsslProcurement.Pages.Staff.ItemsModel
 @{
-    ViewData["Title"] = "Contract Category Sub Group";
+    ViewData["Title"] = "Procurement Items";
 }
 
 <div class="row mt-5">
@@ -32,18 +32,13 @@
             }
 
             <div class="form-group">
-                <label>Category : </label>
-                <input readonly="readonly" class="form-control ml-1" asp-for="ContractSubcategory.ContractCategory.CategoryName" />
-            </div>
-            <div class="form-group">
-                <label>Subcategory Name : </label>
-                <input class="form-control ml-1" asp-for="ContractSubcategory.SubcategoryName" />
+                <label>Item : </label>
+                <input class="form-control ml-1" asp-for="ProcurementItem.ItemName" />
             </div>
             <div class="form-group">
                 <label>Description</label>
-                <textarea class="form-control ml-1" asp-for="ContractSubcategory.SubcategoryDescription"></textarea>
+                <textarea class="form-control ml-1" asp-for="ProcurementItem.Description"></textarea>
             </div>
-            <input type="hidden" asp-for="ContractSubcategory.ContractCategoryId" />
             <div class="form-group">
                 <div class="row">
                     <div class="col-sm-3"> </div>
@@ -63,7 +58,7 @@
         <div class="panel panel-login">
             <div class="panel-heading">
                 <div class="row">
-                    <p class="header-text">@Model.ContractSubcategory.ContractCategory.CategoryName Subcategories</p>
+                    <p class="header-text">Ungrouped Items</p>
                 </div>
                 <hr>
             </div>
@@ -72,6 +67,7 @@
                 <table class="table table-responsive-sm table-striped">
                     <thead>
                         <tr class="table-primary">
+                            <th>Select</th>
                             <th>S/N</th>
                             <th>Name</th>
                             <th>Description</th>
@@ -79,16 +75,17 @@
                         </tr>
                     </thead>
                     <tbody>
-                        @for (int i = 0; i < Model.ContractSubcategories.Count; i++)
+                        @for (int i = 0; i < Model.ProcurementItems.Count; i++)
                         {
-                            var item = Model.ContractSubcategories[i];
+                            var item = Model.ProcurementItems[i];
                             <tr>
+                                <td><input type="checkbox" class="criteriaCheck" cid="@item.Id"/></td>
                                 <td>@(i + 1)</td>
-                                <td>@item.SubcategoryName</td>
-                                <td>@item.SubcategoryDescription</td>
+                                <td>@item.ItemName</td>
+                                <td>@item.Description</td>
                                 <td>
-                                    <a asp-page="./CCSG" asp-route-id="@Model.ContractSubcategory.Id" asp-route-delId="@item.Id" class="btn btn-outline-danger" data-toggle="tooltip" title="Delete Sub-category">
-                                        Delete
+                                    <a asp-page="./PrequalificationCriteria" asp-route-id="@item.Id" class="btn btn-outline-primary" data-toggle="tooltip" title="Manage Item Criteria">
+                                        Criteria
                                     </a>
                                 </td>
                             </tr>
