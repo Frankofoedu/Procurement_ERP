@@ -8,7 +8,7 @@ namespace DcProcurement
     public class ProcurementItem
     {
         public int Id { get; set; }
-        public int ProcurementGroupId { get; set; }
+        public int ProcurementGroupId { get; set; } = 0;
         [Required(ErrorMessage = "The item name field is required.")]
         public string ItemName { get; set; }
         public string Description { get; set; }

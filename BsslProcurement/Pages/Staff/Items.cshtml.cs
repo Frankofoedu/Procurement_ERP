@@ -37,6 +37,7 @@ namespace BsslProcurement.Pages.Staff
                 return;
             }
 
+            ProcurementItem.ProcurementGroupId = 0;
             ProcurementItem.DateAdded = DateTime.UtcNow;
 
             _context.ProcurementItems.Add(ProcurementItem);
