@@ -33,7 +33,7 @@
 
             <div class="form-group">
                 <label>Category : </label>
-                <input readonly="readonly" class="form-control ml-1" asp-for="ContractSubcategory.ContractCategory.CategoryName" />
+                <input readonly="readonly" class="form-control ml-1" value="@Model.ContractCategory.CategoryName" />
             </div>
             <div class="form-group">
                 <label>Subcategory Name : </label>
@@ -43,7 +43,7 @@
                 <label>Description</label>
                 <textarea class="form-control ml-1" asp-for="ContractSubcategory.SubcategoryDescription"></textarea>
             </div>
-            <input type="hidden" asp-for="ContractSubcategory.ContractCategoryId" />
+            <input type="hidden" asp-for="categoryId" />
             <div class="form-group">
                 <div class="row">
                     <div class="col-sm-3"> </div>
@@ -63,7 +63,7 @@
         <div class="panel panel-login">
             <div class="panel-heading">
                 <div class="row">
-                    <p class="header-text">@Model.ContractSubcategory.ContractCategory.CategoryName Subcategories</p>
+                    <p class="header-text">@Model.ContractCategory.CategoryName Subcategories</p>
                 </div>
                 <hr>
             </div>
@@ -87,7 +87,7 @@
                                 <td>@item.SubcategoryName</td>
                                 <td>@item.SubcategoryDescription</td>
                                 <td>
-                                    <a asp-page="./CCSG" asp-route-id="@Model.ContractSubcategory.Id" asp-route-delId="@item.Id" class="btn btn-outline-danger" data-toggle="tooltip" title="Delete Sub-category">
+                                    <a asp-page="./CCSG" asp-route-id="@Model.categoryId" asp-route-delId="@item.Id" class="btn btn-outline-danger" data-toggle="tooltip" title="Delete Sub-category">
                                         Delete
                                     </a>
                                 </td>

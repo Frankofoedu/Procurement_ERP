@@ -20,6 +20,9 @@ namespace BsslProcurement.Pages.Staff
 
         [BindProperty]
         public ContractSubcategory ContractSubcategory { get; set; }
+        [BindProperty]
+        public int categoryId { get; set; }
+        public ContractCategory ContractCategory { get; set; }
         public List<ContractSubcategory> ContractSubcategories { get; set; }
 
         public string Message { get; set; }
@@ -34,10 +37,12 @@ namespace BsslProcurement.Pages.Staff
             {
                 var subToDel = _context.ContractSubcategories.FirstOrDefault(k => k.Id == delId);
                 if (subToDel != null)
-                { _context.ContractSubcategories.Remove(subToDel); }
+                {
+                    _context.ContractSubcategories.Remove(subToDel);
+                    _context.SaveChanges();
+                }
             }
 
-            _context.SaveChanges();
 
             var category = _context.ContractCategories.Include(y => y.ContractSubcategories).FirstOrDefault(x => x.Id == id);
 
@@ -48,9 +53,8 @@ namespace BsslProcurement.Pages.Staff
 
             ContractSubcategories = category.ContractSubcategories.ToList();
 
-            ContractSubcategory = new ContractSubcategory();
-            ContractSubcategory.ContractCategory = category;
-            ContractSubcategory.ContractCategoryId = id.Value;
+            ContractCategory = category;
+            categoryId = id.Value;
 
             return Page();
         }
@@ -64,7 +68,7 @@ namespace BsslProcurement.Pages.Staff
             }
 
             var check = _context.ContractSubcategories.FirstOrDefault(x => x.ContractCategoryId == 
-                ContractSubcategory.ContractCategoryId && x.SubcategoryName == ContractSubcategory.SubcategoryName);
+                categoryId && x.SubcategoryName == ContractSubcategory.SubcategoryName);
 
             if (check != null)
             {
@@ -75,7 +79,7 @@ namespace BsslProcurement.Pages.Staff
             _context.ContractSubcategories.Add(ContractSubcategory);
             _context.SaveChanges();
 
-            var category = _context.ContractCategories.Include(y => y.ContractSubcategories).FirstOrDefault(x => x.Id == ContractSubcategory.ContractCategoryId);
+            var category = _context.ContractCategories.Include(y => y.ContractSubcategories).FirstOrDefault(x => x.Id == categoryId);
 
             if (category == null)
             {
@@ -84,9 +88,8 @@ namespace BsslProcurement.Pages.Staff
 
             ContractSubcategories = category.ContractSubcategories.ToList();
 
-            ContractSubcategory = new ContractSubcategory();
-            ContractSubcategory.ContractCategory = category;
-            ContractSubcategory.ContractCategoryId = category.Id;
+            ContractCategory = category;
+            categoryId = category.Id;
 
             Message = "Saved Successfully";
             return Page();

@@ -6,39 +6,82 @@
 
 <div class="row mt-5">
     <div class="col-md-3"></div>
-    <div class="col-md-6 my-5">
+    <div class="col-md-6">
+
         <form method="post" class="panel panel-login">
             <div class="panel-heading">
                 <div class="row">
-                    <p class="header-text">@ViewData["Title"]</p>
+                    <p class="header-text">Select Items to Publish</p>
                 </div>
                 <hr>
             </div>
+
+
+            <div id="tablediv" class="mt-1">
+                <table class="table table-responsive-sm table-striped">
+                    <thead>
+                        <tr class="table-primary">
+                            <th>Select</th>
+                            <th>S/N</th>
+                            <th>Name</th>
+                            <th>Description</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @for (int i = 0; i < Model.ProcurementItems.Count; i++)
+                        {
+                            var item = Model.ProcurementItems[i];
+                            <tr>
+                                <td>
+                                    <input type="checkbox" class="criteriaCheck" asp-for="ItemList[i].Selected"/>
+                                    <input type="hidden" asp-for="ItemList[i].ItemId" />
+                                </td>
+                                <td>@(i + 1)</td>
+                                <td>@item.ItemName</td>
+                                <td>@item.Description</td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+
+                <div class="form-group">
+                    <div class="row">
+                        <div class="col-sm-3"> </div>
+                        <div class="col-sm-6 col-sm-offset-3">
+                            <button id="btnGroupInfo" class="btn btn-outline-primary">Publish</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
             <div asp-validation-summary="All" class="text-danger"></div>
-            @*@if (!string.IsNullOrWhiteSpace(Model.Message))
-                {
-                    <div class="alert alert-success alert-dismissible">@Model.Message</div>
-                }*@
-            <div class="form-group">
-                <input type="checkbox" class="checkbox" />
-                Application for prequalification can only submit for maximum of
-                <input class="form-control-sm" />
-                category of contract.
-                @*<span asp-validation-for="Input.AccountName" class="text-danger"></span>*@
-            </div>
-            <div class="form-group">
-                <label>Prequalification submission opening date</label>
-                <input id="openingDate" class="form-control ml-1" placeholder="mm/dd/yyyy" style="width:160px" />
-            </div>
-            <div class="form-group">
-                <label>Prequalification submission closing date</label>
-                <input id="closingDate" class="form-control ml-1" placeholder="mm/dd/yyyy" style="width:160px" />
-            </div>
-            <div class="form-group">
-                <div class="row">
-                    <div class="col-sm-3"> </div>
-                    <div class="col-sm-6 col-sm-offset-3">
-                        <button type="submit" class="btn form-btn">Save</button>
+            <div id="groupInfo" class="row my-2 px-2" style="display:none">
+                <div class="form-group">
+                    <label>Title</label>
+                    <input class="form-control" asp-for="procurementGroup.GroupName" />
+                </div>
+                <div class="form-group">
+                    Application for prequalification can only submit for maximum of
+                    <input class="form-control-sm" type="number" asp-for="procurementGroup.NoOfCategory" />
+                    category of contract.
+                </div>
+                <div class="form-group">
+                    <label>Prequalification submission opening date</label>
+                    <input id="openingDate" asp-for="procurementGroup.OpeningDate" class="form-control ml-1" placeholder="mm/dd/yyyy" style="width:160px" />
+                </div>
+                <div class="form-group">
+                    <label>Prequalification submission closing date</label>
+                    <input id="closingDate" asp-for="procurementGroup.ClosingDate" class="form-control ml-1" placeholder="mm/dd/yyyy" style="width:160px" />
+                </div>
+                <div class="form-group">
+                    <div class="row">
+                        <div class="col-sm-3"> </div>
+                        <div class="col-sm-3">
+                            <button type="submit" class="btn btn-primary">Save</button>
+                        </div>
+                        <div class="col-sm-3">
+                            <button id="backBtn" class="btn btn-outline-primary">Back</button>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -47,9 +90,32 @@
 </div>
 
 <script>
-
     $(document).ready(function () {
+        checkShowBtn();
+
         $("#openingDate").datepicker();
         $("#closingDate").datepicker();
+        
+        $('.criteriaCheck').on('change', function () { checkShowBtn() });
+        $('#btnGroupInfo').on('click', function () { $('#btnGroupInfo').show(500); $('#tablediv').hide(500); });
+        $('#backBtn').on('click', function () { $('#btnGroupInfo').hide(500); $('#tablediv').show(500); });
     });
+
+    
+    function checkShowBtn() {
+        //Show or hide #btnGroupInfo.
+
+        var cBoxes = document.getElementsByClassName("criteriaCheck");
+        var allUnChecked = true;
+
+        for (var i = 0; i < cBoxes.length; i++) {
+            if (cBoxes[i].checked) {
+                allUnChecked = false;
+                break;
+            }
+        }
+
+        if (allUnChecked) { $('#btnGroupInfo').hide(500); }
+        else {$('#btnGroupInfo').show(500);}
+    }
 </script>
