@@ -55,24 +55,18 @@ namespace BsslProcurement.Pages.Staff
         {
             if (Image != null)
             {
-                var fileName = GetUniqueName(Image.FileName);
-                var uploads = Path.Combine(_hostingEnvironment.WebRootPath, "logo");
+                var fileName = Image.FileName;
+                var uploads = Path.Combine(_hostingEnvironment.WebRootPath, "uploads");
                 var filePath = Path.Combine(uploads, fileName);
                 Image.CopyTo(new FileStream(filePath, FileMode.Create));
 
 
-                return filePath;
+                return fileName;
             }
 
             return null;
         }
-        private string GetUniqueName(string fileName)
-        {
-            fileName = Path.GetFileName(fileName);
-            return Path.GetFileNameWithoutExtension(fileName)
-                   + "_" + Guid.NewGuid().ToString().Substring(0, 4)
-                   + Path.GetExtension(fileName);
-        }
+      
 
 
 
