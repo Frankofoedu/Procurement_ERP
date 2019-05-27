@@ -67,6 +67,7 @@ namespace BsslProcurement.Pages.Staff
                 return Page();
             }
 
+            ProcurementCriteria.ProcurementItemId = itemId;
             _context.ProcurementCriteria.Add(ProcurementCriteria);
             _context.SaveChanges();
 

@@ -4,14 +4,16 @@ using DcProcurement;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace BsslProcurement.Migrations
 {
     [DbContext(typeof(ProcurementDBContext))]
-    partial class ProcurementDBContextModelSnapshot : ModelSnapshot
+    [Migration("20190527100800_itemUpdate")]
+    partial class itemUpdate
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -104,7 +106,7 @@ namespace BsslProcurement.Migrations
                         .ValueGeneratedOnAdd()
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-                    b.Property<int?>("ContractSubcategoryId");
+                    b.Property<int>("ContractSubcategoryId");
 
                     b.Property<DateTime?>("DateAdded");
 
@@ -113,7 +115,7 @@ namespace BsslProcurement.Migrations
                     b.Property<string>("ItemName")
                         .IsRequired();
 
-                    b.Property<int?>("ProcurementGroupId");
+                    b.Property<int>("ProcurementGroupId");
 
                     b.HasKey("Id");
 
@@ -159,11 +161,13 @@ namespace BsslProcurement.Migrations
                 {
                     b.HasOne("DcProcurement.ContractSubcategory", "ContractSubcategory")
                         .WithMany("ProcurementItems")
-                        .HasForeignKey("ContractSubcategoryId");
+                        .HasForeignKey("ContractSubcategoryId")
+                        .OnDelete(DeleteBehavior.Cascade);
 
                     b.HasOne("DcProcurement.ProcurementGroup", "ProcurementGroup")
                         .WithMany("ProcurementItems")
-                        .HasForeignKey("ProcurementGroupId");
+                        .HasForeignKey("ProcurementGroupId")
+                        .OnDelete(DeleteBehavior.Cascade);
                 });
 #pragma warning restore 612, 618
         }

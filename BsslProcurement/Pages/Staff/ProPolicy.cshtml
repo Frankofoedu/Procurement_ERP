@@ -48,14 +48,14 @@
                     <div class="row">
                         <div class="col-sm-3"> </div>
                         <div class="col-sm-6 col-sm-offset-3">
-                            <button id="btnGroupInfo" class="btn btn-outline-primary">Publish</button>
+                            <button id="btnGroupInfo" class="btn form-btn">Publish</button>
                         </div>
                     </div>
                 </div>
             </div>
 
             <div asp-validation-summary="All" class="text-danger"></div>
-            <div id="groupInfo" class="row my-2 px-2" style="display:none">
+            <div id="groupInfo" class="my-2" style="display:none">
                 <div class="form-group">
                     <label>Title</label>
                     <input class="form-control" asp-for="procurementGroup.GroupName" />
@@ -69,18 +69,20 @@
                     <label>Prequalification submission opening date</label>
                     <input id="openingDate" asp-for="procurementGroup.OpeningDate" class="form-control ml-1" placeholder="mm/dd/yyyy" style="width:160px" />
                 </div>
-                <div class="form-group">
-                    <label>Prequalification submission closing date</label>
-                    <input id="closingDate" asp-for="procurementGroup.ClosingDate" class="form-control ml-1" placeholder="mm/dd/yyyy" style="width:160px" />
+                <div class="form-row">
+                    <div class="form-group">
+                        <label>Prequalification submission closing date</label>
+                        <input id="closingDate" asp-for="procurementGroup.ClosingDate" class="form-control ml-1" placeholder="mm/dd/yyyy" style="width:160px" />
+                    </div>
                 </div>
                 <div class="form-group">
                     <div class="row">
                         <div class="col-sm-3"> </div>
                         <div class="col-sm-3">
-                            <button type="submit" class="btn btn-primary">Save</button>
+                            <button type="submit" class="btn btn-primary w-100">Save</button>
                         </div>
                         <div class="col-sm-3">
-                            <button id="backBtn" class="btn btn-outline-primary">Back</button>
+                            <button id="backBtn" class="btn btn-outline-primary w-100">Back</button>
                         </div>
                     </div>
                 </div>
@@ -97,8 +99,8 @@
         $("#closingDate").datepicker();
         
         $('.criteriaCheck').on('change', function () { checkShowBtn() });
-        $('#btnGroupInfo').on('click', function () { $('#btnGroupInfo').show(500); $('#tablediv').hide(500); });
-        $('#backBtn').on('click', function () { $('#btnGroupInfo').hide(500); $('#tablediv').show(500); });
+        $('#btnGroupInfo').on('click', function (event) { event.preventDefault(); $('#groupInfo').show(500); $('#tablediv').hide(500); });
+        $('#backBtn').on('click', function (event) { event.preventDefault(); $('#groupInfo').hide(500); $('#tablediv').show(500); });
     });
 
     

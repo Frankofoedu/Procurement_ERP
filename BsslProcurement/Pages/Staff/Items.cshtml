@@ -35,6 +35,17 @@
                 <label>Item : </label>
                 <input class="form-control ml-1" asp-for="ProcurementItem.ItemName" />
             </div>
+
+            <div class="form-group">
+                <label class="control-label">Item Group :</label>
+                <select id="selectGroup" class="form-control" asp-items="ViewBag.GroupItems"></select>
+            </div>
+
+            <div class="form-group hidden">
+                <label class="control-label">Item Subgroup :</label>
+                <select id="selectSubgroup" asp-for="ProcurementItem.ContractSubcategoryId" class="form-control"></select>
+            </div>
+
             <div class="form-group">
                 <label>Description</label>
                 <textarea class="form-control ml-1" asp-for="ProcurementItem.Description"></textarea>
@@ -53,8 +64,8 @@
 
 
 <div class="row my-3">
-    <div class="col-md-3"></div>
-    <div class="col-md-6">
+    <div class="col-md-1"></div>
+    <div class="col-md-10">
         <div class="panel panel-login">
             <div class="panel-heading">
                 <div class="row">
@@ -100,3 +111,33 @@
 @section Scripts {
     @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
 }
+
+<script type="text/javascript">
+    var arrayOfSubCategories = JSON.parse('@Json.Serialize(Model.ContractSubcategories)');
+
+    $(document).ready(function () {
+        displaySubgroup();
+
+        $('#selectGroup').on('change', function () {
+            displaySubgroup();
+        });
+
+    });
+
+    function displaySubgroup() {
+        var selVal = $('#selectGroup').val();
+        $("#selectSubgroup").html("");
+
+
+        for (var i = 0; i < arrayOfSubCategories.length; i++) {
+            if (arrayOfSubCategories[i].contractCategoryId == selVal) {
+                
+                var o = new Option(arrayOfSubCategories[i].subcategoryName, arrayOfSubCategories[i].id);
+                /// jquerify the DOM object 'o' so we can use the html method
+                $(o).html(arrayOfSubCategories[i].subcategoryName);
+                $("#selectSubgroup").append(o);
+            }
+        }
+
+    }
+</script>

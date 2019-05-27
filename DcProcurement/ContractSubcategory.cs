@@ -14,5 +14,6 @@ namespace DcProcurement
         public string SubcategoryDescription { get; set; }
 
         public ContractCategory ContractCategory { get; set; }
+        public List<ProcurementItem> ProcurementItems { get; set; }
     }
 }

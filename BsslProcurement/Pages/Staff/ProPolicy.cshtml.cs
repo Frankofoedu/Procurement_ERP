@@ -35,7 +35,9 @@ namespace BsslProcurement.Pages.Staff
 
         public void OnGet()
         {
-            ProcurementItems = _context.ProcurementItems.Where(m=>m.ProcurementGroupId == 0).ToList();
+            ProcurementItems = _context.ProcurementItems.Where(m=>m.ProcurementGroupId == null).ToList();
+
+            ItemList = new List<inputItem>();
 
             foreach (var item in ProcurementItems)
             {

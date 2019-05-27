@@ -76,6 +76,8 @@ namespace BsslProcurement.Pages.Staff
                 return Page();
             }
 
+            ContractSubcategory.ContractCategoryId = categoryId;
+
             _context.ContractSubcategories.Add(ContractSubcategory);
             _context.SaveChanges();
 
@@ -90,6 +92,7 @@ namespace BsslProcurement.Pages.Staff
 
             ContractCategory = category;
             categoryId = category.Id;
+            ContractSubcategory = new ContractSubcategory();
 
             Message = "Saved Successfully";
             return Page();
