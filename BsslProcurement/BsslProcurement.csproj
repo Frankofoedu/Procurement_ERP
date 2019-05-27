@@ -14,4 +14,8 @@
     <ProjectReference Include="..\DcProcurement\DcProcurement.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="wwwroot\logo\" />
+  </ItemGroup>
+
 </Project>
