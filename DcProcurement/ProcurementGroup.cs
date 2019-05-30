@@ -8,9 +8,10 @@ namespace DcProcurement
     {
         public int Id { get; set; }
         public string GroupName { get; set; }
-        public int NoOfCategory { get; set; } = 0;
+        public int NoOfCategory { get; set; }
         public DateTime? OpeningDate { get; set; }
         public DateTime? ClosingDate { get; set; }
+        public DateTime? DateAdded { get; set; }
         public ICollection<ProcurementItem> ProcurementItems { get; set; }
     }
 }

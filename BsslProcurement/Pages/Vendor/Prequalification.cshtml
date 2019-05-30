@@ -1,0 +1,416 @@
+﻿@page
+@model BsslProcurement.Pages.Vendor.PrequalificationModel
+@{
+    ViewData["Title"] = "Prequalification";
+}
+@if (!string.IsNullOrWhiteSpace(Model.Message))
+{
+    <div class="alert alert-success alert-dismissable fade show">
+        <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+        @Model.Message
+    </div>
+}
+@if (!string.IsNullOrWhiteSpace(Model.Error))
+{
+    <div class="alert alert-danger alert-dismissable fade show">
+        <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+        @Model.Error
+    </div>
+}
+
+<div class="row mt-5">
+    <div class="col-md-1"></div>
+    <div class="col-md-10">
+        <form method="post" class="panel panel-login">
+            <div class="panel-heading">
+                <div class="row">
+                    <p class="header-text">Vendor Pre-qualification</p>
+                </div>
+                <hr>
+            </div>
+            <div asp-validation-summary="All" class="text-danger"></div>
+
+            <div class="row">
+                <div class="col-12">
+                    <h3 class="h3 bg-primary text-white px-3 py-1 mt-2 rounded">
+                        Company Details.
+                    </h3>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-sm-6">
+                    <div class="form-group">
+                        <label>Rc No/ITF No </label>
+                        <input class="form-control" placeholder="Enter Rc or ITF Number" />
+                    </div>
+                </div>
+                <div class="col-sm-6">
+                    <div class="form-group">
+                        <label>Company Name</label>
+                        <input class="form-control" placeholder="Enter Company Name" />
+                    </div>
+                </div>
+                <div class="col-sm-6">
+                    <div class="form-group">
+                        <label>Phone Number</label>
+                        <input class="form-control" placeholder="Enter ONE(1) Phone Number" />
+                    </div>
+                </div>
+                <div class="col-sm-6">
+                    <div class="form-group">
+                        <label>Email Address</label>
+                        <input class="form-control" placeholder="Enter ONE(1) Email Address" />
+                    </div>
+                </div>
+                <div class="col-sm-6">
+                    <div class="form-group">
+                        <label>Password</label>
+                        <input class="form-control" type="password" placeholder="Enter Password" />
+                    </div>
+                </div>
+                <div class="col-sm-6">
+                    <div class="form-group">
+                        <label>Confirm Password</label>
+                        <input class="form-control" type="password" placeholder="Repeat Password" />
+                    </div>
+                </div>
+                <div class="col-sm-12">
+                    <div class="form-group">
+                        <label>Company Address </label>
+                        <input class="form-control" placeholder="Enter Company Address" />
+                    </div>
+                </div>
+                <div class="col-sm-6">
+                    <div class="form-group">
+                        <label>Select State</label>
+                        <select class="form-control">
+                            <option>--Select--</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="col-sm-6">
+                    <div class="form-group">
+                        <label>City</label>
+                        <select class="form-control">
+                            <option>--Select--</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="col-sm-12">
+                    <div class="form-group">
+                        <label>Postal Address</label>
+                        <input class="form-control" placeholder="Enter Postal Address" />
+                    </div>
+                </div>
+                <div class="col-sm-6">
+                    <div class="form-group">
+                        <label>Nature of Business </label>
+                        <select class="form-control">
+                            <option>--Select--</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="col-sm-6">
+                    <div class="form-group">
+                        <label>Economic Sector</label>
+                        <select class="form-control">
+                            <option>--Select--</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="col-sm-6">
+                    <div class="form-group">
+                        <label>Date of Establishment</label>
+                        <input class="form-control" />
+                    </div>
+                </div>
+                <div class="col-sm-6">
+                    <div class="form-group">
+                        <label>Tax Identification Number (TIN)</label>
+                        <input class="form-control" placeholder="Enter Tax Identification Number" />
+                    </div>
+                </div>
+            </div>
+
+
+            <div class="row">
+                <div class="col-12">
+                    <h3 class="h3 bg-primary text-white px-3 py-1 mt-2 rounded">
+                        Contact Person Details
+                    </h3>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-sm-6">
+                    <div class="form-group">
+                        <label>Name </label>
+                        <input class="form-control" placeholder="Enter Fullname" />
+                    </div>
+                </div>
+                <div class="col-sm-6">
+                    <div class="form-group">
+                        <label>Designation </label>
+                        <input class="form-control" placeholder="Enter Designation in Company" />
+                    </div>
+                </div>
+                <div class="col-sm-6">
+                    <div class="form-group">
+                        <label>Phone Number</label>
+                        <input class="form-control" placeholder="Enter ONE(1) Phone Number" />
+                    </div>
+                </div>
+                <div class="col-sm-6">
+                    <div class="form-group">
+                        <label>Email Address</label>
+                        <input class="form-control" placeholder="Enter ONE(1) Email Address" type="email" />
+                    </div>
+                </div>
+            </div>
+
+
+            <div class="row">
+                <div class="col-12">
+                    <h3 class="h3 bg-primary text-white px-3 py-1 mt-2 rounded">
+                        Category of Contract for Prequalification
+                    </h3>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-sm-6">
+                    <div class="form-group">
+                        <label>Main Category </label>
+                        <select class="form-control">
+                            <option>--Select--</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="col-sm-6">
+                    <div class="form-group">
+                        <label>Sub Category </label>
+                        <select class="form-control">
+                            <option>--Select--</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="col-sm-6">
+                    <div class="form-group">
+                        <label>Main Category </label>
+                        <select class="form-control">
+                            <option>--Select--</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="col-sm-6">
+                    <div class="form-group">
+                        <label>Sub Category </label>
+                        <select class="form-control">
+                            <option>--Select--</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+
+
+            <div class="row">
+                <div class="col-12">
+                    <h3 class="h3 bg-primary text-white px-3 py-1 mt-2 rounded">
+                        Documents and Requirements
+                    </h3>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-12">
+                    <table class="table table-responsive-sm table-striped">
+                        <thead>
+                            <tr class="table-primary">
+                                <th>S/N</th>
+                                <th>Requirement</th>
+                                <th>Value</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td> 1 </td>
+                                <td>Company Audited Account for Current Year</td>
+                                <td><input type="file" class="form-control-file" /></td>
+                            </tr>
+                            <tr>
+                                <td> 2 </td>
+                                <td>Number of Staff</td>
+                                <td><input type="text" class="form-control" /></td>
+                            </tr>
+                            <tr>
+                                <td> 3 </td>
+                                <td>Tax Clearance Certificate</td>
+                                <td><input type="file" class="form-control-file" /></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+
+            <div class="row">
+                <div class="col-12">
+                    <h3 class="h3 bg-primary text-white px-3 py-1 mt-2 rounded">
+                        Experience Record
+                    </h3>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-12">
+                    <table class="table table-responsive table-striped">
+                        <thead>
+                            <tr class="table-primary">
+                                <th>S/N</th>
+                                <th>Client Name</th>
+                                <th>Client Address</th>
+                                <th>Project Description</th>
+                                <th>Start Date</th>
+                                <th>Completion Date</th>
+                                <th>Contact Person</th>
+                                <th>Phone Number</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td> 1 </td>
+                                <td><input type="text" class="form-control-sm" /></td>
+                                <td><input type="text" class="form-control-sm" /></td>
+                                <td><input type="text" class="form-control-sm" /></td>
+                                <td><input type="text" class="form-control-sm" /></td>
+                                <td><input type="text" class="form-control-sm" /></td>
+                                <td><input type="text" class="form-control-sm" /></td>
+                                <td><input type="text" class="form-control-sm" /></td>
+                            </tr>
+                            <tr>
+                                <td> 2 </td>
+                                <td><input type="text" class="form-control-sm" /></td>
+                                <td><input type="text" class="form-control-sm" /></td>
+                                <td><input type="text" class="form-control-sm" /></td>
+                                <td><input type="text" class="form-control-sm" /></td>
+                                <td><input type="text" class="form-control-sm" /></td>
+                                <td><input type="text" class="form-control-sm" /></td>
+                                <td><input type="text" class="form-control-sm" /></td>
+                            </tr>
+                            <tr>
+                                <td> 3 </td>
+                                <td><input type="text" class="form-control-sm" /></td>
+                                <td><input type="text" class="form-control-sm" /></td>
+                                <td><input type="text" class="form-control-sm" /></td>
+                                <td><input type="text" class="form-control-sm" /></td>
+                                <td><input type="text" class="form-control-sm" /></td>
+                                <td><input type="text" class="form-control-sm" /></td>
+                                <td><input type="text" class="form-control-sm" /></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+
+            <div class="row">
+                <div class="col-12">
+                    <h3 class="h3 bg-primary text-white px-3 py-1 mt-2 rounded">
+                        Equipment Details
+                    </h3>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-12">
+                    <table class="table table-responsive-sm table-striped">
+                        <thead>
+                            <tr class="table-primary">
+                                <th>S/N</th>
+                                <th>Equipment Name</th>
+                                <th>Equipment Description</th>
+                                <th>Quantity</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td> 1 </td>
+                                <td><input type="text" class="form-control" /></td>
+                                <td><input type="text" class="form-control" /></td>
+                                <td><input type="text" class="form-control" /></td>
+                            </tr>
+                            <tr>
+                                <td> 2 </td>
+                                <td><input type="text" class="form-control" /></td>
+                                <td><input type="text" class="form-control" /></td>
+                                <td><input type="text" class="form-control" /></td>
+                            </tr>
+                            <tr>
+                                <td> 3 </td>
+                                <td><input type="text" class="form-control" /></td>
+                                <td><input type="text" class="form-control" /></td>
+                                <td><input type="text" class="form-control" /></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+
+            <div class="row">
+                <div class="col-12">
+                    <h3 class="h3 bg-primary text-white px-3 py-1 mt-2 rounded">
+                        Key Personnel Details
+                    </h3>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-12">
+                    <table class="table table-responsive-sm table-striped">
+                        <thead>
+                            <tr class="table-primary">
+                                <th>S/N</th>
+                                <th>Name</th>
+                                <th>Professional Qualification</th>
+                                <th>CV</th>
+                                <th>Professional Certificate</th>
+                                <th>Passport Photograph</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td> 1 </td>
+                                <td><input type="text" class="form-control" /></td>
+                                <td><input type="text" class="form-control" /></td>
+                                <td><input type="file" class="form-control-file" /></td>
+                                <td><input type="file" class="form-control-file" /></td>
+                                <td><input type="file" class="form-control-file" /></td>
+                            </tr>
+                            <tr>
+                                <td> 2 </td>
+                                <td><input type="text" class="form-control" /></td>
+                                <td><input type="text" class="form-control" /></td>
+                                <td><input type="file" class="form-control-file" /></td>
+                                <td><input type="file" class="form-control-file" /></td>
+                                <td><input type="file" class="form-control-file" /></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <div class="col-12">
+                <div class="form-group">
+                    <div class="row">
+                        <div class="col-sm-4 text-center">
+                            <button type="submit" class="btn btn-outline-primary">Save for Later</button>
+                        </div>
+                        <div class="col-sm-4">
+                            <button type="submit" class="btn form-btn">Submit</button>
+                        </div>
+                        <div class="col-sm-4 text-center">
+                            <button type="submit" class="btn btn-outline-dark">Print/Preview Form</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </form>
+
+        <hr />
+    </div>
+</div>
