@@ -1,0 +1,17 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Text;
+
+namespace DcProcurement
+{
+    public class SubmittedCriteria
+    {
+        public int Id { get; set; }
+        public int CompanyInfoId { get; set; }
+        public int CriteriaId { get; set; }
+        public int MyProperty { get; set; }
+        public string Value { get; set; }
+        public Criteria Criteria { get; set; }
+        public CompanyInfo CompanyInfo { get; set; }
+    }
+}

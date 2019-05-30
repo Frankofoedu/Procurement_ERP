@@ -56,7 +56,7 @@ namespace BsslProcurement.Pages.Staff
             if (Image != null)
             {
                 var fileName = Image.FileName;
-                var uploads = Path.Combine(_hostingEnvironment.WebRootPath, "uploads");
+                var uploads = Path.Combine(_hostingEnvironment.WebRootPath, "logo");
                 var filePath = Path.Combine(uploads, fileName);
                 Image.CopyTo(new FileStream(filePath, FileMode.Create));
 

@@ -59,7 +59,7 @@ namespace BsslProcurement.Migrations
                 {
                     Id = table.Column<int>(nullable: false)
                         .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
-                    ContractCategoryId = table.Column<int>(nullable: true),
+                    ProcurementCategoryId = table.Column<int>(nullable: true),
                     SubcategoryName = table.Column<string>(nullable: false),
                     SubcategoryDescription = table.Column<string>(nullable: true)
                 },
@@ -67,8 +67,8 @@ namespace BsslProcurement.Migrations
                 {
                     table.PrimaryKey("PK_ContractSubcategories", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_ContractSubcategories_ContractCategories_ContractCategoryId",
-                        column: x => x.ContractCategoryId,
+                        name: "FK_ContractSubcategories_ContractCategories_ProcurementCategoryId",
+                        column: x => x.ProcurementCategoryId,
                         principalTable: "ContractCategories",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Restrict);
@@ -119,9 +119,9 @@ namespace BsslProcurement.Migrations
                 });
 
             migrationBuilder.CreateIndex(
-                name: "IX_ContractSubcategories_ContractCategoryId",
+                name: "IX_ContractSubcategories_ProcurementCategoryId",
                 table: "ContractSubcategories",
-                column: "ContractCategoryId");
+                column: "ProcurementCategoryId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_ProcurementCriteria_ProcurementItemId",

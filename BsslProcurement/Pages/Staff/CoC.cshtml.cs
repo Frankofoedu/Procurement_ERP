@@ -18,15 +18,15 @@ namespace BsslProcurement.Pages.Staff
         }
 
         [BindProperty]
-        public ContractCategory ContractCategory { get; set; }
-        public List<ContractCategory> ContractCategories { get; set; }
+        public ProcurementCategory ProcurementCategory { get; set; }
+        public List<ProcurementCategory>  ProcurementCategories { get; set; }
 
         public string Message { get; set; }
         public string Error { get; set; }
 
         public void OnGet()
         {
-            ContractCategories = _context.ContractCategories.ToList();
+           ProcurementCategories = _context.ProcurementCategories.ToList();
         }
 
         public void OnPost()
@@ -37,16 +37,16 @@ namespace BsslProcurement.Pages.Staff
                 return;
             }
 
-            var check = _context.ContractCategories.FirstOrDefault(x => x.CategoryName == ContractCategory.CategoryName);
+            var check = _context.ProcurementCategories.FirstOrDefault(x => x.Name == ProcurementCategory.Name);
 
             if (check!=null)
             {
                 Error = "Category with this name already exist.";
                 return;
             }
-            _context.ContractCategories.Add(ContractCategory);
+            _context.ProcurementCategories.Add(ProcurementCategory);
             _context.SaveChanges();
-            ContractCategories = _context.ContractCategories.ToList();
+            ProcurementCategories = _context.ProcurementCategories.ToList();
 
             Message = "Saved Successfully";
         }

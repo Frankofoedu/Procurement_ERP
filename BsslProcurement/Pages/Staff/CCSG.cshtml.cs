@@ -19,11 +19,11 @@ namespace BsslProcurement.Pages.Staff
         }
 
         [BindProperty]
-        public ContractSubcategory ContractSubcategory { get; set; }
+        public ProcurementSubcategory ProcurementSubcategory { get; set; }
         [BindProperty]
         public int categoryId { get; set; }
-        public ContractCategory ContractCategory { get; set; }
-        public List<ContractSubcategory> ContractSubcategories { get; set; }
+        public ProcurementCategory ProcurementCategory { get; set; }
+        public List<ProcurementSubcategory> ProcurementSubcategories { get; set; }
 
         public string Message { get; set; }
         public string Error { get; set; }
@@ -35,25 +35,25 @@ namespace BsslProcurement.Pages.Staff
 
             if (delId != null)
             {
-                var subToDel = _context.ContractSubcategories.FirstOrDefault(k => k.Id == delId);
+                var subToDel = _context.ProcurementSubcategories.FirstOrDefault(k => k.Id == delId);
                 if (subToDel != null)
                 {
-                    _context.ContractSubcategories.Remove(subToDel);
+                    _context.ProcurementSubcategories.Remove(subToDel);
                     _context.SaveChanges();
                 }
             }
 
 
-            var category = _context.ContractCategories.Include(y => y.ContractSubcategories).FirstOrDefault(x => x.Id == id);
+            var category = _context.ProcurementCategories.Include(y => y.ProcurementSubcategories).FirstOrDefault(x => x.Id == id);
 
             if (category == null)
             {
                 return LocalRedirect("~/Staff/CoC");
             }
 
-            ContractSubcategories = category.ContractSubcategories.ToList();
+            ProcurementSubcategories = category.ProcurementSubcategories.ToList();
 
-            ContractCategory = category;
+            ProcurementCategory = category;
             categoryId = id.Value;
 
             return Page();
@@ -67,8 +67,8 @@ namespace BsslProcurement.Pages.Staff
                 return Page();
             }
 
-            var check = _context.ContractSubcategories.FirstOrDefault(x => x.ContractCategoryId == 
-                categoryId && x.SubcategoryName == ContractSubcategory.SubcategoryName);
+            var check = _context.ProcurementSubcategories.FirstOrDefault(x => x.ProcurementContractCategoryId == 
+                categoryId && x.Name == ProcurementSubcategory.Name);
 
             if (check != null)
             {
@@ -76,23 +76,23 @@ namespace BsslProcurement.Pages.Staff
                 return Page();
             }
 
-            ContractSubcategory.ContractCategoryId = categoryId;
+            ProcurementSubcategory.ProcurementContractCategoryId = categoryId;
 
-            _context.ContractSubcategories.Add(ContractSubcategory);
+            _context.ProcurementSubcategories.Add(ProcurementSubcategory);
             _context.SaveChanges();
 
-            var category = _context.ContractCategories.Include(y => y.ContractSubcategories).FirstOrDefault(x => x.Id == categoryId);
+            var category = _context.ProcurementCategories.Include(y => y.ProcurementSubcategories).FirstOrDefault(x => x.Id == categoryId);
 
             if (category == null)
             {
                 return LocalRedirect("~/Staff/CoC");
             }
 
-            ContractSubcategories = category.ContractSubcategories.ToList();
+            ProcurementSubcategories = category.ProcurementSubcategories.ToList();
 
-            ContractCategory = category;
+            ProcurementCategory = category;
             categoryId = category.Id;
-            ContractSubcategory = new ContractSubcategory();
+            ProcurementSubcategory = new ProcurementSubcategory();
 
             Message = "Saved Successfully";
             return Page();

@@ -5,15 +5,15 @@ using System.Text;
 
 namespace DcProcurement
 {
-    public class ContractSubcategory
+    public class ProcurementSubcategory
     {
         public int Id { get; set; }
-        public int? ContractCategoryId { get; set; }
+        public int? ProcurementContractCategoryId { get; set; }
         [Required(ErrorMessage = "This Subcategory Name Field is Required")]
-        public string SubcategoryName { get; set; }
-        public string SubcategoryDescription { get; set; }
+        public string Name { get; set; }
+        public string Description { get; set; }
 
-        public ContractCategory ContractCategory { get; set; }
+        public ProcurementCategory ProcurementCategory  { get; set; }
         public List<ProcurementItem> ProcurementItems { get; set; }
     }
 }
