@@ -43,7 +43,7 @@
 
             <div class="form-group hidden">
                 <label class="control-label">Item Subgroup :</label>
-                <select id="selectSubgroup" asp-for="ProcurementItem.ContractSubcategoryId" class="form-control"></select>
+                <select id="selectSubgroup" asp-for="ProcurementItem.ProcurementSubcategoryId" class="form-control"></select>
             </div>
 
             <div class="form-group">
@@ -130,7 +130,7 @@
 
 
         for (var i = 0; i < arrayOfSubCategories.length; i++) {
-            if (arrayOfSubCategories[i].contractCategoryId == selVal) {
+            if (arrayOfSubCategories[i].ProcurementCategoryId == selVal) {
                 
                 var o = new Option(arrayOfSubCategories[i].subcategoryName, arrayOfSubCategories[i].id);
                 /// jquerify the DOM object 'o' so we can use the html method

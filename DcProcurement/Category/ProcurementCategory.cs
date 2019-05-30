@@ -5,13 +5,13 @@ using System.Text;
 
 namespace DcProcurement
 {
-    public class ContractCategory
+    public class ProcurementCategory
     {
         public int Id { get; set; }
         [Required(ErrorMessage = "The Name Field is Required")]
-        public string CategoryName { get; set; }
-        public string CategoryDescription { get; set; }
+        public string Name { get; set; }
+        public string Description { get; set; }
 
-        public ICollection<ContractSubcategory> ContractSubcategories { get; set; }
+        public ICollection<ProcurementSubcategory>  ProcurementSubcategories { get; set; }
     }
 }

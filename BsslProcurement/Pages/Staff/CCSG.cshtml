@@ -33,15 +33,15 @@
 
             <div class="form-group">
                 <label>Category : </label>
-                <input readonly="readonly" class="form-control ml-1" value="@Model.ContractCategory.CategoryName" />
+                <input readonly="readonly" class="form-control ml-1" value="@Model.ProcurementCategory.CategoryName" />
             </div>
             <div class="form-group">
                 <label>Subcategory Name : </label>
-                <input class="form-control ml-1" asp-for="ContractSubcategory.SubcategoryName" />
+                <input class="form-control ml-1" asp-for="ProcurementSubcategory.SubcategoryName" />
             </div>
             <div class="form-group">
                 <label>Description</label>
-                <textarea class="form-control ml-1" asp-for="ContractSubcategory.SubcategoryDescription"></textarea>
+                <textarea class="form-control ml-1" asp-for="ProcurementSubcategory.SubcategoryDescription"></textarea>
             </div>
             <input type="hidden" asp-for="categoryId" />
             <div class="form-group">
@@ -63,7 +63,7 @@
         <div class="panel panel-login">
             <div class="panel-heading">
                 <div class="row">
-                    <p class="header-text">@Model.ContractCategory.CategoryName Subcategories</p>
+                    <p class="header-text">@Model.ProcurementCategory.CategoryName Subcategories</p>
                 </div>
                 <hr>
             </div>

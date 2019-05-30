@@ -7,7 +7,7 @@ namespace BsslProcurement.Migrations
         protected override void Up(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropForeignKey(
-                name: "FK_ProcurementItems_ContractSubcategories_ContractSubcategoryId",
+                name: "FK_ProcurementItems_ContractSubcategories_ProcurementSubcategoryId",
                 table: "ProcurementItems");
 
             migrationBuilder.DropForeignKey(
@@ -21,15 +21,15 @@ namespace BsslProcurement.Migrations
                 oldClrType: typeof(int));
 
             migrationBuilder.AlterColumn<int>(
-                name: "ContractSubcategoryId",
+                name: "ProcurementSubcategoryId",
                 table: "ProcurementItems",
                 nullable: true,
                 oldClrType: typeof(int));
 
             migrationBuilder.AddForeignKey(
-                name: "FK_ProcurementItems_ContractSubcategories_ContractSubcategoryId",
+                name: "FK_ProcurementItems_ContractSubcategories_ProcurementSubcategoryId",
                 table: "ProcurementItems",
-                column: "ContractSubcategoryId",
+                column: "ProcurementSubcategoryId",
                 principalTable: "ContractSubcategories",
                 principalColumn: "Id",
                 onDelete: ReferentialAction.Restrict);
@@ -46,7 +46,7 @@ namespace BsslProcurement.Migrations
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropForeignKey(
-                name: "FK_ProcurementItems_ContractSubcategories_ContractSubcategoryId",
+                name: "FK_ProcurementItems_ContractSubcategories_ProcurementSubcategoryId",
                 table: "ProcurementItems");
 
             migrationBuilder.DropForeignKey(
@@ -61,16 +61,16 @@ namespace BsslProcurement.Migrations
                 oldNullable: true);
 
             migrationBuilder.AlterColumn<int>(
-                name: "ContractSubcategoryId",
+                name: "ProcurementSubcategoryId",
                 table: "ProcurementItems",
                 nullable: false,
                 oldClrType: typeof(int),
                 oldNullable: true);
 
             migrationBuilder.AddForeignKey(
-                name: "FK_ProcurementItems_ContractSubcategories_ContractSubcategoryId",
+                name: "FK_ProcurementItems_ContractSubcategories_ProcurementSubcategoryId",
                 table: "ProcurementItems",
-                column: "ContractSubcategoryId",
+                column: "ProcurementSubcategoryId",
                 principalTable: "ContractSubcategories",
                 principalColumn: "Id",
                 onDelete: ReferentialAction.Cascade);

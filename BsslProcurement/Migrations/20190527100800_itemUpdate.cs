@@ -7,20 +7,20 @@ namespace BsslProcurement.Migrations
         protected override void Up(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.AddColumn<int>(
-                name: "ContractSubcategoryId",
+                name: "ProcurementSubcategoryId",
                 table: "ProcurementItems",
                 nullable: false,
                 defaultValue: 0);
 
             migrationBuilder.CreateIndex(
-                name: "IX_ProcurementItems_ContractSubcategoryId",
+                name: "IX_ProcurementItems_ProcurementSubcategoryId",
                 table: "ProcurementItems",
-                column: "ContractSubcategoryId");
+                column: "ProcurementSubcategoryId");
 
             migrationBuilder.AddForeignKey(
-                name: "FK_ProcurementItems_ContractSubcategories_ContractSubcategoryId",
+                name: "FK_ProcurementItems_ContractSubcategories_ProcurementSubcategoryId",
                 table: "ProcurementItems",
-                column: "ContractSubcategoryId",
+                column: "ProcurementSubcategoryId",
                 principalTable: "ContractSubcategories",
                 principalColumn: "Id",
                 onDelete: ReferentialAction.Cascade);
@@ -29,15 +29,15 @@ namespace BsslProcurement.Migrations
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropForeignKey(
-                name: "FK_ProcurementItems_ContractSubcategories_ContractSubcategoryId",
+                name: "FK_ProcurementItems_ContractSubcategories_ProcurementSubcategoryId",
                 table: "ProcurementItems");
 
             migrationBuilder.DropIndex(
-                name: "IX_ProcurementItems_ContractSubcategoryId",
+                name: "IX_ProcurementItems_ProcurementSubcategoryId",
                 table: "ProcurementItems");
 
             migrationBuilder.DropColumn(
-                name: "ContractSubcategoryId",
+                name: "ProcurementSubcategoryId",
                 table: "ProcurementItems");
         }
     }

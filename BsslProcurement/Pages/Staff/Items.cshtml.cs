@@ -22,7 +22,7 @@ namespace BsslProcurement.Pages.Staff
         [BindProperty]
         public ProcurementItem ProcurementItem { get; set; }
         public List<ProcurementItem> ProcurementItems { get; set; }
-        public List<ContractSubcategory> ContractSubcategories { get; set; }
+        public List<ProcurementSubcategory> ContractSubcategories { get; set; }
 
         public string Message { get; set; }
         public string Error { get; set; }
@@ -31,13 +31,13 @@ namespace BsslProcurement.Pages.Staff
         {
             ProcurementItems = _context.ProcurementItems.ToList();
 
-            var subCategories = _context.ContractSubcategories.AsNoTracking().ToList();
+            var subCategories = _context.ProcurementSubcategories.AsNoTracking().ToList();
             foreach (var item in subCategories)
-            { item.ContractCategory = null; }
+            { item.ProcurementCategory = null; }
 
             ContractSubcategories = subCategories;
 
-            ViewData["GroupItems"] = new SelectList(_context.ContractCategories, "Id", "CategoryName");
+            ViewData["GroupItems"] = new SelectList(_context.ProcurementCategories, "Id", "CategoryName");
         }
 
         public void OnPost()
@@ -55,13 +55,13 @@ namespace BsslProcurement.Pages.Staff
 
             ProcurementItems = _context.ProcurementItems.ToList();
 
-            var subCategories = _context.ContractSubcategories.AsNoTracking().ToList();
+            var subCategories = _context.ProcurementSubcategories.AsNoTracking().ToList();
             foreach (var item in subCategories)
-            { item.ContractCategory = null; }
+            { item.ProcurementCategory = null; }
 
             ContractSubcategories = subCategories;
 
-            ViewData["GroupItems"] = new SelectList(_context.ContractCategories, "Id", "CategoryName");
+            ViewData["GroupItems"] = new SelectList(_context.ProcurementCategories, "Id", "CategoryName");
 
             Message = "Saved Successfully";
         }

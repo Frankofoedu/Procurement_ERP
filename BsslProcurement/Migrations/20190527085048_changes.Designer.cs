@@ -21,7 +21,7 @@ namespace BsslProcurement.Migrations
                 .HasAnnotation("Relational:MaxIdentifierLength", 128)
                 .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-            modelBuilder.Entity("DcProcurement.ContractCategory", b =>
+            modelBuilder.Entity("DcProcurement.ProcurementCategory", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -37,13 +37,13 @@ namespace BsslProcurement.Migrations
                     b.ToTable("ContractCategories");
                 });
 
-            modelBuilder.Entity("DcProcurement.ContractSubcategory", b =>
+            modelBuilder.Entity("DcProcurement.ProcurementSubcategory", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-                    b.Property<int?>("ContractCategoryId");
+                    b.Property<int?>("ProcurementCategoryId");
 
                     b.Property<string>("SubcategoryDescription");
 
@@ -52,7 +52,7 @@ namespace BsslProcurement.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("ContractCategoryId");
+                    b.HasIndex("ProcurementCategoryId");
 
                     b.ToTable("ContractSubcategories");
                 });
@@ -139,11 +139,11 @@ namespace BsslProcurement.Migrations
                     b.ToTable("ProcurementPortalInfo");
                 });
 
-            modelBuilder.Entity("DcProcurement.ContractSubcategory", b =>
+            modelBuilder.Entity("DcProcurement.ProcurementSubcategory", b =>
                 {
-                    b.HasOne("DcProcurement.ContractCategory", "ContractCategory")
+                    b.HasOne("DcProcurement.ProcurementCategory", "ProcurementCategory")
                         .WithMany("ContractSubcategories")
-                        .HasForeignKey("ContractCategoryId");
+                        .HasForeignKey("ProcurementCategoryId");
                 });
 
             modelBuilder.Entity("DcProcurement.ProcurementCriteria", b =>
