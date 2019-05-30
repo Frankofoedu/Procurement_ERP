@@ -130,9 +130,9 @@
 
 
         for (var i = 0; i < arrayOfSubCategories.length; i++) {
-            if (arrayOfSubCategories[i].ProcurementCategoryId == selVal) {
-                
-                var o = new Option(arrayOfSubCategories[i].subcategoryName, arrayOfSubCategories[i].id);
+            if (arrayOfSubCategories[i].procurementCategoryId == selVal) {
+                console.log(arrayOfSubCategories);
+                var o = new Option(arrayOfSubCategories[i].name, arrayOfSubCategories[i].id);
                 /// jquerify the DOM object 'o' so we can use the html method
                 $(o).html(arrayOfSubCategories[i].subcategoryName);
                 $("#selectSubgroup").append(o);

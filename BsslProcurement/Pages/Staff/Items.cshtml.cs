@@ -37,7 +37,7 @@ namespace BsslProcurement.Pages.Staff
 
             ContractSubcategories = subCategories;
 
-            ViewData["GroupItems"] = new SelectList(_context.ProcurementCategories, "Id", "CategoryName");
+            ViewData["GroupItems"] = new SelectList(_context.ProcurementCategories, "Id", "Name");
         }
 
         public void OnPost()
@@ -61,7 +61,7 @@ namespace BsslProcurement.Pages.Staff
 
             ContractSubcategories = subCategories;
 
-            ViewData["GroupItems"] = new SelectList(_context.ProcurementCategories, "Id", "CategoryName");
+            ViewData["GroupItems"] = new SelectList(_context.ProcurementCategories, "Id", "Name");
 
             Message = "Saved Successfully";
         }

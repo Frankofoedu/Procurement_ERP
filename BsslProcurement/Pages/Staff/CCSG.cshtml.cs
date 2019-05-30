@@ -67,7 +67,7 @@ namespace BsslProcurement.Pages.Staff
                 return Page();
             }
 
-            var check = _context.ProcurementSubcategories.FirstOrDefault(x => x.ProcurementContractCategoryId == 
+            var check = _context.ProcurementSubcategories.FirstOrDefault(x => x.ProcurementCategoryId == 
                 categoryId && x.Name == ProcurementSubcategory.Name);
 
             if (check != null)
@@ -76,7 +76,7 @@ namespace BsslProcurement.Pages.Staff
                 return Page();
             }
 
-            ProcurementSubcategory.ProcurementContractCategoryId = categoryId;
+            ProcurementSubcategory.ProcurementCategoryId = categoryId;
 
             _context.ProcurementSubcategories.Add(ProcurementSubcategory);
             _context.SaveChanges();

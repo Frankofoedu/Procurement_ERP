@@ -33,15 +33,15 @@
 
             <div class="form-group">
                 <label>Category : </label>
-                <input readonly="readonly" class="form-control ml-1" value="@Model.ProcurementCategory.CategoryName" />
+                <input readonly="readonly" class="form-control ml-1" value="@Model.ProcurementCategory.Name" />
             </div>
             <div class="form-group">
                 <label>Subcategory Name : </label>
-                <input class="form-control ml-1" asp-for="ProcurementSubcategory.SubcategoryName" />
+                <input class="form-control ml-1" asp-for="ProcurementSubcategory.Name" />
             </div>
             <div class="form-group">
                 <label>Description</label>
-                <textarea class="form-control ml-1" asp-for="ProcurementSubcategory.SubcategoryDescription"></textarea>
+                <textarea class="form-control ml-1" asp-for="ProcurementSubcategory.Description"></textarea>
             </div>
             <input type="hidden" asp-for="categoryId" />
             <div class="form-group">
@@ -63,7 +63,7 @@
         <div class="panel panel-login">
             <div class="panel-heading">
                 <div class="row">
-                    <p class="header-text">@Model.ProcurementCategory.CategoryName Subcategories</p>
+                    <p class="header-text">@Model.ProcurementCategory.Name Subcategories</p>
                 </div>
                 <hr>
             </div>
@@ -79,13 +79,13 @@
                         </tr>
                     </thead>
                     <tbody>
-                        @for (int i = 0; i < Model.ContractSubcategories.Count; i++)
+                        @for (int i = 0; i < Model.ProcurementSubcategories.Count; i++)
                         {
-                            var item = Model.ContractSubcategories[i];
+                            var item = Model.ProcurementSubcategories[i];
                             <tr>
                                 <td>@(i + 1)</td>
-                                <td>@item.SubcategoryName</td>
-                                <td>@item.SubcategoryDescription</td>
+                                <td>@item.Name</td>
+                                <td>@item.Description</td>
                                 <td>
                                     <a asp-page="./CCSG" asp-route-id="@Model.categoryId" asp-route-delId="@item.Id" class="btn btn-outline-danger" data-toggle="tooltip" title="Delete Sub-category">
                                         Delete

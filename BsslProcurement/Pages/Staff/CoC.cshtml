@@ -33,11 +33,11 @@
 
             <div class="form-group">
                 <label>Name : </label>
-                <input class="form-control ml-1" asp-for="ProcurementCategory.CategoryName" />
+                <input class="form-control ml-1" asp-for="ProcurementCategory.Name" />
             </div>
             <div class="form-group">
                 <label>Description</label>
-                <textarea class="form-control ml-1" asp-for="ProcurementCategory.CategoryDescription"></textarea>
+                <textarea class="form-control ml-1" asp-for="ProcurementCategory.Description"></textarea>
             </div>
             <div class="form-group">
                 <div class="row">
@@ -74,13 +74,13 @@
                         </tr>
                     </thead>
                     <tbody>
-                        @for (int i = 0; i < Model.ContractCategories.Count; i++)
+                        @for (int i = 0; i < Model.ProcurementCategories.Count; i++)
                         {
-                            var item = Model.ContractCategories[i];
+                            var item = Model.ProcurementCategories[i];
                             <tr>
                                 <td>@(i + 1)</td>
-                                <td>@item.CategoryName</td>
-                                <td>@item.CategoryDescription</td>
+                                <td>@item.Name</td>
+                                <td>@item.Description</td>
                                 <td>
                                     <a asp-page="./CCSG" asp-route-id="@item.Id" class="btn btn-outline-primary btn-sm" data-toggle="tooltip" title="Add and Edit Sub-categories">
                                         Sub-Categories
