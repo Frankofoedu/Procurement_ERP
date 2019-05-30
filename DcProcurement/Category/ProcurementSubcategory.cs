@@ -8,6 +8,7 @@ namespace DcProcurement
     public class ProcurementSubcategory
     {
         public int Id { get; set; }
+        public string ProcurementSubCategoryCode { get; set; }
         public int? ProcurementCategoryId { get; set; }
         [Required(ErrorMessage = "This Subcategory Name Field is Required")]
         public string Name { get; set; }
