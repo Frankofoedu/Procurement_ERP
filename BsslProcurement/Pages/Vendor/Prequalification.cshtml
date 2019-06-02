@@ -41,31 +41,32 @@
                 <div class="col-sm-6">
                     <div class="form-group">
                         <label>Rc No/ITF No </label>
-                        <input class="form-control" placeholder="Enter Rc or ITF Number" />
+                        <input class="form-control" asp-for="CompanyInfo.CompanyRegNo" placeholder="Enter Rc or ITF Number" />
                     </div>
                 </div>
                 <div class="col-sm-6">
                     <div class="form-group">
                         <label>Company Name</label>
-                        <input class="form-control" placeholder="Enter Company Name" />
+                        <input class="form-control" asp-for="CompanyInfo.CompanyName" placeholder="Enter Company Name" />
                     </div>
                 </div>
                 <div class="col-sm-6">
                     <div class="form-group">
                         <label>Phone Number</label>
-                        <input class="form-control" placeholder="Enter ONE(1) Phone Number" />
+                        <input class="form-control" asp-for="CompanyInfo.PhoneNumber" placeholder="Enter ONE(1) Phone Number" />
                     </div>
                 </div>
                 <div class="col-sm-6">
                     <div class="form-group">
                         <label>Email Address</label>
-                        <input class="form-control" placeholder="Enter ONE(1) Email Address" />
+                        <input class="form-control" asp-for="CompanyInfo.Email" placeholder="Enter ONE(1) Email Address" />
                     </div>
                 </div>
                 <div class="col-sm-6">
                     <div class="form-group">
                         <label>Password</label>
-                        <input class="form-control" type="password" placeholder="Enter Password" />
+                        @* TODO move password to identity *@
+                        <input class="form-control" asp-for="CompanyInfo.Password" type="password" placeholder="Enter Password" />
                     </div>
                 </div>
                 <div class="col-sm-6">
@@ -77,13 +78,13 @@
                 <div class="col-sm-12">
                     <div class="form-group">
                         <label>Company Address </label>
-                        <input class="form-control" placeholder="Enter Company Address" />
+                        <input class="form-control" asp-for="CompanyInfo.Address" placeholder="Enter Company Address" />
                     </div>
                 </div>
                 <div class="col-sm-6">
                     <div class="form-group">
                         <label>Select State</label>
-                        <select class="form-control">
+                        <select class="form-control" asp-for="CompanyInfo.State">
                             <option>--Select--</option>
                         </select>
                     </div>
@@ -91,7 +92,7 @@
                 <div class="col-sm-6">
                     <div class="form-group">
                         <label>City</label>
-                        <select class="form-control">
+                        <select class="form-control" asp-for="CompanyInfo.City">
                             <option>--Select--</option>
                         </select>
                     </div>
@@ -99,13 +100,13 @@
                 <div class="col-sm-12">
                     <div class="form-group">
                         <label>Postal Address</label>
-                        <input class="form-control" placeholder="Enter Postal Address" />
+                        <input class="form-control" asp-for="CompanyInfo.PostalAddress" placeholder="Enter Postal Address" />
                     </div>
                 </div>
                 <div class="col-sm-6">
                     <div class="form-group">
                         <label>Nature of Business </label>
-                        <select class="form-control">
+                        <select class="form-control" asp-for="CompanyInfo.NatureOfBusiness">
                             <option>--Select--</option>
                         </select>
                     </div>
@@ -113,7 +114,7 @@
                 <div class="col-sm-6">
                     <div class="form-group">
                         <label>Economic Sector</label>
-                        <select class="form-control">
+                        <select class="form-control" asp-for="CompanyInfo.Sector">
                             <option>--Select--</option>
                         </select>
                     </div>
@@ -121,13 +122,13 @@
                 <div class="col-sm-6">
                     <div class="form-group">
                         <label>Date of Establishment</label>
-                        <input class="form-control" />
+                        <input class="form-control"  asp-for="CompanyInfo.DateEstablishment"/>
                     </div>
                 </div>
                 <div class="col-sm-6">
                     <div class="form-group">
                         <label>Tax Identification Number (TIN)</label>
-                        <input class="form-control" placeholder="Enter Tax Identification Number" />
+                        <input class="form-control" placeholder="Enter Tax Identification Number" asp-for="CompanyInfo.TIN" />
                     </div>
                 </div>
             </div>
@@ -144,25 +145,25 @@
                 <div class="col-sm-6">
                     <div class="form-group">
                         <label>Name </label>
-                        <input class="form-control" placeholder="Enter Fullname" />
+                        <input class="form-control" placeholder="Enter Fullname" asp-for="CompanyInfo.ContactName" />
                     </div>
                 </div>
                 <div class="col-sm-6">
                     <div class="form-group">
                         <label>Designation </label>
-                        <input class="form-control" placeholder="Enter Designation in Company" />
+                        <input class="form-control" placeholder="Enter Designation in Company" asp-for="CompanyInfo.ContactDesignation"/>
                     </div>
                 </div>
                 <div class="col-sm-6">
                     <div class="form-group">
                         <label>Phone Number</label>
-                        <input class="form-control" placeholder="Enter ONE(1) Phone Number" />
+                        <input class="form-control" placeholder="Enter ONE(1) Phone Number" asp-for="CompanyInfo.ContactPhoneNumber" />
                     </div>
                 </div>
                 <div class="col-sm-6">
                     <div class="form-group">
                         <label>Email Address</label>
-                        <input class="form-control" placeholder="Enter ONE(1) Email Address" type="email" />
+                        <input class="form-control" placeholder="Enter ONE(1) Email Address" type="email" asp-for="CompanyInfo.Email" />
                     </div>
                 </div>
             </div>
@@ -176,38 +177,26 @@
                 </div>
             </div>
             <div class="row">
-                <div class="col-sm-6">
-                    <div class="form-group">
-                        <label>Main Category </label>
-                        <select class="form-control">
-                            <option>--Select--</option>
-                        </select>
+                @for (int i = 0; i < Model.CategoryCount; i++)
+                {
+
+                    <div class="col-sm-6">
+                        <div class="form-group">
+                            <label>Main Category </label>
+                            <select class="form-control" onchange="getSubCategories(this.value);" asp-items="Model.Categories">
+                                <option>--Select--</option>
+                            </select>
+                        </div>
                     </div>
-                </div>
-                <div class="col-sm-6">
-                    <div class="form-group">
-                        <label>Sub Category </label>
-                        <select class="form-control">
-                            <option>--Select--</option>
-                        </select>
+                    <div class="col-sm-6">
+                        <div class="form-group">
+                            <label>Sub Category </label>
+                            <select class="form-control">
+                                <option>--Select--</option>
+                            </select>
+                        </div>
                     </div>
-                </div>
-                <div class="col-sm-6">
-                    <div class="form-group">
-                        <label>Main Category </label>
-                        <select class="form-control">
-                            <option>--Select--</option>
-                        </select>
-                    </div>
-                </div>
-                <div class="col-sm-6">
-                    <div class="form-group">
-                        <label>Sub Category </label>
-                        <select class="form-control">
-                            <option>--Select--</option>
-                        </select>
-                    </div>
-                </div>
+                }
             </div>
 
 
@@ -414,3 +403,23 @@
         <hr />
     </div>
 </div>
+<script>
+        function getSubCategories(id) {
+        //alert("started" + id);
+        $.getJSON("https://localhost:5001/DynamicData/Sections?id=" + id,
+            function (result) {
+                // alert('Done');
+                $('#ddlsection').empty();
+                $('#ddlsection').append($('<option>').text("Select"));
+                $.each(result, function (i, obj) {
+
+                    $('#ddlsection').append($('<option>').text(obj.name).attr('value', obj.value));
+                });
+                console.log(result);
+            })
+            .fail(function (error) {
+                // alert('Done');
+                console.log(error);
+            });
+    };
+</script>

@@ -39,5 +39,7 @@ namespace DcProcurement
         public DbSet<ProcurementSubcategory> ProcurementSubcategories { get; set; }
 
         #endregion
+
+        public DbSet<PrequalificationPolicy> PrequalificationPolicies { get; set; }
     }
 }
