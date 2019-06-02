@@ -15,7 +15,9 @@ namespace DcProcurement
         public string Name { get; set; }
         public string Description { get; set; }
         public List<CompanyInfoProcurementSubCategory> CompanyInfos { get; set; }
-        public ProcurementCategory ProcurementCategory  { get; set; }
+        public ICollection<SubCategoryCriteria> SubCategoryCriterias { get; set; }
+        public virtual ProcurementCategory ProcurementCategory { get; set; }
+
         public List<ProcurementItem> ProcurementItems { get; set; }
     }
 }
