@@ -1,7 +1,7 @@
 ﻿@page
-@model BsslProcurement.Pages.Staff.CCSGModel
+@model BsslProcurement.Pages.Staff.PurchaseItemModel
 @{
-    ViewData["Title"] = "Contract Category Sub Group";
+    ViewData["Title"] = "Items To Purchase";
 }
 
 <div class="row mt-5">
@@ -10,7 +10,7 @@
         <form method="post" class="panel panel-login">
             <div class="panel-heading">
                 <div class="row">
-                    <p class="header-text">@ViewData["Title"]</p>
+                    <p class="header-text">Add to Purchase List</p>
                 </div>
                 <hr>
             </div>
@@ -31,29 +31,28 @@
                 </div>
             }
 
+            <input class="itemIdInput" type="hidden" asp-for="PItem.ItemId" />
+
             <div class="form-group">
-                <label>Category : </label>
-                <input readonly="readonly" class="categoryInput form-control ml-1" value="@Model.ProcurementCategory.Name" />
-            </div>
-            <div class="form-group">
-                <label>Subcategory Code</label>
-                <input class="codeInput form-control-sm ml-1" asp-for="ProcurementSubcategory.ProcurementSubCategoryCode" />
+                <label>Item Code</label>
+                <input class="codeInput form-control-sm ml-1" />
                 <button id="btnSearch" class="btn btn-sm btn-outline-primary"><i class="fas fa-search"></i></button>
             </div>
+
             <div class="form-group">
-                <label>Subcategory Name : </label>
-                <input class="nameInput form-control ml-1" asp-for="ProcurementSubcategory.Name" />
+                <label>Item Name </label>
+                <input class="nameInput form-control ml-1" type="text"/>
             </div>
+
             <div class="form-group">
-                <label>Description</label>
-                <textarea class="descriptionInput form-control ml-1" asp-for="ProcurementSubcategory.Description"></textarea>
+                <label>Purchase Information</label>
+                <textarea class="form-control ml-1" asp-for="PItem.Info"></textarea>
             </div>
-            <input class="catId" type="hidden" asp-for="categoryId" />
             <div class="form-group">
                 <div class="row">
                     <div class="col-sm-3"> </div>
                     <div class="col-sm-6 col-sm-offset-3">
-                        <button type="submit" class="btnSubmit btn form-btn">Save</button>
+                        <button type="submit" class="btn form-btn">Save</button>
                     </div>
                 </div>
             </div>
@@ -63,12 +62,12 @@
 
 
 <div class="row my-3">
-    <div class="col-md-2"></div>
-    <div class="col-md-8">
+    <div class="col-md-1"></div>
+    <div class="col-md-10">
         <div class="panel panel-login">
             <div class="panel-heading">
                 <div class="row">
-                    <p class="header-text">@Model.ProcurementCategory.Name Subcategories</p>
+                    <p class="header-text">Ungrouped Items</p>
                 </div>
                 <hr>
             </div>
@@ -77,27 +76,21 @@
                 <table class="table table-responsive-sm table-striped">
                     <thead>
                         <tr class="table-primary">
+                            <th>Select</th>
                             <th>S/N</th>
-                            <th>Code</th>
                             <th>Name</th>
                             <th>Description</th>
-                            <th></th>
                         </tr>
                     </thead>
                     <tbody>
-                        @for (int i = 0; i < Model.ProcurementSubcategories.Count; i++)
+                        @for (int i = 0; i < Model.PItems.Count; i++)
                         {
-                            var item = Model.ProcurementSubcategories[i];
+                            var item = Model.PItems[i];
                             <tr>
+                                <td><input type="checkbox" class="criteriaCheck" cid="@item.Id" /></td>
                                 <td>@(i + 1)</td>
-                                <td>@item.ProcurementSubCategoryCode</td>
-                                <td>@item.Name</td>
-                                <td>@item.Description</td>
-                                <td>
-                                    <a asp-page="./CCSG" asp-route-id="@Model.categoryId" asp-route-delId="@item.Id" class="btn btn-outline-danger" data-toggle="tooltip" title="Delete Sub-category">
-                                        Delete
-                                    </a>
-                                </td>
+                                <td>@item.Item.ItemName</td>
+                                <td>@item.Info</td>
                             </tr>
                         }
                     </tbody>
@@ -111,8 +104,9 @@
     @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
 }
 
-<script>
+<script type="text/javascript">
     $(document).ready(function () {
+        
         $('#btnSearch').on('click', function (event) {
             event.preventDefault();
             var code = $('.codeInput').val();
@@ -122,38 +116,31 @@
                 var baseUrl = window.location.origin;
 
                 $.ajax({
-                    url: baseUrl + '/api/Codes/Subcategory/' + code.trim(),
+                    url: baseUrl + '/api/Codes/Item/' + code.trim(),
                     type: 'get',
                     xhrFields: {
                         withCredentials: true
                     },
                     contentType: 'application/json',
                     error: function () {
-                        alert('Code has not been used before.');
-                        $('.nameInput').val('')
-                        $('.descriptionInput').val('')
-                        $('.btnSubmit').text('Save');
+                        alert('An Error occured during search.');
                     },
                     success: function (data) {
                         if (!data) {
-                            alert('Code has not been used before.');
-                            $('.nameInput').val('')
-                            $('.descriptionInput').val('')
-                            $('.btnSubmit').text('Save');
+                            alert('Code not found.');
                             return;
                         }
-                        var catId = $('.catId').val;
-                        if (catId == data.procurementCategory.id) {
-                            $('.nameInput').val(data.name)
-                            $('.descriptionInput').val(data.description)
-                            $('.btnSubmit').text('Save Changes');
-                        } else {
-                            alert('This Id is already in use.');
-                            $('.categoryInput').val('')
+                        if (data== '') {
+                            alert('Code not found.');
+                            return;
                         }
+
+                        $('.codeInput').val(data.itemName);
+                        $('.itemIdInput').val(data.id);
                     },
                 });
             }
         });
     });
+
 </script>

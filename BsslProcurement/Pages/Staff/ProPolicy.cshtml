@@ -1,4 +1,4 @@
-﻿@page
+﻿ @page
 @model BsslProcurement.Pages.Staff.ProPolicyModel
 @{
     ViewData["Title"] = "Procurement Policy";
@@ -37,8 +37,8 @@
                                     <input type="hidden" asp-for="ItemList[i].ItemId" />
                                 </td>
                                 <td>@(i + 1)</td>
-                                <td>@item.ItemName</td>
-                                <td>@item.Description</td>
+                                @*<td>@item.ItemName</td>
+                                <td>@item.Description</td>*@
                             </tr>
                         }
                     </tbody>

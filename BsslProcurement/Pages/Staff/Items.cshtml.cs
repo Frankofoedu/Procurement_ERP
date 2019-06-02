@@ -20,8 +20,8 @@ namespace BsslProcurement.Pages.Staff
         }
 
         [BindProperty]
-        public ProcurementItem ProcurementItem { get; set; }
-        public List<ProcurementItem> ProcurementItems { get; set; }
+        public Item Item { get; set; }
+        public List<Item> dItems { get; set; }
         public List<ProcurementSubcategory> ContractSubcategories { get; set; }
 
         public string Message { get; set; }
@@ -29,7 +29,7 @@ namespace BsslProcurement.Pages.Staff
 
         public void OnGet()
         {
-            ProcurementItems = _context.ProcurementItems.ToList();
+            dItems = _context.Items.ToList();
 
             var subCategories = _context.ProcurementSubcategories.AsNoTracking().ToList();
             foreach (var item in subCategories)
@@ -48,12 +48,24 @@ namespace BsslProcurement.Pages.Staff
                 return;
             }
 
-            ProcurementItem.DateAdded = DateTime.UtcNow;
+            Item.ItemCode = Item.ItemCode.Trim();
 
-            _context.ProcurementItems.Add(ProcurementItem);
-            _context.SaveChanges();
+            var check = _context.Items.FirstOrDefault(x => x.ItemCode == Item.ItemCode);
+            if (check != null)
+            {
+                Error = "This CODE is already in USE!!!";
+            }
+            else
+            {
+                Item.DateAdded = DateTime.UtcNow;
 
-            ProcurementItems = _context.ProcurementItems.ToList();
+                _context.Items.Add(Item);
+                _context.SaveChanges();
+
+                Message = "Saved Successfully";
+            }
+
+            dItems = _context.Items.ToList();
 
             var subCategories = _context.ProcurementSubcategories.AsNoTracking().ToList();
             foreach (var item in subCategories)
@@ -63,7 +75,6 @@ namespace BsslProcurement.Pages.Staff
 
             ViewData["GroupItems"] = new SelectList(_context.ProcurementCategories, "Id", "Name");
 
-            Message = "Saved Successfully";
         }
     }
 }
