@@ -1,0 +1,82 @@
+﻿@page
+@model BsslProcurement.Pages.Staff.PreQSetupModel
+@{
+    ViewData["Title"] = "PreQSetup";
+}
+<div class="row mt-5">
+    <div class="col-md-3"></div>
+    <div class="col-md-6">
+        <form method="post" class="panel panel-login">
+            <input type="hidden" asp-for="isSetupAlready" />
+            <div class="panel-heading">
+                <div class="row">
+                    <p class="header-text">Prequalification Setup</p>
+                </div>
+                <hr>
+            </div>
+            <div asp-validation-summary="All" class="text-danger"></div>
+            @if (!string.IsNullOrWhiteSpace(Model.Message))
+            {
+                <div class="alert alert-success alert-dismissable fade show">
+                    <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                    @Model.Message
+                </div>
+            }
+            @if (!string.IsNullOrWhiteSpace(Model.Error))
+            {
+                <div class="alert alert-danger alert-dismissable fade show">
+                    <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                    @Model.Error
+                </div>
+            }
+
+            <div class="row mt-5">
+                <div class="col-md-1"></div>
+                <div class="col-md-10">
+
+                    <div id="groupInfo" class="my-2">
+
+                        <div class="form-group">
+                            <label asp-for="PrequalificationPolicy.NoOfCategory"> Maximum number of category for prequalification</label>
+                            <input class="form-control-sm " type="number" asp-for="PrequalificationPolicy.NoOfCategory" />
+
+                        </div>
+                        <div class="form-group">
+                            <label>Prequalification submission opening date</label>
+                            <input id="openingDate" asp-for="PrequalificationPolicy.PrequalificationStartDate" class="form-control-sm ml-1" type="date" placeholder="mm/dd/yyyy" />
+                        </div>
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label>Prequalification submission closing date</label>
+                                <input id="closingDate" asp-for="PrequalificationPolicy.PrequalificationEndDate" class="form-control-sm ml-1" />
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <div class="row">
+                                <div class="col-sm-3"> </div>
+                                @if (Model.isSetupAlready)
+                                {
+
+                                    <div class="col-sm-3">
+                                        <button type="submit" class="btn btn-primary w-100">Update</button>
+                                    </div>
+                                }
+                                else
+                                {
+
+                                    <div class="col-sm-3">
+                                        <button type="submit" class="btn btn-primary w-100">Save</button>
+                                    </div>
+                                }
+
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+
+                <div class="col-md-1"></div>
+            </div>
+        </form>
+    </div>
+</div>
