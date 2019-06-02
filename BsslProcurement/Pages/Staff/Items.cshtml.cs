@@ -29,7 +29,7 @@ namespace BsslProcurement.Pages.Staff
 
         public void OnGet()
         {
-            dItems = _context.Items.ToList();
+            dItems = _context.Items.Include(m=>m.ProcurementSubcategory.ProcurementCategory).ToList();
 
             var subCategories = _context.ProcurementSubcategories.AsNoTracking().ToList();
             foreach (var item in subCategories)
@@ -65,7 +65,7 @@ namespace BsslProcurement.Pages.Staff
                 Message = "Saved Successfully";
             }
 
-            dItems = _context.Items.ToList();
+            dItems = _context.Items.Include(m => m.ProcurementSubcategory.ProcurementCategory).ToList();
 
             var subCategories = _context.ProcurementSubcategories.AsNoTracking().ToList();
             foreach (var item in subCategories)

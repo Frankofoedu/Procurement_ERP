@@ -86,14 +86,73 @@ namespace BsslProcurement.Pages.Staff
                 return BadRequest(ModelState);
             }
 
-            var item = await _context.Items.FirstOrDefaultAsync(m => m.ItemName.Contains(str));
+            var item = await _context.Items.Where(m => m.ItemName.Contains(str)).ToListAsync();
             
-            if (item == null)
+            if (item.Count<1)
             {
                 return Ok();
             }
 
             return Ok(item);
         }
+
+
+        // GET: api/Codes/CategoryWithCriteria/C001
+        [HttpGet("CategoryWithCriteria/{code}")]
+        public async Task<IActionResult> GetCategoryAndCriteriaByCode([FromRoute] string code)
+        {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+
+            var category = await _context.ProcurementCategories.Include(n=> n.CategoryCriterias).FirstOrDefaultAsync(m => m.ProcurementCategoryCode == code);
+
+            if (category == null)
+            {
+                return NotFound();
+            }
+
+            return Ok(category);
+        }
+
+        // GET: api/Codes/SubcategoryWithCriteria/C001
+        [HttpGet("SubcategoryWithCriteria/{code}")]
+        public async Task<IActionResult> GetSubategoryAndCriteriaByCode([FromRoute] string code)
+        {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+
+            var subcategory = await _context.ProcurementSubcategories.Include(n => n.SubCategoryCriterias).FirstOrDefaultAsync(m => m.ProcurementSubCategoryCode == code);
+
+            if (subcategory == null)
+            {
+                return NotFound();
+            }
+
+            return Ok(subcategory);
+        }
+
+        // GET: api/Codes/ItemWithCriteria/C001
+        [HttpGet("ItemWithCriteria/{code}")]
+        public async Task<IActionResult> GetItemAndCriteriaByCode([FromRoute] string code)
+        {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+
+            var item = await _context.Items.Include(n => n.ItemCriterias).FirstOrDefaultAsync(m => m.ItemCode == code);
+            
+            if (item == null)
+            {
+                return NotFound();
+            }
+
+            return Ok(item);
+        }
+
     }
 }

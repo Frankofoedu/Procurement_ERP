@@ -15,7 +15,7 @@ namespace DcProcurement
         public string Description { get; set; }
         public DateTime? DateAdded { get; set; }
 
-        public virtual ICollection<ProcurementCriteria> ProcurementCriterias { get; set; }
+        public ICollection<ItemCriteria> ItemCriterias { get; set; }
         public ProcurementSubcategory ProcurementSubcategory { get; set; }
     }
 }

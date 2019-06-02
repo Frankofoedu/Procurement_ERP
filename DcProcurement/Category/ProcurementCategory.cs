@@ -13,6 +13,7 @@ namespace DcProcurement
         public string Name { get; set; }
         public string Description { get; set; }
 
-        public ICollection<ProcurementSubcategory>  ProcurementSubcategories { get; set; }
+        public ICollection<CategoryCriteria> CategoryCriterias { get; set; }
+        public virtual ICollection<ProcurementSubcategory>  ProcurementSubcategories { get; set; }
     }
 }

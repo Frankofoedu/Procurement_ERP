@@ -5,6 +5,10 @@
     {
       "library": "font-awesome@5.8.2",
       "destination": "wwwroot/lib/font-awesome/"
+    },
+    {
+      "library": "bootstrap-combobox@1.1.8",
+      "destination": "wwwroot/lib/bootstrap-combobox/"
     }
   ]
 }

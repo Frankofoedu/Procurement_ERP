@@ -15,7 +15,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Pages\Staff\Criteria\" />
     <Folder Include="wwwroot\JSON\" />
     <Folder Include="wwwroot\logo\" />
   </ItemGroup>

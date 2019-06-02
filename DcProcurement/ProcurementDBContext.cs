@@ -34,7 +34,6 @@ namespace DcProcurement
         public DbSet<ProcurementGroup> ProcurementGroups { get; set; }
         public DbSet<Item> Items { get; set; }
         public DbSet<ProcurementItem> ProcurementItems { get; set; }
-        public DbSet<ProcurementCriteria> ProcurementCriteria { get; set; }
         public DbSet<ProcurementPortalInfo> ProcurementPortalInfo { get; set; }
         public DbSet<ProcurementCategory> ProcurementCategories { get; set; }
         public DbSet<ProcurementSubcategory> ProcurementSubcategories { get; set; }

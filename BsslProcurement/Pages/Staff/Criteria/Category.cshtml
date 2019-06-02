@@ -1,0 +1,170 @@
+﻿@page
+@model BsslProcurement.Pages.Staff.Criteria.CategoryModel
+@{
+    ViewData["Title"] = "Category Pre-qualification Criteria";
+}
+
+@if (!string.IsNullOrWhiteSpace(Model.Message))
+{
+    <div class="alert alert-success alert-dismissable fade show">
+        <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+        @Model.Message
+    </div>
+}
+@if (!string.IsNullOrWhiteSpace(Model.Error))
+{
+    <div class="alert alert-danger alert-dismissable fade show">
+        <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+        @Model.Error
+    </div>
+}
+
+<div class="row mt-5">
+    <div class="col-md-1"></div>
+    <div class="col-md-10">
+        <form method="post" class="panel panel-login">
+            <div class="panel-heading">
+                <div class="row">
+                    <p class="header-text">@ViewData["Title"]</p>
+                </div>
+                <hr>
+            </div>
+            <div asp-validation-summary="All" class="text-danger"></div>
+
+            <input class="catIdInput" type="hidden" asp-for="CategoryCriteria.ProcurementCategoryId" />
+
+            <div class="row">
+                <div class="col-sm-6">
+                    <div class="form-group">
+                        <label>Category Code</label>
+                        <input class="codeInput form-control-sm ml-1" />
+                        <button id="btnSearch" class="btn btn-sm btn-outline-primary"><i class="fas fa-search"></i></button>
+                    </div>
+                </div>
+
+                <div class="col-sm-6">
+                    <div class="form-group">
+                        <label>Item Name </label>
+                        <input readonly="readonly" class="nameInput form-control ml-1" type="text" />
+                    </div>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-sm-6">
+                    <div class="form-group">
+                        <label>Criteria Description</label>
+                        <input class="form-control" placeholder="Enter Criteria Description" asp-for="CategoryCriteria.CriteriaDescription" />
+                    </div>
+                    <div class="form-group">
+                        <div class="form-check-inline btn btn-outline-primary">
+                            <label class="form-check-label">
+                                <input asp-for="CategoryCriteria.isCompulsory" type="checkbox" class="form-check-input"> Is Compulsory Requirement
+                            </label>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-sm-6">
+                    <div class="form-group">
+                        <label>Minimum Value</label>
+                        <input class="form-control" type="number" asp-for="CategoryCriteria.MinValue" />
+                    </div>
+                    <div class="form-group">
+                        <div class="form-check-inline btn btn-outline-primary">
+                            <label class="form-check-label">
+                                <input asp-for="CategoryCriteria.NeedsDocument" type="checkbox" class="form-check-input"> Request Document
+                            </label>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <div class="row">
+                    <div class="col-sm-3"> </div>
+                    <div class="col-sm-6">
+                        <button id="btnSubmit" disabled type="submit" class="btn form-btn">Add Criteria</button>
+                    </div>
+                </div>
+            </div>
+        </form>
+
+        <hr />
+
+        <div class="col-12">
+            <table class="table table-responsive-sm table-striped">
+                <thead>
+                    <tr class="table-primary">
+                        <th>S/N</th>
+                        <th>Criteria Description</th>
+                        <th>Is Compulsory?</th>
+                        <th>Use Document</th>
+                        <th>Min Value</th>
+                    </tr>
+                </thead>
+                <tbody id="tbody">
+                    
+                </tbody>
+            </table>
+        </div>
+
+    </div>
+</div>
+
+
+<script>
+    $(document).ready(function () {
+        $('#btnSearch').on('click', function (event) {
+            event.preventDefault();
+            var code = $('.codeInput').val();
+
+            if (code) {
+
+                var baseUrl = window.location.origin;
+
+                $.ajax({
+                    url: baseUrl + '/api/Codes/CategoryWithCriteria/' + code.trim(),
+                    type: 'get',
+                    xhrFields: {
+                        withCredentials: true
+                    },
+                    contentType: 'application/json',
+                    error: function () {
+                        alert('Invalid Code.');
+                        
+                        $('.catIdInput').val('');
+                        $('.nameInput').val('');
+                        $('#btnSubmit').prop('disabled', true);
+                    },
+                    success: function (data) {
+                        if (!data) {
+                            alert('Invalid Code.');
+                            
+                            $('.catIdInput').val('');
+                            $('.nameInput').val('');
+                            $('#btnSubmit').prop('disabled', true);
+                            return;
+                        }
+
+                        $('.catIdInput').val(data.id);
+                        $('.nameInput').val(data.name);
+                        $('#btnSubmit').prop('disabled', false);
+
+                        var html = '';
+
+                        for (var i = 0; i < data.categoryCriterias.length; i++)
+                        {
+                            var item = data.categoryCriterias[i];
+
+                            html += '<tr> <td>' + (i + 1) + '</td> <td>' + item.criteriaDescription + '</td>' +
+                                '<td>' + item.isCompulsory + '</td> <td>' + item.needsDocument + '</td>' +
+                                '<td>' + item.minValue + '</td> </tr>';
+                        }
+
+                        $('#tbody').html(html);
+                    },
+                });
+            }
+        });
+    });
+</script>

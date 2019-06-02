@@ -84,28 +84,26 @@
                 <table class="table table-responsive-sm table-striped">
                     <thead>
                         <tr class="table-primary">
-                            <th>Select</th>
                             <th>S/N</th>
+                            <th>Item Code</th>
                             <th>Name</th>
                             <th>Description</th>
-                            <th></th>
+                            <th>Group</th>
+                            <th>Sub-Group</th>
                         </tr>
                     </thead>
                     <tbody>
                         @for (int i = 0; i < Model.dItems.Count; i++)
                         {
                             var item = Model.dItems[i];
-                            <tr>
-                                <td><input type="checkbox" class="criteriaCheck" cid="@item.Id"/></td>
-                                <td>@(i + 1)</td>
-                                <td>@item.ItemName</td>
-                                <td>@item.Description</td>
-                                <td>
-                                    <a asp-page="./PrequalificationCriteria" asp-route-id="@item.Id" class="btn btn-outline-primary" data-toggle="tooltip" title="Manage Item Criteria">
-                                        Criteria
-                                    </a>
-                                </td>
-                            </tr>
+                        <tr>
+                            <td>@(i + 1)</td>
+                            <td>@item.ItemCode</td>
+                            <td>@item.ItemName</td>
+                            <td>@item.Description</td>
+                            <td>@item.ProcurementSubcategory.ProcurementCategory.Name</td>
+                            <td>@item.ProcurementSubcategory.Name</td>
+                        </tr>
                         }
                     </tbody>
                 </table>
