@@ -6,8 +6,8 @@ namespace DcProcurement
 {
     public class ItemCriteria : Criteria
     {
-        public int? ProcurementItemId { get; set; }
+        public int? ItemId { get; set; }
 
-        public ProcurementItem  ProcurementItem { get; set; }
+        public Item  Item { get; set; }
     }
 }

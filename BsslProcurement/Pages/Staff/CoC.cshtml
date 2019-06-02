@@ -32,18 +32,23 @@
             }
 
             <div class="form-group">
-                <label>Name : </label>
-                <input class="form-control ml-1" asp-for="ProcurementCategory.Name" />
+                <label>Code</label>
+                <input class="codeInput form-control-sm ml-1" asp-for="ProcurementCategory.ProcurementCategoryCode" />
+                <button id="btnSearch" class="btn btn-sm btn-outline-primary"><i class="fas fa-search"></i></button>
+            </div>
+            <div class="form-group">
+                <label>Name</label>
+                <input class="nameInput form-control ml-1" asp-for="ProcurementCategory.Name" />
             </div>
             <div class="form-group">
                 <label>Description</label>
-                <textarea class="form-control ml-1" asp-for="ProcurementCategory.Description"></textarea>
+                <textarea class="descriptionInput form-control ml-1" asp-for="ProcurementCategory.Description"></textarea>
             </div>
             <div class="form-group">
                 <div class="row">
                     <div class="col-sm-3"> </div>
                     <div class="col-sm-6 col-sm-offset-3">
-                        <button type="submit" class="btn form-btn">Save</button>
+                        <button type="submit" class="btnSubmit btn form-btn">Save</button>
                     </div>
                 </div>
             </div>
@@ -68,6 +73,7 @@
                     <thead>
                         <tr class="table-primary">
                             <th>S/N</th>
+                            <th>Code</th>
                             <th>Name</th>
                             <th>Description</th>
                             <th></th>
@@ -79,6 +85,7 @@
                             var item = Model.ProcurementCategories[i];
                             <tr>
                                 <td>@(i + 1)</td>
+                                <td>@item.ProcurementCategoryCode</td>
                                 <td>@item.Name</td>
                                 <td>@item.Description</td>
                                 <td>
@@ -98,3 +105,45 @@
 @section Scripts {
     @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
 }
+
+<script>
+    $(document).ready(function () {
+        $('#btnSearch').on('click', function (event) {
+            event.preventDefault();
+            var code = $('.codeInput').val();
+
+            if (code) {
+
+                var baseUrl = window.location.origin;
+
+                $.ajax({
+                    url: baseUrl + '/api/Codes/Category/' + code.trim(),
+                    type: 'get',
+                    xhrFields: {
+                        withCredentials: true
+                    },
+                    contentType: 'application/json',
+                    error: function () {
+                        alert('Code has not been used before.');
+                        $('.nameInput').val('')
+                        $('.descriptionInput').val('')
+                        $('.btnSubmit').text('Save');
+                    },
+                    success: function (data) {
+                        if (!data) {
+                            alert('Code has not been used before.');
+                            $('.nameInput').val('')
+                            $('.descriptionInput').val('')
+                            $('.btnSubmit').text('Save');
+                            return;
+                        }
+
+                        $('.nameInput').val(data.name)
+                        $('.descriptionInput').val(data.description)
+                        $('.btnSubmit').text('Save Changes');
+                    },
+                });
+            }
+        });
+    });
+</script>

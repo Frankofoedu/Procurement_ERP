@@ -15,6 +15,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Folder Include="wwwroot\JSON\" />
     <Folder Include="wwwroot\logo\" />
   </ItemGroup>
 

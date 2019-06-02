@@ -36,12 +36,24 @@ namespace BsslProcurement.Pages.Staff
                 Error = "An Error occured. Please check the data and try again.";
                 return;
             }
+            var cat = _context.ProcurementCategories.FirstOrDefault(x => x.ProcurementCategoryCode == ProcurementCategory.ProcurementCategoryCode);
+            if (cat != null)
+            {
+                cat.Name = ProcurementCategory.Name;
+                cat.Description = ProcurementCategory.Description;
+
+                _context.SaveChanges();
+
+                ProcurementCategories = _context.ProcurementCategories.ToList();
+                return;
+            }
 
             var check = _context.ProcurementCategories.FirstOrDefault(x => x.Name == ProcurementCategory.Name);
 
             if (check!=null)
             {
                 Error = "Category with this name already exist.";
+                ProcurementCategories = _context.ProcurementCategories.ToList();
                 return;
             }
             _context.ProcurementCategories.Add(ProcurementCategory);

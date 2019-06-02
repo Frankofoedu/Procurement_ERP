@@ -1,7 +1,7 @@
 ﻿@page
 @model BsslProcurement.Pages.Staff.ItemsModel
 @{
-    ViewData["Title"] = "Procurement Items";
+    ViewData["Title"] = "Items";
 }
 
 <div class="row mt-5">
@@ -32,8 +32,14 @@
             }
 
             <div class="form-group">
-                <label>Item : </label>
-                <input class="form-control ml-1" asp-for="ProcurementItem.ItemName" />
+                <label>Item Code</label>
+                <input class="codeInput form-control-sm ml-1" asp-for="Item.ItemCode" />
+                <button id="btnSearch" class="btn btn-sm btn-outline-primary"><i class="fas fa-search"></i></button>
+            </div>
+
+            <div class="form-group">
+                <label>Item Name </label>
+                <input class="form-control ml-1" asp-for="Item.ItemName" />
             </div>
 
             <div class="form-group">
@@ -43,12 +49,12 @@
 
             <div class="form-group hidden">
                 <label class="control-label">Item Subgroup :</label>
-                <select id="selectSubgroup" asp-for="ProcurementItem.ProcurementSubcategoryId" class="form-control"></select>
+                <select id="selectSubgroup" asp-for="Item.ProcurementSubcategoryId" class="form-control"></select>
             </div>
 
             <div class="form-group">
                 <label>Description</label>
-                <textarea class="form-control ml-1" asp-for="ProcurementItem.Description"></textarea>
+                <textarea class="form-control ml-1" asp-for="Item.Description"></textarea>
             </div>
             <div class="form-group">
                 <div class="row">
@@ -78,28 +84,26 @@
                 <table class="table table-responsive-sm table-striped">
                     <thead>
                         <tr class="table-primary">
-                            <th>Select</th>
                             <th>S/N</th>
+                            <th>Item Code</th>
                             <th>Name</th>
                             <th>Description</th>
-                            <th></th>
+                            <th>Group</th>
+                            <th>Sub-Group</th>
                         </tr>
                     </thead>
                     <tbody>
-                        @for (int i = 0; i < Model.ProcurementItems.Count; i++)
+                        @for (int i = 0; i < Model.dItems.Count; i++)
                         {
-                            var item = Model.ProcurementItems[i];
-                            <tr>
-                                <td><input type="checkbox" class="criteriaCheck" cid="@item.Id"/></td>
-                                <td>@(i + 1)</td>
-                                <td>@item.ItemName</td>
-                                <td>@item.Description</td>
-                                <td>
-                                    <a asp-page="./PrequalificationCriteria" asp-route-id="@item.Id" class="btn btn-outline-primary" data-toggle="tooltip" title="Manage Item Criteria">
-                                        Criteria
-                                    </a>
-                                </td>
-                            </tr>
+                            var item = Model.dItems[i];
+                        <tr>
+                            <td>@(i + 1)</td>
+                            <td>@item.ItemCode</td>
+                            <td>@item.ItemName</td>
+                            <td>@item.Description</td>
+                            <td>@item.ProcurementSubcategory.ProcurementCategory.Name</td>
+                            <td>@item.ProcurementSubcategory.Name</td>
+                        </tr>
                         }
                     </tbody>
                 </table>
@@ -122,6 +126,40 @@
             displaySubgroup();
         });
 
+        $('#btnSearch').on('click', function (event) {
+            event.preventDefault();
+            var code = $('.codeInput').val();
+
+            if (code) {
+
+                var baseUrl = window.location.origin;
+
+                $.ajax({
+                    url: baseUrl + '/api/Codes/Item/' + code.trim(),
+                    type: 'get',
+                    xhrFields: {
+                        withCredentials: true
+                    },
+                    contentType: 'application/json',
+                    error: function () {
+                        alert('An Error occured during search.');
+                    },
+                    success: function (data) {
+                        if (!data) {
+                            alert('Code has not been used before.');
+                            return;
+                        }
+                        if (data== '') {
+                            alert('Code has not been used before.');
+                            return;
+                        }
+
+                        alert('This CODE is already in USE!!!');
+                        return;
+                    },
+                });
+            }
+        });
     });
 
     function displaySubgroup() {
@@ -134,10 +172,11 @@
                 console.log(arrayOfSubCategories);
                 var o = new Option(arrayOfSubCategories[i].name, arrayOfSubCategories[i].id);
                 /// jquerify the DOM object 'o' so we can use the html method
-                $(o).html(arrayOfSubCategories[i].subcategoryName);
+                $(o).html(arrayOfSubCategories[i].name);
                 $("#selectSubgroup").append(o);
             }
         }
 
     }
+
 </script>
