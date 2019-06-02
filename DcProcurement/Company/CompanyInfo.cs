@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Text;
 
 using System.ComponentModel.DataAnnotations;
+using DcProcurement.JoinTables;
 
 namespace DcProcurement
 {
@@ -26,7 +27,8 @@ namespace DcProcurement
         public string ContactDesignation { get; set; }
         public string ContactPhoneNumber { get; set; }
         public string ContactEmail { get; set; }
-        public List<ProcurementSubcategory> SubCategories { get; set; }
+
+        public List<CompanyInfoProcurementSubCategory> CompanyInfos { get; set; }
         public List<ExperienceRecord>  ExperienceRecords { get; set; }
         public List<EquipmentDetails> EquipmentDetails { get; set; }
         public List<PersonnelDetails>  PersonnelDetails { get; set; }

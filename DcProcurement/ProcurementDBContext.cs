@@ -1,4 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using DcProcurement.JoinTables;
 using System;
 
 namespace DcProcurement
@@ -41,5 +42,11 @@ namespace DcProcurement
         #endregion
 
         public DbSet<PrequalificationPolicy> PrequalificationPolicies { get; set; }
+
+        public CompanyInfoProcurementSubCategory  CompanyInfoProcurementSubCategory { get; set; }
+        protected override void OnModelCreating(ModelBuilder modelBuilder)
+        {
+            modelBuilder.Entity<CompanyInfoProcurementSubCategory>().HasKey(sc => new { sc.CompanyInfoId, sc.ProcurementSubcategoryId });
+        }
     }
 }
