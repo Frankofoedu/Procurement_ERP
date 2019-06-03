@@ -12,12 +12,12 @@ namespace DcProcurement
 
 
         #region Company Informations
-        public CompanyInfo CompanyInfo { get; set; }
-        public EquipmentDetails EquipmentDetails { get; set; }
-        public ExperienceRecord ExperienceRecord { get; set; }
-        public PersonnelDetails PersonnelDetails { get; set; }
+        public DbSet<CompanyInfo> CompanyInfo { get; set; }
+        public DbSet<EquipmentDetails> EquipmentDetails { get; set; }
+        public DbSet<ExperienceRecord> ExperienceRecord { get; set; }
+        public DbSet<PersonnelDetails> PersonnelDetails { get; set; }
 
-        public SubmittedCriteria SubmittedCriteria { get; set; }
+        public DbSet<SubmittedCriteria> SubmittedCriteria { get; set; }
 
         #endregion
 
