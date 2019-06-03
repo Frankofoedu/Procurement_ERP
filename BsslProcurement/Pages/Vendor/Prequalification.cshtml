@@ -203,7 +203,7 @@
 
 
             <div class="text-center p-3">
-                <button id="btnHideDocs" onclick="hideDocDiv(); return false" class="btn btn-info ">Add Documents and Requirements</button>
+                <button id="btnHideDocs" onclick="getCatAndhideDocBtn(); return false" class="btn btn-info ">Add Documents and Requirements</button>
             </div>
 
             <div class="row">
@@ -214,8 +214,9 @@
                 </div>
             </div>
 
-            <div id="btnShowDocs" class="row">
+            <div id="ShowDocs" class="row" style="">
                 <div class="col-12">
+                    <input type="button" value="Test" onclick="addDocFields();" />
                     <table class="table table-responsive-sm table-striped">
                         <thead>
                             <tr class="table-primary">
@@ -224,22 +225,14 @@
                                 <th>Value</th>
                             </tr>
                         </thead>
-                        <tbody>
+                        <tbody id="table_docs">
                             <tr>
-                                <td> 1 </td>
-                                <td>Company Audited Account for Current Year</td>
-                                <td><input type="file" class="form-control-file" /></td>
-                            </tr>
-                            <tr>
-                                <td> 2 </td>
-                                <td>Number of Staff</td>
-                                <td><input type="text" class="form-control" /></td>
-                            </tr>
-                            <tr>
-                                <td> 3 </td>
-                                <td>Tax Clearance Certificate</td>
-                                <td><input type="file" class="form-control-file" /></td>
-                            </tr>
+                                <td>
+                                    <input type="file" class="form-control-sm" asp-for="DocImages[0].Image" />
+                                </td>
+                                </tr>
+
+                           
                         </tbody>
                     </table>
                 </div>
@@ -409,7 +402,7 @@
 </div>
 <script>
 
-    function hideDocDiv() {
+    function getCatAndhideDocBtn() {
         var listCatsId = [];
         for (var i = 0; i < @Model.CategoryCount; i++) {
             //remove non selected criterias
@@ -417,7 +410,7 @@
 
             if (!Number.isNaN(id)) {
                 listCatsId.push(id);
-            }          
+            }
 
         }
 
@@ -425,9 +418,34 @@
 
         //disable button after adding docs field
         $('#btnHideDocs').prop('disabled', true);
+
+        //show docs div
+        $('#ShowDocs').show(1000);
        // console.log(listCatsId);
 
     }
+
+    //
+    function addDocFields(counter,pscid, itId, isDoc, mval,desc ) {
+        if (isDoc) {
+            //requires a file
+            var control = '<tr><td>' + counter + '</td><td>' + desc +
+                '</td><td><input id="DocImages_' + counter +
+                '_Image" name="DocImages[' + counter +
+                '].Image" type="file" class="form-control-file" value /></td></tr>';
+
+
+            $('#table_docs').append(control);
+        } else {
+            var control = '<tr><td>' + counter + '</td><td>' + desc +
+                '</td><td><input id="SubmittedCriterias_' + counter +
+                '__Value" name="SubmittedCriterias[' + counter +
+                '].Value" type="text" class="form-control" value /></td></tr>';
+
+           $('#table_docs').append(control);
+        }
+    }
+
     //get docs and requirements
     function getCriterias(listInt) {
         var baseUrl = window.location.origin;
@@ -451,6 +469,21 @@
                 if (!data) {
                     alert('good Invalid Code.');
                 } else {
+
+                    for (var i = 0; i < data.length; i++) {
+
+                        var item = data[i];
+
+                        var pscID = item.procurementSubcategoryId;
+                        var id = item.id;
+                        var needsDoc = item.needsDocument;
+                        var minVal = item.minValue;
+                        var isCompul = item.isCompulsory;
+                        var critDesc = item.criteriaDescription;
+
+
+                        addDocFields(id, pscID, id, needsDoc, minVal, critDesc);
+                    }
                     console.log(data);
                 }
             }
