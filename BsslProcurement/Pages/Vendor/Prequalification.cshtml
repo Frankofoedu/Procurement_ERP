@@ -21,7 +21,7 @@
 <div class="row mt-5">
     <div class="col-md-1"></div>
     <div class="col-md-10">
-        <form method="post" class="panel panel-login">
+        <form method="post" class="panel panel-login" enctype="multipart/form-data">
             <div class="panel-heading">
                 <div class="row">
                     <p class="header-text">Vendor Pre-qualification</p>
@@ -214,7 +214,7 @@
 
             <div id="ShowDocs" class="row" style="">
                 <div class="col-12">
-                    <input type="button" value="Test" onclick="addDocFields();" />
+                    @*<input type="button" value="Test" onclick="addDocFields();" />*@
                     <table class="table table-responsive-sm table-striped">
                         <thead>
                             <tr class="table-primary">
@@ -224,13 +224,12 @@
                             </tr>
                         </thead>
                         <tbody id="table_docs">
-                            <tr>
-                                <td>
-                                    <input type="file" class="form-control-sm" asp-for="DocImages[0].Image" />
-                                </td>
-                                </tr>
-
-                           
+                          
+                            @*<tr>
+                                <td>(1) <input type="hidden"  asp-for="DocImages[0].Id" value="1"/></td>
+                                <td><input type="file" class="form-control-file" asp-for="DocImages[0].Image" /></td>
+                            </tr>*@
+                            
                         </tbody>
                     </table>
                 </div>
@@ -371,6 +370,8 @@
                                     <td><input type="file" class="form-control-file" asp-for="PersonnelDetailIntputs[i].PassportFile" /></td>
                                 </tr>
                             }
+
+
                         </tbody>
 
                     </table>
@@ -424,23 +425,42 @@
     }
 
     //
-    function addDocFields(counter,pscid, itId, isDoc, mval,desc ) {
+    function addDocFields(counter,pscid, CriId, isDoc, mval,desc ) {
         if (isDoc) {
             //requires a file
-            var control = '<tr><td>' + counter + '</td><td>' + desc +
-                '</td><td><input id="DocImages_' + counter +
-                '_Image" name="DocImages[' + counter +
+
+            //file control
+            var control = '<tr><td>' + counter + 1 + '</td><td>' + desc +
+                '</td><td><input id="DocsList_' + counter +
+                '_Image" name="DocsList[' + counter +
                 '].Image" type="file" class="form-control-file" value /></td></tr>';
 
+            //hidden field to store the id
+            var hidControl = '<tr><td><input id="DocsList_' + counter +
+                '_Id" name="DocsList[' + counter +
+                '].Id" type="hidden" value=' + CriId + ' /></td></tr>';
+
+            
 
             $('#table_docs').append(control);
+            $('#table_docs').append(hidControl);
         } else {
-            var control = '<tr><td>' + counter + '</td><td>' + desc +
+            //no file required
+
+            //value control
+            var control = '<tr><td>' + counter + 1 + '</td><td>' + desc +
                 '</td><td><input id="SubmittedCriterias_' + counter +
                 '__Value" name="SubmittedCriterias[' + counter +
-                '].Value" type="text" class="form-control" value /></td></tr>';
+                '].Value" type="text" class="form-control" value='+mVal+' /></td></tr>';
+
+            
+            //hidden field to store the id
+            var hidControl = '<tr><td><input id="DocsList_' + counter +
+                '_Id" name="DocsList[' + counter +
+                '].Id" type="hidden" value='+CriId+' /></td></tr>';
 
            $('#table_docs').append(control);
+            $('#table_docs').append(hidControl);
         }
     }
 
@@ -473,14 +493,14 @@
                         var item = data[i];
 
                         var pscID = item.procurementSubcategoryId;
-                        var id = item.id;
+                        var Criteriaid = item.id;
                         var needsDoc = item.needsDocument;
                         var minVal = item.minValue;
                         var isCompul = item.isCompulsory;
                         var critDesc = item.criteriaDescription;
 
 
-                        addDocFields(id, pscID, id, needsDoc, minVal, critDesc);
+                        addDocFields(i, pscID, Criteriaid, needsDoc, minVal, critDesc);
                     }
                     console.log(data);
                 }

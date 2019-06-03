@@ -18,6 +18,7 @@ namespace BsslProcurement.Pages.Vendor
         public bool isDoc { get; set; }
         public IFormFile Image { get; set; }
         public string FileName { get; set; }
+        public string Value { get; set; }
     }
 
 
@@ -39,7 +40,7 @@ namespace BsslProcurement.Pages.Vendor
         public List<SubmittedCriteria> SubmittedCriterias { get; set; }
 
         [BindProperty]
-        public List<DocsModel> DocImages { get; set; }
+        public List<DocsModel> DocsList { get; set; }
 
         [BindProperty]
         public CompanyInfo CompanyInfo { get; set; }
@@ -71,10 +72,10 @@ namespace BsslProcurement.Pages.Vendor
         public List<int> subCatsId { get; set; }
         public void OnGet()
         {
-            //gets the number of categories from the setup page
-            //CategoryCount = _context.PrequalificationPolicies.FirstOrDefault().NoOfCategory;
+           // gets the number of categories from the setup page
+            CategoryCount = _context.PrequalificationPolicies.FirstOrDefault().NoOfCategory;
 
-            //GetCategories();
+            GetCategories();
 
         }
 
