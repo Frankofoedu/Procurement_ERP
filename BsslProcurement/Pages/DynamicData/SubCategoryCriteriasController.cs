@@ -61,11 +61,11 @@ namespace BsslProcurement.Pages.DynamicData
 
             if (!subCategoryCriteria.Any())
             {
-                return new JsonResult("None");
-                //return NotFound();
+                //return new JsonResult("None");
+                return NotFound();
             }
 
-            return new JsonResult(subCategoryCriteria);
+            return Ok(subCategoryCriteria);
         }
 
 
