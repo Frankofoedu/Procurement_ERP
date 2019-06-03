@@ -12,7 +12,6 @@ namespace BsslProcurement.Pages.Vendor
 {
     public class PrequalificationModel : PageModel
     {
-
         private readonly ProcurementDBContext _context;
 
         public PrequalificationModel(ProcurementDBContext context)
