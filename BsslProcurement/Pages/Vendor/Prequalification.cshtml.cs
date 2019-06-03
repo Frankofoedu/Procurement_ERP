@@ -61,7 +61,11 @@ namespace BsslProcurement.Pages.Vendor
 
         [BindProperty]
         public List<PersonnelDetailInput> PersonnelDetailIntputs { get; set; }
-        
+        [BindProperty]
+        public List<EquipmentDetails> EquipmentDetails { get; set; }
+        [BindProperty]
+        public List<ExperienceRecord> ExperienceRecords { get; set; }
+
 
         public string Message { get; set; }
         public string Error { get; set; }
