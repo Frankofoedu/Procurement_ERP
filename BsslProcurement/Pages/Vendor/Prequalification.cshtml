@@ -21,7 +21,7 @@
 <div class="row mt-5">
     <div class="col-md-1"></div>
     <div class="col-md-10">
-        <form method="post" class="panel panel-login">
+        <form method="post" class="panel panel-login" enctype="multipart/form-data">
             <div class="panel-heading">
                 <div class="row">
                     <p class="header-text">Vendor Pre-qualification</p>
@@ -228,9 +228,9 @@
                                 <td>
                                     <input type="file" class="form-control-sm" asp-for="DocImages[0].Image" />
                                 </td>
-                                </tr>
+                            </tr>
 
-                           
+
                         </tbody>
                     </table>
                 </div>
@@ -374,11 +374,12 @@
                         </tbody>
 
                     </table>
-                    <button id="btnAddMorePersonnel" class="btn btn-outline-primary"> Add More</button>
+                    <input id="personnelLastIndex" type="hidden" value="1">
+                    <button id="btnAddMorePersonnel" class=""> Add More</button>
                 </div>
             </div>
 
-            <div class="col-12">
+            <div class="col-12 mt-4">
                 <div class="form-group">
                     <div class="row">
                         <div class="col-sm-4 text-center">
@@ -399,6 +400,30 @@
     </div>
 </div>
 <script>
+
+    $(document).ready(function () {
+        $('#btnAddMorePersonnel').on('click', function (event) {
+            var lastIndex = $('#personnelLastIndex').val();
+            var newIndex = Number(lastIndex) + 1;
+
+            newPersonnelRow(newIndex);
+            $('#personnelLastIndex').val(newIndex);
+            return false;
+        });
+
+    });
+
+    function newPersonnelRow(index) {
+        var html = ' <tr> <td>' + (Number(index) + 1) + '</td > <td>' +
+            '<input type="text" class="form-control" id="PersonnelDetailIntputs_' + index + '__Name" name="PersonnelDetailIntputs[' + index + '].Name" value="" /></td>' +
+            '<td><input type="text" class="form-control" id="PersonnelDetailIntputs_' + index + '__Qualification" name="PersonnelDetailIntputs[' + index + '].Qualification" value="" /></td>' +
+            '<td><input type="file" class="form-control-file" id="PersonnelDetailIntputs_' + index + '__CVFile" name="PersonnelDetailIntputs[' + index + '].CVFile" /></td>' +
+            '<td><input type="file" class="form-control-file" id="PersonnelDetailIntputs_' + index + '__CertFile" name="PersonnelDetailIntputs[' + index + '].CertFile" /></td>' +
+            '<td><input type="file" class="form-control-file" id="PersonnelDetailIntputs_' + index + '__PassportFile" name="PersonnelDetailIntputs[' + index + '].PassportFile" /></td>' +
+            '</tr>';
+
+        $('#personnelTbody').append(html);
+    }
 
     function getCatAndhideDocBtn() {
         var listCatsId = [];

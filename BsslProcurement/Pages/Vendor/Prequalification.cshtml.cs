@@ -72,9 +72,9 @@ namespace BsslProcurement.Pages.Vendor
         public void OnGet()
         {
             //gets the number of categories from the setup page
-            //CategoryCount = _context.PrequalificationPolicies.FirstOrDefault().NoOfCategory;
+            CategoryCount = _context.PrequalificationPolicies.FirstOrDefault().NoOfCategory;
 
-            //GetCategories();
+            GetCategories();
 
         }
 
@@ -101,6 +101,7 @@ namespace BsslProcurement.Pages.Vendor
 
             if (!ModelState.IsValid)
             {
+                Message = "No of personnel = " + PersonnelDetailIntputs.Count;
                 CategoryCount = _context.PrequalificationPolicies.FirstOrDefault().NoOfCategory;
                 GetCategories();
                 return Page();
