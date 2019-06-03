@@ -64,9 +64,11 @@ namespace BsslProcurement.Pages.Vendor
 
             if (!ModelState.IsValid)
             {
+                CategoryCount = _context.PrequalificationPolicies.FirstOrDefault().NoOfCategory;
                 GetCategories();
                 return Page();
             }
+
 
 
             return null;

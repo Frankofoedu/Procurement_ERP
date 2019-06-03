@@ -191,16 +191,18 @@
                     <div class="col-sm-6">
                         <div class="form-group">
                             <label>Sub Category </label>
-                            <select  asp-for="subCatsId[i]" class="form-control">
+                            <select id="ddlSelectCategory_@i" class="form-control">
                                 <option>--Select--</option>
                             </select>
                         </div>
                     </div>
                 }
-
-              
             </div>
 
+
+            <div class="text-center p-3">
+                <button id="btnHideDocs" onclick="hideDocDiv(); return false" class="btn btn-info ">Add Documents and Requirements</button>
+            </div>
 
             <div class="row">
                 <div class="col-12">
@@ -209,7 +211,8 @@
                     </h3>
                 </div>
             </div>
-            <div class="row">
+
+            <div id="btnShowDocs" class="row">
                 <div class="col-12">
                     <table class="table table-responsive-sm table-striped">
                         <thead>
@@ -406,6 +409,56 @@
     </div>
 </div>
 <script>
+
+    function hideDocDiv() {
+        var listCatsId = [];
+        for (var i = 0; i < @Model.CategoryCount; i++) {
+            //remove non selected criterias
+            var id = +($('#ddlSelectCategory_' + i).val());
+
+            if (!Number.isNaN(id)) {
+                listCatsId.push(id);
+            }          
+
+        }
+
+        getCriterias(listCatsId);
+
+        //disable button after adding docs field
+        $('#btnHideDocs').prop('disabled', true);
+       // console.log(listCatsId);
+
+    }
+    //get docs and requirements
+    function getCriterias(listInt) {
+        var baseUrl = window.location.origin;
+        //var myJSON = JSON.stringify(listInt);
+
+        //var tes = [1, 2, 3];
+        //console.log(tes);
+        $.ajax({
+            contentType:'application/json; charset=utf-8',
+            url: baseUrl + '/api/SubCategoryCriterias/ListSubCategoryCriteria' ,
+            data: { ids: listInt },
+           traditional:true,
+            type: 'get',
+            xhrFields: {
+                withCredentials: true
+            },
+            contentType: 'application/json',
+            error: function () {
+                alert('error Invalid Code.');
+            }, success: function (data) {
+                if (!data) {
+                    alert('good Invalid Code.');
+                } else {
+                    console.log(data);
+                }
+            }
+        })
+
+    }
+
     function getSubCategories(id, counter) {
         //alert("started" + id);
         $.getJSON("https://localhost:5001/DynamicData/SubCategories?id=" + id,
@@ -418,10 +471,10 @@
 
                         $('#ddlSelectCategory_' + counter).append($('<option>').text(obj.name).attr('value', obj.value));
                     });
-                    console.log(result);
+                   // console.log(result);
 
                 } else {
-                    
+
                     $('#ddlSelectCategory_' + counter).empty();
                     $('#ddlSelectCategory_' + counter).append($('<option>').text("Select"));
                 }
