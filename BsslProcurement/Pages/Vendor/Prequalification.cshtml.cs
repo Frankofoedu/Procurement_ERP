@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using DcProcurement;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.AspNetCore.Mvc.Rendering;
@@ -26,6 +27,20 @@ namespace BsslProcurement.Pages.Vendor
 
         [BindProperty]
         public List<ProcurementSubcategory> scat { get; set; }
+
+        public class PersonnelDetailInput
+        {
+            public string Name { get; set; }
+            public string Qualification { get; set; }
+            public IFormFile CVFile { get; set; }
+            public IFormFile CertFile { get; set; }
+            public IFormFile PassportFile { get; set; }
+        }
+
+        [BindProperty]
+        public List<PersonnelDetailInput> PersonnelDetailIntputs { get; set; }
+        
+
         public string Message { get; set; }
         public string Error { get; set; }
         public int CategoryCount { get; set; }
@@ -35,9 +50,9 @@ namespace BsslProcurement.Pages.Vendor
         public void OnGet()
         {
             //gets the number of categories from the setup page
-            CategoryCount = _context.PrequalificationPolicies.FirstOrDefault().NoOfCategory;
+            //CategoryCount = _context.PrequalificationPolicies.FirstOrDefault().NoOfCategory;
 
-            GetCategories();
+            //GetCategories();
 
         }
 

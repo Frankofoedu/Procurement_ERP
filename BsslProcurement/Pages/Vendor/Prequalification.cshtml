@@ -366,25 +366,22 @@
                                 <th>Passport Photograph</th>
                             </tr>
                         </thead>
-                        <tbody>
-                            <tr>
-                                <td> 1 </td>
-                                <td><input type="text" class="form-control" /></td>
-                                <td><input type="text" class="form-control" /></td>
-                                <td><input type="file" class="form-control-file" /></td>
-                                <td><input type="file" class="form-control-file" /></td>
-                                <td><input type="file" class="form-control-file" /></td>
-                            </tr>
-                            <tr>
-                                <td> 2 </td>
-                                <td><input type="text" class="form-control" /></td>
-                                <td><input type="text" class="form-control" /></td>
-                                <td><input type="file" class="form-control-file" /></td>
-                                <td><input type="file" class="form-control-file" /></td>
-                                <td><input type="file" class="form-control-file" /></td>
-                            </tr>
+                        <tbody id="personnelTbody">
+                            @for (int i = 0; i < 2; i++)
+                            {
+                                <tr>
+                                    <td> @(i + 1) </td>
+                                    <td><input type="text" class="form-control" asp-for="PersonnelDetailIntputs[i].Name" /></td>
+                                    <td><input type="text" class="form-control" asp-for="PersonnelDetailIntputs[i].Qualification" /></td>
+                                    <td><input type="file" class="form-control-file" asp-for="PersonnelDetailIntputs[i].CVFile" /></td>
+                                    <td><input type="file" class="form-control-file" asp-for="PersonnelDetailIntputs[i].CertFile" /></td>
+                                    <td><input type="file" class="form-control-file" asp-for="PersonnelDetailIntputs[i].PassportFile" /></td>
+                                </tr>
+                            }
                         </tbody>
+
                     </table>
+                    <button id="btnAddMorePersonnel" class="btn btn-outline-primary"> Add More</button>
                 </div>
             </div>
 
