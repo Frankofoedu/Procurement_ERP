@@ -229,7 +229,6 @@
                                 <td>(1) <input type="hidden"  asp-for="DocImages[0].Id" value="1"/></td>
                                 <td><input type="file" class="form-control-file" asp-for="DocImages[0].Image" /></td>
                             </tr>*@
-                            
                         </tbody>
                     </table>
                 </div>
@@ -258,39 +257,25 @@
                                 <th>Phone Number</th>
                             </tr>
                         </thead>
-                        <tbody>
-                            <tr>
-                                <td> 1 </td>
-                                <td><input type="text" class="form-control-sm" /></td>
-                                <td><input type="text" class="form-control-sm" /></td>
-                                <td><input type="text" class="form-control-sm" /></td>
-                                <td><input type="text" class="form-control-sm" /></td>
-                                <td><input type="text" class="form-control-sm" /></td>
-                                <td><input type="text" class="form-control-sm" /></td>
-                                <td><input type="text" class="form-control-sm" /></td>
-                            </tr>
-                            <tr>
-                                <td> 2 </td>
-                                <td><input type="text" class="form-control-sm" /></td>
-                                <td><input type="text" class="form-control-sm" /></td>
-                                <td><input type="text" class="form-control-sm" /></td>
-                                <td><input type="text" class="form-control-sm" /></td>
-                                <td><input type="text" class="form-control-sm" /></td>
-                                <td><input type="text" class="form-control-sm" /></td>
-                                <td><input type="text" class="form-control-sm" /></td>
-                            </tr>
-                            <tr>
-                                <td> 3 </td>
-                                <td><input type="text" class="form-control-sm" /></td>
-                                <td><input type="text" class="form-control-sm" /></td>
-                                <td><input type="text" class="form-control-sm" /></td>
-                                <td><input type="text" class="form-control-sm" /></td>
-                                <td><input type="text" class="form-control-sm" /></td>
-                                <td><input type="text" class="form-control-sm" /></td>
-                                <td><input type="text" class="form-control-sm" /></td>
-                            </tr>
+                        <tbody id="experienceTbody">
+                            @for (int i = 0; i < 1; i++)
+                            {
+                                <tr>
+                                    <td>@(i + 1)</td>
+                                    <td><input type="text" class="form-control-sm" asp-for="ExperienceRecords[i].Name" /></td>
+                                    <td><input type="text" class="form-control-sm" asp-for="ExperienceRecords[i].Address" /></td>
+                                    <td><input type="text" class="form-control-sm" asp-for="ExperienceRecords[i].ProjectDescription" /></td>
+                                    <td><input type="text" class="form-control-sm" asp-for="ExperienceRecords[i].StartDate" /></td>
+                                    <td><input type="text" class="form-control-sm" asp-for="ExperienceRecords[i].CompletionDate" /></td>
+                                    <td><input type="text" class="form-control-sm" asp-for="ExperienceRecords[i].ContactPerson" /></td>
+                                    <td><input type="text" class="form-control-sm" asp-for="ExperienceRecords[i].PhoneNumber" /></td>
+                                </tr>
+                            }
                         </tbody>
                     </table>
+
+                    <input id="experienceLastIndex" type="hidden" value="0">
+                    <button id="btnAddMoreExperience" class=""> Add More</button>
                 </div>
             </div>
 
@@ -313,27 +298,21 @@
                                 <th>Quantity</th>
                             </tr>
                         </thead>
-                        <tbody>
-                            <tr>
-                                <td> 1 </td>
-                                <td><input type="text" class="form-control" /></td>
-                                <td><input type="text" class="form-control" /></td>
-                                <td><input type="text" class="form-control" /></td>
-                            </tr>
-                            <tr>
-                                <td> 2 </td>
-                                <td><input type="text" class="form-control" /></td>
-                                <td><input type="text" class="form-control" /></td>
-                                <td><input type="text" class="form-control" /></td>
-                            </tr>
-                            <tr>
-                                <td> 3 </td>
-                                <td><input type="text" class="form-control" /></td>
-                                <td><input type="text" class="form-control" /></td>
-                                <td><input type="text" class="form-control" /></td>
-                            </tr>
+                        <tbody id="equipmentTbody">
+                            @for (int i = 0; i < 1; i++)
+                            {
+                                <tr>
+                                    <td>@(i + 1)</td>
+                                    <td><input type="text" class="form-control" asp-for="EquipmentDetails[i].Name" /></td>
+                                    <td><input type="text" class="form-control" asp-for="EquipmentDetails[i].Description" /></td>
+                                    <td><input type="text" class="form-control" asp-for="EquipmentDetails[i].Quantity" /></td>
+                                </tr>
+                            }
                         </tbody>
                     </table>
+
+                    <input id="equipmentLastIndex" type="hidden" value="0">
+                    <button id="btnAddMoreEquipment" class=""> Add More</button>
                 </div>
             </div>
 
@@ -359,7 +338,7 @@
                             </tr>
                         </thead>
                         <tbody id="personnelTbody">
-                            @for (int i = 0; i < 2; i++)
+                            @for (int i = 0; i < 1; i++)
                             {
                                 <tr>
                                     <td> @(i + 1) </td>
@@ -375,11 +354,12 @@
                         </tbody>
 
                     </table>
-                    <button id="btnAddMorePersonnel" class="btn btn-outline-primary"> Add More</button>
+                    <input id="personnelLastIndex" type="hidden" value="0">
+                    <button id="btnAddMorePersonnel" class=""> Add More</button>
                 </div>
             </div>
 
-            <div class="col-12">
+            <div class="col-12 mt-4">
                 <div class="form-group">
                     <div class="row">
                         <div class="col-sm-4 text-center">
@@ -400,6 +380,72 @@
     </div>
 </div>
 <script>
+
+    $(document).ready(function () {
+        $('#btnAddMorePersonnel').on('click', function (event) {
+            var lastIndex = $('#personnelLastIndex').val();
+            var newIndex = Number(lastIndex) + 1;
+
+            newPersonnelRow(newIndex);
+            $('#personnelLastIndex').val(newIndex);
+            return false;
+        });
+
+        $('#btnAddMoreEquipment').on('click', function (event) {
+            var lastIndex = $('#equipmentLastIndex').val();
+            var newIndex = Number(lastIndex) + 1;
+
+            newEquipmentRow(newIndex);
+            $('#equipmentLastIndex').val(newIndex);
+            return false;
+        });
+
+        $('#btnAddMoreExperience').on('click', function (event) {
+            var lastIndex = $('#experienceLastIndex').val();
+            var newIndex = Number(lastIndex) + 1;
+
+            newExperienceRow(newIndex);
+            $('#experienceLastIndex').val(newIndex);
+            return false;
+        });
+
+    });
+
+    function newPersonnelRow(index) {
+        var html = ' <tr> <td>' + (Number(index) + 1) + '</td > <td>' +
+            '<input type="text" class="form-control" id="PersonnelDetailIntputs_' + index + '__Name" name="PersonnelDetailIntputs[' + index + '].Name" value="" /></td>' +
+            '<td><input type="text" class="form-control" id="PersonnelDetailIntputs_' + index + '__Qualification" name="PersonnelDetailIntputs[' + index + '].Qualification" value="" /></td>' +
+            '<td><input type="file" class="form-control-file" id="PersonnelDetailIntputs_' + index + '__CVFile" name="PersonnelDetailIntputs[' + index + '].CVFile" /></td>' +
+            '<td><input type="file" class="form-control-file" id="PersonnelDetailIntputs_' + index + '__CertFile" name="PersonnelDetailIntputs[' + index + '].CertFile" /></td>' +
+            '<td><input type="file" class="form-control-file" id="PersonnelDetailIntputs_' + index + '__PassportFile" name="PersonnelDetailIntputs[' + index + '].PassportFile" /></td>' +
+            '</tr>';
+
+        $('#personnelTbody').append(html);
+    }
+
+    function newEquipmentRow(index) {
+        var html = ' <tr> <td>' + (Number(index) + 1) + '</td > <td>' +
+            '<input type="text" class="form-control" id="EquipmentDetails_' + index + '__Name" name="EquipmentDetails[' + index + '].Name" value="" /></td>' +
+            '<td><input type="text" class="form-control" id="EquipmentDetails_' + index + '__Description" name="EquipmentDetails[' + index + '].Description" value="" /></td>' +
+            '<td><input type="text" class="form-control" id="EquipmentDetails_' + index + '__Quantity" name="EquipmentDetails[' + index + '].Quantity" value="" /></td>' +
+            '</tr>';
+
+        $('#equipmentTbody').append(html);
+    }
+    
+    function newExperienceRow(index) {
+        var html = ' <tr> <td>' + (Number(index) + 1) + '</td > <td>' +
+            '<input type="text" class="form-control" id="ExperienceRecords_' + index + '__Name" name="ExperienceRecords[' + index + '].Name" value="" /></td>' +
+            '<td><input type="text" class="form-control" id="ExperienceRecords_' + index + '__Address" name="ExperienceRecords[' + index + '].Address" value="" /></td>' +
+            '<td><input type="text" class="form-control" id="ExperienceRecords_' + index + '__ProjectDescription" name="ExperienceRecords[' + index + '].ProjectDescription" value="" /></td>' +
+            '<td><input type="text" class="form-control" id="ExperienceRecords_' + index + '__StartDate" name="ExperienceRecords[' + index + '].StartDate" value="" /></td>' +
+            '<td><input type="text" class="form-control" id="ExperienceRecords_' + index + '__CompletionDate" name="ExperienceRecords[' + index + '].CompletionDate" value="" /></td>' +
+            '<td><input type="text" class="form-control" id="ExperienceRecords_' + index + '__ContactPerson" name="ExperienceRecords[' + index + '].ContactPerson" value="" /></td>' +
+            '<td><input type="text" class="form-control" id="ExperienceRecords_' + index + '__PhoneNumber" name="ExperienceRecords[' + index + '].PhoneNumber" value="" /></td>' +
+            '</tr>';
+
+        $('#experienceTbody').append(html);
+    }
 
     function getCatAndhideDocBtn() {
         var listCatsId = [];
