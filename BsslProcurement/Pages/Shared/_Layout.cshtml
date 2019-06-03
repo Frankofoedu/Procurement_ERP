@@ -68,6 +68,35 @@
                     </ul>
                 </li>
                 <li>
+                    <a href="#vendorSubmenu" data-toggle="collapse" aria-expanded="true" class="dropdown-toggle">
+                        <i class="fas fa-user-alt mr-1"></i> Vendor
+                    </a>
+                    <ul class="collapse list-unstyled" id="vendorSubmenu">
+                        <li>
+                            <a asp-page="/Vendor/Prequalification"><i class="fas fa-file-archive mr-1"></i> Prequalification</a>
+                        </li>
+                    </ul>
+                </li>
+                <li>
+                    <a href="#criteriaSubmenu" data-toggle="collapse" aria-expanded="true" class="dropdown-toggle">
+                        <i class="fas fa-list mr-1"></i> Manage Criteria
+                    </a>
+                    <ul class="collapse list-unstyled" id="criteriaSubmenu">
+                        <li>
+                            <a asp-page="/Staff/Criteria/General"><i class="fas fa-file-archive mr-1"></i> General Criteria</a>
+                        </li>
+                        <li>
+                            <a asp-page="/Staff/Criteria/Category"><i class="fas fa-file-archive mr-1"></i> Category Criteria</a>
+                        </li>
+                        <li>
+                            <a asp-page="/Staff/Criteria/SubCategory"><i class="fas fa-file-archive mr-1"></i> Sub-category Criteria</a>
+                        </li>
+                        <li>
+                            <a asp-page="/Staff/Criteria/Item"><i class="fas fa-file-archive mr-1"></i> Item Criteria</a>
+                        </li>
+                    </ul>
+                </li>
+                <li>
                     <a href="#pagesSubmenu" data-toggle="collapse" aria-expanded="true" class="dropdown-toggle">
                         <i class="fas fa-file-alt mr-1"></i> Pages
                     </a>
@@ -78,8 +107,11 @@
                         <li>
                             <a asp-page="/Staff/Items"><i class="fas fa-file-archive mr-1"></i> Items</a>
                         </li>
+                        @*<li>
+            <a asp-page="/Staff/ProPolicy"><i class="fas fa-file-invoice mr-1"></i> Publish Procurement</a>
+        </li>*@
                         <li>
-                            <a asp-page="/Staff/ProPolicy"><i class="fas fa-file-invoice mr-1"></i> Publish Procurement</a>
+                            <a asp-page="/Staff/PreQSetup"><i class="fas fa-file-invoice mr-1"></i> Prequalification Setup</a>
                         </li>
                         <li>
                             <a asp-page="/Staff/PSISS"><i class="fas fa-file-invoice mr-1"></i> PSISS</a>
