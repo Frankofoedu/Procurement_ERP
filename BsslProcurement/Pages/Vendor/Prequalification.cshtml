@@ -84,16 +84,14 @@
                 <div class="col-sm-6">
                     <div class="form-group">
                         <label>Select State</label>
-                        <select class="form-control" asp-for="CompanyInfo.State">
-                            <option>--Select--</option>
+                        <select class="states form-control" asp-for="CompanyInfo.State">
                         </select>
                     </div>
                 </div>
                 <div class="col-sm-6">
                     <div class="form-group">
-                        <label>City</label>
-                        <select class="form-control" asp-for="CompanyInfo.City">
-                            <option>--Select--</option>
+                        <label>Select LGA</label>
+                        <select class="lgas form-control" asp-for="CompanyInfo.City">
                         </select>
                     </div>
                 </div>
@@ -224,11 +222,11 @@
                             </tr>
                         </thead>
                         <tbody id="table_docs">
-                          
+
                             @*<tr>
-                                <td>(1) <input type="hidden"  asp-for="DocImages[0].Id" value="1"/></td>
-                                <td><input type="file" class="form-control-file" asp-for="DocImages[0].Image" /></td>
-                            </tr>*@
+                                    <td>(1) <input type="hidden"  asp-for="DocImages[0].Id" value="1"/></td>
+                                    <td><input type="file" class="form-control-file" asp-for="DocImages[0].Image" /></td>
+                                </tr>*@
                         </tbody>
                     </table>
                 </div>
@@ -379,9 +377,24 @@
         <hr />
     </div>
 </div>
+    <script src="~/js/StatenLGA.js" ></script>
+
 <script>
 
     $(document).ready(function () {
+
+        for (var i = 0; i < states.length; i++) {
+            var o = new Option(states[i].state.name, states[i].state.name);
+            $(o).html(states[i].state.name);
+            $('.states').append(o);
+        }
+
+        $('.states').on('change', function () {
+            displayLGA();
+        });
+
+        displayLGA();
+
         $('#btnAddMorePersonnel').on('click', function (event) {
             var lastIndex = $('#personnelLastIndex').val();
             var newIndex = Number(lastIndex) + 1;
@@ -432,7 +445,7 @@
 
         $('#equipmentTbody').append(html);
     }
-    
+
     function newExperienceRow(index) {
         var html = ' <tr> <td>' + (Number(index) + 1) + '</td > <td>' +
             '<input type="text" class="form-control" id="ExperienceRecords_' + index + '__Name" name="ExperienceRecords[' + index + '].Name" value="" /></td>' +
@@ -490,7 +503,7 @@
             var hidControl = '<tr><td><input id="DocsList_' + counter +
                 '_Id" name="DocsList[' + counter +
                 '].Id" type="hidden" value=' + isDoc + ' /></td></tr>';
-            
+
 
             $('#table_docs').append(control);
             $('#table_docs').append(hidControl);
@@ -503,7 +516,7 @@
                 '__Value" name="SubmittedCriterias[' + counter +
                 '].Value" type="text" class="form-control" value='+mVal+' /></td></tr>';
 
-            
+
             //hidden field to store the id
             var hidControl = '<tr><td><input id="DocsList_' + counter +
                 '_Id" name="DocsList[' + counter +
@@ -583,24 +596,8 @@
                 // alert('Done');
                 console.log(error);
             });
-        };
-
-     $(document).ready(function () {
-        for (var i = 0; i < states.length; i++) {
-            var o = new Option(states[i].state.name, states[i].state.name);
-            $(o).html(states[i].state.name);
-            $('.states').append(o);
         }
 
-        $('.states').on('change', function () {
-            displayLGA();
-        });
-
-        displayLGA();
-
-    });
-
-    
     function displayLGA() {
         var selVal = $('.states').val();
         $(".lgas").html("");
@@ -622,4 +619,3 @@
         }
     }
 </script>
-<script src="~/js/StatenLGA.js"></script>
