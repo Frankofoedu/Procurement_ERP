@@ -107,6 +107,10 @@ namespace BsslProcurement.Pages.Staff
             }
 
             var category = await _context.ProcurementCategories.Include(n=> n.CategoryCriterias).FirstOrDefaultAsync(m => m.ProcurementCategoryCode == code);
+            foreach (var item in category.CategoryCriterias)
+            {
+                item.ProcurementCategory = null;
+            } 
 
             if (category == null)
             {
@@ -126,6 +130,10 @@ namespace BsslProcurement.Pages.Staff
             }
 
             var subcategory = await _context.ProcurementSubcategories.Include(n => n.SubCategoryCriterias).FirstOrDefaultAsync(m => m.ProcurementSubCategoryCode == code);
+            foreach (var item in subcategory.SubCategoryCriterias)
+            {
+                item.ProcurementSubcategory = null;
+            }
 
             if (subcategory == null)
             {
@@ -145,7 +153,12 @@ namespace BsslProcurement.Pages.Staff
             }
 
             var item = await _context.Items.Include(n => n.ItemCriterias).FirstOrDefaultAsync(m => m.ItemCode == code);
-            
+
+            foreach (var obj in item.ItemCriterias)
+            {
+                obj.Item = null;
+            }
+
             if (item == null)
             {
                 return NotFound();
