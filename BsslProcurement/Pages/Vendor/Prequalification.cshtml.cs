@@ -36,8 +36,7 @@ namespace BsslProcurement.Pages.Vendor
         }
 
 
-        [BindProperty]
-        public List<SubmittedCriteria> SubmittedCriterias { get; set; }
+       
 
         [BindProperty]
         public List<DocsModel> DocsList { get; set; }
@@ -112,7 +111,14 @@ namespace BsslProcurement.Pages.Vendor
                 return Page();
             }
 
+            //saves company to db
+            _context.CompanyInfo.Add(CompanyInfo);
 
+
+            //saves list of submitted criterias to db
+           _context.SubmittedCriteria.AddRange(GetSubmittedCriterias(CompanyInfo.Id));
+
+            _context.SaveChanges();
 
             return null;
 
@@ -138,13 +144,16 @@ namespace BsslProcurement.Pages.Vendor
             {
                 foreach (var doc in formFiles)
                 {
+                    //check if it requires a document upload
+                    if (doc.isDoc)
+                    {
+                        var fileName = doc.Image.FileName;
+                        var uploads = Path.Combine(_hostingEnvironment.WebRootPath, "logo");
+                        var filePath = Path.Combine(uploads, fileName);
+                        doc.Image.CopyTo(new FileStream(filePath, FileMode.Create));
 
-                    var fileName = doc.Image.FileName;
-                    var uploads = Path.Combine(_hostingEnvironment.WebRootPath, "logo");
-                    var filePath = Path.Combine(uploads, fileName);
-                    doc.Image.CopyTo(new FileStream(filePath, FileMode.Create));
-
-                    doc.FileName = fileName;
+                        doc.FileName = fileName;
+                    }
                 }
 
                 //    return fileNames;
@@ -153,6 +162,29 @@ namespace BsslProcurement.Pages.Vendor
             // return null;
         }
 
+        /// <summary>
+        /// creates a list of submitted criterias and there docs
+        /// </summary>
+        /// <param name="id">Company Id</param>
+        List<SubmittedCriteria> GetSubmittedCriterias(int id)
+        {
+            GetImageFileName(DocsList);
 
+            var SubmittedCriterias = new List<SubmittedCriteria>();
+
+            foreach ( var docs in DocsList)
+            {
+                if (docs.isDoc)
+                {
+                    SubmittedCriterias.Add(new SubmittedCriteria { CompanyInfoId = id, CriteriaId = docs.Id, Value = docs.FileName });
+                }
+                else
+                {
+                    SubmittedCriterias.Add(new SubmittedCriteria { CompanyInfoId = id, CriteriaId = docs.Id, Value = docs.Value });
+                }
+            }
+
+            return SubmittedCriterias;
+        }
     }
 }

@@ -163,7 +163,7 @@
                 <div class="col-sm-6">
                     <div class="form-group">
                         <label>Email Address</label>
-                        <input class="form-control" placeholder="Enter ONE(1) Email Address" type="email" asp-for="CompanyInfo.Email" />
+                        <input class="form-control" placeholder="Enter ONE(1) Email Address" type="email" asp-for="CompanyInfo.ContactEmail" />
                     </div>
                 </div>
             </div>
@@ -486,6 +486,10 @@
                 '_Id" name="DocsList[' + counter +
                 '].Id" type="hidden" value=' + CriId + ' /></td></tr>';
 
+            //hidden field for the bool doc test
+            var hidControl = '<tr><td><input id="DocsList_' + counter +
+                '_Id" name="DocsList[' + counter +
+                '].Id" type="hidden" value=' + isDoc + ' /></td></tr>';
             
 
             $('#table_docs').append(control);
@@ -579,5 +583,43 @@
                 // alert('Done');
                 console.log(error);
             });
-    };
+        };
+
+     $(document).ready(function () {
+        for (var i = 0; i < states.length; i++) {
+            var o = new Option(states[i].state.name, states[i].state.name);
+            $(o).html(states[i].state.name);
+            $('.states').append(o);
+        }
+
+        $('.states').on('change', function () {
+            displayLGA();
+        });
+
+        displayLGA();
+
+    });
+
+    
+    function displayLGA() {
+        var selVal = $('.states').val();
+        $(".lgas").html("");
+
+        var locals = [];
+        for (var i = 0; i < states.length; i++) {
+            if (states[i].state.name == selVal) {
+                locals = states[i].state.locals;
+                break;
+            }
+        }
+
+        for (var i = 0; i < locals.length; i++) {
+
+            var o = new Option(locals[i].name, locals[i].name);
+            $(o).html(locals[i].name);
+                $(".lgas").append(o);
+
+        }
+    }
 </script>
+<script src="~/js/StatenLGA.js"></script>
