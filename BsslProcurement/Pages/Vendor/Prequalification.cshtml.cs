@@ -24,9 +24,14 @@ namespace BsslProcurement.Pages.Vendor
         [BindProperty]
         public List<SelectListItem> Categories { get; set; }
 
+        [BindProperty]
+        public List<ProcurementSubcategory> scat { get; set; }
         public string Message { get; set; }
         public string Error { get; set; }
         public int CategoryCount { get; set; }
+
+        [BindProperty]
+        public List<int> subCatsId { get; set; }
         public void OnGet()
         {
             //gets the number of categories from the setup page
@@ -52,17 +57,35 @@ namespace BsslProcurement.Pages.Vendor
                .ToList();
         }
 
-        public void OnPost()
+        public async Task<IActionResult> OnPostAsync()
         {
+
+           // CompanyInfo.SubCategories = GetSubCategories(subCatsId);
+
             if (!ModelState.IsValid)
             {
                 GetCategories();
-                return;
+                return Page();
             }
 
 
+            return null;
 
 
         }
+        List<ProcurementSubcategory> GetSubCategories(List<int> ids)
+        {
+            var subCats = _context.ProcurementSubcategories.Where(p => ids.Contains(p.Id)).ToList();
+
+            if (subCats.Any())
+            {
+                return subCats;
+            }
+
+            return null;
+        }
+
+        
+
     }
 }
