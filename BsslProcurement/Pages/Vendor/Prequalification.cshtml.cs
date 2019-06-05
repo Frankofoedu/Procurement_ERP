@@ -47,8 +47,6 @@ namespace BsslProcurement.Pages.Vendor
         [BindProperty]
         public List<SelectListItem> Categories { get; set; }
 
-        [BindProperty]
-        public List<ProcurementSubcategory> scat { get; set; }
 
         public class PersonnelDetailInput
         {
@@ -60,7 +58,7 @@ namespace BsslProcurement.Pages.Vendor
         }
 
         [BindProperty]
-        public List<PersonnelDetailInput> PersonnelDetailIntputs { get; set; }
+        public List<PersonnelDetailInput> PersonnelDetailIntputs { get; set; }//add method to convert iformfiles to file paths for personnel details table
         [BindProperty]
         public List<EquipmentDetails> EquipmentDetails { get; set; }
         [BindProperty]
@@ -148,7 +146,7 @@ namespace BsslProcurement.Pages.Vendor
                     if (doc.isDoc)
                     {
                         var fileName = doc.Image.FileName;
-                        var uploads = Path.Combine(_hostingEnvironment.WebRootPath, "logo");
+                        var uploads = Path.Combine(_hostingEnvironment.WebRootPath, "docs");
                         var filePath = Path.Combine(uploads, fileName);
                         doc.Image.CopyTo(new FileStream(filePath, FileMode.Create));
 
@@ -163,7 +161,7 @@ namespace BsslProcurement.Pages.Vendor
         }
 
         /// <summary>
-        /// creates a list of submitted criterias and there docs
+        /// creates a list of submitted criterias and there docs paths
         /// </summary>
         /// <param name="id">Company Id</param>
         List<SubmittedCriteria> GetSubmittedCriterias(int id)
@@ -186,5 +184,66 @@ namespace BsslProcurement.Pages.Vendor
 
             return SubmittedCriterias;
         }
+
+        /// <summary>
+        /// method for saving experience record using company id 
+        /// </summary>
+        /// <param name="id">Id of the company to be registered</param>
+        void AddExperienceToDB(int id, List<ExperienceRecord>  experienceRecords)
+        {
+            experienceRecords.ForEach(x => x.CompanyInfoId = id);
+
+            _context.ExperienceRecord.AddRange(experienceRecords);
+        }
+
+
+        /// <summary>
+        /// method for saving equipments details using company id 
+        /// </summary>
+        /// <param name="id"></param>
+        /// <param name="experienceRecords"></param>
+        void AddEquipmentsToDB(int id, List<EquipmentDetails> equipmentDetails)
+        {
+            equipmentDetails.ForEach(x => x.CompanyInfoId = id);
+
+            _context.EquipmentDetails.AddRange(equipmentDetails);
+        }
+
+
+        void AddPersonnelDetailsToDB(List<PersonnelDetailInput> personnelDetailInputs, int id)
+        {
+            string companyCode = "_" + id + "_";
+            var pd = new List<PersonnelDetails>();
+
+            foreach (var pdInput in personnelDetailInputs)
+            {
+                var CertFileName = pdInput.CertFile.FileName;
+                var CvFileName = pdInput.CVFile.FileName;
+                var PassPortFileName = pdInput.PassportFile.FileName;
+
+                //get path for storing files
+                var uploads = Path.Combine(_hostingEnvironment.WebRootPath, "docs");
+                 
+
+                //create file paths for docs
+                var CertfilePath = Path.Combine(uploads, companyCode + CertFileName);
+                var CvfilePath = Path.Combine(uploads, companyCode + CvFileName);
+                var PassPortfilePath = Path.Combine(uploads, companyCode + PassPortFileName);
+
+                //save files to folder
+                pdInput.CertFile.CopyTo(new FileStream(CertfilePath, FileMode.Create));
+                pdInput.CVFile.CopyTo(new FileStream(CvfilePath, FileMode.Create));
+                pdInput.PassportFile.CopyTo(new FileStream(PassPortfilePath, FileMode.Create));
+
+                pd.Add(new PersonnelDetails { Certificate = CertFileName, CV = CvFileName,
+                                            Name = pdInput.Name, Passport = PassPortFileName,
+                                            Qualification = pdInput.Qualification });
+
+            }
+
+
+        }
+
+
     }
 }
