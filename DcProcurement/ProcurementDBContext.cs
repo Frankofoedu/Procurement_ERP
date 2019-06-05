@@ -42,12 +42,31 @@ namespace DcProcurement
 
         #endregion
 
+        #region Workflow Tables
+        public DbSet<Workflow> Workflows { get; set; }
+        public DbSet<PrequalificationWorkflow> PrequalificationWorkflows { get; set; }
+        #endregion
+
+        #region Users Tables
+        public DbSet<Staff> Staffs { get; set; }
+        public DbSet<Vendor> Vendors { get; set; }
+        #endregion
+
+        #region Jobs Tables
+        public DbSet<Job> Jobs { get; set; }
+        public DbSet<PrequalificationJob> PrequalificationJobs { get; set; }
+        #endregion
+
+
         public DbSet<PrequalificationPolicy> PrequalificationPolicies { get; set; }
 
         public CompanyInfoProcurementSubCategory  CompanyInfoProcurementSubCategory { get; set; }
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             modelBuilder.Entity<CompanyInfoProcurementSubCategory>().HasKey(sc => new { sc.CompanyInfoId, sc.ProcurementSubcategoryId });
+            modelBuilder.Entity<CompanyInfo>().HasOne(m => m.Vendor).WithOne(n => n.CompanyInfo).HasForeignKey<Vendor>(l => l.CompanyInfoId);
+            base.OnModelCreating(modelBuilder);
+
         }
     }
 }
