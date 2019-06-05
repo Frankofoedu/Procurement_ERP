@@ -1,9 +1,113 @@
 ﻿@page
 @model BsslProcurement.Pages.Staff.Workflow.PrequalificationModel
 @{
-    ViewData["Title"] = "Prequalification";
+    ViewData["Title"] = "Prequalification Workflow";
     Layout = "~/Pages/Shared/_Layout.cshtml";
 }
 
-<h2>Prequalification</h2>
+<div class="row my-3">
+    <div class="col-md-2"></div>
+    <div class="col-md-8">
+        <div class="panel panel-login">
+            <div class="panel-heading">
+                <div class="row">
+                    <p class="header-text">Current Prequalification Workflow</p>
+                </div>
+                <hr>
+            </div>
 
+            <div class="mt-1">
+                <table class="table table-responsive-sm table-striped">
+                    <thead>
+                        <tr class="table-primary">
+                            <th>Step</th>
+                            <th>Description</th>
+                            <th>For Specific<br />Staff</th>
+                            <th>Staff</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @for (int i = 0; i < Model.currentPrequalificationWorkflows.Count; i++)
+                        {
+                            var item = Model.currentPrequalificationWorkflows[i];
+                            <tr>
+                                <td>@item.Step</td>
+                                <td>@item.Description</td>
+                                <td>@item.ToPersonOrAssign</td>
+                                <td>@item.StaffToAssign.Name</td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="row mt-5">
+    <div class="col-md-2"></div>
+    <div class="col-md-8">
+        <form method="post" class="panel panel-login">
+            <div class="panel-heading">
+                <div class="row">
+                    <p class="header-text">New Prequalification Workflow</p>
+                </div>
+                <hr>
+            </div>
+            <div asp-validation-summary="All" class="text-danger"></div>
+
+            @if (!string.IsNullOrWhiteSpace(Model.Message))
+            {
+                <div class="alert alert-success alert-dismissable fade show">
+                    <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                    @Model.Message
+                </div>
+            }
+            @if (!string.IsNullOrWhiteSpace(Model.Error))
+            {
+                <div class="alert alert-danger alert-dismissable fade show">
+                    <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                    @Model.Error
+                </div>
+            }
+
+        <div class="mt-1">
+            <table class="table table-responsive-sm table-striped">
+                <thead>
+                    <tr class="table-primary">
+                        <th>Step</th>
+                        <th>Description</th>
+                        <th>For Specific<br />Staff</th>
+                        <th>Staff</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @for (int i = 0; i < Model.currentPrequalificationWorkflows.Count; i++)
+                    {
+                        var item = Model.currentPrequalificationWorkflows[i];
+                        <tr>
+                            <td>@item.Step</td>
+                            <td>@item.Description</td>
+                            <td>@item.ToPersonOrAssign</td>
+                            <td>@item.StaffToAssign.Name</td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+            <div class="form-group">
+                <div class="row">
+                    <div class="col-sm-3"> </div>
+                    <div class="col-sm-6 col-sm-offset-3">
+                        <button type="submit" class="btnSubmit btn form-btn">Save</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        </form>
+    </div>
+</div>
+
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}
