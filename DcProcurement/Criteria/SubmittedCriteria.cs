@@ -7,7 +7,7 @@ namespace DcProcurement
     public class SubmittedCriteria
     {
         public int Id { get; set; }
-        public int CompanyInfoId { get; set; }
+        public string CompanyInfoId { get; set; }
         public int CriteriaId { get; set; }
         public string Value { get; set; }
         public Criteria Criteria { get; set; }

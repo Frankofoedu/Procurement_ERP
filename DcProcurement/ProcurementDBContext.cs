@@ -1,10 +1,11 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using DcProcurement.JoinTables;
 using System;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 
 namespace DcProcurement
 {
-    public class ProcurementDBContext : DbContext
+    public class ProcurementDBContext : IdentityDbContext<CompanyInfo>
     {
         public ProcurementDBContext(DbContextOptions options)
            : base(options)

@@ -166,7 +166,7 @@ namespace BsslProcurement.Pages.Vendor
         /// creates a list of submitted criterias and there docs
         /// </summary>
         /// <param name="id">Company Id</param>
-        List<SubmittedCriteria> GetSubmittedCriterias(int id)
+        List<SubmittedCriteria> GetSubmittedCriterias(string id)
         {
             GetImageFileName(DocsList);
 
