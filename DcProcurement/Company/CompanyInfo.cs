@@ -22,6 +22,7 @@ namespace DcProcurement
         public string State { get; set; }
         public string NatureOfBusiness { get; set; }
         public string Sector { get; set; }
+        [DataType(DataType.Date)]
         public DateTime DateEstablishment { get; set; }
         public string TIN { get; set; }
         public string ContactName { get; set; }
