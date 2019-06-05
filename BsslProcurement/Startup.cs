@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.HttpsPolicy;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
@@ -39,6 +40,44 @@ namespace BsslProcurement
 
             services.AddDbContext<ProcurementDBContext> (options => options.UseSqlServer(connection, b => b.MigrationsAssembly("BsslProcurement")));
 
+            services.AddIdentity<User, IdentityRole>(config =>
+            {
+                config.SignIn.RequireConfirmedEmail = false;
+            }).AddEntityFrameworkStores<ProcurementDBContext>().AddDefaultTokenProviders();
+
+            services.ConfigureApplicationCookie(options =>
+            {
+                // Cookie settings
+                options.Cookie.HttpOnly = true;
+                options.ExpireTimeSpan = TimeSpan.FromMinutes(15);
+
+                options.LoginPath = "/Identity/Account/Login";
+                options.SlidingExpiration = true;
+            });
+
+            services.AddSession(s => s.IdleTimeout = TimeSpan.FromMinutes(30));
+
+            services.Configure<IdentityOptions>(options =>
+            {
+
+                // Password settings.
+                options.Password.RequireDigit = false;
+                options.Password.RequireLowercase = true;
+                options.Password.RequireNonAlphanumeric = false;
+                options.Password.RequireUppercase = false;
+                options.Password.RequiredLength = 6;
+                options.Password.RequiredUniqueChars = 0;
+
+                // Lockout settings.
+                options.Lockout.DefaultLockoutTimeSpan = TimeSpan.FromMinutes(5);
+                options.Lockout.MaxFailedAccessAttempts = 7;
+                options.Lockout.AllowedForNewUsers = true;
+
+                // User settings.
+                //options.User.AllowedUserNameCharacters =
+                //"abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789-._@+";
+                options.User.RequireUniqueEmail = true;
+            });
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -58,6 +97,7 @@ namespace BsslProcurement
             app.UseHttpsRedirection();
             app.UseStaticFiles();
             app.UseCookiePolicy();
+            app.UseAuthentication();
 
             app.UseMvc();
         }

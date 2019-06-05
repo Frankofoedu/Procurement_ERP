@@ -5,7 +5,7 @@ using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 
 namespace DcProcurement
 {
-    public class ProcurementDBContext : IdentityDbContext<CompanyInfo>
+    public class ProcurementDBContext : IdentityDbContext<User>
     {
         public ProcurementDBContext(DbContextOptions options)
            : base(options)

@@ -16,13 +16,13 @@ namespace BsslProcurement.Areas.Identity.Pages.Account
     [AllowAnonymous]
     public class ExternalLoginModel : PageModel
     {
-        private readonly SignInManager<CompanyInfo> _signInManager;
-        private readonly UserManager<CompanyInfo> _userManager;
+        private readonly SignInManager<User> _signInManager;
+        private readonly UserManager<User> _userManager;
         private readonly ILogger<ExternalLoginModel> _logger;
 
         public ExternalLoginModel(
-            SignInManager<CompanyInfo> signInManager,
-            UserManager<CompanyInfo> userManager,
+            SignInManager<User> signInManager,
+            UserManager<User> userManager,
             ILogger<ExternalLoginModel> logger)
         {
             _signInManager = signInManager;
@@ -115,7 +115,7 @@ namespace BsslProcurement.Areas.Identity.Pages.Account
 
             if (ModelState.IsValid)
             {
-                var user = new CompanyInfo { UserName = Input.Email, Email = Input.Email };
+                var user = new User { UserName = Input.Email, Email = Input.Email };
                 var result = await _userManager.CreateAsync(user);
                 if (result.Succeeded)
                 {

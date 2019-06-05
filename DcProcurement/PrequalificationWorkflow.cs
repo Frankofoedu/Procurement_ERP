@@ -4,7 +4,7 @@ using System.Text;
 
 namespace DcProcurement
 {
-    class Task
+    public class PrequalificationWorkflow:Workflow
     {
     }
 }
