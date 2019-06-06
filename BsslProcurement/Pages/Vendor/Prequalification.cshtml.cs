@@ -36,7 +36,7 @@ namespace BsslProcurement.Pages.Vendor
         }
 
 
-       
+
 
         [BindProperty]
         public List<DocsModel> DocsList { get; set; }
@@ -73,7 +73,7 @@ namespace BsslProcurement.Pages.Vendor
         public List<int> subCatsId { get; set; }
         public void OnGet()
         {
-           // gets the number of categories from the setup page
+            // gets the number of categories from the setup page
             CategoryCount = _context.PrequalificationPolicies.FirstOrDefault().NoOfCategory;
 
             GetCategories();
@@ -85,7 +85,7 @@ namespace BsslProcurement.Pages.Vendor
         /// </summary>
         private void GetCategories()
         {
-            
+
             Categories = _context.ProcurementCategories
                .Select(a =>
                            new SelectListItem
@@ -99,7 +99,7 @@ namespace BsslProcurement.Pages.Vendor
         public async Task<IActionResult> OnPostAsync()
         {
 
-           // CompanyInfo.SubCategories = GetSubCategories(subCatsId);
+            // CompanyInfo.SubCategories = GetSubCategories(subCatsId);
 
             if (!ModelState.IsValid)
             {
@@ -114,9 +114,16 @@ namespace BsslProcurement.Pages.Vendor
 
 
             //saves list of submitted criterias to db
-           _context.SubmittedCriteria.AddRange(GetSubmittedCriterias(CompanyInfo.Id));
+            _context.SubmittedCriteria.AddRange(GetSubmittedCriterias(CompanyInfo.Id));
 
-            _context.SaveChanges();
+            //
+            AddEquipmentsToDB(CompanyInfo.Id, EquipmentDetails);
+
+            AddExperienceToDB(CompanyInfo.Id, ExperienceRecords);
+
+            AddPersonnelDetailsToDB(PersonnelDetailIntputs, CompanyInfo.Id);
+
+            await  _context.SaveChangesAsync();
 
             return null;
 
@@ -170,7 +177,7 @@ namespace BsslProcurement.Pages.Vendor
 
             var SubmittedCriterias = new List<SubmittedCriteria>();
 
-            foreach ( var docs in DocsList)
+            foreach (var docs in DocsList)
             {
                 if (docs.isDoc)
                 {
@@ -189,7 +196,7 @@ namespace BsslProcurement.Pages.Vendor
         /// method for saving experience record using company id 
         /// </summary>
         /// <param name="id">Id of the company to be registered</param>
-        void AddExperienceToDB(int id, List<ExperienceRecord>  experienceRecords)
+        void AddExperienceToDB(int id, List<ExperienceRecord> experienceRecords)
         {
             experienceRecords.ForEach(x => x.CompanyInfoId = id);
 
@@ -200,8 +207,8 @@ namespace BsslProcurement.Pages.Vendor
         /// <summary>
         /// method for saving equipments details using company id 
         /// </summary>
-        /// <param name="id"></param>
-        /// <param name="experienceRecords"></param>
+        /// <param name="id">id of the company</param>
+        /// <param name="experienceRecords">list of custom experience records model</param>
         void AddEquipmentsToDB(int id, List<EquipmentDetails> equipmentDetails)
         {
             equipmentDetails.ForEach(x => x.CompanyInfoId = id);
@@ -209,8 +216,12 @@ namespace BsslProcurement.Pages.Vendor
             _context.EquipmentDetails.AddRange(equipmentDetails);
         }
 
-
-        void AddPersonnelDetailsToDB(List<PersonnelDetailInput> personnelDetailInputs, int id)
+        /// <summary>
+        /// saving the personnel details to the db
+        /// </summary>
+        /// <param name="personnelDetailInputs">list of custom personnel detail model</param>
+        /// <param name="id">id of the company</param>
+       void AddPersonnelDetailsToDB(List<PersonnelDetailInput> personnelDetailInputs, int id)
         {
             string companyCode = "_" + id + "_";
             var pd = new List<PersonnelDetails>();
@@ -223,7 +234,7 @@ namespace BsslProcurement.Pages.Vendor
 
                 //get path for storing files
                 var uploads = Path.Combine(_hostingEnvironment.WebRootPath, "docs");
-                 
+
 
                 //create file paths for docs
                 var CertfilePath = Path.Combine(uploads, companyCode + CertFileName);
@@ -235,13 +246,18 @@ namespace BsslProcurement.Pages.Vendor
                 pdInput.CVFile.CopyTo(new FileStream(CvfilePath, FileMode.Create));
                 pdInput.PassportFile.CopyTo(new FileStream(PassPortfilePath, FileMode.Create));
 
-                pd.Add(new PersonnelDetails { Certificate = CertFileName, CV = CvFileName,
-                                            Name = pdInput.Name, Passport = PassPortFileName,
-                                            Qualification = pdInput.Qualification });
+                pd.Add(new PersonnelDetails
+                {
+                    Certificate = CertFileName,
+                    CV = CvFileName,
+                    Name = pdInput.Name,
+                    Passport = PassPortFileName,
+                    Qualification = pdInput.Qualification
+                });
 
             }
 
-
+            _context.PersonnelDetails.AddRange(pd);
         }
 
 
