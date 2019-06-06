@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using DcProcurement;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
+using Microsoft.EntityFrameworkCore;
 
 namespace BsslProcurement.Pages.Staff.Workflow
 {
@@ -28,7 +29,7 @@ namespace BsslProcurement.Pages.Staff.Workflow
 
         public void OnGet()
         {
-            currentPrequalificationWorkflows = _context.PrequalificationWorkflows.ToList();
+            currentPrequalificationWorkflows = _context.PrequalificationWorkflows.Include(m=>m.StaffToAssign).ToList();
         }
     }
 }

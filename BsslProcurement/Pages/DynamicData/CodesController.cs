@@ -77,6 +77,39 @@ namespace BsslProcurement.Pages.Staff
             return Ok(item);
         }
 
+        class cusStaff
+        {
+            public string Id { get; set; }
+            public string Name { get; set; }
+            public string Code { get; set; }
+
+        }
+
+        // GET: api/Codes/Staff/C001
+        [HttpGet("Staff/{code}")]
+        public async Task<IActionResult> GetStaffCode([FromRoute] string code)
+        {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+
+            var staff = await _context.Staffs.FirstOrDefaultAsync(m => m.StaffCode == code);
+
+            if (staff == null)
+            {
+                return Ok();
+            }
+
+            var rtn = new cusStaff {
+                    Code = staff.StaffCode,
+                    Id = staff.Id,
+                    Name = staff.Name,
+                };
+
+            return Ok(rtn);
+        }
+
         // GET: api/Codes/Itemname/pen
         [HttpGet("Itemname/{str}")]
         public async Task<IActionResult> GetItemName([FromRoute] string str)

@@ -12,6 +12,8 @@ namespace DcProcurement
         [Required(ErrorMessage = "Account Name is required.")]
         public string Name { get; set; }
 
+        [Required(ErrorMessage = "Staff Code Field is required.")]
+        public string StaffCode { get; set; }
         [Required(ErrorMessage = "Position Field is required.")]
         public string Position { get; set; }
 
