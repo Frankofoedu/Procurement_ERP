@@ -46,13 +46,13 @@
                         @for (int i = 0; i < Model.currentPrequalificationWorkflows.Count; i++)
                         {
                             var item = Model.currentPrequalificationWorkflows[i];
-                        <tr>
-                            <td>@item.Step</td>
-                            <td>@item.Description</td>
-                            <td>@item.ToPersonOrAssign</td>
-                            <td>@item.StaffToAssign.StaffCode</td>
-                            <td>@item.StaffToAssign.Name</td>
-                        </tr>
+                            <tr>
+                                <td>@item.Step</td>
+                                <td>@item.Description</td>
+                                <td>@item.ToPersonOrAssign</td>
+                                <td>@item.StaffToAssign.StaffCode</td>
+                                <td>@item.StaffToAssign.Name</td>
+                            </tr>
                         }
                     </tbody>
                 </table>
@@ -73,48 +73,110 @@
             </div>
             <div asp-validation-summary="All" class="text-danger"></div>
 
-        <div class="mt-1">
-            <table class="table table-responsive-sm table-striped">
-                <thead>
-                    <tr class="table-primary">
-                        <th>Step</th>
-                        <th>Description</th>
-                        <th>For Specific<br />Staff</th>
-                        <th>Staff<br /> Code</th>
-                        <th>Staff<br /> Name</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    @for (int i = 0; i < 1; i++)
-                    {
-                        var item = Model.newPrequalificationWorkflows[i];
-                    <tr>
-                        <td>@(i + 1) <input type="hidden" asp-for="newPrequalificationWorkflows[i].Step" value="@(i+1)" /></td>
-                        <td><input type="text" asp-for="newPrequalificationWorkflows[i].Description" class="form-control" /></td>
-                        <td><input type="checkbox" asp-for="newPrequalificationWorkflows[i].ToPersonOrAssign" class="checkbox" /></td>
-                        <td><input type="hidden" class="staffIdInput" asp-for="newPrequalificationWorkflows[i].StaffId"/><input type="text" class="staffCodeInput form-control" /></td>
-                        <td><input type="text" readonly="readonly" class="staffNameInput"/></td>
-                    </tr>
-                    }
-                </tbody>
-            </table>
+            <div class="mt-1">
+                <table class="table table-responsive-sm table-striped">
+                    <thead>
+                        <tr class="table-primary">
+                            <th>Step</th>
+                            <th>Description</th>
+                            <th>For Specific<br />Staff</th>
+                            <th>Staff<br /> Code</th>
+                            <th>Staff<br /> Name</th>
+                        </tr>
+                    </thead>
+                    <tbody id="workflowTbody">
+                        @for (int i = 0; i < 1; i++)
+                        {
+                            var item = Model.newPrequalificationWorkflows[i];
+                            <tr>
+                                <td>@(i + 1) <input type="hidden" asp-for="newPrequalificationWorkflows[i].Step" value="@(i+1)" /></td>
+                                <td><input type="text" asp-for="newPrequalificationWorkflows[i].Description" class="form-control" /></td>
+                                <td><input type="checkbox" asp-for="newPrequalificationWorkflows[i].ToPersonOrAssign" class="checkbox" /></td>
+                                <td><input type="hidden" class="staffIdInput staffIdInput@i" asp-for="newPrequalificationWorkflows[i].StaffId" /><input type="text" sIndex="@i" class="staffCodeInput staffCodeInput@i form-control" /></td>
+                                <td><input type="text" readonly="readonly" class="staffNameInput staffNameInput@i" /></td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
 
+                <input type="hidden" id="lastIndex" value="0" />
 
-            <div class="form-group">
-                <div class="row">
-                    <div class="col-sm-3"> </div>
-                    <div class="col-sm-6">
-                        <button class="btnMore btn btn-outline-primary">New Step</button>
-                        <button type="submit" class="btnSubmit btn btn-primary ml-sm-2">Save</button>
+                <div class="form-group">
+                    <div class="row">
+                        <div class="col-sm-3"> </div>
+                        <div class="col-sm-6">
+                            <button class="btnMore btn btn-outline-primary">New Step</button>
+                            <button type="submit" class="btnSubmit btn btn-primary ml-sm-2">Save</button>
+                        </div>
                     </div>
                 </div>
             </div>
-        </div>
         </form>
     </div>
 </div>
 
-
 @section Scripts {
     @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
 }
+
+<script>
+    $(document).ready(function () {
+        $('#workflowTbody').on('change', '.staffCodeInput', function (this) {
+
+            var code = this.val();
+            var sindex = this.attr('sIndex');
+
+            if (code) {
+
+                var baseUrl = window.location.origin;
+
+                $.ajax({
+                    url: baseUrl + '/api/Codes/Staff/' + code.trim(),
+                    type: 'get',
+                    xhrFields: {
+                        withCredentials: true
+                    },
+                    contentType: 'application/json',
+                    error: function () {
+                        alert('An Error occured.');
+                        $('.staffCodeInput' + sindex).focus()
+                        $('.staffIdInput' + sindex).val('')
+                        $('.staffNameInput' + sindex).val('')
+                    },
+                    success: function (data) {
+                        if (!data) {
+                            alert('This staff code is invalid.');
+                            $('.staffCodeInput' + sindex).focus()
+                            $('.staffIdInput' + sindex).val('')
+                            $('.staffNameInput' + sindex).val('')
+                            return;
+                        }
+
+                        $('.staffIdInput' + sindex).val(data.id)
+                        $('.staffNameInput' + sindex).val(data.name)
+                    },
+                });
+            }
+        });
+        
+        $('#btnMore').on('click', function (event) {
+            var lastIndex = $('#lastIndex').val();
+            var newIndex = Number(lastIndex) + 1;
+
+            newStepRow(newIndex);
+            $('#lastIndex').val(newIndex);
+            return false;
+        });
+
+        function newStepRow(index) {
+            var html = ' <tr> <td>' + (Number(index) + 1) + ' <input type="hidden" id="newPrequalificationWorkflows_' + index + '__Step" name="newPrequalificationWorkflows[' + index + '].Step" value="' + index + 1 + '" /></td > <td>' +
+            '<input type="text" class="form-control"  id="newPrequalificationWorkflows_' + index + '__Description" name="newPrequalificationWorkflows[' + index + '].Description"/></td>' +
+            '<td><input type="checkbox" class="checkbox" id="newPrequalificationWorkflows_' + index + '__ToPersonOrAssign" name="newPrequalificationWorkflows[' + index + '].ToPersonOrAssign" /></td>' +
+            '<td><input type="hidden" class="staffIdInput staffIdInput' + index + '" id="newPrequalificationWorkflows_' + index + '__StaffId" name="newPrequalificationWorkflows[' + index + '].StaffId" /><input type="text" sIndex="' + index + '" class="staffCodeInput staffCodeInput' + index + ' form-control" /></td>' +
+            '<td><input type="text" readonly="readonly" class="staffNameInput staffNameInput' + index + '" /></td> </tr>';
+
+        $('#workflowTbody').append(html);
+    }
+
+    });
+</script>

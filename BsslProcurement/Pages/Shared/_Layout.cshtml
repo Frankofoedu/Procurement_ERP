@@ -78,6 +78,16 @@
                     </ul>
                 </li>
                 <li>
+                    <a href="#workflowSubmenu" data-toggle="collapse" aria-expanded="true" class="dropdown-toggle">
+                        <i class="fas fa-user-alt mr-1"></i> Manage Workflow
+                    </a>
+                    <ul class="collapse list-unstyled" id="workflowSubmenu">
+                        <li>
+                            <a asp-page="/Staff/Workflow/Prequalification"><i class="fas fa-file-archive mr-1"></i> Prequalification</a>
+                        </li>
+                    </ul>
+                </li>
+                <li>
                     <a href="#criteriaSubmenu" data-toggle="collapse" aria-expanded="true" class="dropdown-toggle">
                         <i class="fas fa-list mr-1"></i> Manage Criteria
                     </a>
@@ -108,8 +118,8 @@
                             <a asp-page="/Staff/Items"><i class="fas fa-file-archive mr-1"></i> Items</a>
                         </li>
                         @*<li>
-            <a asp-page="/Staff/ProPolicy"><i class="fas fa-file-invoice mr-1"></i> Publish Procurement</a>
-        </li>*@
+                    <a asp-page="/Staff/ProPolicy"><i class="fas fa-file-invoice mr-1"></i> Publish Procurement</a>
+                </li>*@
                         <li>
                             <a asp-page="/Staff/PreQSetup"><i class="fas fa-file-invoice mr-1"></i> Prequalification Setup</a>
                         </li>
@@ -136,21 +146,16 @@
         <div id="content" class="container-fluid">
             <nav id="navbar" class="navbar navbar-expand-lg navbar-light bg-white">
                 <div class="container-fluid">
+
                     <button class="btn btn-dark d-inline-block d-lg-none ml-auto" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
                         <i class="fas fa-bars"></i>
                     </button>
                     <div class="collapse navbar-collapse w-100" id="navbarSupportedContent">
-                        <ul class="nav navbar-nav ml-auto">
-                            <li class="nav-item mr-2">
-                                <a href="#">Login</a>
-                            </li>
-                            <li class="nav-item mr-2">
-                                <a href="#">Register</a>
-                            </li>
-                        </ul>
+                        <partial name="_LoginPartial" />
                     </div>
                 </div>
             </nav>
+
             <div class="container-fluid">
                 @RenderBody()
             </div>

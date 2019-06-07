@@ -1,16 +1,16 @@
 ﻿@using Microsoft.AspNetCore.Identity
 @using DcProcurement
-@inject SignInManager<CompanyInfo> SignInManager
-@inject UserManager<CompanyInfo> UserManager
+@inject SignInManager<User> SignInManager
+@inject UserManager<User> UserManager
 
 @if (SignInManager.IsSignedIn(User))
 {
-    <form asp-area="Identity" asp-page="/Account/Logout" asp-route-returnUrl="@Url.Page("/Index", new { area = "" })" method="post" id="logoutForm" class="navbar-right">
-        <ul class="nav navbar-nav navbar-right">
-            <li>
+    <form asp-area="Identity" asp-page="/Account/Logout" asp-route-returnUrl="@Url.Page("/Index", new { area = "" })" method="post" id="logoutForm" class="ml-auto">
+        <ul class="nav navbar-nav ml-auto">
+            <li class="nav-item mr-2">
                 <a asp-area="Identity" asp-page="/Account/Manage/Index" title="Manage">Hello @UserManager.GetUserName(User)!</a>
             </li>
-            <li>
+            <li class="nav-item mr-2">
                 <button type="submit" class="btn btn-link navbar-btn navbar-link">Logout</button>
             </li>
         </ul>
@@ -18,8 +18,8 @@
 }
 else
 {
-    <ul class="nav navbar-nav navbar-right">
-        <li><a asp-area="Identity" asp-page="/Account/Register">Register</a></li>
-        <li><a asp-area="Identity" asp-page="/Account/Login">Login</a></li>
+    <ul class="nav navbar-nav ml-auto">
+        <li class="nav-item mr-2"><a asp-area="Identity" asp-page="/Account/Register">Register</a></li>
+        <li class="nav-item mr-2"><a asp-area="Identity" asp-page="/Account/Login">Login</a></li>
     </ul>
 }
