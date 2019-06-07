@@ -500,13 +500,14 @@
                 '].Id" type="hidden" value=' + CriId + ' /></td></tr>';
 
             //hidden field for the bool doc test
-            var hidControl = '<tr><td><input id="DocsList_' + counter +
-                '_Id" name="DocsList[' + counter +
-                '].Id" type="hidden" value=' + isDoc + ' /></td></tr>';
+            var hidBool = '<tr><td><input id="DocsList_' + counter +
+                '_isDoc" name="DocsList[' + counter +
+                '].isDoc" type="hidden" value=' + isDoc + ' /></td></tr>';
 
 
             $('#table_docs').append(control);
             $('#table_docs').append(hidControl);
+            $('#table_docs').append(hidBool);
         } else {
             //no file required
 
