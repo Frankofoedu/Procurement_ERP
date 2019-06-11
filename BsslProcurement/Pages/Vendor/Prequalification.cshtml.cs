@@ -6,9 +6,11 @@ using System.Threading.Tasks;
 using DcProcurement;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.AspNetCore.Mvc.Rendering;
+using Microsoft.Extensions.Logging;
 
 namespace BsslProcurement.Pages.Vendor
 {
@@ -27,12 +29,22 @@ namespace BsslProcurement.Pages.Vendor
     {
         private readonly ProcurementDBContext _context;
 
+        private readonly SignInManager<User> _signInManager;
+        private readonly ILogger<PrequalificationModel> _logger;
+        private readonly UserManager<User> _userManager;
 
         public readonly IHostingEnvironment _hostingEnvironment;
-        public PrequalificationModel(ProcurementDBContext context, IHostingEnvironment hostingEnvironment)
+        public PrequalificationModel(ProcurementDBContext context,
+                                    IHostingEnvironment hostingEnvironment,
+                                    UserManager<User> userManager,
+                                    SignInManager<User> signInManager,
+                                    ILogger<PrequalificationModel> logger)
         {
             _context = context;
             _hostingEnvironment = hostingEnvironment;
+            _userManager = userManager;
+            _signInManager = signInManager;
+            _logger = logger;
         }
 
 
@@ -71,12 +83,56 @@ namespace BsslProcurement.Pages.Vendor
 
         [BindProperty]
         public List<int> subCatsId { get; set; }
-        public void OnGet()
+        public string ReturnUrl { get; set; }
+        public void OnGet(string returnUrl = null)
         {
+            ReturnUrl = returnUrl;
             // gets the number of categories from the setup page
             CategoryCount = _context.PrequalificationPolicies.FirstOrDefault().NoOfCategory;
 
             GetCategories();
+
+        }
+
+       
+
+        public async Task<IActionResult> OnPostAsync()
+        {
+
+            // CompanyInfo.SubCategories = GetSubCategories(subCatsId);
+
+            if (!ModelState.IsValid)
+            {
+                Message = "No of personnel = " + PersonnelDetailIntputs.Count;
+                CategoryCount = _context.PrequalificationPolicies.FirstOrDefault().NoOfCategory;
+                GetCategories();
+                return Page();
+            }
+
+            //saves company to db
+            _context.CompanyInfo.Add(CompanyInfo);
+
+            await _context.SaveChangesAsync();
+
+            //saves list of submitted criterias to db
+            _context.SubmittedCriteria.AddRange(GetSubmittedCriterias(CompanyInfo.Id));
+
+
+            AddEquipmentsToDB(CompanyInfo.Id, EquipmentDetails);
+
+            AddExperienceToDB(CompanyInfo.Id, ExperienceRecords);
+
+            AddPersonnelDetailsToDB(PersonnelDetailIntputs, CompanyInfo.Id);
+
+            await _context.SaveChangesAsync();
+
+            if (SignUpUserAsync(CompanyInfo,ReturnUrl) == null)
+            {
+                return Page();
+            }
+
+            return null; //change to redirect location
+
 
         }
 
@@ -95,40 +151,6 @@ namespace BsslProcurement.Pages.Vendor
                            })
                .ToList();
         }
-
-        public async Task<IActionResult> OnPostAsync()
-        {
-
-            // CompanyInfo.SubCategories = GetSubCategories(subCatsId);
-
-            if (!ModelState.IsValid)
-            {
-                Message = "No of personnel = " + PersonnelDetailIntputs.Count;
-                CategoryCount = _context.PrequalificationPolicies.FirstOrDefault().NoOfCategory;
-                GetCategories();
-                return Page();
-            }
-
-            //saves company to db
-            _context.CompanyInfo.Add(CompanyInfo);
-
-
-            //saves list of submitted criterias to db
-            _context.SubmittedCriteria.AddRange(GetSubmittedCriterias(CompanyInfo.Id));
-
-            //
-            AddEquipmentsToDB(CompanyInfo.Id, EquipmentDetails);
-
-            AddExperienceToDB(CompanyInfo.Id, ExperienceRecords);
-
-            AddPersonnelDetailsToDB(PersonnelDetailIntputs, CompanyInfo.Id);
-
-            await  _context.SaveChangesAsync();
-
-            return null;
-
-
-        }
         List<ProcurementSubcategory> GetSubCategories(List<int> ids)
         {
             var subCats = _context.ProcurementSubcategories.Where(p => ids.Contains(p.Id)).ToList();
@@ -143,7 +165,7 @@ namespace BsslProcurement.Pages.Vendor
 
 
         //update docs model filenames
-        void GetImageFileName(List<DocsModel> formFiles)
+        void GetImageFileName(List<DocsModel> formFiles, int id)
         {
             if (formFiles.Any())
             {
@@ -153,7 +175,11 @@ namespace BsslProcurement.Pages.Vendor
                     if (doc.isDoc)
                     {
                         var fileName = doc.Image.FileName;
-                        var uploads = Path.Combine(_hostingEnvironment.WebRootPath, "docs");
+                        var uploads = Path.Combine(_hostingEnvironment.WebRootPath, "Criteriadocs", id.ToString());
+
+                        //checks if path exists, if not create it,id.ToString()
+                        Directory.CreateDirectory(uploads);
+
                         var filePath = Path.Combine(uploads, fileName);
                         doc.Image.CopyTo(new FileStream(filePath, FileMode.Create));
 
@@ -173,7 +199,7 @@ namespace BsslProcurement.Pages.Vendor
         /// <param name="id">Company Id</param>
         List<SubmittedCriteria> GetSubmittedCriterias(int id)
         {
-            GetImageFileName(DocsList);
+            GetImageFileName(DocsList, id);
 
             var SubmittedCriterias = new List<SubmittedCriteria>();
 
@@ -221,7 +247,7 @@ namespace BsslProcurement.Pages.Vendor
         /// </summary>
         /// <param name="personnelDetailInputs">list of custom personnel detail model</param>
         /// <param name="id">id of the company</param>
-       void AddPersonnelDetailsToDB(List<PersonnelDetailInput> personnelDetailInputs, int id)
+        void AddPersonnelDetailsToDB(List<PersonnelDetailInput> personnelDetailInputs, int id)
         {
             string companyCode = "_" + id + "_";
             var pd = new List<PersonnelDetails>();
@@ -233,8 +259,10 @@ namespace BsslProcurement.Pages.Vendor
                 var PassPortFileName = pdInput.PassportFile.FileName;
 
                 //get path for storing files
-                var uploads = Path.Combine(_hostingEnvironment.WebRootPath, "docs");
+                var uploads = Path.Combine(_hostingEnvironment.WebRootPath, "Personneldocs", id.ToString());
 
+                //checks if path exists, if not create it.
+                Directory.CreateDirectory(uploads);
 
                 //create file paths for docs
                 var CertfilePath = Path.Combine(uploads, companyCode + CertFileName);
@@ -260,6 +288,41 @@ namespace BsslProcurement.Pages.Vendor
             _context.PersonnelDetails.AddRange(pd);
         }
 
+        async Task<LocalRedirectResult> SignUpUserAsync(CompanyInfo cp, string returnUrl = null)
+        {
+            var user = new VendorUser
+            {
+                UserName = cp.Email,
+                Email = cp.Email,
+                CreationDate = DateTime.Now,
+                
+            };
+
+            var result = await _userManager.CreateAsync(user,cp.Password);
+            if (result.Succeeded)
+            {
+                _logger.LogInformation("Company created a new account with password.");
+
+                //var code = await _userManager.GenerateEmailConfirmationTokenAsync(user);
+                //var callbackUrl = Url.Page(
+                //    "/Account/ConfirmEmail",
+                //    pageHandler: null,
+                //    values: new { userId = user.Id, code = code },
+                //    protocol: Request.Scheme);
+
+                //await _emailSender.SendEmailAsync(Input.Email, "Confirm your email",
+                //    $"Please confirm your account by <a href='{HtmlEncoder.Default.Encode(callbackUrl)}'>clicking here</a>.");
+
+                await _signInManager.SignInAsync(user, isPersistent: false);
+                return LocalRedirect(returnUrl);
+            }
+            foreach (var error in result.Errors)
+            {
+                ModelState.AddModelError(string.Empty, error.Description);
+            }
+
+            return null;
+        }
 
     }
 }
