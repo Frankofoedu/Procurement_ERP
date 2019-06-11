@@ -16,21 +16,6 @@
                 <hr>
             </div>
 
-            @if (!string.IsNullOrWhiteSpace(Model.Message))
-            {
-                <div class="alert alert-success alert-dismissable fade show">
-                    <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                    @Model.Message
-                </div>
-            }
-            @if (!string.IsNullOrWhiteSpace(Model.Error))
-            {
-                <div class="alert alert-danger alert-dismissable fade show">
-                    <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                    @Model.Error
-                </div>
-            }
-
             <div class="mt-1">
                 <table class="table table-responsive-sm table-striped">
                     <thead>
@@ -43,16 +28,29 @@
                         </tr>
                     </thead>
                     <tbody>
-                        @for (int i = 0; i < Model.currentPrequalificationWorkflows.Count; i++)
+                        @if (Model.currentPrequalificationWorkflows.Count > 0)
                         {
-                            var item = Model.currentPrequalificationWorkflows[i];
-                            <tr>
-                                <td>@item.Step</td>
-                                <td>@item.Description</td>
-                                <td>@item.ToPersonOrAssign</td>
+                            for (int i = 0; i < Model.currentPrequalificationWorkflows.Count; i++)
+                            {
+                                var item = Model.currentPrequalificationWorkflows[i];
+
+                        <tr>
+                            <td>@item.Step</td>
+                            <td>@item.Description</td>
+                            <td>@item.ToPersonOrAssign</td>
+                            @if (item.StaffToAssign != null)
+                            {
                                 <td>@item.StaffToAssign.StaffCode</td>
                                 <td>@item.StaffToAssign.Name</td>
-                            </tr>
+                            }
+                            else
+                            {
+                                <td></td>
+                                <td></td>
+                            }
+                        </tr>
+                            }
+
                         }
                     </tbody>
                 </table>
@@ -71,6 +69,22 @@
                 </div>
                 <hr>
             </div>
+
+            @if (!string.IsNullOrWhiteSpace(Model.Message))
+            {
+                <div class="alert alert-success alert-dismissable fade show">
+                    <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                    @Model.Message
+                </div>
+            }
+            @if (!string.IsNullOrWhiteSpace(Model.Error))
+            {
+                <div class="alert alert-danger alert-dismissable fade show">
+                    <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                    @Model.Error
+                </div>
+            }
+
             <div asp-validation-summary="All" class="text-danger"></div>
 
             <div class="mt-1">
@@ -85,16 +99,40 @@
                         </tr>
                     </thead>
                     <tbody id="workflowTbody">
-                        @for (int i = 0; i < 1; i++)
+                        @if (Model.InputModel == null)
                         {
-                            var item = Model.newPrequalificationWorkflows[i];
-                            <tr>
-                                <td>@(i + 1) <input type="hidden" asp-for="newPrequalificationWorkflows[i].Step" value="@(i+1)" /></td>
-                                <td><input type="text" asp-for="newPrequalificationWorkflows[i].Description" class="form-control" /></td>
-                                <td><input type="checkbox" asp-for="newPrequalificationWorkflows[i].ToPersonOrAssign" class="checkbox" /></td>
-                                <td><input type="hidden" class="staffIdInput staffIdInput@i" asp-for="newPrequalificationWorkflows[i].StaffId" /><input type="text" sIndex="@i" class="staffCodeInput staffCodeInput@i form-control" /></td>
-                                <td><input type="text" readonly="readonly" class="staffNameInput staffNameInput@i" /></td>
-                            </tr>
+                            for (int i = 0; i < 1; i++)
+                            {
+                                <tr>
+                                    <td>@(i + 1) <input type="hidden" asp-for="InputModel[i].Step" value="@(i+1)" /></td>
+                                    <td><input type="text" asp-for="InputModel[i].Description" class="form-control" /></td>
+                                    <td><input type="checkbox" asp-for="InputModel[i].Assign" class="checkbox" /></td>
+                                    <td>
+                                        <input type="hidden" class="staffIdInput @("staffIdInput" + i)" asp-for="InputModel[i].StaffId" />
+                                        <input type="text" sIndex="@i" class="staffCodeInput @("staffCodeInput" + i) form-control" asp-for="InputModel[i].StaffCode" />
+                                    </td>
+                                    <td><input type="text" readonly="readonly" class="staffNameInput @("staffNameInput" + i)" asp-for="InputModel[i].StaffName" /></td>
+                                </tr>
+                            }
+                        }
+                        else
+                        {
+                            for (int i = 0; i < Model.InputModel.Count; i++)
+                            {
+                                var item = Model.InputModel[i];
+
+                                <tr>
+                                    <td>@(i + 1) <input type="hidden" asp-for="InputModel[i].Step" value="@item.Step" /></td>
+                                    <td><input type="text" asp-for="InputModel[i].Description" value="@item.Description" class="form-control" /></td>
+                                    <td><input type="checkbox" asp-for="InputModel[i].Assign" class="checkbox" /></td>
+                                    
+                                    <td>
+                                        <input type="hidden" class="staffIdInput @("staffIdInput" + i)" asp-for="InputModel[i].StaffId" value="@item.StaffId" />
+                                        <input type="text" sIndex="@i" class="staffCodeInput @("staffCodeInput" + i) form-control" asp-for="InputModel[i].StaffCode" value="@item.StaffCode" />
+                                    </td>
+                                    <td><input type="text" readonly="readonly" class="staffNameInput @("staffNameInput" + i)" asp-for="InputModel[i].StaffName" value="@item.StaffName" /></td>
+                                </tr>
+                            }
                         }
                     </tbody>
                 </table>
@@ -104,8 +142,8 @@
                 <div class="form-group">
                     <div class="row">
                         <div class="col-sm-3"> </div>
-                        <div class="col-sm-6">
-                            <button class="btnMore btn btn-outline-primary">New Step</button>
+                        <div class="col-sm-6 text-center">
+                            <button id="btnMore" class="btn btn-outline-primary">New Step</button>
                             <button type="submit" class="btnSubmit btn btn-primary ml-sm-2">Save</button>
                         </div>
                     </div>
@@ -121,10 +159,10 @@
 
 <script>
     $(document).ready(function () {
-        $('#workflowTbody').on('change', '.staffCodeInput', function (this) {
+        $('#workflowTbody').on('change', '.staffCodeInput', function () {
 
-            var code = this.val();
-            var sindex = this.attr('sIndex');
+            var code = this.value;
+            var sindex = this.getAttribute('sIndex');
 
             if (code) {
 
@@ -158,8 +196,9 @@
                 });
             }
         });
-        
+
         $('#btnMore').on('click', function (event) {
+            event.preventDefault;
             var lastIndex = $('#lastIndex').val();
             var newIndex = Number(lastIndex) + 1;
 
@@ -169,14 +208,15 @@
         });
 
         function newStepRow(index) {
-            var html = ' <tr> <td>' + (Number(index) + 1) + ' <input type="hidden" id="newPrequalificationWorkflows_' + index + '__Step" name="newPrequalificationWorkflows[' + index + '].Step" value="' + index + 1 + '" /></td > <td>' +
-            '<input type="text" class="form-control"  id="newPrequalificationWorkflows_' + index + '__Description" name="newPrequalificationWorkflows[' + index + '].Description"/></td>' +
-            '<td><input type="checkbox" class="checkbox" id="newPrequalificationWorkflows_' + index + '__ToPersonOrAssign" name="newPrequalificationWorkflows[' + index + '].ToPersonOrAssign" /></td>' +
-            '<td><input type="hidden" class="staffIdInput staffIdInput' + index + '" id="newPrequalificationWorkflows_' + index + '__StaffId" name="newPrequalificationWorkflows[' + index + '].StaffId" /><input type="text" sIndex="' + index + '" class="staffCodeInput staffCodeInput' + index + ' form-control" /></td>' +
-            '<td><input type="text" readonly="readonly" class="staffNameInput staffNameInput' + index + '" /></td> </tr>';
+            var html = ' <tr> <td>' + (Number(index) + 1) + ' <input type="hidden" id="InputModel_' + index + '__Step" name="InputModel[' + index + '].Step" value="' + (Number(index) + 1) + '" /></td > <td>' +
+                '<input type="text" class="form-control"  id="InputModel_' + index + '__Description" name="InputModel[' + index + '].Description" value=""/></td>' +
+                '<td><input type="checkbox" class="checkbox" data-val="true" data-val-required="The Assign field is required." id="InputModel_' + index + '__Assign" name="InputModel[' + index + '].Assign" value="true" /></td>' +
+                '<td><input type="hidden" class="staffIdInput staffIdInput' + index + '" id="InputModel_' + index + '__StaffId" name="InputModel[' + index + '].StaffId" value="" />' +
+                '<input type="text" sIndex="' + index + '" class="staffCodeInput staffCodeInput' + index + ' form-control" id="InputModel_' + index + '__StaffCode" name="InputModel[' + index + '].StaffCode" value="" /></td>' +
+                '<td><input type="text" readonly="readonly" class="staffNameInput staffNameInput' + index + '" id="InputModel_' + index + '__StaffName" name="InputModel[' + index + '].StaffName" value="" /></td> </tr>';
 
-        $('#workflowTbody').append(html);
-    }
+            $('#workflowTbody').append(html);
+        }
 
     });
 </script>
