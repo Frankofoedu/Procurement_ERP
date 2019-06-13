@@ -1,25 +1,68 @@
 ﻿@using Microsoft.AspNetCore.Identity
+@using Microsoft.EntityFrameworkCore
 @using DcProcurement
 @inject SignInManager<User> SignInManager
 @inject UserManager<User> UserManager
+@inject ProcurementDBContext _context
 
 @if (SignInManager.IsSignedIn(User))
 {
-    <form asp-area="Identity" asp-page="/Account/Logout" asp-route-returnUrl="@Url.Page("/Index", new { area = "" })" method="post" id="logoutForm" class="ml-auto">
-        <ul class="nav navbar-nav ml-auto">
-            <li class="nav-item mr-2">
-                <a asp-area="Identity" asp-page="/Account/Manage/Index" title="Manage">Hello @UserManager.GetUserName(User)!</a>
-            </li>
-            <li class="nav-item mr-2">
-                <button type="submit" class="btn btn-link navbar-btn navbar-link">Logout</button>
-            </li>
-        </ul>
+    var aspUser = await UserManager.GetUserAsync(User);
+    var curUser = await _context.Staffs.FindAsync(aspUser.Id);
+    var notificationNum = await _context.Staffs.FindAsync(aspUser.Id);
+
+    <form asp-area="Identity" asp-page="/Account/Logout" asp-route-returnUrl="@Url.Page("/Index", new { area = "" })" method="post" id="logoutForm" class="w-100">
+
+        <li class="dropdown float-right list-unstyled">
+            <a href="#" class="dropdown-toggle btn" data-toggle="dropdown">
+                <i class="fas fa-user-circle fa-2x mr-4"></i>
+                <span id="noti" class="badge badge-pill badge-danger">!</span>
+            </a>
+            <ul class="dropdown-menu dropdown-menu-right">
+                <li>
+                    <div class="navbar-login pr-2">
+                        <div class="row">
+                            <div class="col-lg-4">
+                                <p class="text-center">
+                                    <i class="fas fa-user icon-size"></i>
+                                </p>
+                            </div>
+                            <div class="col-lg-8">
+                                <p class="text-left"><strong>@curUser.Name</strong></p>
+                                <p class="text-left small">@curUser.Email</p>
+                                <p class="text-left">
+                                    <a asp-area="Identity" asp-page="/Account/Manage/Index" title="Manage" class="ml-0 btn btn-primary btn-block btn-sm">Account</a>
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                </li>
+                <li class="dropdown-divider"></li>
+                <li>
+                    <div class="navbar-login navbar-login-session">
+                        <div class="row">
+                            <div class="col-lg-12">
+                                <a href="#" class="btn btn-link navbar-btn navbar-link">Procurement Tasks</a>
+                                <span class="badge badge-pill badge-danger float-right">4</span>
+                            </div>
+                        </div>
+                    </div>
+                </li>
+                <li>
+                    <div class="navbar-login navbar-login-session">
+                        <div class="row">
+                            <div class="col-lg-12">
+                                <button type="submit" class="btn btn-link navbar-btn navbar-link">Logout</button>
+                            </div>
+                        </div>
+                    </div>
+                </li>
+            </ul>
+        </li>
     </form>
 }
 else
 {
-    <ul class="nav navbar-nav ml-auto">
-        <li class="nav-item mr-2"><a asp-area="Identity" asp-page="/Account/Register">Register</a></li>
-        <li class="nav-item mr-2"><a asp-area="Identity" asp-page="/Account/Login">Login</a></li>
-    </ul>
+    <li class="nav-item mr-2"><a asp-area="Identity" asp-page="/Account/Register">Register</a></li>
+    <li class="nav-item mr-2"><a asp-area="Identity" asp-page="/Account/Login">Login</a></li>
 }

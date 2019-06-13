@@ -324,3 +324,25 @@ a[data-toggle="collapse"] {
         background-color: #53A3CD;
         border-color: #53A3CD;
     }
+
+.navbar-login {
+    width: 305px;
+    padding: 10px;
+    padding-bottom: 0px;
+}
+
+.navbar-login-session {
+    padding: 10px;
+    padding-bottom: 0px;
+    padding-top: 0px;
+}
+
+.icon-size {
+    font-size: 87px;
+}
+
+#noti{
+    float:right;
+    margin-right:20px;
+    margin-top:5px;
+}
