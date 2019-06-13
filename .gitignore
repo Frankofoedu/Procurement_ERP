@@ -339,3 +339,5 @@ ASALocalRun/
 # BeatPulse healthcheck temp database
 healthchecksdb
 /BsslProcurement/wwwroot/docs
+/BsslProcurement/Pages/Staff/Review/Prequalification.cshtml
+/BsslProcurement/Pages/Staff/Review/Prequalification.cshtml.cs
