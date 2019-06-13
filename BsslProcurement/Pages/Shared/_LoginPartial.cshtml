@@ -9,14 +9,17 @@
 {
     var aspUser = await UserManager.GetUserAsync(User);
     var curUser = await _context.Staffs.FindAsync(aspUser.Id);
-    var notificationNum = await _context.Staffs.FindAsync(aspUser.Id);
+    var notificationNum = await _context.PrequalificationJobs.CountAsync(m=>m.StaffId == curUser.Id);
 
     <form asp-area="Identity" asp-page="/Account/Logout" asp-route-returnUrl="@Url.Page("/Index", new { area = "" })" method="post" id="logoutForm" class="w-100">
 
         <li class="dropdown float-right list-unstyled">
             <a href="#" class="dropdown-toggle btn" data-toggle="dropdown">
                 <i class="fas fa-user-circle fa-2x mr-4"></i>
-                <span id="noti" class="badge badge-pill badge-danger">!</span>
+                @if (notificationNum > 0)
+                {
+                    <span id="noti" class="badge badge-pill badge-danger">!</span>
+                }
             </a>
             <ul class="dropdown-menu dropdown-menu-right">
                 <li>
@@ -41,9 +44,11 @@
                 <li>
                     <div class="navbar-login navbar-login-session">
                         <div class="row">
-                            <div class="col-lg-12">
-                                <a href="#" class="btn btn-link navbar-btn navbar-link">Procurement Tasks</a>
-                                <span class="badge badge-pill badge-danger float-right">4</span>
+                            <div class="col-12">
+                                <a asp-route="./JobViews/PrequalificationJobs" class="btn btn-link navbar-btn navbar-link col-12 text-left pl-2">
+                                    Procurement Tasks
+                                    <span class="badge badge-pill badge-danger float-right">@notificationNum</span>
+                                </a>
                             </div>
                         </div>
                     </div>
