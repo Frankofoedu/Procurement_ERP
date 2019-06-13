@@ -331,13 +331,15 @@ namespace BsslProcurement.Pages.Vendor
         {
             if (_context.PrequalificationWorkflows.Any())
             {
+                var wkflw = _context.Workflows.OrderBy(x=> x.Step).First();
 
                 _context.PrequalificationJobs.Add(new PrequalificationJob
                 {
                     CompanyInfoId = companyID,
                     CreationDate = DateTime.Now,
                     WorkFlowStep = 1,
-
+                    StaffId = wkflw.StaffId,
+                    
                 });
             }
             else
@@ -346,8 +348,7 @@ namespace BsslProcurement.Pages.Vendor
                 {
                     CompanyInfoId = companyID,
                     CreationDate = DateTime.Now,
-                    WorkFlowStep = 0,
-                     
+                    WorkFlowStep = 0,                    
 
                 });
             }
