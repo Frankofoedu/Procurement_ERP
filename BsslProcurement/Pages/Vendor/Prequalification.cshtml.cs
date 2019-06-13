@@ -124,6 +124,8 @@ namespace BsslProcurement.Pages.Vendor
 
             AddPersonnelDetailsToDB(PersonnelDetailIntputs, CompanyInfo.Id);
 
+            AddPrequalificationJob(CompanyInfo.Id);
+
             await _context.SaveChangesAsync();
 
             if (SignUpUserAsync(CompanyInfo,ReturnUrl) == null)
@@ -322,6 +324,33 @@ namespace BsslProcurement.Pages.Vendor
             }
 
             return null;
+        }
+
+
+        public void AddPrequalificationJob(int companyID)
+        {
+            if (_context.PrequalificationWorkflows.Any())
+            {
+
+                _context.PrequalificationJobs.Add(new PrequalificationJob
+                {
+                    CompanyInfoId = companyID,
+                    CreationDate = DateTime.Now,
+                    WorkFlowStep = 1,
+
+                });
+            }
+            else
+            {
+                _context.PrequalificationJobs.Add(new PrequalificationJob
+                {
+                    CompanyInfoId = companyID,
+                    CreationDate = DateTime.Now,
+                    WorkFlowStep = 0,
+                     
+
+                });
+            }
         }
 
     }
