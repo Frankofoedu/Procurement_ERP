@@ -49,7 +49,7 @@ namespace DcProcurement
 
         #region Users Tables
         public DbSet<Staff> Staffs { get; set; }
-        public DbSet<Vendor> Vendors { get; set; }
+        public DbSet<VendorUser> Vendors { get; set; }
         #endregion
 
         #region Jobs Tables
@@ -64,7 +64,7 @@ namespace DcProcurement
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             modelBuilder.Entity<CompanyInfoProcurementSubCategory>().HasKey(sc => new { sc.CompanyInfoId, sc.ProcurementSubcategoryId });
-            modelBuilder.Entity<CompanyInfo>().HasOne(m => m.Vendor).WithOne(n => n.CompanyInfo).HasForeignKey<Vendor>(l => l.CompanyInfoId);
+            modelBuilder.Entity<CompanyInfo>().HasOne(m => m.Vendor).WithOne(n => n.CompanyInfo).HasForeignKey<VendorUser>(l => l.CompanyInfoId);
             base.OnModelCreating(modelBuilder);
 
         }

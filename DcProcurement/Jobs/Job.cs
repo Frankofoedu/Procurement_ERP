@@ -8,6 +8,11 @@ namespace DcProcurement
     public class Job
     {
         public int Id { get; set; }
+        /// <summary>
+        /// check if there is any workflow in the db before setting. 
+        /// if no workflow in the db, set to 0 else set to 1
+        /// </summary>
+        public int WorkFlowStep { get; set; } //current workflow step
 
         [DataType(DataType.Date)]
         public DateTime CreationDate { get; set; }
