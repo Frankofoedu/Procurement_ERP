@@ -30,13 +30,10 @@ namespace DcProcurement
         public string ContactPhoneNumber { get; set; }
         public string ContactEmail { get; set; }
         public string VendorId { get; set; } //The identity User attached to this company. (User of type vendor)
-        public int PrequalificationTaskId { get; set; } // the task attaching this company to the user to verify.
-        public int WorkflowStep { get; set; } //current workflow step showing approval progress. used instead of workflowId bcause workflow process can change at anytime
         public bool Approved { get; set; } //Becomes True after going the workflow stages
         public bool Disqualified { get; set; }
 
-
-        public PrequalificationJob PrequalificationJob { get; set; }
+        public List<Job>  Jobs { get; set; }
         public VendorUser Vendor { get; set; }
         public List<CompanyInfoProcurementSubCategory> CompanyInfos { get; set; }
         public List<ExperienceRecord>  ExperienceRecords { get; set; }
