@@ -33,6 +33,8 @@ namespace DcProcurement
         public bool Approved { get; set; } //Becomes True after going the workflow stages
         public bool Disqualified { get; set; }
 
+        public DateTime CreationDate { get; set; } 
+
         public List<PrequalificationJob>  PrequalificationJobs { get; set; }
         public VendorUser Vendor { get; set; }
         public List<CompanyInfoProcurementSubCategory> CompanyInfos { get; set; }

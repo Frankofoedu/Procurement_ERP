@@ -34,21 +34,21 @@
                             {
                                 var item = Model.currentPrequalificationWorkflows[i];
 
-                        <tr>
-                            <td>@item.Step</td>
-                            <td>@item.Description</td>
-                            <td>@item.ToPersonOrAssign</td>
-                            @if (item.StaffToAssign != null)
-                            {
-                                <td>@item.StaffToAssign.StaffCode</td>
-                                <td>@item.StaffToAssign.Name</td>
-                            }
-                            else
-                            {
-                                <td></td>
-                                <td></td>
-                            }
-                        </tr>
+                                <tr>
+                                    <td>@item.Step</td>
+                                    <td>@item.Description</td>
+                                    <td>@item.ToPersonOrAssign</td>
+                                    @if (item.StaffToAssign != null)
+                                    {
+                                        <td>@item.StaffToAssign.StaffCode</td>
+                                        <td>@item.StaffToAssign.Name</td>
+                                    }
+                                    else
+                                    {
+                                        <td></td>
+                                        <td></td>
+                                    }
+                                </tr>
                             }
 
                         }
@@ -125,7 +125,7 @@
                                     <td>@(i + 1) <input type="hidden" asp-for="InputModel[i].Step" value="@item.Step" /></td>
                                     <td><input type="text" asp-for="InputModel[i].Description" value="@item.Description" class="form-control" /></td>
                                     <td><input type="checkbox" asp-for="InputModel[i].Assign" class="checkbox" /></td>
-                                    
+
                                     <td>
                                         <input type="hidden" class="staffIdInput @("staffIdInput" + i)" asp-for="InputModel[i].StaffId" value="@item.StaffId" />
                                         <input type="text" sIndex="@i" class="staffCodeInput @("staffCodeInput" + i) form-control" asp-for="InputModel[i].StaffCode" value="@item.StaffCode" />

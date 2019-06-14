@@ -109,8 +109,12 @@ namespace BsslProcurement.Pages.Vendor
                 return Page();
             }
 
+            //sets date of creation
+            CompanyInfo.CreationDate = DateTime.Now;
+
             //saves company to db
             _context.CompanyInfo.Add(CompanyInfo);
+
 
             await _context.SaveChangesAsync();
 
@@ -251,7 +255,7 @@ namespace BsslProcurement.Pages.Vendor
         /// <param name="id">id of the company</param>
         void AddPersonnelDetailsToDB(List<PersonnelDetailInput> personnelDetailInputs, int id)
         {
-            string companyCode = "_" + id + "_";
+           // string companyCode = "_" + id + "_";
             var pd = new List<PersonnelDetails>();
 
             foreach (var pdInput in personnelDetailInputs)
@@ -267,9 +271,9 @@ namespace BsslProcurement.Pages.Vendor
                 Directory.CreateDirectory(uploads);
 
                 //create file paths for docs
-                var CertfilePath = Path.Combine(uploads, companyCode + CertFileName);
-                var CvfilePath = Path.Combine(uploads, companyCode + CvFileName);
-                var PassPortfilePath = Path.Combine(uploads, companyCode + PassPortFileName);
+                var CertfilePath = Path.Combine(uploads,  CertFileName);
+                var CvfilePath = Path.Combine(uploads, CvFileName);
+                var PassPortfilePath = Path.Combine(uploads, PassPortFileName);
 
                 //save files to folder
                 pdInput.CertFile.CopyTo(new FileStream(CertfilePath, FileMode.Create));

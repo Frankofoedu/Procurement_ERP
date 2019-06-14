@@ -55,8 +55,13 @@ namespace BsslProcurement.Pages.Staff
         {
             if (Image != null)
             {
+                string companyCode = "_" + (1).ToString() + "_";
                 var fileName = Image.FileName;
                 var uploads = Path.Combine(_hostingEnvironment.WebRootPath, "logo");
+
+                //checks if path exists, if not create it.
+                Directory.CreateDirectory(uploads);
+
                 var filePath = Path.Combine(uploads, fileName);
                 Image.CopyTo(new FileStream(filePath, FileMode.Create));
 

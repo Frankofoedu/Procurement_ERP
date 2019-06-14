@@ -20,13 +20,38 @@ namespace BsslProcurement.Pages.Staff.JobViews
 
         public IList<PrequalificationJob> PrequalificationJob { get;set; }
 
+       // public IList<PrequalificationWorkflow> Steps { get; set; }
+        public int Counter { get; set; }
 
+        [BindProperty]
+        public List<PrequalificationJob> PreQJobsGroups { get; set; }
 
         public async Task OnGetAsync()
         {
-            PrequalificationJob = await _context.PrequalificationJobs
+
+
+            //get all the steps
+            try
+            {
+                Counter = _context.PrequalificationWorkflows.Max(x => x.Step);
+            }
+            catch (ArgumentNullException)
+            {
+                Counter = 0;
+                throw;
+            }
+
+            PrequalificationJob = await _context.PrequalificationJobs.Where(x => x.Done == false)
                 .Include(p => p.CompanyInfo)
                 .Include(p => p.Staff).ToListAsync();
+
+
+
+        }
+        public void OnPost()
+        {
+          //  return ;
+        }
+
         }
     }
-}

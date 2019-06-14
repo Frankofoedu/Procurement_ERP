@@ -6,61 +6,133 @@
 }
 
 <h2>PreqJobs</h2>
+<form method="post">
 
-<p>
-    <a asp-page="Create">Create New</a>
-</p>
-<table class="table">
-    <thead>
-        <tr>
-            <th>
-                @Html.DisplayNameFor(model => model.PrequalificationJob[0].CompanyInfo)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.PrequalificationJob[0].WorkFlowStep)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.PrequalificationJob[0].CreationDate)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.PrequalificationJob[0].DoneDate)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.PrequalificationJob[0].Done)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.PrequalificationJob[0].Staff)
-            </th>
-            <th></th>
-        </tr>
-    </thead>
-    <tbody>
-@foreach (var item in Model.PrequalificationJob) {
-        <tr>
-            <td>
-                @Html.DisplayFor(modelItem => item.CompanyInfo.Id)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.WorkFlowStep)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.CreationDate)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.DoneDate)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Done)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Staff.Id)
-            </td>
-            <td>
-                <a asp-page="./Edit" asp-route-id="@item.Id">Edit</a> |
-                <a asp-page="./Details" asp-route-id="@item.Id">Details</a> |
-                <a asp-page="./Delete" asp-route-id="@item.Id">Delete</a>
-            </td>
-        </tr>
-}
-    </tbody>
-</table>
+    @for (int i = 0; i < Model.Counter + 1; i++)
+    {
+        <div class="row my-3">
+            <div class="col-md-2"></div>
+            <div class="col-md-8">
+                <div class="panel panel-login">
+                    <div class="panel-heading">
+                        <div class="row">
+                            <p class="header-text">Current Prequalification Jobs in Workflow Step @i</p>
+
+                        </div>
+                        <hr>
+                    </div>
+                    <div class="mt-1">
+                        <table class="table table-responsive-sm table-striped">
+                            <thead>
+                                <tr class="table-primary">
+                                    <th>Company Name</th>
+                                    <th>Company Contact</th>
+                                    <th>Assigned to</th>
+                                    <th>Assigned Date</th>
+                                    <th>Approved</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach (var item in Model.PreQJobsGroups)
+                                //loops through all the jobs in a Workflow group
+                                {
+                                    if (item.WorkFlowStep == i)
+                                    {
+
+                                        <tr>
+                                            <td>
+                                                @item.CompanyInfo.CompanyName
+                                            </td>
+                                            <td>
+                                                @item.CompanyInfo.ContactName
+                                            </td>
+                                            <td>
+                                                @if (item.Staff == null)
+                                                {
+                                                    <span>Not Assigned</span>
+                                                }
+                                                else
+                                                {
+                                                    <span>Self</span>
+                                                }
+                                            </td>
+                                            <td>
+                                                @item.CreationDate.ToShortDateString()
+                                            </td>
+                                            <td>
+                                                <input type="checkbox" asp-for="@item.Done" />
+                                            </td>
+
+                                            <td>
+                                                <input type="hidden" name="PreQJobsGroups.ElementAt" value="@item.Id" />
+                                            </td>
+
+                                        </tr>
+                                    }
+                                }
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    }
+
+    <input type="submit" name="Submit" value="SUbmit" />
+</form>
+@*<table class="table">
+        <thead>
+            <tr>
+                <th>
+                    @Html.DisplayNameFor(model => model.PrequalificationJob[0].CompanyInfo)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.PrequalificationJob[0].WorkFlowStep)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.PrequalificationJob[0].CreationDate)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.PrequalificationJob[0].DoneDate)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.PrequalificationJob[0].Done)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.PrequalificationJob[0].Staff)
+                </th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model.PrequalificationJob)
+            {
+                <tr>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.CompanyInfo.Id)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.WorkFlowStep)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.CreationDate)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.DoneDate)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Done)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Staff.Id)
+                    </td>
+                    <td>
+                        <a asp-page="./Edit" asp-route-id="@item.Id">Edit</a> |
+                        <a asp-page="./Details" asp-route-id="@item.Id">Details</a> |
+                        <a asp-page="./Delete" asp-route-id="@item.Id">Delete</a>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>*@
