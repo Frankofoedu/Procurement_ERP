@@ -37,7 +37,7 @@ namespace DcProcurement
 
         public List<PrequalificationJob>  PrequalificationJobs { get; set; }
         public VendorUser Vendor { get; set; }
-        public List<CompanyInfoProcurementSubCategory> CompanyInfos { get; set; }
+        public List<CompanyInfoProcurementSubCategory> CompanyInfoSelectedSubcategory { get; set; }
         public List<ExperienceRecord>  ExperienceRecords { get; set; }
         public List<EquipmentDetails> EquipmentDetails { get; set; }
         public List<PersonnelDetails>  PersonnelDetails { get; set; }
