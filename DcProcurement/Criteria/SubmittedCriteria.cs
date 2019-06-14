@@ -10,7 +10,7 @@ namespace DcProcurement
         public int CompanyInfoId { get; set; }
         public int CriteriaId { get; set; }
         public string Value { get; set; }
-        public Criteria Criteria { get; set; }
+        public virtual Criteria Criteria { get; set; }
         public CompanyInfo CompanyInfo { get; set; }
     }
 }
