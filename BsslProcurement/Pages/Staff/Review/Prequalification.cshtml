@@ -1,0 +1,369 @@
+﻿@page
+
+@using Microsoft.AspNetCore.Hosting;
+@using System.IO;
+
+@inject IHostingEnvironment _hostingEnvironment;
+
+@model BsslProcurement.Pages.Staff.Review.PrequalificationModel
+@{
+    ViewData["Title"] = "Prequalification";
+    Layout = "~/Pages/Shared/_Layout.cshtml";
+}
+@if (!string.IsNullOrWhiteSpace(Model.Message))
+{
+    <div class="alert alert-success alert-dismissable fade show">
+        <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+        @Model.Message
+    </div>
+}
+@if (!string.IsNullOrWhiteSpace(Model.Error))
+{
+    <div class="alert alert-danger alert-dismissable fade show">
+        <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+        @Model.Error
+    </div>
+}
+
+<div class="row mt-5">
+    <div class="col-md-1"></div>
+    <div class="col-md-10">
+        <form method="post" class="panel panel-login" enctype="multipart/form-data">
+            <div class="panel-heading">
+                <div class="row">
+                    <p class="header-text">@Model.Step.Description</p>
+                </div>
+                <hr>
+            </div>
+            <div asp-validation-summary="All" class="text-danger"></div>
+
+            <div class="row">
+                <div class="col-12">
+                    <h3 class="h3 bg-primary text-white px-3 py-1 mt-2 rounded">
+                        Company Details.
+                    </h3>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-sm-6">
+                    <div class="form-group">
+                        <label>Rc No/ITF No </label>
+                        <input class="form-control" readonly="readonly" value="@Model.CompanyInfo.CompanyRegNo" />
+                    </div>
+                </div>
+                <div class="col-sm-6">
+                    <div class="form-group">
+                        <label>Company Name</label>
+                        <input class="form-control" readonly="readonly" value="@Model.CompanyInfo.CompanyName" />
+                    </div>
+                </div>
+                <div class="col-sm-6">
+                    <div class="form-group">
+                        <label>Phone Number</label>
+                        <input class="form-control" readonly="readonly" value="@Model.CompanyInfo.PhoneNumber" />
+                    </div>
+                </div>
+                <div class="col-sm-6">
+                    <div class="form-group">
+                        <label>Email Address</label>
+                        <input class="form-control" readonly="readonly" value="@Model.CompanyInfo.Email" />
+                    </div>
+                </div>
+                <div class="col-sm-12">
+                    <div class="form-group">
+                        <label>Company Address </label>
+                        <input class="form-control" readonly="readonly" value="@Model.CompanyInfo.Address" />
+                    </div>
+                </div>
+                <div class="col-sm-6">
+                    <div class="form-group">
+                        <label>State</label>
+                        <input class="form-control" readonly="readonly" value="@Model.CompanyInfo.State" />
+                    </div>
+                </div>
+                <div class="col-sm-6">
+                    <div class="form-group">
+                        <label>LGA</label>
+                        <input class="form-control" readonly="readonly" value="@Model.CompanyInfo.City" />
+                    </div>
+                </div>
+                <div class="col-sm-12">
+                    <div class="form-group">
+                        <label>Postal Address</label>
+                        <input class="form-control" readonly="readonly" value="@Model.CompanyInfo.PostalAddress" />
+                    </div>
+                </div>
+                <div class="col-sm-6">
+                    <div class="form-group">
+                        <label>Nature of Business </label>
+                        <input class="form-control" readonly="readonly" value="@Model.CompanyInfo.NatureOfBusiness" />
+                    </div>
+                </div>
+                <div class="col-sm-6">
+                    <div class="form-group">
+                        <label>Economic Sector</label>
+                        <input class="form-control" readonly="readonly" value="@Model.CompanyInfo.Sector">
+                    </div>
+                </div>
+                <div class="col-sm-6">
+                    <div class="form-group">
+                        <label>Date of Establishment</label>
+                        <input class="form-control" readonly="readonly" value="@Model.CompanyInfo.DateEstablishment" />
+                    </div>
+                </div>
+                <div class="col-sm-6">
+                    <div class="form-group">
+                        <label>Tax Identification Number (TIN)</label>
+                        <input class="form-control" readonly="readonly" value="@Model.CompanyInfo.TIN" />
+                    </div>
+                </div>
+            </div>
+
+
+            <div class="row">
+                <div class="col-12">
+                    <h3 class="h3 bg-primary text-white px-3 py-1 mt-2 rounded">
+                        Contact Person Details
+                    </h3>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-sm-6">
+                    <div class="form-group">
+                        <label>Name </label>
+                        <input class="form-control" placeholder="Enter Fullname" asp-for="CompanyInfo.ContactName" />
+                    </div>
+                </div>
+                <div class="col-sm-6">
+                    <div class="form-group">
+                        <label>Designation </label>
+                        <input class="form-control" placeholder="Enter Designation in Company" asp-for="CompanyInfo.ContactDesignation" />
+                    </div>
+                </div>
+                <div class="col-sm-6">
+                    <div class="form-group">
+                        <label>Phone Number</label>
+                        <input class="form-control" placeholder="Enter ONE(1) Phone Number" asp-for="CompanyInfo.ContactPhoneNumber" />
+                    </div>
+                </div>
+                <div class="col-sm-6">
+                    <div class="form-group">
+                        <label>Email Address</label>
+                        <input class="form-control" placeholder="Enter ONE(1) Email Address" type="email" asp-for="CompanyInfo.ContactEmail" />
+                    </div>
+                </div>
+            </div>
+
+
+            <div class="row">
+                <div class="col-12">
+                    <h3 class="h3 bg-primary text-white px-3 py-1 mt-2 rounded">
+                        Category of Contract for Prequalification
+                    </h3>
+                </div>
+            </div>
+            <div class="row">
+                @foreach (var item in Model.CompanyInfo.CompanyInfoSelectedSubcategory)
+                {
+                    <div class="col-sm-6">
+                        <div class="form-group">
+                            <label>Main Category </label>
+                            <input class="form-control" value="@item.ProcurementSubcategory.ProcurementCategory.Name" />
+                        </div>
+                    </div>
+                    <div class="col-sm-6">
+                        <div class="form-group">
+                            <label>Sub Category </label>
+                            <input class="form-control" value="@item.ProcurementSubcategory.Name">
+                        </div>
+                    </div>
+
+                }
+            </div>
+
+            <div class="row">
+                <div class="col-12">
+                    <h3 class="h3 bg-primary text-white px-3 py-1 mt-2 rounded">
+                        Documents and Requirements
+                    </h3>
+                </div>
+            </div>
+            <div class="row" style="">
+                <div class="col-12">
+                    <table class="table table-responsive-sm table-striped">
+                        <thead>
+                            <tr class="table-primary">
+                                <th>S/N</th>
+                                <th>Requirement</th>
+                                <th>Value</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @for (int i = 0; i < Model.CompanyInfo.SubmittedCriterias.Count; i++)
+                            {
+                                var item = Model.CompanyInfo.SubmittedCriterias[i];
+
+                            <tr>
+                                <td> @(i + 1) </td>
+                                <td> @item.Criteria.CriteriaDescription </td>
+
+                                @if (item.Criteria.NeedsDocument)
+                                {
+                                    var uploads = System.IO.Path.Combine(_hostingEnvironment.WebRootPath, "Criteriadocs", Model.CompanyInfo.Id.ToString());
+                                    var filePath = System.IO.Path.Combine(uploads, item.Value);
+
+                                    <td> <a target="_blank" href="@filePath" class="btn btn-outline-primary">Open Document</a> </td>
+                                }
+                                else
+                                { <td> @item.Value </td>}
+
+                            </tr>
+                            }
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+
+            <div class="row">
+                <div class="col-12">
+                    <h3 class="h3 bg-primary text-white px-3 py-1 mt-2 rounded">
+                        Experience Record
+                    </h3>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-12">
+                    <table class="table table-responsive table-striped">
+                        <thead>
+                            <tr class="table-primary">
+                                <th>S/N</th>
+                                <th>Client Name</th>
+                                <th>Client Address</th>
+                                <th>Project Description</th>
+                                <th>Start Date</th>
+                                <th>Completion Date</th>
+                                <th>Contact Person</th>
+                                <th>Phone Number</th>
+                            </tr>
+                        </thead>
+                        <tbody id="experienceTbody">
+                            @for (int i = 0; i < Model.CompanyInfo.ExperienceRecords.Count; i++)
+                            {
+                                var item = Model.CompanyInfo.ExperienceRecords[i];
+
+                                <tr>
+                                    <td>@(i + 1)</td>
+                                    <td><input type="text" class="form-control-sm" readonly="readonly" value="@item.Name" /></td>
+                                    <td><input type="text" class="form-control-sm" readonly="readonly" value="@item.Address" /></td>
+                                    <td><input type="text" class="form-control-sm" readonly="readonly" value="@item.ProjectDescription" /></td>
+                                    <td><input type="text" class="form-control-sm" readonly="readonly" value="@item.StartDate.ToShortDateString()" /></td>
+                                    <td><input type="date" class="form-control-sm" readonly="readonly" value="@item.CompletionDate.ToShortDateString()" /></td>
+                                    <td><input type="text" class="form-control-sm" readonly="readonly" value="@item.ContactPerson" /></td>
+                                    <td><input type="text" class="form-control-sm" readonly="readonly" value="@item.PhoneNumber" /></td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+
+            <div class="row">
+                <div class="col-12">
+                    <h3 class="h3 bg-primary text-white px-3 py-1 mt-2 rounded">
+                        Equipment Details
+                    </h3>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-12">
+                    <table class="table table-responsive-sm table-striped">
+                        <thead>
+                            <tr class="table-primary">
+                                <th>S/N</th>
+                                <th>Equipment Name</th>
+                                <th>Equipment Description</th>
+                                <th>Quantity</th>
+                            </tr>
+                        </thead>
+                        <tbody id="equipmentTbody">
+                            @for (int i = 0; i < Model.CompanyInfo.EquipmentDetails.Count; i++)
+                            {
+                                var item = Model.CompanyInfo.EquipmentDetails[i];
+                                <tr>
+                                    <td>@(i + 1)</td>
+                                    <td><input type="text" class="form-control" readonly="readonly" value="@item.Name" /></td>
+                                    <td><input type="text" class="form-control" readonly="readonly" value="@item.Description" /></td>
+                                    <td><input type="text" class="form-control"  readonly="readonly" value="@item.Quantity" /></td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+
+                </div>
+            </div>
+
+
+            <div class="row">
+                <div class="col-12">
+                    <h3 class="h3 bg-primary text-white px-3 py-1 mt-2 rounded">
+                        Key Personnel Details
+                    </h3>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-12">
+                    <table class="table table-responsive-sm table-striped">
+                        <thead>
+                            <tr class="table-primary">
+                                <th>S/N</th>
+                                <th>Name</th>
+                                <th>Professional Qualification</th>
+                                <th>CV</th>
+                                <th>Professional Certificate</th>
+                                <th>Passport Photograph</th>
+                            </tr>
+                        </thead>
+                        <tbody id="personnelTbody">
+                            @for (int i = 0; i < Model.CompanyInfo.PersonnelDetails.Count; i++)
+                            {
+                                var item = Model.CompanyInfo.PersonnelDetails[i];
+                                var uploads = System.IO.Path.Combine(_hostingEnvironment.WebRootPath, "Personneldocs", Model.CompanyInfo.Id.ToString());
+
+                                //create file paths for docs
+                                var CertfilePath = System.IO.Path.Combine(uploads, item.Certificate );
+                                var CvfilePath = System.IO.Path.Combine(uploads, item.CV);
+                                var PassPortfilePath = System.IO.Path.Combine(uploads, item.Passport);
+
+                                <tr>
+                                    <td> @(i + 1) </td>
+                                    <td><input type="text" class="form-control" readonly="readonly" value="@item.Name" /></td>
+                                    <td><input type="text" class="form-control" readonly="readonly" value="@item.Qualification" /></td>
+                                    <td><a target="_blank" href="@CvfilePath" class="btn btn-outline-primary">View CV</a></td>
+                                    <td><a target="_blank" href="@CertfilePath" class="btn btn-outline-primary">View Certificate</a></td>
+                                    <td><a target="_blank" href="@PassPortfilePath" class="btn btn-outline-primary">View Passport</a></td>
+                                </tr>
+                            }
+
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <div class="col-12 mt-4">
+                <div class="form-group">
+                    <div class="row">
+                        <div class="col-sm-3">
+                        </div>
+                        <div class="col-sm-6 text-center">
+                            <button type="submit" class="btn form-btn">Submit</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </form>
+
+        <hr />
+    </div>
+</div>
