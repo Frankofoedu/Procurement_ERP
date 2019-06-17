@@ -8,6 +8,7 @@
 <h2>PreqJobs</h2>
 <form method="post">
 
+    <input type="hidden" asp-for="Counter" />
     @for (int i = 1; i <= Model.Counter; i++)
     //loop through workflow steps
     {
@@ -76,6 +77,7 @@
                                                         <input type="hidden" asp-for="InputModels[j].AssignedStaff" />
                                                         <input type="hidden" asp-for="InputModels[j].CompanyInfoId" />
                                                         <input type="hidden" asp-for="InputModels[j].WorkFlowStep" />
+                                                        <input type="hidden" asp-for="InputModels[j].Id" />
                                                     </td>
                                                     <td>
                                                         <a asp-page="../Review/Prequalification" asp-route-id="@item.Id">Review</a>
@@ -133,6 +135,7 @@
                                                         <input type="hidden" asp-for="InputModels[j].CompanyInfoId" />
                                                         <input type="hidden" asp-for="InputModels[j].WorkFlowStep" />
                                                         <input type="hidden" asp-for="InputModels[j].AssignedStaff" />
+                                                        <input type="hidden" asp-for="InputModels[j].Id" />
 
                                                     </td>
                                                     <td>
@@ -191,6 +194,7 @@
                                                         <input type="hidden" asp-for="InputModels[j].AssignedStaff" />
                                                         <input type="hidden" asp-for="InputModels[j].CompanyInfoId" />
                                                         <input type="hidden" asp-for="InputModels[j].WorkFlowStep" />
+                                                        <input type="hidden" asp-for="InputModels[j].Id" />
                                                     </td>
                                                     <td>
                                                         <a asp-page="../Review/Prequalification" asp-route-id="@item.Id">Review</a>
@@ -203,7 +207,7 @@
                                         <tr>
                                             <td>
                                                 <input class="codeInput @i form-control-sm ml-1" placeholder="Search Staff Code" />
-                                                <button id="btnSearch @i" onclick="getStaff(@i);return false" class="btn btn-sm btn-outline-primary"><i class="fas fa-search"></i></button>
+                                                <button id="btnSearch @i" onclick="getStaff(@i);" class="btn btn-sm btn-outline-primary"><i class="fas fa-search"></i></button>
                                                 <input type="hidden" id="StaffId" />
                                             </td>
                                             <td>
@@ -247,6 +251,7 @@
                                                     <td>
                                                         <input type="hidden" asp-for="InputModels[j].CompanyInfoId" />
                                                         <input type="hidden" asp-for="InputModels[j].WorkFlowStep" />
+                                                        <input type="hidden" asp-for="InputModels[j].Id" />
                                                         <input class="group @i" type="hidden" asp-for="InputModels[j].AssignedStaff" />
                                                     </td>
                                                     <td>
@@ -260,7 +265,7 @@
                                             <td></td>
                                             <td></td>
                                             <td>
-                                                <button id="btnAssignAll" onclick="GroupAssign(@i, '@Model.PrequalificationWorkflow[i].StaffId'); return false" class="btn btn-block">Assign All</button>
+                                                <button id="btnAssignAll" onclick="GroupAssign(@i, '@Model.PrequalificationWorkflow[i].StaffId');" class="btn btn-block">Assign All</button>
                                             </td>
                                         </tr>
 
@@ -299,6 +304,7 @@
                                                 <td>
                                                     <input type="hidden" asp-for="InputModels[j].CompanyInfoId" />
                                                     <input type="hidden" asp-for="InputModels[j].WorkFlowStep" />
+                                                    <input type="hidden" asp-for="InputModels[j].Id" />
                                                 </td>
                                                 <td>
                                                     <a asp-page="../Review?Prequalification" asp-route-id="@item.Id">Review</a>

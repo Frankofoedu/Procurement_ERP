@@ -30,6 +30,8 @@ namespace BsslProcurement.Pages.Staff.JobViews
 
         public List<PrequalificationWorkflow> PrequalificationWorkflow { get; set; }
         // public IList<PrequalificationWorkflow> Steps { get; set; }
+
+        [BindProperty]
         public int Counter { get; set; }
 
 
@@ -38,6 +40,12 @@ namespace BsslProcurement.Pages.Staff.JobViews
         //get current user
         private Task<User> GetCurrentUserAsync() => _userManager.GetUserAsync(HttpContext.User);
         public async Task OnGetAsync()
+        {
+            await LoadJobs();
+
+        }
+
+        private async Task LoadJobs()
         {
             //get current user
             // var user = await GetCurrentUserAsync();
@@ -73,19 +81,29 @@ namespace BsslProcurement.Pages.Staff.JobViews
                     StaffId = p.StaffId,
                     WorkFlowStep = p.WorkFlowStep,
                 }).ToListAsync();
+        }
 
+        public async Task OnPost()
+        {
+            if (!ModelState.IsValid)
+            {
+                await LoadJobs();
+            }
+            else
+            {
+                
 
-            //check if the next step if it is assigned to one or multiple
+                ProcessJobs();
 
-            //if to be assigned to multiple staff, add checkbox to assign to staff
+                _context.SaveChanges();
 
-            //no checkbox for single staff
-
+                await LoadJobs();
+            }
 
         }
-        public void OnPost()
-        {
 
+        private void ProcessJobs()
+        {
             //TODO: refactor post code to receive values
             List<PrequalificationJob> newJobs = new List<PrequalificationJob>();
 
@@ -94,54 +112,57 @@ namespace BsslProcurement.Pages.Staff.JobViews
                 //get current job
                 var job = InputModels[i];
 
-
-                //set current job as done 
-                job.Done = true;
-
-                //check if current job is at last workflow step:
-                if (job.WorkFlowStep >= Counter)
+                //check if job was assigned on the frontend
+                if (job.AssignedStaff != null)
                 {
-                    //dont create a new job for it.
-                    return;
-                }
 
 
-                //check if next workflow step is assigned to staff
-                //get next workflow step
-                var nxtWorkflow = PrequalificationWorkflow.FirstOrDefault(w => w.Step == job.WorkFlowStep + 1);
+                    //set current job as done 
+                    var currJob = _context.PrequalificationJobs.First(x => x.Id == job.Id);
+                    currJob.Done = true;
 
-                //check if next workflow step is assigned to a single staff
-                if (nxtWorkflow.ToPersonOrAssign)
-                {
-                    //create new job with staff id and add to list of new jobs
-                    //also increment the workflow step
-                    newJobs.Add(new PrequalificationJob
+                    //check if current job is at last workflow step:
+                    if (!(job.WorkFlowStep >= Counter))
                     {
-                        CompanyInfoId = job.CompanyInfoId,
-                        CreationDate = DateTime.Now,
-                        StaffId = nxtWorkflow.StaffId,
-                        WorkFlowStep = job.WorkFlowStep + 1
-                        
-                    });
-                }
-                //if not assigned
-                else
-                {
-                    //create new job without specific staff
-                    //also increment the workflow step
-                    newJobs.Add(new PrequalificationJob
-                    {
-                        CompanyInfoId = job.CompanyInfoId,
-                        CreationDate = DateTime.Now,
-                        WorkFlowStep = job.WorkFlowStep + 1,
-                    });
-                }
 
-                
-               
+                        var x = job.WorkFlowStep + 1;
+                        //get next workflow step
+                        var nxtWorkflow = _context.PrequalificationWorkflows.FirstOrDefault(w => w.Step == x);
+
+                        //check if next workflow step is assigned to a single staff
+                        if (nxtWorkflow.ToPersonOrAssign)
+                        {
+                            //create new job with staff id and add to list of new jobs
+                            //also increment the workflow step
+                            newJobs.Add(new PrequalificationJob
+                            {
+                                CompanyInfoId = job.CompanyInfoId,
+                                CreationDate = DateTime.Now,
+                                StaffId = nxtWorkflow.StaffId,
+                                WorkFlowStep = job.WorkFlowStep + 1
+
+                            });
+                        }
+                        //if not assigned
+                        else
+                        {
+                            //create new job without specific staff
+                            //also increment the workflow step
+                            newJobs.Add(new PrequalificationJob
+                            {
+                                CompanyInfoId = job.CompanyInfoId,
+                                CreationDate = DateTime.Now,
+                                WorkFlowStep = job.WorkFlowStep + 1,
+                            });
+                        }
+
+                    }
+
+                }
             }
 
-        }
+            _context.PrequalificationJobs.AddRange(newJobs);
 
+        }
     }
 }
