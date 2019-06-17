@@ -574,8 +574,9 @@
     }
 
     function getSubCategories(id, counter) {
-        //alert("started" + id);
-        $.getJSON("https://localhost:5001/DynamicData/SubCategories?id=" + id,
+        var baseUrl = window.location.origin;
+
+        $.getJSON(baseUrl + "/DynamicData/SubCategories?id=" + id,
             function (result) {
                 if (result.length > 0) {
                     // alert('Done');
