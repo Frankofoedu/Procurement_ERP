@@ -7,6 +7,7 @@ namespace DcProcurement
    public class PersonnelDetails
     {
         public int Id { get; set; }
+        public int? CompanyInfoId { get; set; }
         public string    Name { get; set; }
         public string Qualification { get; set; }
         public string CV { get; set; }

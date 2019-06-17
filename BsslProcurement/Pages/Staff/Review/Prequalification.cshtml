@@ -3,8 +3,6 @@
 @using Microsoft.AspNetCore.Hosting;
 @using System.IO;
 
-@inject IHostingEnvironment _hostingEnvironment;
-
 @model BsslProcurement.Pages.Staff.Review.PrequalificationModel
 @{
     ViewData["Title"] = "Prequalification";
@@ -199,9 +197,9 @@
                             </tr>
                         </thead>
                         <tbody>
-                            @for (int i = 0; i < Model.CompanyInfo.SubmittedCriterias.Count; i++)
+                            @for (int i = 0; i < Model.SubmittedCriterias.Count; i++)
                             {
-                                var item = Model.CompanyInfo.SubmittedCriterias[i];
+                                var item = Model.SubmittedCriterias[i];
 
                             <tr>
                                 <td> @(i + 1) </td>
@@ -209,7 +207,7 @@
 
                                 @if (item.Criteria.NeedsDocument)
                                 {
-                                    var uploads = System.IO.Path.Combine(_hostingEnvironment.WebRootPath, "Criteriadocs", Model.CompanyInfo.Id.ToString());
+                                    var uploads = System.IO.Path.Combine(Model.baseURL, "Criteriadocs", Model.CompanyInfo.Id.ToString());
                                     var filePath = System.IO.Path.Combine(uploads, item.Value);
 
                                     <td> <a target="_blank" href="@filePath" class="btn btn-outline-primary">Open Document</a> </td>
@@ -329,7 +327,7 @@
                             @for (int i = 0; i < Model.CompanyInfo.PersonnelDetails.Count; i++)
                             {
                                 var item = Model.CompanyInfo.PersonnelDetails[i];
-                                var uploads = System.IO.Path.Combine(_hostingEnvironment.WebRootPath, "Personneldocs", Model.CompanyInfo.Id.ToString());
+                                var uploads = System.IO.Path.Combine(Model.baseURL, "Personneldocs", Model.CompanyInfo.Id.ToString());
 
                                 //create file paths for docs
                                 var CertfilePath = System.IO.Path.Combine(uploads, item.Certificate );

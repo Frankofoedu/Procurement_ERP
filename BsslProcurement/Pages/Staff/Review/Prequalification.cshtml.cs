@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using DcProcurement;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
@@ -21,19 +22,19 @@ namespace BsslProcurement.Pages.Staff.Review
         private readonly SignInManager<User> _signInManager;
         private readonly ILogger<PrequalificationModel> _logger;
         private readonly UserManager<User> _userManager;
+        private readonly HttpContext currentContext;
 
         public readonly IHostingEnvironment _hostingEnvironment;
-        public PrequalificationModel(ProcurementDBContext context,
-                                    IHostingEnvironment hostingEnvironment,
-                                    UserManager<User> userManager,
-                                    SignInManager<User> signInManager,
-                                    ILogger<PrequalificationModel> logger)
+        public PrequalificationModel(ProcurementDBContext context, IHostingEnvironment hostingEnvironment,
+                                    UserManager<User> userManager, SignInManager<User> signInManager,
+                                    ILogger<PrequalificationModel> logger, IHttpContextAccessor httpContextAccessor)
         {
             _context = context;
             _hostingEnvironment = hostingEnvironment;
             _userManager = userManager;
             _signInManager = signInManager;
             _logger = logger;
+            currentContext = httpContextAccessor.HttpContext;
         }
 
 
@@ -49,18 +50,21 @@ namespace BsslProcurement.Pages.Staff.Review
 
         public string Message { get; set; }
         public string Error { get; set; }
+        public string baseURL { get; set; }
         public int CategoryCount { get; set; }
 
         [BindProperty]
         public List<int> subCatsId { get; set; }
 
+        public List<SubmittedCriteria> SubmittedCriterias { get; set; }
 
-        public IActionResult OnGet(int? JobId)
+
+        public IActionResult OnGet(int? id)
         {
-            if (JobId == null)
+            if (id == null)
             { return LocalRedirect("~/Staff/JobViews/PreqJobs"); }
 
-            Job = _context.PrequalificationJobs.FirstOrDefault(n=>n.Id == JobId);
+            Job = _context.PrequalificationJobs.FirstOrDefault(n=>n.Id == id);
             if (Job == null)
             { return LocalRedirect("~/Staff/JobViews/PreqJobs"); }
 
@@ -68,14 +72,26 @@ namespace BsslProcurement.Pages.Staff.Review
             { return LocalRedirect("~/Staff/JobViews/PreqJobs"); }
 
             CompanyInfo = _context.CompanyInfo.Include(n=>n.CompanyInfoSelectedSubcategory).Include(b=>b.EquipmentDetails).Include(l=>l.ExperienceRecords)
-                .Include(k=>k.PersonnelDetails).Include(j=>j.SubmittedCriterias).FirstOrDefault(m => m.Id == Job.CompanyInfoId);
+                .Include(k=>k.PersonnelDetails).FirstOrDefault(m => m.Id == Job.CompanyInfoId);
+
+            SubmittedCriterias = _context.SubmittedCriteria.Include(n => n.Criteria).Where(m => m.CompanyInfoId == CompanyInfo.Id).ToList();
 
             Step = _context.PrequalificationWorkflows.FirstOrDefault(m => m.Step == Job.WorkFlowStep);
+            baseURL = GetBaseUrl();
 
             return Page();
         }
 
+        public string GetBaseUrl()
+        {
+            var request = currentContext.Request;
 
+            var host = request.Host.ToUriComponent();
+
+            var pathBase = request.PathBase.ToUriComponent();
+
+            return $"{request.Scheme}://{host}{pathBase}";
+        }
 
         public async Task<IActionResult> OnPostAsync()
         {
