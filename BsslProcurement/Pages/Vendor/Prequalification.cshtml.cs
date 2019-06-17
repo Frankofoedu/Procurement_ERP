@@ -307,6 +307,8 @@ namespace BsslProcurement.Pages.Vendor
             var result = await _userManager.CreateAsync(user,cp.Password);
             if (result.Succeeded)
             {
+               ///TODO: Use returned Id to update vendorId
+               
                 _logger.LogInformation("Company created a new account with password.");
 
                 //var code = await _userManager.GenerateEmailConfirmationTokenAsync(user);

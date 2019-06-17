@@ -21,15 +21,7 @@ namespace BsslProcurement.Pages.DynamicData
         {
             var listCat = _context.ProcurementSubcategories.AsNoTracking().Where(m => m.ProcurementCategoryId == id).Select(x => new { value = x.Id, name = x.Name }).ToList();
 
-            if (listCat.Any())
-            {
-                return new JsonResult(listCat);
-            }
-            else
-            {
-                return null;
-            }
-
+            return listCat.Any() ? new JsonResult(listCat) : null;
         }
 
     }
