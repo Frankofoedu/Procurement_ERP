@@ -286,7 +286,8 @@ namespace BsslProcurement.Pages.Vendor
                     CV = CvFileName,
                     Name = pdInput.Name,
                     Passport = PassPortFileName,
-                    Qualification = pdInput.Qualification
+                    Qualification = pdInput.Qualification,
+                    CompanyInfoId = id
                 });
 
             }
