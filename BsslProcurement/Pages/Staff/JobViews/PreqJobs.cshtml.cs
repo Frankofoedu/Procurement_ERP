@@ -112,18 +112,16 @@ namespace BsslProcurement.Pages.Staff.JobViews
                 //get current job
                 var job = InputModels[i];
 
-                //check if job was assigned on the frontend
-                if (job.AssignedStaff != null)
+                //check if current job is at last workflow step:
+                if (!(job.WorkFlowStep >= Counter))
                 {
 
-
-                    //set current job as done 
-                    var currJob = _context.PrequalificationJobs.First(x => x.Id == job.Id);
-                    currJob.Done = true;
-
-                    //check if current job is at last workflow step:
-                    if (!(job.WorkFlowStep >= Counter))
+                     //check if job was assigned on the frontend
+                    if (job.AssignedStaff != null)
                     {
+                        //set current job as done 
+                        var currJob = _context.PrequalificationJobs.First(x => x.Id == job.Id);
+                        currJob.Done = true;
 
                         var x = job.WorkFlowStep + 1;
                         //get next workflow step
@@ -158,6 +156,13 @@ namespace BsslProcurement.Pages.Staff.JobViews
 
                     }
 
+                }
+                //job is at last workflow. Just set it as done
+                else
+                {
+                    //set current job as done 
+                    var currJob = _context.PrequalificationJobs.First(x => x.Id == job.Id);
+                    currJob.Done = true;
                 }
             }
 
