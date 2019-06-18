@@ -9,6 +9,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
+using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 
@@ -37,10 +38,14 @@ namespace BsslProcurement.Pages.Staff.Review
             currentContext = httpContextAccessor.HttpContext;
         }
 
+        public class submittedCriteriaApproved
+        {
+            public int SubmittedCriteriaId { get; set; }
+            public Enums.VerificationStates VeriState { get; set; }
+        }
 
         [BindProperty]
         public PrequalificationJob Job { get; set; }
-
         [BindProperty]
         public CompanyInfo CompanyInfo { get; set; }
 
@@ -58,6 +63,7 @@ namespace BsslProcurement.Pages.Staff.Review
 
         public List<SubmittedCriteria> SubmittedCriterias { get; set; }
 
+        public List<submittedCriteriaApproved> submittedCriteriaApproveds { get; set; }
 
         public IActionResult OnGet(int? id)
         {
@@ -75,6 +81,17 @@ namespace BsslProcurement.Pages.Staff.Review
                 .Include(k=>k.PersonnelDetails).FirstOrDefault(m => m.Id == Job.CompanyInfoId);
 
             SubmittedCriterias = _context.SubmittedCriteria.Include(n => n.Criteria).Where(m => m.CompanyInfoId == CompanyInfo.Id).ToList();
+            submittedCriteriaApproveds = new List<submittedCriteriaApproved>();
+
+            foreach (var item in SubmittedCriterias)
+            {
+                var SCA = new submittedCriteriaApproved();
+
+                SCA.SubmittedCriteriaId = item.Id;
+                SCA.VeriState = item.VerificationState;
+
+                submittedCriteriaApproveds.Add(SCA);
+            }
 
             Step = _context.PrequalificationWorkflows.FirstOrDefault(m => m.Step == Job.WorkFlowStep);
             baseURL = GetBaseUrl();

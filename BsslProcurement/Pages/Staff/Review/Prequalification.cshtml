@@ -194,6 +194,8 @@
                                 <th>S/N</th>
                                 <th>Requirement</th>
                                 <th>Value</th>
+                                <th>Approved</th>
+                                <th>Disapproved</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -211,9 +213,11 @@
                                     var filePath = System.IO.Path.Combine(uploads, item.Value);
 
                                     <td> <a target="_blank" href="@filePath" class="btn btn-outline-primary">Open Document</a> </td>
+                                    <td><select asp-for="submittedCriteriaApproveds[i].VeriState" ></select></td>
                                 }
                                 else
-                                { <td> @item.Value </td>}
+                                {
+                                    <td> @item.Value </td>}
 
                             </tr>
                             }
