@@ -56,14 +56,22 @@ namespace DcProcurement
         public DbSet<Job> Jobs { get; set; }
         public DbSet<PrequalificationJob> PrequalificationJobs { get; set; }
         #endregion
-
+        
 
         public DbSet<PrequalificationPolicy> PrequalificationPolicies { get; set; }
 
         public CompanyInfoProcurementSubCategory  CompanyInfoProcurementSubCategory { get; set; }
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
+            #region Many to many configuration for company to procurementsubcategory
+
             modelBuilder.Entity<CompanyInfoProcurementSubCategory>().HasKey(sc => new { sc.CompanyInfoId, sc.ProcurementSubcategoryId });
+            modelBuilder.Entity<CompanyInfoProcurementSubCategory>().HasOne(x => x.CompanyInfo).WithMany(m => m.CompanyInfoSelectedSubcategory);
+            modelBuilder.Entity<CompanyInfoProcurementSubCategory>().HasOne(x => x.ProcurementSubcategory).WithMany(m => m.CompanyInfos);
+            
+            #endregion
+
+
             modelBuilder.Entity<CompanyInfo>().HasOne(m => m.Vendor).WithOne(n => n.CompanyInfo).HasForeignKey<VendorUser>(l => l.CompanyInfoId);
             base.OnModelCreating(modelBuilder);
 
