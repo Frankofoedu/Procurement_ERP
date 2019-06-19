@@ -11,9 +11,12 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.Extensions.Logging;
-
+using MoreLinq;
 namespace BsslProcurement.Pages.Vendor
 {
+    //TODO: Cheeck for errors if any returned entity doesnt and display error meesage
+
+
     public class DocsModel
     {
         public int Id { get; set; }
@@ -22,9 +25,6 @@ namespace BsslProcurement.Pages.Vendor
         public string FileName { get; set; }
         public string Value { get; set; }
     }
-
-
-
     public class PrequalificationModel : PageModel
     {
         private readonly ProcurementDBContext _context;
@@ -130,13 +130,17 @@ namespace BsslProcurement.Pages.Vendor
 
             AddPrequalificationJob(CompanyInfo.Id);
 
+            AddCompanyToJobs(CompanyInfo.Id);
+
             await _context.SaveChangesAsync();
 
             if (SignUpUserAsync(CompanyInfo,ReturnUrl) == null)
             {
+                Error = "An Error occured!";
                 return Page();
             }
 
+            Message = "Your Information has been successfully uploaded";
             return null; //change to redirect location
 
 
@@ -361,5 +365,44 @@ namespace BsslProcurement.Pages.Vendor
             }
         }
 
+        /// <summary>
+        /// save company profile to new jobs
+        /// </summary>
+        /// <param name="company"></param>
+        public void AddCompanyToJobs(int companyID)
+        {
+            //get first workflowstep
+
+            //set job workflow step to 0 if no workflow exists
+
+
+
+            var wrkFlow = _context.PrequalificationWorkflows.MinBy(x => x.Step).FirstOrDefault();
+
+            if (wrkFlow.ToPersonOrAssign)
+            {
+
+                _context.PrequalificationJobs.Add(new PrequalificationJob
+                {
+                    CompanyInfoId = companyID,
+                    CreationDate = DateTime.Now,
+                    StaffId = wrkFlow.StaffId,
+                    WorkFlowStep = wrkFlow.Step,
+
+                });
+            }
+            else
+            {
+                _context.PrequalificationJobs.Add(new PrequalificationJob
+                {
+                    CompanyInfoId = companyID,
+                    CreationDate = DateTime.Now,
+                    StaffId = wrkFlow.StaffId,
+                    WorkFlowStep = 0,
+
+                });
+            }
+
+        }
     }
 }

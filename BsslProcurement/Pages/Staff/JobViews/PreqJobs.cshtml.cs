@@ -27,6 +27,8 @@ namespace BsslProcurement.Pages.Staff.JobViews
 
         [BindProperty]
         public IList<InputModel> InputModels { get; set; }
+        public string Message { get; set; }
+        public string Error { get; set; }
 
         public List<PrequalificationWorkflow> PrequalificationWorkflow { get; set; }
         // public IList<PrequalificationWorkflow> Steps { get; set; }
@@ -48,7 +50,7 @@ namespace BsslProcurement.Pages.Staff.JobViews
         private async Task LoadJobs()
         {
             //get current user
-            // var user = await GetCurrentUserAsync();
+            var user = await GetCurrentUserAsync();
 
 
 
@@ -66,7 +68,7 @@ namespace BsslProcurement.Pages.Staff.JobViews
 
 
             //get prequalification jobs pending for user or all users
-            InputModels = await _context.PrequalificationJobs.Where(x => x.Done == false)//.Where(x=> x.StaffId == user.Id || x.StaffId == null)
+            InputModels = await _context.PrequalificationJobs.Where(x => x.Done == false).Where(x=> x.StaffId == user.Id || x.StaffId == null)
                 .Include(p => p.CompanyInfo)
                 .Include(p => p.Staff).Select(
                 p => new InputModel
@@ -91,13 +93,23 @@ namespace BsslProcurement.Pages.Staff.JobViews
             }
             else
             {
-                
+                try
+                {
 
-                ProcessJobs();
 
-                _context.SaveChanges();
+                    ProcessJobs();
 
-                await LoadJobs();
+                    _context.SaveChanges();
+
+                    Message = "Tasks Processed";
+
+                    await LoadJobs();
+
+                }
+                catch (Exception)
+                {
+                    Error = "An error occured";
+                }
             }
 
         }
@@ -120,7 +132,7 @@ namespace BsslProcurement.Pages.Staff.JobViews
                     if (job.AssignedStaff != null)
                     {
                         //set current job as done 
-                        var currJob = _context.PrequalificationJobs.First(m => m.Id == job.Id);
+                        var currJob = _context.PrequalificationJobs.First(j => j.Id == job.Id);
                         currJob.Done = true;
 
                         var x = job.WorkFlowStep + 1;

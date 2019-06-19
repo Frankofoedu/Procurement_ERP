@@ -18,11 +18,13 @@ namespace BsslProcurement
 {
     public class Startup
     {
-        public Startup(IConfiguration configuration)
+        public Startup(IConfiguration configuration, IHostingEnvironment  env)
         {
             Configuration = configuration;
+            Env = env;
         }
 
+        public IHostingEnvironment Env { get; set; }
         public IConfiguration Configuration { get; }
 
         // This method gets called by the runtime. Use this method to add services to the container.
@@ -39,7 +41,16 @@ namespace BsslProcurement
 
             services.TryAddSingleton<IHttpContextAccessor, HttpContextAccessor>();
 
-            var connection = @"Server=.\sqlexpress;Database=DcProcurement;Trusted_Connection=True;ConnectRetryCount=0";
+
+            string connection;
+
+              //  connection = @"Server=.\sqlexpress;Database=DcProcurement;Trusted_Connection=True;ConnectRetryCount=0";
+
+                connection = @"Data Source=WIN2016\MSSQLSERVER2017;Initial Catalog=DcProcurement;User ID=sa;Password=Bssl2019**;Integrated Security=False;
+                  Trusted_Connection=True;ConnectRetryCount=0;MultipleActiveResultSets=true";
+
+            
+
 
             services.AddDbContext<ProcurementDBContext> (options => options.UseSqlServer(connection, b => b.MigrationsAssembly("BsslProcurement")));
 
@@ -86,16 +97,17 @@ namespace BsslProcurement
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IHostingEnvironment env)
         {
-            if (env.IsDevelopment())
-            {
-                app.UseDeveloperExceptionPage();
-                app.UseBrowserLink();
-            }
-            else
-            {
-                app.UseExceptionHandler("/Error");
-                app.UseHsts();
-            }
+            //if (env.IsDevelopment())
+            //{
+            //    app.UseDeveloperExceptionPage();
+            //    app.UseBrowserLink();
+            //}
+            //else
+            //{
+            app.UseDeveloperExceptionPage();
+            //app.UseExceptionHandler("/Error");
+            app.UseHsts();
+            //}
 
             app.UseHttpsRedirection();
             app.UseStaticFiles();
