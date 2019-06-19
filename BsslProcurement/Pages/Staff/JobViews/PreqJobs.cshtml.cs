@@ -120,7 +120,7 @@ namespace BsslProcurement.Pages.Staff.JobViews
                     if (job.AssignedStaff != null)
                     {
                         //set current job as done 
-                        var currJob = _context.PrequalificationJobs.First(x => x.Id == job.Id);
+                        var currJob = _context.PrequalificationJobs.First(m => m.Id == job.Id);
                         currJob.Done = true;
 
                         var x = job.WorkFlowStep + 1;

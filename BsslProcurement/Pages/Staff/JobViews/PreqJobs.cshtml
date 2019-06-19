@@ -24,7 +24,7 @@
                         <hr>
                     </div>
                     <div class="mt-1">
-                        <table class="table table-responsive-sm table-striped">
+                        <table class="table table-responsive table-striped">
                             <thead>
                                 <tr class="table-primary">
                                     <th>Company Name</th>
@@ -80,7 +80,7 @@
                                                         <input type="hidden" asp-for="InputModels[j].Id" />
                                                     </td>
                                                     <td>
-                                                        <a asp-page="../Review/Prequalification" asp-route-id="@item.Id">Review</a>
+                                                        <a asp-page="../Review/Prequalification" class="btn btn-outline-primary" asp-route-id="@item.Id">Review</a>
                                                     </td>
                                                 </tr>
                                             }

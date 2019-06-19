@@ -129,25 +129,25 @@
                 <div class="col-sm-6">
                     <div class="form-group">
                         <label>Name </label>
-                        <input class="form-control" placeholder="Enter Fullname" asp-for="CompanyInfo.ContactName" />
+                        <input class="form-control" readonly="readonly" placeholder="Enter Fullname" asp-for="CompanyInfo.ContactName" />
                     </div>
                 </div>
                 <div class="col-sm-6">
                     <div class="form-group">
                         <label>Designation </label>
-                        <input class="form-control" placeholder="Enter Designation in Company" asp-for="CompanyInfo.ContactDesignation" />
+                        <input class="form-control" readonly="readonly" placeholder="Enter Designation in Company" asp-for="CompanyInfo.ContactDesignation" />
                     </div>
                 </div>
                 <div class="col-sm-6">
                     <div class="form-group">
                         <label>Phone Number</label>
-                        <input class="form-control" placeholder="Enter ONE(1) Phone Number" asp-for="CompanyInfo.ContactPhoneNumber" />
+                        <input class="form-control" readonly="readonly" placeholder="Enter ONE(1) Phone Number" asp-for="CompanyInfo.ContactPhoneNumber" />
                     </div>
                 </div>
                 <div class="col-sm-6">
                     <div class="form-group">
                         <label>Email Address</label>
-                        <input class="form-control" placeholder="Enter ONE(1) Email Address" type="email" asp-for="CompanyInfo.ContactEmail" />
+                        <input class="form-control" readonly="readonly" placeholder="Enter ONE(1) Email Address" type="email" asp-for="CompanyInfo.ContactEmail" />
                     </div>
                 </div>
             </div>
@@ -194,8 +194,7 @@
                                 <th>S/N</th>
                                 <th>Requirement</th>
                                 <th>Value</th>
-                                <th>Approved</th>
-                                <th>Disapproved</th>
+                                <th>Verification</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -204,7 +203,7 @@
                                 var item = Model.SubmittedCriterias[i];
 
                             <tr>
-                                <td> @(i + 1) </td>
+                                <td> @(i + 1) <input type="hidden" asp-for="submittedCriteriaApproveds[i].Id"  value="@Model.submittedCriteriaApproveds[i].Id"/></td>
                                 <td> @item.Criteria.CriteriaDescription </td>
 
                                 @if (item.Criteria.NeedsDocument)
@@ -213,7 +212,7 @@
                                     var filePath = System.IO.Path.Combine(uploads, item.Value);
 
                                     <td> <a target="_blank" href="@filePath" class="btn btn-outline-primary">Open Document</a> </td>
-                                    <td><select asp-for="submittedCriteriaApproveds[i].VeriState" ></select></td>
+                                    <td> <select class="form-control" asp-for="submittedCriteriaApproveds[i].VeriState"  asp-items="Html.GetEnumSelectList<DcProcurement.Enums.VerificationStates>()"></select></td>
                                 }
                                 else
                                 {
@@ -256,13 +255,13 @@
 
                                 <tr>
                                     <td>@(i + 1)</td>
-                                    <td><input type="text" class="form-control-sm" readonly="readonly" value="@item.Name" /></td>
-                                    <td><input type="text" class="form-control-sm" readonly="readonly" value="@item.Address" /></td>
-                                    <td><input type="text" class="form-control-sm" readonly="readonly" value="@item.ProjectDescription" /></td>
-                                    <td><input type="text" class="form-control-sm" readonly="readonly" value="@item.StartDate.ToShortDateString()" /></td>
-                                    <td><input type="date" class="form-control-sm" readonly="readonly" value="@item.CompletionDate.ToShortDateString()" /></td>
-                                    <td><input type="text" class="form-control-sm" readonly="readonly" value="@item.ContactPerson" /></td>
-                                    <td><input type="text" class="form-control-sm" readonly="readonly" value="@item.PhoneNumber" /></td>
+                                    <td><input type="text" class="form-control" readonly="readonly" value="@item.Name" data-toggle="tooltip" title="@item.Name" /></td>
+                                    <td><input type="text" class="form-control" readonly="readonly" value="@item.Address" data-toggle="tooltip" title="@item.Address" /></td>
+                                    <td><input type="text" class="form-control" readonly="readonly" value="@item.ProjectDescription" data-toggle="tooltip" title="@item.ProjectDescription" /></td>
+                                    <td><input type="text" class="form-control" readonly="readonly" value="@item.StartDate.ToShortDateString()" data-toggle="tooltip" title="@item..StartDate.ToShortDateString()" /></td>
+                                    <td><input type="date" class="form-control" readonly="readonly" value="@item.CompletionDate.ToShortDateString()" data-toggle="tooltip" title="@item..CompletionDate.ToShortDateString()" /></td>
+                                    <td><input type="text" class="form-control" readonly="readonly" value="@item.ContactPerson" data-toggle="tooltip" title="@item.ContactPerson" /></td>
+                                    <td><input type="text" class="form-control" readonly="readonly" value="@item.PhoneNumber" data-toggle="tooltip" title="@item.PhoneNumber" /></td>
                                 </tr>
                             }
                         </tbody>
@@ -325,6 +324,7 @@
                                 <th>CV</th>
                                 <th>Professional Certificate</th>
                                 <th>Passport Photograph</th>
+                                <th>Verification</th>
                             </tr>
                         </thead>
                         <tbody id="personnelTbody">
@@ -338,14 +338,15 @@
                                 var CvfilePath = System.IO.Path.Combine(uploads, item.CV);
                                 var PassPortfilePath = System.IO.Path.Combine(uploads, item.Passport);
 
-                                <tr>
-                                    <td> @(i + 1) </td>
-                                    <td><input type="text" class="form-control" readonly="readonly" value="@item.Name" /></td>
-                                    <td><input type="text" class="form-control" readonly="readonly" value="@item.Qualification" /></td>
-                                    <td><a target="_blank" href="@CvfilePath" class="btn btn-outline-primary">View CV</a></td>
-                                    <td><a target="_blank" href="@CertfilePath" class="btn btn-outline-primary">View Certificate</a></td>
-                                    <td><a target="_blank" href="@PassPortfilePath" class="btn btn-outline-primary">View Passport</a></td>
-                                </tr>
+                            <tr>
+                                <td> @(i + 1) <input type="hidden" asp-for="personnelFilesApproveds[i].Id" value="@Model.personnelFilesApproveds[i].Id" /></td>
+                                <td><input type="text" class="form-control" readonly="readonly" value="@item.Name" /></td>
+                                <td><input type="text" class="form-control" readonly="readonly" value="@item.Qualification" /></td>
+                                <td><a target="_blank" href="@CvfilePath" class="btn btn-outline-primary">View CV</a></td>
+                                <td><a target="_blank" href="@CertfilePath" class="btn btn-outline-primary">View Certificate</a></td>
+                                <td><a target="_blank" href="@PassPortfilePath" class="btn btn-outline-primary">View Passport</a></td>
+                                <td><select class="form-control" asp-for="personnelFilesApproveds[i].VeriState" asp-items="Html.GetEnumSelectList<DcProcurement.Enums.VerificationStates>()"></select></td>
+                            </tr>
                             }
 
                         </tbody>
@@ -358,8 +359,11 @@
                     <div class="row">
                         <div class="col-sm-3">
                         </div>
-                        <div class="col-sm-6 text-center">
+                        <div class="col-sm-3 text-center">
                             <button type="submit" class="btn form-btn">Submit</button>
+                        </div>
+                        <div class="col-sm-3 text-center">
+                            <a asp-page="/Staff/JobViews/PreqJobs" class="btn btn-outline-dark">Back to Jobs List</a>
                         </div>
                     </div>
                 </div>

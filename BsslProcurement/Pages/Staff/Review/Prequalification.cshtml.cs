@@ -38,19 +38,17 @@ namespace BsslProcurement.Pages.Staff.Review
             currentContext = httpContextAccessor.HttpContext;
         }
 
-        public class submittedCriteriaApproved
+        public class filesApproved
         {
-            public int SubmittedCriteriaId { get; set; }
+            public int Id { get; set; }
             public Enums.VerificationStates VeriState { get; set; }
         }
 
-        [BindProperty]
-        public PrequalificationJob Job { get; set; }
-        [BindProperty]
+
+
         public CompanyInfo CompanyInfo { get; set; }
-
-
         public PrequalificationWorkflow Step { get; set; }
+        public List<SubmittedCriteria> SubmittedCriterias { get; set; }
 
 
         public string Message { get; set; }
@@ -58,39 +56,62 @@ namespace BsslProcurement.Pages.Staff.Review
         public string baseURL { get; set; }
         public int CategoryCount { get; set; }
 
+
         [BindProperty]
-        public List<int> subCatsId { get; set; }
-
-        public List<SubmittedCriteria> SubmittedCriterias { get; set; }
-
-        public List<submittedCriteriaApproved> submittedCriteriaApproveds { get; set; }
+        public int JobId { get; set; }
+        [BindProperty]
+        public bool CompanyApproved { get; set; }
+        [BindProperty]
+        public List<filesApproved> submittedCriteriaApproveds { get; set; }
+        [BindProperty]
+        public List<filesApproved> personnelFilesApproveds { get; set; }
 
         public IActionResult OnGet(int? id)
         {
             if (id == null)
             { return LocalRedirect("~/Staff/JobViews/PreqJobs"); }
 
-            Job = _context.PrequalificationJobs.FirstOrDefault(n=>n.Id == id);
+            var Job = _context.PrequalificationJobs.FirstOrDefault(n=>n.Id == id);
             if (Job == null)
             { return LocalRedirect("~/Staff/JobViews/PreqJobs"); }
 
             if (Job.Done)
             { return LocalRedirect("~/Staff/JobViews/PreqJobs"); }
 
+            JobId = Job.Id;
+
             CompanyInfo = _context.CompanyInfo.Include(n=>n.CompanyInfoSelectedSubcategory).Include(b=>b.EquipmentDetails).Include(l=>l.ExperienceRecords)
                 .Include(k=>k.PersonnelDetails).FirstOrDefault(m => m.Id == Job.CompanyInfoId);
 
             SubmittedCriterias = _context.SubmittedCriteria.Include(n => n.Criteria).Where(m => m.CompanyInfoId == CompanyInfo.Id).ToList();
-            submittedCriteriaApproveds = new List<submittedCriteriaApproved>();
+            submittedCriteriaApproveds = new List<filesApproved>();
 
             foreach (var item in SubmittedCriterias)
             {
-                var SCA = new submittedCriteriaApproved();
+                var FA = new filesApproved();
 
-                SCA.SubmittedCriteriaId = item.Id;
-                SCA.VeriState = item.VerificationState;
+                FA.Id = item.Id;
+                FA.VeriState = item.VerificationState;
 
-                submittedCriteriaApproveds.Add(SCA);
+                submittedCriteriaApproveds.Add(FA);
+            }
+
+            personnelFilesApproveds = new List<filesApproved>();
+            foreach (var item in CompanyInfo.PersonnelDetails)
+            {
+                var FA = new filesApproved();
+
+                FA.Id = item.Id;
+                FA.VeriState = item.VerificationState;
+
+                personnelFilesApproveds.Add(FA);
+            }
+
+            var nextStep = _context.PrequalificationWorkflows.FirstOrDefault(m => m.Step == Job.WorkFlowStep + 1);
+
+            if (nextStep == null)
+            {
+
             }
 
             Step = _context.PrequalificationWorkflows.FirstOrDefault(m => m.Step == Job.WorkFlowStep);
@@ -112,8 +133,76 @@ namespace BsslProcurement.Pages.Staff.Review
 
         public async Task<IActionResult> OnPostAsync()
         {
+            if (!ModelState.IsValid)
+            {
+                Error = "An Error occured! Data not formatted properly.";
+                return Page();
+            }
+            else
+            {
+                var Job = _context.PrequalificationJobs.FirstOrDefault(n => n.Id == JobId);
 
-            return Page();
+                CompanyInfo = _context.CompanyInfo.Include(n => n.CompanyInfoSelectedSubcategory).Include(b => b.EquipmentDetails).Include(l => l.ExperienceRecords)
+                    .Include(k => k.PersonnelDetails).FirstOrDefault(m => m.Id == Job.CompanyInfoId);
+
+                SubmittedCriterias = _context.SubmittedCriteria.Include(n => n.Criteria).Where(m => m.CompanyInfoId == CompanyInfo.Id).ToList();
+                
+
+
+                foreach (var item in SubmittedCriterias)
+                {
+                    var FA = submittedCriteriaApproveds.FirstOrDefault(m => m.Id == item.Id);
+
+                    if (FA != null)
+                    {
+                        item.VerificationState = FA.VeriState;
+                    }
+                }
+
+                foreach (var item in CompanyInfo.PersonnelDetails)
+                {
+                    var FA = personnelFilesApproveds.FirstOrDefault(m => m.Id == item.Id);
+
+                    if (FA != null)
+                    {
+                        item.VerificationState = FA.VeriState;
+                    }
+                }
+
+                var nextStep = _context.PrequalificationWorkflows.FirstOrDefault(m => m.Step == Job.WorkFlowStep + 1);
+
+                if (nextStep == null)
+                {
+                    CompanyInfo.Approved = CompanyApproved;
+
+                    Job.Done = true;
+                    Job.DoneDate = DateTime.UtcNow;
+                }
+
+                if (nextStep.ToPersonOrAssign)
+                {
+                    Job.Done = true;
+                    Job.DoneDate = DateTime.UtcNow;
+
+                    var nextJob = new PrequalificationJob()
+                    {
+                        CreationDate = DateTime.UtcNow,
+                        Done = false,
+                        StaffId = nextStep.StaffId,
+                        WorkFlowStep = nextStep.Step,
+                        CompanyInfoId = CompanyInfo.Id
+                    };
+
+                    _context.PrequalificationJobs.Add(nextJob);
+                }
+
+                _context.SaveChanges();
+
+                return LocalRedirect("~/Staff/JobViews/PreqJobs");
+            }
+
+
+
         }
 
         /// <summary>
