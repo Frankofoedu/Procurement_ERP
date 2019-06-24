@@ -177,21 +177,21 @@
                     contentType: 'application/json',
                     error: function () {
                         alert('An Error occured.');
-                        $('.staffCodeInput' + sindex).focus()
-                        $('.staffIdInput' + sindex).val('')
-                        $('.staffNameInput' + sindex).val('')
+                        $('.staffCodeInput' + sindex).focus();
+                        $('.staffIdInput' + sindex).val('');
+                        $('.staffNameInput' + sindex).val('');
                     },
                     success: function (data) {
                         if (!data) {
                             alert('This staff code is invalid.');
-                            $('.staffCodeInput' + sindex).focus()
-                            $('.staffIdInput' + sindex).val('')
-                            $('.staffNameInput' + sindex).val('')
+                            $('.staffCodeInput' + sindex).focus();
+                            $('.staffIdInput' + sindex).val('');
+                            $('.staffNameInput' + sindex).val('');
                             return;
                         }
 
-                        $('.staffIdInput' + sindex).val(data.id)
-                        $('.staffNameInput' + sindex).val(data.name)
+                        $('.staffIdInput' + sindex).val(data.id);
+                        $('.staffNameInput' + sindex).val(data.name);
                     },
                 });
             }

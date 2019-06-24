@@ -29,7 +29,7 @@
         <form method="post" class="panel panel-login" enctype="multipart/form-data">
             <div class="panel-heading">
                 <div class="row">
-                    <p class="header-text">@Model.Step.Description</p>
+                    <p class="header-text">@Model.Description</p>
                 </div>
                 <hr>
             </div>
@@ -202,23 +202,23 @@
                             {
                                 var item = Model.SubmittedCriterias[i];
 
-                            <tr>
-                                <td> @(i + 1) <input type="hidden" asp-for="submittedCriteriaApproveds[i].Id"  value="@Model.submittedCriteriaApproveds[i].Id"/></td>
-                                <td> @item.Criteria.CriteriaDescription </td>
+                                <tr>
+                                    <td> @(i + 1) <input type="hidden" asp-for="submittedCriteriaApproveds[i].Id" value="@Model.submittedCriteriaApproveds[i].Id" /></td>
+                                    <td> @item.Criteria.CriteriaDescription </td>
 
-                                @if (item.Criteria.NeedsDocument)
-                                {
-                                    var uploads = System.IO.Path.Combine(Model.baseURL, "Criteriadocs", Model.CompanyInfo.Id.ToString());
-                                    var filePath = System.IO.Path.Combine(uploads, item.Value);
+                                    @if (item.Criteria.NeedsDocument)
+                                    {
+                                        var uploads = System.IO.Path.Combine(Model.baseURL, "Criteriadocs", Model.CompanyInfo.Id.ToString());
+                                        var filePath = System.IO.Path.Combine(uploads, item.Value);
 
-                                    <td> <a target="_blank" href="@filePath" class="btn btn-outline-primary">Open Document</a> </td>
-                                    <td> <select class="form-control" asp-for="submittedCriteriaApproveds[i].VeriState"  asp-items="Html.GetEnumSelectList<DcProcurement.Enums.VerificationStates>()"></select></td>
-                                }
-                                else
-                                {
-                                    <td> @item.Value </td>}
+                                        <td> <a target="_blank" href="@filePath" class="btn btn-outline-primary">Open Document</a> </td>
+                                        <td> <select class="form-control" asp-for="submittedCriteriaApproveds[i].VeriState" asp-items="Html.GetEnumSelectList<DcProcurement.Enums.VerificationStates>()"></select></td>
+                                    }
+                                    else
+                                    {
+                                        <td> @item.Value </td>}
 
-                            </tr>
+                                </tr>
                             }
                         </tbody>
                     </table>
@@ -296,7 +296,7 @@
                                     <td>@(i + 1)</td>
                                     <td><input type="text" class="form-control" readonly="readonly" value="@item.Name" /></td>
                                     <td><input type="text" class="form-control" readonly="readonly" value="@item.Description" /></td>
-                                    <td><input type="text" class="form-control"  readonly="readonly" value="@item.Quantity" /></td>
+                                    <td><input type="text" class="form-control" readonly="readonly" value="@item.Quantity" /></td>
                                 </tr>
                             }
                         </tbody>
@@ -334,33 +334,62 @@
                                 var uploads = System.IO.Path.Combine(Model.baseURL, "Personneldocs", Model.CompanyInfo.Id.ToString());
 
                                 //create file paths for docs
-                                var CertfilePath = System.IO.Path.Combine(uploads, item.Certificate );
+                                var CertfilePath = System.IO.Path.Combine(uploads, item.Certificate);
                                 var CvfilePath = System.IO.Path.Combine(uploads, item.CV);
                                 var PassPortfilePath = System.IO.Path.Combine(uploads, item.Passport);
 
-                            <tr>
-                                <td> @(i + 1) <input type="hidden" asp-for="personnelFilesApproveds[i].Id" value="@Model.personnelFilesApproveds[i].Id" /></td>
-                                <td><input type="text" class="form-control" readonly="readonly" value="@item.Name" /></td>
-                                <td><input type="text" class="form-control" readonly="readonly" value="@item.Qualification" /></td>
-                                <td><a target="_blank" href="@CvfilePath" class="btn btn-outline-primary">View CV</a></td>
-                                <td><a target="_blank" href="@CertfilePath" class="btn btn-outline-primary">View Certificate</a></td>
-                                <td><a target="_blank" href="@PassPortfilePath" class="btn btn-outline-primary">View Passport</a></td>
-                                <td><select class="form-control" asp-for="personnelFilesApproveds[i].VeriState" asp-items="Html.GetEnumSelectList<DcProcurement.Enums.VerificationStates>()"></select></td>
-                            </tr>
+                                <tr>
+                                    <td> @(i + 1) <input type="hidden" asp-for="personnelFilesApproveds[i].Id" value="@Model.personnelFilesApproveds[i].Id" /></td>
+                                    <td><input type="text" class="form-control" readonly="readonly" value="@item.Name" /></td>
+                                    <td><input type="text" class="form-control" readonly="readonly" value="@item.Qualification" /></td>
+                                    <td><a target="_blank" href="@CvfilePath" class="btn btn-outline-primary">View CV</a></td>
+                                    <td><a target="_blank" href="@CertfilePath" class="btn btn-outline-primary">View Certificate</a></td>
+                                    <td><a target="_blank" href="@PassPortfilePath" class="btn btn-outline-primary">View Passport</a></td>
+                                    <td><select class="form-control" asp-for="personnelFilesApproveds[i].VeriState" asp-items="Html.GetEnumSelectList<DcProcurement.Enums.VerificationStates>()"></select></td>
+                                </tr>
                             }
 
                         </tbody>
                     </table>
                 </div>
             </div>
-
+            @if (Model.todo == "approve")
+            {
+                <div class="row">
+                    <div class="col-12">
+                        <h3 class="h3 bg-primary text-white px-3 py-1 mt-2 rounded">
+                            Company Prequalification Status
+                        </h3>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-sm-6">
+                        <div class="form-group">
+                            <label class="form-check-label"><input type="radio" asp-for="CompanyApproved" value="True" /> Approved</label>
+                        </div>
+                    </div>
+                    <div class="col-sm-6">
+                        <div class="form-group">
+                            <label class="form-check-label"><input type="radio" asp-for="CompanyApproved" value="False" /> Disapproved</label>
+                        </div>
+                    </div>
+                </div>
+            }
             <div class="col-12 mt-4">
                 <div class="form-group">
                     <div class="row">
                         <div class="col-sm-3">
                         </div>
                         <div class="col-sm-3 text-center">
-                            <button type="submit" class="btn form-btn">Submit</button>
+                            @if (Model.todo == "saventoassign")
+                            {
+                                <button type="submit" class="btn form-btn">Save Changes</button>
+                            }
+                            else
+                            {
+                                <button type="submit" class="btn form-btn">Submit</button>
+                            }
+
                         </div>
                         <div class="col-sm-3 text-center">
                             <a asp-page="/Staff/JobViews/PreqJobs" class="btn btn-outline-dark">Back to Jobs List</a>

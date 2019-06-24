@@ -44,13 +44,15 @@ namespace BsslProcurement
 
             string connection;
 
-              //  connection = @"Server=.\sqlexpress;Database=DcProcurement;Trusted_Connection=True;ConnectRetryCount=0";
-
+            if (Env.IsDevelopment())
+            {
+                connection = @"Server=.\sqlexpress;Database=DcProcurement;Trusted_Connection=True;ConnectRetryCount=0";
+            }
+            else
+            {
                 connection = @"Data Source=WIN2016\MSSQLSERVER2017;Initial Catalog=DcProcurement;User ID=sa;Password=Bssl2019**;Integrated Security=False;
                   Trusted_Connection=True;ConnectRetryCount=0;MultipleActiveResultSets=true";
-
-            
-
+            }
 
             services.AddDbContext<ProcurementDBContext> (options => options.UseSqlServer(connection, b => b.MigrationsAssembly("BsslProcurement")));
 

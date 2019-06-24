@@ -47,7 +47,6 @@ namespace BsslProcurement.Pages.Staff.Review
 
 
         public CompanyInfo CompanyInfo { get; set; }
-        public PrequalificationWorkflow Step { get; set; }
         public List<SubmittedCriteria> SubmittedCriterias { get; set; }
 
 
@@ -55,6 +54,8 @@ namespace BsslProcurement.Pages.Staff.Review
         public string Error { get; set; }
         public string baseURL { get; set; }
         public int CategoryCount { get; set; }
+        public string todo { get; set; }
+        public string Description { get; set; }
 
 
         [BindProperty]
@@ -107,14 +108,26 @@ namespace BsslProcurement.Pages.Staff.Review
                 personnelFilesApproveds.Add(FA);
             }
 
-            var nextStep = _context.PrequalificationWorkflows.FirstOrDefault(m => m.Step == Job.WorkFlowStep + 1);
+            var curStep = _context.PrequalificationWorkflows.FirstOrDefault(m => m.Step == Job.WorkFlowStep);
 
-            if (nextStep == null)
+            if (curStep == null) // if there is no workflow in the db
             {
+                Description = "Validate Files and Approve Company";
+                todo = "approve";
+            }
+            else {
+                Description = curStep.Description;
+
+                var nextStep = _context.PrequalificationWorkflows.FirstOrDefault(m => m.Step == Job.WorkFlowStep + 1);
+
+                if (nextStep == null)
+                { todo = "approve"; }
+                else if (nextStep.ToPersonOrAssign)
+                { todo = "saventoperson"; }
+                else { todo = "saventoassign"; }
 
             }
 
-            Step = _context.PrequalificationWorkflows.FirstOrDefault(m => m.Step == Job.WorkFlowStep);
             baseURL = GetBaseUrl();
 
             return Page();
