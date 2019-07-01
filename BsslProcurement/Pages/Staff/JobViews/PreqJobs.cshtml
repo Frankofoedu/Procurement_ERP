@@ -434,8 +434,8 @@
                             <div class="col-sm-6">
                                 <div class="form-group">
                                     <label>Staff Code : </label> <br />
-                                    <input class="@("staffCode" + jobGroup.WorkflowStep.Step) staffCode form-control-sm ml-1" type="text" />
-                                    <button id="btnSearch" class="btn btn-sm btn-outline-primary" onclick="event.preventDefault(); getStaff(@jobGroup.WorkflowStep.Step);">
+                                    <input class="@("staffCode" + jobGroup.WorkflowStep.Step) staffCode form-control-sm ml-1" onchange="getStaff(@jobGroup.WorkflowStep.Step);" type="text" />
+                                    <button id="btnSearch" class="btn btn-sm btn-outline-primary" onclick="event.preventDefault();">
                                         <i class="fas fa-search"></i>
                                     </button>
                                 </div>

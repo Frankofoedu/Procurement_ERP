@@ -50,7 +50,7 @@ namespace BsslProcurement
             }
             else
             {
-                connection = @"Data Source=WIN2016\MSSQLSERVER2017;Initial Catalog=DcProcurement;User ID=sa;Password=Bssl2019**;Integrated Security=False;
+                connection = @"Data Source=WIN2016\BSSLDATAENGIN;Initial Catalog=DcProcurement;User ID=sa;Password=Bssl2019**;Integrated Security=False;
                   Trusted_Connection=True;ConnectRetryCount=0;MultipleActiveResultSets=true";
             }
 

@@ -1,5 +1,4 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using DcProcurement.JoinTables;
 using System;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 
@@ -60,7 +59,7 @@ namespace DcProcurement
 
         public DbSet<PrequalificationPolicy> PrequalificationPolicies { get; set; }
 
-        public CompanyInfoProcurementSubCategory  CompanyInfoProcurementSubCategory { get; set; }
+        public DbSet<CompanyInfoProcurementSubCategory>  CompanyInfoProcurementSubCategory { get; set; }
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             #region Many to many configuration for company to procurementsubcategory

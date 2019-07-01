@@ -27,6 +27,8 @@
     <div class="col-md-1"></div>
     <div class="col-md-10">
         <form method="post" class="panel panel-login" enctype="multipart/form-data">
+            <input type="hidden" asp-for="JobId"/>
+
             <div class="panel-heading">
                 <div class="row">
                     <p class="header-text">@Model.Description</p>
@@ -258,8 +260,8 @@
                                     <td><input type="text" class="form-control" readonly="readonly" value="@item.Name" data-toggle="tooltip" title="@item.Name" /></td>
                                     <td><input type="text" class="form-control" readonly="readonly" value="@item.Address" data-toggle="tooltip" title="@item.Address" /></td>
                                     <td><input type="text" class="form-control" readonly="readonly" value="@item.ProjectDescription" data-toggle="tooltip" title="@item.ProjectDescription" /></td>
-                                    <td><input type="text" class="form-control" readonly="readonly" value="@item.StartDate.ToShortDateString()" data-toggle="tooltip" title="@item..StartDate.ToShortDateString()" /></td>
-                                    <td><input type="date" class="form-control" readonly="readonly" value="@item.CompletionDate.ToShortDateString()" data-toggle="tooltip" title="@item..CompletionDate.ToShortDateString()" /></td>
+                                    <td><input type="text" class="form-control" readonly="readonly" value="@item.StartDate.ToShortDateString()" data-toggle="tooltip" title="@item.StartDate.ToShortDateString()" /></td>
+                                    <td><input type="text" class="form-control" readonly="readonly" value="@item.CompletionDate.ToShortDateString()" data-toggle="tooltip" title="@item.CompletionDate.ToShortDateString()" /></td>
                                     <td><input type="text" class="form-control" readonly="readonly" value="@item.ContactPerson" data-toggle="tooltip" title="@item.ContactPerson" /></td>
                                     <td><input type="text" class="form-control" readonly="readonly" value="@item.PhoneNumber" data-toggle="tooltip" title="@item.PhoneNumber" /></td>
                                 </tr>

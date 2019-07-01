@@ -189,7 +189,7 @@
                     <div class="col-sm-6">
                         <div class="form-group">
                             <label>Sub Category </label>
-                            <select id="ddlSelectCategory_@i" asp-for="CompanyInfo.CompanyInfoSelectedSubcategory" class="form-control">
+                            <select id="ddlSelectCategory_@i" asp-for="SelectedSubcategories[i].ProcurementSubcategoryId" class="form-control">
                                 <option>--Select--</option>
                             </select>
                         </div>
@@ -451,8 +451,8 @@
             '<input type="text" class="form-control" id="ExperienceRecords_' + index + '__Name" name="ExperienceRecords[' + index + '].Name" value="" /></td>' +
             '<td><input type="text" class="form-control" id="ExperienceRecords_' + index + '__Address" name="ExperienceRecords[' + index + '].Address" value="" /></td>' +
             '<td><input type="text" class="form-control" id="ExperienceRecords_' + index + '__ProjectDescription" name="ExperienceRecords[' + index + '].ProjectDescription" value="" /></td>' +
-            '<td><input type="text" class="form-control" id="ExperienceRecords_' + index + '__StartDate" name="ExperienceRecords[' + index + '].StartDate" value="" /></td>' +
-            '<td><input type="text" class="form-control" id="ExperienceRecords_' + index + '__CompletionDate" name="ExperienceRecords[' + index + '].CompletionDate" value="" /></td>' +
+            '<td><input type="date" class="form-control" id="ExperienceRecords_' + index + '__StartDate" name="ExperienceRecords[' + index + '].StartDate" value="" /></td>' +
+            '<td><input type="date" class="form-control" id="ExperienceRecords_' + index + '__CompletionDate" name="ExperienceRecords[' + index + '].CompletionDate" value="" /></td>' +
             '<td><input type="text" class="form-control" id="ExperienceRecords_' + index + '__ContactPerson" name="ExperienceRecords[' + index + '].ContactPerson" value="" /></td>' +
             '<td><input type="text" class="form-control" id="ExperienceRecords_' + index + '__PhoneNumber" name="ExperienceRecords[' + index + '].PhoneNumber" value="" /></td>' +
             '</tr>';
