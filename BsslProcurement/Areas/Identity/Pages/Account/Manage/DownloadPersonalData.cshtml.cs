@@ -14,11 +14,11 @@ namespace BsslProcurement.Areas.Identity.Pages.Account.Manage
 {
     public class DownloadPersonalDataModel : PageModel
     {
-        private readonly UserManager<CompanyInfo> _userManager;
+        private readonly UserManager<User> _userManager;
         private readonly ILogger<DownloadPersonalDataModel> _logger;
 
         public DownloadPersonalDataModel(
-            UserManager<CompanyInfo> userManager,
+            UserManager<User> userManager,
             ILogger<DownloadPersonalDataModel> logger)
         {
             _userManager = userManager;
