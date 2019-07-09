@@ -9,7 +9,7 @@
 @if (SignInManager.IsSignedIn(User))
 {
     var aspUser = await UserManager.GetUserAsync(User);
-    var curUser = await _context.Staffs.FindAsync(aspUser.Id);
+    var curUser = await _context.Vendors.FindAsync(aspUser.Id);
 
     if (curUser == null)
     {
@@ -17,7 +17,7 @@
         return;
     }
 
-    var notificationNum = await _context.PrequalificationJobs.Where(x => x.Done == false).CountAsync(m => m.StaffId == curUser.Id || m.StaffId == null);
+    var notificationNum = 0;
 
     <form asp-area="Identity" asp-page="/Account/Logout" asp-route-returnUrl="@Url.Page("/Index", new { area = "" })" method="post" id="logoutForm" class="w-100">
 
@@ -39,7 +39,6 @@
                                 </p>
                             </div>
                             <div class="col-lg-8">
-                                <p class="text-left"><strong>@curUser.Name</strong></p>
                                 <p class="text-left small">@curUser.Email</p>
                                 <p class="text-left">
                                     <a asp-area="Identity" asp-page="/Account/Manage/Index" title="Manage" class="ml-0 btn btn-primary btn-block btn-sm">Account</a>

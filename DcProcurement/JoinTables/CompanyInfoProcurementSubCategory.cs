@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace DcProcurement.JoinTables
+namespace DcProcurement
 {
    public class CompanyInfoProcurementSubCategory
     {

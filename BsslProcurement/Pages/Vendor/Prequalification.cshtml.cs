@@ -52,12 +52,18 @@ namespace BsslProcurement.Pages.Vendor
 
         [BindProperty]
         public List<DocsModel> DocsList { get; set; }
-
         [BindProperty]
         public CompanyInfo CompanyInfo { get; set; }
-
         [BindProperty]
         public List<SelectListItem> Categories { get; set; }
+        [BindProperty]
+        public List<PersonnelDetailInput> PersonnelDetailIntputs { get; set; }//add method to convert iformfiles to file paths for personnel details table
+        [BindProperty]
+        public List<EquipmentDetails> EquipmentDetails { get; set; }
+        [BindProperty]
+        public List<ExperienceRecord> ExperienceRecords { get; set; }
+        [BindProperty]
+        public List<CompanyInfoProcurementSubCategory> SelectedSubcategories { get; set; }
 
 
         public class PersonnelDetailInput
@@ -69,13 +75,6 @@ namespace BsslProcurement.Pages.Vendor
             public IFormFile PassportFile { get; set; }
         }
 
-        [BindProperty]
-        public List<PersonnelDetailInput> PersonnelDetailIntputs { get; set; }//add method to convert iformfiles to file paths for personnel details table
-        [BindProperty]
-        public List<EquipmentDetails> EquipmentDetails { get; set; }
-        [BindProperty]
-        public List<ExperienceRecord> ExperienceRecords { get; set; }
-
 
         public string Message { get; set; }
         public string Error { get; set; }
@@ -83,10 +82,8 @@ namespace BsslProcurement.Pages.Vendor
 
         [BindProperty]
         public List<int> subCatsId { get; set; }
-        public string ReturnUrl { get; set; }
-        public void OnGet(string returnUrl = null)
+        public void OnGet()
         {
-            ReturnUrl = returnUrl;
             // gets the number of categories from the setup page
             CategoryCount = _context.PrequalificationPolicies.FirstOrDefault().NoOfCategory;
 
@@ -123,8 +120,10 @@ namespace BsslProcurement.Pages.Vendor
 
 
             AddEquipmentsToDB(CompanyInfo.Id, EquipmentDetails);
-
+            
             AddExperienceToDB(CompanyInfo.Id, ExperienceRecords);
+
+            AddSelectedSubcategoriesToDB(CompanyInfo.Id, SelectedSubcategories);
 
             AddPersonnelDetailsToDB(PersonnelDetailIntputs, CompanyInfo.Id);
 
@@ -134,13 +133,18 @@ namespace BsslProcurement.Pages.Vendor
 
             await _context.SaveChangesAsync();
 
-            if (SignUpUserAsync(CompanyInfo,ReturnUrl) == null)
+            var rtn = await SignUpUserAsync(CompanyInfo);
+            if ( rtn == "error")
             {
                 Error = "An Error occured!";
                 return Page();
             }
+            CompanyInfo.VendorId = rtn.Replace("userId=", "");
+
+            await _context.SaveChangesAsync();
 
             Message = "Your Information has been successfully uploaded";
+
             return null; //change to redirect location
 
 
@@ -252,6 +256,33 @@ namespace BsslProcurement.Pages.Vendor
             _context.EquipmentDetails.AddRange(equipmentDetails);
         }
 
+
+        /// <summary>
+        /// method for saving equipments details using company id 
+        /// </summary>
+        /// <param name="id">id of the company</param>
+        /// <param name="experienceRecords">list of custom experience records model</param>
+        void AddSelectedSubcategoriesToDB(int id, List<CompanyInfoProcurementSubCategory> selectedSubCategorys)
+        {
+            selectedSubCategorys = selectedSubCategorys.DistinctBy(i => i.ProcurementSubcategoryId).ToList();
+
+            var SubCs = new List<CompanyInfoProcurementSubCategory>();
+
+            foreach (var item in selectedSubCategorys)
+            {
+                if (item.ProcurementSubcategoryId != 0)
+                {
+                    SubCs.Add(new CompanyInfoProcurementSubCategory()
+                    {
+                        CompanyInfoId = id,
+                        ProcurementSubcategoryId = item.ProcurementSubcategoryId
+                    });
+                }
+            }
+            
+            _context.CompanyInfoProcurementSubCategory.AddRange(SubCs);
+        }
+
         /// <summary>
         /// saving the personnel details to the db
         /// </summary>
@@ -299,7 +330,7 @@ namespace BsslProcurement.Pages.Vendor
             _context.PersonnelDetails.AddRange(pd);
         }
 
-        async Task<LocalRedirectResult> SignUpUserAsync(CompanyInfo cp, string returnUrl = null)
+        async Task<string> SignUpUserAsync(CompanyInfo cp)
         {
             var user = new VendorUser
             {
@@ -312,29 +343,16 @@ namespace BsslProcurement.Pages.Vendor
             var result = await _userManager.CreateAsync(user,cp.Password);
             if (result.Succeeded)
             {
-               ///TODO: Use returned Id to update vendorId
-               
                 _logger.LogInformation("Company created a new account with password.");
 
-                //var code = await _userManager.GenerateEmailConfirmationTokenAsync(user);
-                //var callbackUrl = Url.Page(
-                //    "/Account/ConfirmEmail",
-                //    pageHandler: null,
-                //    values: new { userId = user.Id, code = code },
-                //    protocol: Request.Scheme);
-
-                //await _emailSender.SendEmailAsync(Input.Email, "Confirm your email",
-                //    $"Please confirm your account by <a href='{HtmlEncoder.Default.Encode(callbackUrl)}'>clicking here</a>.");
-
-                await _signInManager.SignInAsync(user, isPersistent: false);
-                return LocalRedirect(returnUrl);
+                return "userId=" + user.Id;
             }
             foreach (var error in result.Errors)
             {
                 ModelState.AddModelError(string.Empty, error.Description);
             }
 
-            return null;
+            return "error";
         }
 
 

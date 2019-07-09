@@ -34,7 +34,7 @@
             <div class="form-group">
                 <label>Item Code</label>
                 <input class="codeInput form-control-sm ml-1" asp-for="Item.ItemCode" />
-                <button id="btnSearch" class="btn btn-sm btn-outline-primary"><i class="fas fa-search"></i></button>
+                <button id="btnSearch" onclick="event.preventDefault();" class="btn btn-sm btn-outline-primary"><i class="fas fa-search"></i></button>
             </div>
 
             <div class="form-group">
@@ -126,8 +126,7 @@
             displaySubgroup();
         });
 
-        $('#btnSearch').on('click', function (event) {
-            event.preventDefault();
+        $('.codeInput').on('change', function () {
             var code = $('.codeInput').val();
 
             if (code) {

@@ -12,13 +12,13 @@ namespace BsslProcurement.Areas.Identity.Pages.Account.Manage
 {
     public class ResetAuthenticatorModel : PageModel
     {
-        UserManager<CompanyInfo> _userManager;
-        private readonly SignInManager<CompanyInfo> _signInManager;
+        UserManager<User> _userManager;
+        private readonly SignInManager<User> _signInManager;
         ILogger<ResetAuthenticatorModel> _logger;
 
         public ResetAuthenticatorModel(
-            UserManager<CompanyInfo> userManager,
-            SignInManager<CompanyInfo> signInManager,
+            UserManager<User> userManager,
+            SignInManager<User> signInManager,
             ILogger<ResetAuthenticatorModel> logger)
         {
             _userManager = userManager;

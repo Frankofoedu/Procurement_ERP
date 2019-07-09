@@ -20,7 +20,9 @@
         @Model.Error
     </div>
 }
-<form method="post">
+
+
+@*<form method="post">
 
     <input type="hidden" asp-for="Counter" />
     @for (int i = 1; i <= Model.Counter; i++)
@@ -353,10 +355,120 @@
             </div>
         </div>
     </div>
-</form>
+</form>*@
+
+
+
+
+@for (int i = 0; i < Model.JobGroups.Count; i++)
+{
+    var jobGroup = Model.JobGroups[i];
+
+    <form method="post">
+        <div class="row my-3">
+            <div class="col-md-2"></div>
+            <div class="col-md-8">
+                <div class="panel panel-login">
+                    <div class="panel-heading">
+                        <div class="row">
+                            <p class="header-text"> @jobGroup.WorkflowStep.Description </p>
+                        </div>
+                        <hr>
+                    </div>
+                    <div class="mt-1">
+                        <table class="table table-responsive-sm table-striped">
+                            <thead>
+                                <tr class="table-primary">
+
+                                    @if (jobGroup.todo == "saventoassign")
+                                    {
+                                        <th>Select</th>
+                                    }
+
+                                    <th>Company Name</th>
+                                    <th>Company Contact</th>
+                                    <th>Assigned Date</th>
+                                    <th></th>
+                                </tr>
+                            </thead>
+                            <tbody>
+
+                                @for (int j = 0; j < jobGroup.Jobs.Count; j++)
+                                {
+                                    var item = jobGroup.Jobs[j];
+
+                                    <tr>
+
+                                        @if (jobGroup.todo == "saventoassign")
+                                        {
+                                            <td>
+                                                <input type="checkbox" asp-for="CheckInputs[j].Checked" />
+                                                <input type="hidden" asp-for="CheckInputs[j].JobId" value="@item.Id" />
+                                            </td>
+                                        }
+
+                                        <td>
+                                            @item.CompanyInfo.CompanyName
+                                        </td>
+                                        <td>
+                                            @item.CompanyInfo.ContactName
+
+                                        </td>
+                                        <td>
+                                            @item.CreationDate.ToShortDateString()
+                                        </td>
+                                        <td>
+                                            <a asp-page="../Review/Prequalification" class="btn btn-outline-primary" asp-route-id="@item.Id">Review</a>
+                                        </td>
+                                    </tr>
+                                }
+
+                            </tbody>
+                        </table>
+                    </div>
+
+                    @if (jobGroup.todo == "saventoassign")
+                    {
+
+                        <div class="row mt-2">
+                            <div class="col-sm-6">
+                                <div class="form-group">
+                                    <label>Staff Code : </label> <br />
+                                    <input class="@("staffCode" + jobGroup.WorkflowStep.Step) staffCode form-control-sm ml-1" onchange="getStaff(@jobGroup.WorkflowStep.Step);" type="text" />
+                                    <button id="btnSearch" class="btn btn-sm btn-outline-primary" onclick="event.preventDefault();">
+                                        <i class="fas fa-search"></i>
+                                    </button>
+                                </div>
+                            </div>
+
+                            <div class="col-sm-6">
+                                <div class="form-group">
+                                    <label>Staff Name : </label>
+                                    <input readonly="readonly" class="@("staffName" + jobGroup.WorkflowStep.Step) staffName form-control ml-1" type="text" />
+                                    <input class="@("staffId" + jobGroup.WorkflowStep.Step) staffId" type="hidden" asp-for="staffId" />
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="row mt-2">
+                            <div class="col-12 text-center">
+                                <button type="submit" asp-route-postedStep="@jobGroup.WorkflowStep.Step" disabled class="@("btn" + jobGroup.WorkflowStep.Step) btn btn-primary">Assign to Staff</button>
+                            </div>
+                        </div>
+                    }
+                </div>
+            </div>
+        </div>
+
+    </form>
+
+}
+
+
 <script>
+
     function getStaff(val) {
-        var code = $('.codeInput' + '.' + val).val();
+        var code = $('.staffCode' + val).val();
 
         if (code) {
 
@@ -370,24 +482,30 @@
                 },
                 contentType: 'application/json',
                 error: function () {
-                    alert('Staff not found!');
+                    alert('Staff code was not found!');
 
-                    $('.btnAssignInd' + '.' + val).prop('disabled', true);
+                    $('.staffCode' + val).focus();
+                    $('.staffId' + val).val('');
+                    $('.staffName' + val).val('');
+                    $('.btn' + val).prop('disabled', true);
                 },
                 success: function (data) {
                     if (!data) {
-                        alert('Error Ocurred');
+                        alert('Staff code was not found!');
 
-                        $('.btnAssignInd' + '.' + val).prop('disabled', true);
+                        $('.staffCode' + val).focus();
+                        $('.staffId' + val).val('');
+                        $('.staffName' + val).val('');
+                        $('.btn' + val).prop('disabled', true);
                         return;
                     }
-                    $('.txtStaff' + '.' + val).val(data.name);
-                    $('#StaffId').val(data.id);
-                    $('.btnAssignInd' + '.' + val).prop('disabled', false);
-                    // $('.btnAssignInd' + '.' + val).val('Assign To : ' + data.name);
+
+                    $('.staffId' + val).val(data.id);
+                    $('.staffName' + val).val(data.name);
+
+                    $('.btn' + val).prop('disabled', false);
                 }
             });
-
 
         }
     }

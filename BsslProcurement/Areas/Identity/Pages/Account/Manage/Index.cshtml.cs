@@ -14,13 +14,13 @@ namespace BsslProcurement.Areas.Identity.Pages.Account.Manage
 {
     public partial class IndexModel : PageModel
     {
-        private readonly UserManager<CompanyInfo> _userManager;
-        private readonly SignInManager<CompanyInfo> _signInManager;
+        private readonly UserManager<User> _userManager;
+        private readonly SignInManager<User> _signInManager;
         private readonly IEmailSender _emailSender;
 
         public IndexModel(
-            UserManager<CompanyInfo> userManager,
-            SignInManager<CompanyInfo> signInManager,
+            UserManager<User> userManager,
+            SignInManager<User> signInManager,
             IEmailSender emailSender)
         {
             _userManager = userManager;

@@ -38,7 +38,7 @@
             <div class="form-group">
                 <label>Subcategory Code</label>
                 <input class="codeInput form-control-sm ml-1" asp-for="ProcurementSubcategory.ProcurementSubCategoryCode" />
-                <button id="btnSearch" class="btn btn-sm btn-outline-primary"><i class="fas fa-search"></i></button>
+                <button id="btnSearch" onclick="event.preventDefault();" class="btn btn-sm btn-outline-primary"><i class="fas fa-search"></i></button>
             </div>
             <div class="form-group">
                 <label>Subcategory Name : </label>
@@ -113,8 +113,7 @@
 
 <script>
     $(document).ready(function () {
-        $('#btnSearch').on('click', function (event) {
-            event.preventDefault();
+        $('.codeInput').on('change', function () {
             var code = $('.codeInput').val();
 
             if (code) {

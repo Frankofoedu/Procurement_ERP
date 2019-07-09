@@ -9,6 +9,8 @@
     <Compile Remove="Migrations\20190618113628_many2ManyComp_Procurement.Designer.cs" />
     <Compile Remove="Migrations\20190618114143_many2ManyComp_Procurement.cs" />
     <Compile Remove="Migrations\20190618114143_many2ManyComp_Procurement.Designer.cs" />
+    <Compile Remove="Migrations\20190626095754_selectedProcurement.cs" />
+    <Compile Remove="Migrations\20190626095754_selectedProcurement.Designer.cs" />
   </ItemGroup>
 
   <ItemGroup>

@@ -11,13 +11,13 @@ namespace BsslProcurement.Areas.Identity.Pages.Account.Manage
 {
     public class DeletePersonalDataModel : PageModel
     {
-        private readonly UserManager<CompanyInfo> _userManager;
-        private readonly SignInManager<CompanyInfo> _signInManager;
+        private readonly UserManager<User> _userManager;
+        private readonly SignInManager<User> _signInManager;
         private readonly ILogger<DeletePersonalDataModel> _logger;
 
         public DeletePersonalDataModel(
-            UserManager<CompanyInfo> userManager,
-            SignInManager<CompanyInfo> signInManager,
+            UserManager<User> userManager,
+            SignInManager<User> signInManager,
             ILogger<DeletePersonalDataModel> logger)
         {
             _userManager = userManager;
