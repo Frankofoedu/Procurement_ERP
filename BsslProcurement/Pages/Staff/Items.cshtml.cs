@@ -29,13 +29,23 @@ namespace BsslProcurement.Pages.Staff
 
         public void OnGet()
         {
-            dItems = _context.Items.Include(m=>m.ProcurementSubcategory.ProcurementCategory).ToList();
+            dItems = _context.Items.Include(m=>m.ProcurementSubcategory).ToList();
+
 
             var subCategories = _context.ProcurementSubcategories.AsNoTracking().ToList();
-            foreach (var item in subCategories)
-            { item.ProcurementCategory = null; }
 
-            ContractSubcategories = subCategories;
+            ContractSubcategories = new List<ProcurementSubcategory>();
+            foreach (var item in subCategories)
+            {
+                ContractSubcategories.Add(new ProcurementSubcategory()
+                {
+                    Id = item.Id,
+                    Name = item.Name,
+                    Description = item.Description,
+                    ProcurementSubCategoryCode = item.ProcurementSubCategoryCode,
+                    ProcurementCategoryId = item.ProcurementCategoryId,
+                });
+            }
 
             ViewData["GroupItems"] = new SelectList(_context.ProcurementCategories, "Id", "Name");
         }
@@ -68,10 +78,19 @@ namespace BsslProcurement.Pages.Staff
             dItems = _context.Items.Include(m => m.ProcurementSubcategory.ProcurementCategory).ToList();
 
             var subCategories = _context.ProcurementSubcategories.AsNoTracking().ToList();
-            foreach (var item in subCategories)
-            { item.ProcurementCategory = null; }
 
-            ContractSubcategories = subCategories;
+            ContractSubcategories = new List<ProcurementSubcategory>();
+            foreach (var item in subCategories)
+            {
+                ContractSubcategories.Add(new ProcurementSubcategory()
+                {
+                    Id = item.Id,
+                    Name = item.Name,
+                    Description = item.Description,
+                    ProcurementSubCategoryCode = item.ProcurementSubCategoryCode,
+                    ProcurementCategoryId = item.ProcurementCategoryId,
+                });
+            }
 
             ViewData["GroupItems"] = new SelectList(_context.ProcurementCategories, "Id", "Name");
 

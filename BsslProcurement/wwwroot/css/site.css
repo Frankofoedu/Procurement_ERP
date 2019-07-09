@@ -23,7 +23,7 @@ a, a:hover, a:focus {
 ul ul a {
     font-size: 0.9em !important;
     padding-left: 30px !important;
-    background: #0A84FF;
+    background: #aaa;
 }
 /* Wrapping element */
 /* Set some basic padding to keep content from hitting the edges */
@@ -70,7 +70,7 @@ ul ul a {
     left: 0;
     height: 100vh;
     z-index: 999;
-    background: #0074E8;
+    background: #ccc;
     color: #fff;
     transition: all 0.3s;
 }
@@ -91,12 +91,12 @@ ul ul a {
 
 #sidebar .sidebar-header {
     padding: 20px;
-    background: #0A84FF;
+    background: #aaa;
 }
 
 #sidebar ul.components {
     padding: 20px 0;
-    border-bottom: 1px solid #0A84FF;
+    border-bottom: 1px solid #aaa;
 }
 
 #sidebar ul p {
@@ -111,13 +111,15 @@ ul ul a {
 }
 
     #sidebar ul li a:hover {
-        color: #0074E8;
+        color: #aaa;
         background: #fff;
     }
 
 #sidebar ul li.active > a, a[aria-expanded="true"] {
-    color: #fff;
-    background: #0074E8;
+}
+#sidebar ul{
+    background: #bbb;
+    color: #000;
 }
 
 a[data-toggle="collapse"] {
@@ -221,7 +223,7 @@ a[data-toggle="collapse"] {
 #sidebarCollapse {
     width: 40px;
     height: 40px;
-    background: #0A84FF;
+    background: #aaa;
     color: #fff;
     position: fixed;
     top: 15px;
