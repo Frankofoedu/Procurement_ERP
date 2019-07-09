@@ -306,7 +306,7 @@ namespace BsslProcurement.Pages.Vendor
                 UserName = cp.Email,
                 Email = cp.Email,
                 CreationDate = DateTime.Now,
-                
+                PhoneNumber = cp.PhoneNumber
             };
 
             var result = await _userManager.CreateAsync(user,cp.Password);
