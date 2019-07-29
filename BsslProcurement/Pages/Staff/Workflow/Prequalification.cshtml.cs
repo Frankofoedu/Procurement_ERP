@@ -27,6 +27,9 @@ namespace BsslProcurement.Pages.Staff.Workflow
             public string StaffId { get; set; }
             public string StaffCode { get; set; }
             public string StaffName { get; set; }
+            public string AlternativeStaffId { get; set; }
+            public string AlternativeStaffCode { get; set; }
+            public string AlternativeStaffName { get; set; }
         }
 
         [BindProperty]
@@ -77,6 +80,7 @@ namespace BsslProcurement.Pages.Staff.Workflow
                     if (item.Assign)
                     {
                         pwf.StaffId = item.StaffId;
+                        pwf.AlternativeStaffId = item.AlternativeStaffId;
                     }
 
                     newPWF.Add(pwf);

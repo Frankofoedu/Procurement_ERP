@@ -6,8 +6,8 @@
 }
 
 <div class="row my-3">
-    <div class="col-md-2"></div>
-    <div class="col-md-8">
+    <div class="col-md-1"></div>
+    <div class="col-md-10">
         <div class="panel panel-login">
             <div class="panel-heading">
                 <div class="row">
@@ -25,6 +25,8 @@
                             <th>For Specific<br />Staff</th>
                             <th>Staff<br /> Code</th>
                             <th>Staff<br /> Name</th>
+                            <th>Alt. Staff<br /> Code</th>
+                            <th>Alt. Staff<br /> Name</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -42,6 +44,17 @@
                                     {
                                         <td>@item.StaffToAssign.StaffCode</td>
                                         <td>@item.StaffToAssign.Name</td>
+                                        if (item.AlternativeStaffToAssign != null)
+                                        {
+                                            <td>@item.AlternativeStaffToAssign.StaffCode</td>
+                                            <td>@item.AlternativeStaffToAssign.Name</td>
+                                        }
+                                        else
+                                        {
+                                            <td></td>
+                                            <td></td>
+
+                                        }
                                     }
                                     else
                                     {
@@ -60,8 +73,8 @@
 </div>
 
 <div class="row mt-5">
-    <div class="col-md-2"></div>
-    <div class="col-md-8">
+    <div class="col-md-1"></div>
+    <div class="col-md-10">
         <form method="post" class="panel panel-login">
             <div class="panel-heading">
                 <div class="row">
@@ -96,6 +109,8 @@
                             <th>For Specific<br />Staff</th>
                             <th>Staff<br /> Code</th>
                             <th>Staff<br /> Name</th>
+                            <th>Alt. Staff<br /> Code</th>
+                            <th>Alt. Staff<br /> Name</th>
                         </tr>
                     </thead>
                     <tbody id="workflowTbody">
@@ -111,7 +126,16 @@
                                         <input type="hidden" class="staffIdInput @("staffIdInput" + i)" asp-for="InputModel[i].StaffId" />
                                         <input type="text" sIndex="@i" class="staffCodeInput @("staffCodeInput" + i) form-control" asp-for="InputModel[i].StaffCode" />
                                     </td>
-                                    <td><input type="text" readonly="readonly" class="staffNameInput @("staffNameInput" + i)" asp-for="InputModel[i].StaffName" /></td>
+                                    <td>
+                                        <input type="text" readonly="readonly" class="staffNameInput @("staffNameInput" + i)" asp-for="InputModel[i].StaffName" />
+                                    </td>
+                                    <td>
+                                        <input type="hidden" class="AltStaffIdInput @("AltStaffIdInput" + i)" asp-for="InputModel[i].AlternativeStaffId" />
+                                        <input type="text" sIndex="@i" class="AltStaffCodeInput @("AltStaffCodeInput" + i) form-control" asp-for="InputModel[i].AlternativeStaffCode" />
+                                    </td>
+                                    <td>
+                                        <input type="text" readonly="readonly" class="AltStaffNameInput @("AltStaffNameInput" + i)" asp-for="InputModel[i].AlternativeStaffName" />
+                                    </td>
                                 </tr>
                             }
                         }
@@ -130,7 +154,16 @@
                                         <input type="hidden" class="staffIdInput @("staffIdInput" + i)" asp-for="InputModel[i].StaffId" value="@item.StaffId" />
                                         <input type="text" sIndex="@i" class="staffCodeInput @("staffCodeInput" + i) form-control" asp-for="InputModel[i].StaffCode" value="@item.StaffCode" />
                                     </td>
-                                    <td><input type="text" readonly="readonly" class="staffNameInput @("staffNameInput" + i)" asp-for="InputModel[i].StaffName" value="@item.StaffName" /></td>
+                                    <td>
+                                        <input type="text" readonly="readonly" class="staffNameInput @("staffNameInput" + i)" asp-for="InputModel[i].StaffName" value="@item.StaffName" />
+                                    </td>
+                                    <td>
+                                        <input type="hidden" class="AltStaffIdInput @("AltStaffIdInput" + i)" asp-for="InputModel[i].AlternativeStaffId" value="@item.AlternativeStaffId" />
+                                        <input type="text" sIndex="@i" class="AltStaffCodeInput @("AltStaffCodeInput" + i) form-control" asp-for="InputModel[i].AlternativeStaffCode" value="@item.AlternativeStaffCode" />
+                                    </td>
+                                    <td>
+                                        <input type="text" readonly="readonly" class="AltStaffNameInput @("AltStaffNameInput" + i)" asp-for="InputModel[i].AlternativeStaffName" value="@item.AlternativeStaffName" />
+                                    </td>
                                 </tr>
                             }
                         }
@@ -197,6 +230,43 @@
             }
         });
 
+         $('#workflowTbody').on('change', '.AltStaffCodeInput', function () {
+
+            var code = this.value;
+            var sindex = this.getAttribute('sIndex');
+
+            if (code) {
+
+                var baseUrl = window.location.origin;
+
+                $.ajax({
+                    url: baseUrl + '/api/Codes/Staff/' + code.trim(),
+                    type: 'get',
+                    xhrFields: {
+                        withCredentials: true
+                    },
+                    contentType: 'application/json',
+                    error: function () {
+                        alert('An Error occured.');
+                        $('.AltStaffCodeInput' + sindex).focus();
+                        $('.AltStaffIdInput' + sindex).val('');
+                        $('.AltStaffNameInput' + sindex).val('');
+                    },
+                    success: function (data) {
+                        if (!data) {
+                            alert('This staff code is invalid.');
+                            $('.AltStaffCodeInput' + sindex).focus();
+                            $('.AltStaffIdInput' + sindex).val('');
+                            $('.AltStaffNameInput' + sindex).val('');
+                            return;
+                        }
+
+                        $('.AltStaffIdInput' + sindex).val(data.id);
+                        $('.AltStaffNameInput' + sindex).val(data.name);
+                    },
+                });
+            }
+        });
         $('#btnMore').on('click', function (event) {
             event.preventDefault;
             var lastIndex = $('#lastIndex').val();
@@ -213,7 +283,10 @@
                 '<td><input type="checkbox" class="checkbox" data-val="true" data-val-required="The Assign field is required." id="InputModel_' + index + '__Assign" name="InputModel[' + index + '].Assign" value="true" /></td>' +
                 '<td><input type="hidden" class="staffIdInput staffIdInput' + index + '" id="InputModel_' + index + '__StaffId" name="InputModel[' + index + '].StaffId" value="" />' +
                 '<input type="text" sIndex="' + index + '" class="staffCodeInput staffCodeInput' + index + ' form-control" id="InputModel_' + index + '__StaffCode" name="InputModel[' + index + '].StaffCode" value="" /></td>' +
-                '<td><input type="text" readonly="readonly" class="staffNameInput staffNameInput' + index + '" id="InputModel_' + index + '__StaffName" name="InputModel[' + index + '].StaffName" value="" /></td> </tr>';
+                '<td><input type="text" readonly="readonly" class="staffNameInput staffNameInput' + index + '" id="InputModel_' + index + '__StaffName" name="InputModel[' + index + '].StaffName" value="" /></td>' +
+                '<td><input type="hidden" class="AltstaffIdInput AltStaffIdInput' + index + ' id="InputModel_' + index + '__AlternativeStaffId" name="InputModel[' + index + '].AlternativeStaffId" value="">'+
+                '<input type="text" sindex="' + index + '" class="AltstaffCodeInput AltStaffCodeInput' + index + ' form-control" id="InputModel_' + index + '__AlternativeStaffCode" name="InputModel[' + index + '].AlternativeStaffCode" value=""></td>'+
+                '<td><input type="text" readonly="readonly" class="AltStaffNameInput AltStaffNameInput' + index + '" id="InputModel_' + index + '__AlternativeStaffName" name="InputModel[' + index + '].AlternativeStaffName" value=""></td></tr > ';
 
             $('#workflowTbody').append(html);
         }
