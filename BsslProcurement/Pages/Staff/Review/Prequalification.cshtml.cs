@@ -59,6 +59,8 @@ namespace BsslProcurement.Pages.Staff.Review
 
 
         [BindProperty]
+        public string Remark { get; set; }
+        [BindProperty]
         public int JobId { get; set; }
         [BindProperty]
         public bool CompanyApproved { get; set; }
@@ -66,6 +68,11 @@ namespace BsslProcurement.Pages.Staff.Review
         public List<filesApproved> submittedCriteriaApproveds { get; set; }
         [BindProperty]
         public List<filesApproved> personnelFilesApproveds { get; set; }
+        [BindProperty]
+        public List<DcProcurement.Staff> Staffs { get; set; }
+
+        [BindProperty]
+        public string nxtStaffId { get; set; }
 
         public IActionResult OnGet(int? id)
         {
@@ -118,14 +125,22 @@ namespace BsslProcurement.Pages.Staff.Review
             else {
                 Description = curStep.Description;
 
-                var nextStep = _context.PrequalificationWorkflows.FirstOrDefault(m => m.Step == Job.WorkFlowStep + 1);
+                var nextStep = _context.PrequalificationWorkflows.Include(st => st.StaffToAssign)
+                                        .Include(w => w.AlternativeStaffToAssign)
+                                        .FirstOrDefault(m => m.Step == Job.WorkFlowStep + 1);
 
                 if (nextStep == null)
                 { todo = "approve"; }
                 else if (nextStep.ToPersonOrAssign)
-                { todo = "saventoperson"; }
-                else { todo = "saventoassign"; }
-
+                { todo = "saventoperson";
+                    Staffs = new List<DcProcurement.Staff>();
+                    Staffs.Add(nextStep.StaffToAssign);
+                    Staffs.Add(nextStep.AlternativeStaffToAssign);
+                }
+                else {
+                    todo = "saventoassign";
+                }
+                
             }
 
             baseURL = GetBaseUrl();
@@ -201,13 +216,15 @@ namespace BsslProcurement.Pages.Staff.Review
                     {
                         CreationDate = DateTime.UtcNow,
                         Done = false,
-                        StaffId = nextStep.StaffId,
+                        StaffId = nxtStaffId,
                         WorkFlowStep = nextStep.Step,
                         CompanyInfoId = CompanyInfo.Id
                     };
 
                     _context.PrequalificationJobs.Add(nextJob);
                 }
+
+                Job.Remark = Remark;
 
                 _context.SaveChanges();
 
