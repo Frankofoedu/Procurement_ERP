@@ -7,7 +7,7 @@
 
     <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.css" />
     <link rel="stylesheet" href="~/css/site.css" />
-    <link href="~/lib/font-awesome/css/all.css" rel="stylesheet">
+    <link href="~/lib/font-awesome/css/all.css" rel="stylesheet" >
     <link href="~/lib/jquery/dist/jquery.mCustomScrollbar.min.css" rel="stylesheet" />
     <link href="~/lib/jqueryui/themes/ui-lightness/jquery-ui.css" rel="stylesheet" />
 
@@ -60,7 +60,7 @@
                     </a>
                     <ul class="collapse list-unstyled" id="accountSubmenu">
                         <li>
-                            <a href="#"><i class="fas fa-file-archive mr-1"></i> Procurement Report</a>
+                            <a asp-page="/Staff/Reports/Preq/PreqReport"><i class="fas fa-file-archive mr-1"></i> Procurement Report</a>
                         </li>
                         <li>
                             <a href="#"><i class="fas fa-file-invoice mr-1"></i> PR Inquiry Form</a>
@@ -118,8 +118,8 @@
                             <a asp-page="/Staff/Items"><i class="fas fa-file-archive mr-1"></i> Items</a>
                         </li>
                         @*<li>
-                    <a asp-page="/Staff/ProPolicy"><i class="fas fa-file-invoice mr-1"></i> Publish Procurement</a>
-                </li>*@
+                                <a asp-page="/Staff/ProPolicy"><i class="fas fa-file-invoice mr-1"></i> Publish Procurement</a>
+                            </li>*@
                         <li>
                             <a asp-page="/Staff/PreQSetup"><i class="fas fa-file-invoice mr-1"></i> Prequalification Setup</a>
                         </li>
@@ -176,6 +176,8 @@
     <script src="~/js/site.js" asp-append-version="true"></script>
     <script src="~/lib/jquery/dist/jquery.mCustomScrollbar.concat.min.js"></script>
     <script src="~/lib/jqueryui/jquery-ui.min.js"></script>
+    <script src="~/lib/bootstrap/dist/js/print.js"></script>
+
 
     @RenderSection("Scripts", required: false)
 </body>

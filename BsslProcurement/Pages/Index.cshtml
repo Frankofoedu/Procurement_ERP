@@ -1,134 +1,157 @@
 ﻿@page
+@using Microsoft.AspNetCore.Identity
+@using Microsoft.EntityFrameworkCore
+@using DcProcurement
+
+@inject SignInManager<User> SignInManager
+@inject UserManager<User> UserManager
+@inject ProcurementDBContext _context
 @model IndexModel
 @{
     ViewData["Title"] = "Home page";
 }
 <style>
     .v-center {
-       display: flex;
-       align-items: center;
+        display: flex;
+        align-items: center;
     }
-    .border-width-2{
-        border-width:2px !important;
+
+    .border-width-2 {
+        border-width: 2px !important;
     }
 </style>
 
 <div class="container bg-white shadow my-4">
-    <div class="row">
+    @if (SignInManager.IsSignedIn(User))
+    {
+        var aspUser = await UserManager.GetUserAsync(User);
+        var curUser = await _context.Staffs.FindAsync(aspUser.Id);
 
-        <div class="col-xl-3 col-md-4 col-sm-6 my-3">
-            <div class="container-fluid">
-                <div class="row p-2 border rounded border-width-2 border-danger">
-                    <div class="col-4 v-center">
-                        <div class="bg-danger rounded-circle text-center" style="height:50px; width:50px;">
-                            <i class="fas fa-info text-white mt-3"></i>
+        if (curUser == null)
+        {
+            await SignInManager.SignOutAsync();
+            return;
+        }
+        
+        //get number of prequalification jobs
+        var PreQnotificationNum = await _context.PrequalificationJobs.Where(x => x.Done == false).CountAsync(m => m.StaffId == curUser.Id || m.StaffId == null);
+
+        <div class="row">
+
+            <div class="col-xl-3 col-md-4 col-sm-6 my-3">
+                <div class="container-fluid">
+                    <div class="row p-2 border rounded border-width-2 border-danger">
+                        <div class="col-4 v-center">
+                            <div class="bg-danger rounded-circle text-center" style="height:50px; width:50px;">
+                                <i class="fas fa-info text-white mt-3"></i>
+                            </div>
                         </div>
-                    </div>
-                    <div class="col-8 text-black-50 text-right">
-                        <p class="h3 mb-0">0</p>
-                        <p class="mb-0 font-italic" style="line-height:20px; font-size:16px;">Organisation information</p>
+                        <div class="col-8 text-black-50 text-right">
+                            <p class="h3 mb-0">@PreQnotificationNum</p>
+                            <a asp-page="Staff/JobViews/PreqJobs"><p class="mb-0 font-italic" style="line-height:20px; font-size:16px;">Prequalification Tasks</p></a>
+                        </div>
                     </div>
                 </div>
             </div>
-        </div>
 
-        <div class="col-xl-3 col-md-4 col-sm-6 my-3">
-            <div class="container-fluid">
-                <div class="row p-2 border rounded border-width-2 border-success">
-                    <div class="col-4 v-center">
-                        <div class="bg-success rounded-circle text-center" style="height:50px; width:50px;">
-                            <i class="fas fa-info text-white mt-3"></i>
+            <div class="col-xl-3 col-md-4 col-sm-6 my-3">
+                <div class="container-fluid">
+                    <div class="row p-2 border rounded border-width-2 border-success">
+                        <div class="col-4 v-center">
+                            <div class="bg-success rounded-circle text-center" style="height:50px; width:50px;">
+                                <i class="fas fa-info text-white mt-3"></i>
+                            </div>
                         </div>
-                    </div>
-                    <div class="col-8 text-black-50 text-right">
-                        <p class="h3 mb-0">0</p>
-                        <p class="mb-0 font-italic" style="line-height:20px; font-size:16px;">Organisation information</p>
+                        <div class="col-8 text-black-50 text-right">
+                            <p class="h3 mb-0">0</p>
+                            <p class="mb-0 font-italic" style="line-height:20px; font-size:16px;">Organisation information</p>
+                        </div>
                     </div>
                 </div>
             </div>
-        </div>
 
-        <div class="col-xl-3 col-md-4 col-sm-6 my-3">
-            <div class="container-fluid">
-                <div class="row p-2 border rounded border-width-2 border-warning">
-                    <div class="col-4 v-center">
-                        <div class="bg-warning rounded-circle text-center" style="height:50px; width:50px;">
-                            <i class="fas fa-info text-white mt-3"></i>
+            <div class="col-xl-3 col-md-4 col-sm-6 my-3">
+                <div class="container-fluid">
+                    <div class="row p-2 border rounded border-width-2 border-warning">
+                        <div class="col-4 v-center">
+                            <div class="bg-warning rounded-circle text-center" style="height:50px; width:50px;">
+                                <i class="fas fa-info text-white mt-3"></i>
+                            </div>
                         </div>
-                    </div>
-                    <div class="col-8 text-black-50 text-right">
-                        <p class="h3 mb-0">0</p>
-                        <p class="mb-0 font-italic" style="line-height:20px; font-size:16px;">Organisation information</p>
+                        <div class="col-8 text-black-50 text-right">
+                            <p class="h3 mb-0">0</p>
+                            <p class="mb-0 font-italic" style="line-height:20px; font-size:16px;">Organisation information</p>
+                        </div>
                     </div>
                 </div>
             </div>
-        </div>
 
-        <div class="col-xl-3 col-md-4 col-sm-6 my-3">
-            <div class="container-fluid">
-                <div class="row p-2 border rounded border-width-2 border-dark">
-                    <div class="col-4 v-center">
-                        <div class="bg-dark rounded-circle text-center" style="height:50px; width:50px;">
-                            <i class="fas fa-info text-white mt-3"></i>
+            <div class="col-xl-3 col-md-4 col-sm-6 my-3">
+                <div class="container-fluid">
+                    <div class="row p-2 border rounded border-width-2 border-dark">
+                        <div class="col-4 v-center">
+                            <div class="bg-dark rounded-circle text-center" style="height:50px; width:50px;">
+                                <i class="fas fa-info text-white mt-3"></i>
+                            </div>
                         </div>
-                    </div>
-                    <div class="col-8 text-black-50 text-right">
-                        <p class="h3 mb-0">0</p>
-                        <p class="mb-0 font-italic" style="line-height:20px; font-size:16px;">Organisation information</p>
+                        <div class="col-8 text-black-50 text-right">
+                            <p class="h3 mb-0">0</p>
+                            <p class="mb-0 font-italic" style="line-height:20px; font-size:16px;">Organisation information</p>
+                        </div>
                     </div>
                 </div>
             </div>
-        </div>
 
-        <div class="col-xl-3 col-md-4 col-sm-6 my-3">
-            <div class="container-fluid">
-                <div class="row p-2 border rounded border-width-2 border-info">
-                    <div class="col-4 v-center">
-                        <div class="bg-info rounded-circle text-center" style="height:50px; width:50px;">
-                            <i class="fas fa-info text-white mt-3"></i>
+            <div class="col-xl-3 col-md-4 col-sm-6 my-3">
+                <div class="container-fluid">
+                    <div class="row p-2 border rounded border-width-2 border-info">
+                        <div class="col-4 v-center">
+                            <div class="bg-info rounded-circle text-center" style="height:50px; width:50px;">
+                                <i class="fas fa-info text-white mt-3"></i>
+                            </div>
                         </div>
-                    </div>
-                    <div class="col-8 text-black-50 text-right">
-                        <p class="h3 mb-0">0</p>
-                        <p class="mb-0 font-italic" style="line-height:20px; font-size:16px;">Organisation information</p>
+                        <div class="col-8 text-black-50 text-right">
+                            <p class="h3 mb-0">0</p>
+                            <p class="mb-0 font-italic" style="line-height:20px; font-size:16px;">Organisation information</p>
+                        </div>
                     </div>
                 </div>
             </div>
-        </div>
 
-        <div class="col-xl-3 col-md-4 col-sm-6 my-3">
-            <div class="container-fluid">
-                <div class="row p-2 border rounded border-width-2 border-light">
-                    <div class="col-4 v-center">
-                        <div class="bg-light rounded-circle text-center" style="height:50px; width:50px;">
-                            <i class="fas fa-info text-white mt-3"></i>
+            <div class="col-xl-3 col-md-4 col-sm-6 my-3">
+                <div class="container-fluid">
+                    <div class="row p-2 border rounded border-width-2 border-light">
+                        <div class="col-4 v-center">
+                            <div class="bg-light rounded-circle text-center" style="height:50px; width:50px;">
+                                <i class="fas fa-info text-white mt-3"></i>
+                            </div>
                         </div>
-                    </div>
-                    <div class="col-8 text-black-50 text-right">
-                        <p class="h3 mb-0">0</p>
-                        <p class="mb-0 font-italic" style="line-height:20px; font-size:16px;">Organisation information</p>
+                        <div class="col-8 text-black-50 text-right">
+                            <p class="h3 mb-0">0</p>
+                            <p class="mb-0 font-italic" style="line-height:20px; font-size:16px;">Organisation information</p>
+                        </div>
                     </div>
                 </div>
             </div>
-        </div>
 
-        <div class="col-xl-3 col-md-4 col-sm-6 my-3">
-            <div class="container-fluid">
-                <div class="row p-2 border rounded border-width-2 border-success">
-                    <div class="col-4 v-center">
-                        <div class="bg-success rounded-circle text-center" style="height:50px; width:50px;">
-                            <i class="fas fa-info text-white mt-3"></i>
+            <div class="col-xl-3 col-md-4 col-sm-6 my-3">
+                <div class="container-fluid">
+                    <div class="row p-2 border rounded border-width-2 border-success">
+                        <div class="col-4 v-center">
+                            <div class="bg-success rounded-circle text-center" style="height:50px; width:50px;">
+                                <i class="fas fa-info text-white mt-3"></i>
+                            </div>
                         </div>
-                    </div>
-                    <div class="col-8 text-black-50 text-right">
-                        <p class="h3 mb-0">0</p>
-                        <p class="mb-0 font-italic" style="line-height:20px; font-size:16px;">Organisation information</p>
+                        <div class="col-8 text-black-50 text-right">
+                            <p class="h3 mb-0">0</p>
+                            <p class="mb-0 font-italic" style="line-height:20px; font-size:16px;">Organisation information</p>
+                        </div>
                     </div>
                 </div>
             </div>
-        </div>
 
-    </div>
+        </div>
+    }
 </div>
 <!-- what we do section -->
 <div class="what bg-li py-5" id="what">
