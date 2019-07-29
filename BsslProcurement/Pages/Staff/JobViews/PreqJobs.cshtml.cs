@@ -11,7 +11,7 @@ using Microsoft.AspNetCore.Authorization;
 
 namespace BsslProcurement.Pages.Staff.JobViews
 {
-    [Authorize]
+  
     public class InputModel : PrequalificationJob
     {
         public string AssignedStaff { get; set; }
@@ -29,7 +29,7 @@ namespace BsslProcurement.Pages.Staff.JobViews
         public PrequalificationWorkflow WorkflowStep { get; set; }
         public List<PrequalificationJob> Jobs { get; set; }
     }
-
+    [Authorize]
     public class PreqJobsModel : PageModel
     {
         private readonly DcProcurement.ProcurementDBContext _context;
@@ -71,66 +71,71 @@ namespace BsslProcurement.Pages.Staff.JobViews
             //get current user
             var user = await GetCurrentUserAsync();
 
-            //get all the workflow steps
-            var allWorkflow = _context.PrequalificationWorkflows.ToList();
-
-            //get all prequalification jobs pending for user or all users
-            var allJobs = await _context.PrequalificationJobs.Where(x => x.Done == false).Where(x => x.StaffId == user.Id || x.StaffId == null)
-                .Include(p => p.CompanyInfo)
-                .Include(p => p.Staff).ToListAsync();
-
-            JobGroups = new List<JobGroup>();
-
-            //group allJobs into jobGroups by steps
-            for (int i = 0; i < allWorkflow.Count; i++)
+            if (user != null)
             {
-                var curWorkFlowStep = allWorkflow[i];
+                //get all the workflow steps
+                var allWorkflow = _context.PrequalificationWorkflows.ToList();
+                //get all prequalification jobs pending for user or all users
+                var allJobs = await _context.PrequalificationJobs.Where(x => x.Done == false).Where(x => x.StaffId == user.Id || x.StaffId == null)
+                    .Include(p => p.CompanyInfo)
+                    .Include(p => p.Staff).ToListAsync();
 
-                PrequalificationWorkflow nextWorkFlowStep;
-                var todo = "";
+                JobGroups = new List<JobGroup>();
 
-                if ((i+1) < allWorkflow.Count )
+                //group allJobs into jobGroups by steps
+                for (int i = 0; i < allWorkflow.Count; i++)
                 {
-                    nextWorkFlowStep = allWorkflow[i + 1];
+                    var curWorkFlowStep = allWorkflow[i];
 
-                    if (nextWorkFlowStep.ToPersonOrAssign)
-                    { todo = "saventoperson"; }
-                    else { todo = "saventoassign"; }
+                    PrequalificationWorkflow nextWorkFlowStep;
+                    var todo = "";
+
+                    if ((i + 1) < allWorkflow.Count)
+                    {
+                        nextWorkFlowStep = allWorkflow[i + 1];
+
+                        if (nextWorkFlowStep.ToPersonOrAssign)
+                        { todo = "saventoperson"; }
+                        else { todo = "saventoassign"; }
+                    }
+                    else
+                    { todo = "approve"; }
+
+
+                    var stepJobs = allJobs.Where(m => m.WorkFlowStep == curWorkFlowStep.Step).ToList();
+
+                    if (stepJobs.Count > 0)
+                    {
+                        var jg = new JobGroup()
+                        {
+                            Jobs = stepJobs,
+                            WorkflowStep = curWorkFlowStep,
+                            todo = todo,
+                        };
+                        JobGroups.Add(jg);
+                    }
                 }
-                else
-                { todo = "approve"; }
 
+                var step0jobs = allJobs.Where(m => m.WorkFlowStep == 0).ToList();
 
-                var stepJobs = allJobs.Where(m => m.WorkFlowStep == curWorkFlowStep.Step).ToList();
-
-                if (stepJobs.Count > 0)
+                if (step0jobs.Count > 0)
                 {
                     var jg = new JobGroup()
                     {
-                        Jobs = stepJobs,
-                        WorkflowStep = curWorkFlowStep,
-                        todo = todo,
+                        Jobs = step0jobs,
+                        WorkflowStep = new PrequalificationWorkflow()
+                        {
+                            Step = 0,
+                            Description = "Validate Files and Approve Company",
+                            ToPersonOrAssign = true,
+                        },
+                        todo = "approve",
                     };
                     JobGroups.Add(jg);
                 }
             }
-
-            var step0jobs = allJobs.Where(m => m.WorkFlowStep == 0).ToList();
-
-            if (step0jobs.Count > 0)
-            {
-                var jg = new JobGroup()
-                {
-                    Jobs = step0jobs,
-                    WorkflowStep = new PrequalificationWorkflow() {
-                        Step =0,
-                        Description = "Validate Files and Approve Company",
-                        ToPersonOrAssign = true,
-                    },
-                    todo = "approve",
-                };
-                JobGroups.Add(jg);
-            }
+          
+           
 
         }
 

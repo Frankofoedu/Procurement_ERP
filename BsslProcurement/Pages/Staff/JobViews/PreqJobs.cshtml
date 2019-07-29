@@ -364,103 +364,104 @@
 {
     var jobGroup = Model.JobGroups[i];
 
-    <form method="post">
-        <div class="row my-3">
-            <div class="col-md-2"></div>
-            <div class="col-md-8">
-                <div class="panel panel-login">
-                    <div class="panel-heading">
-                        <div class="row">
-                            <p class="header-text"> @jobGroup.WorkflowStep.Description </p>
-                        </div>
-                        <hr>
+<form method="post">
+    <div class="row my-3">
+        <div class="col-md-2"></div>
+        <div class="col-md-8">
+            <div class="panel panel-login">
+                <div class="panel-heading">
+                    <div class="row">
+                        <p class="header-text"> @jobGroup.WorkflowStep.Description </p>
                     </div>
-                    <div class="mt-1">
-                        <table class="table table-responsive-sm table-striped">
-                            <thead>
-                                <tr class="table-primary">
+                    <hr>
+                </div>
+                <div class="mt-1">
+                    <table class="table table-responsive-sm table-striped">
+                        <thead>
+                            <tr class="table-primary">
+
+                                @if (jobGroup.todo == "saventoassign")
+                                {
+                                    <th>Select</th>
+                                }
+
+                                <th>Company Name</th>
+                                <th>Company Contact</th>
+                                <th>Assigned Date</th>
+                                <th></th>
+                            </tr>
+                        </thead>
+                        <tbody>
+
+                            @for (int j = 0; j < jobGroup.Jobs.Count; j++)
+                            {
+                                var item = jobGroup.Jobs[j];
+
+                                <tr>
 
                                     @if (jobGroup.todo == "saventoassign")
                                     {
-                                        <th>Select</th>
+                                        <td>
+                                            <input type="checkbox" asp-for="CheckInputs[j].Checked" />
+                                            <input type="hidden" asp-for="CheckInputs[j].JobId" value="@item.Id" />
+                                        </td>
                                     }
 
-                                    <th>Company Name</th>
-                                    <th>Company Contact</th>
-                                    <th>Assigned Date</th>
-                                    <th></th>
+                                    <td>
+                                        @item.CompanyInfo.CompanyName
+                                    </td>
+                                    <td>
+                                        @item.CompanyInfo.ContactName
+
+                                    </td>
+                                    <td>
+                                        @item.CreationDate.ToShortDateString()
+                                    </td>
+                                    <td>
+                                        <a asp-page="../Review/Prequalification" class="btn btn-outline-primary" asp-route-id="@item.Id">Review</a>
+                                    </td>
                                 </tr>
-                            </thead>
-                            <tbody>
+                            }
 
-                                @for (int j = 0; j < jobGroup.Jobs.Count; j++)
-                                {
-                                    var item = jobGroup.Jobs[j];
+                        </tbody>
+                    </table>
+                </div>
 
-                                    <tr>
+                @if (jobGroup.todo == "saventoassign")
+                {
 
-                                        @if (jobGroup.todo == "saventoassign")
-                                        {
-                                            <td>
-                                                <input type="checkbox" asp-for="CheckInputs[j].Checked" />
-                                                <input type="hidden" asp-for="CheckInputs[j].JobId" value="@item.Id" />
-                                            </td>
-                                        }
+                    <div class="row mt-2">
+                        <div class="col-sm-6">
+                            <div class="form-group">
+                                <label>Staff Code : </label> <br />
+                                <input class="@("staffCode" + jobGroup.WorkflowStep.Step) staffCode form-control-sm ml-1" onchange="getStaff(@jobGroup.WorkflowStep.Step);" type="text" />
+                                <button id="btnSearch" class="btn btn-sm btn-outline-primary" onclick="event.preventDefault();">
+                                    <i class="fas fa-search"></i>
+                                </button>
+                            </div>
+                        </div>
 
-                                        <td>
-                                            @item.CompanyInfo.CompanyName
-                                        </td>
-                                        <td>
-                                            @item.CompanyInfo.ContactName
-
-                                        </td>
-                                        <td>
-                                            @item.CreationDate.ToShortDateString()
-                                        </td>
-                                        <td>
-                                            <a asp-page="../Review/Prequalification" class="btn btn-outline-primary" asp-route-id="@item.Id">Review</a>
-                                        </td>
-                                    </tr>
-                                }
-
-                            </tbody>
-                        </table>
+                        <div class="col-sm-6">
+                            <div class="form-group">
+                                <label>Staff Name : </label>
+                                <input readonly="readonly" class="@("staffName" + jobGroup.WorkflowStep.Step) staffName form-control ml-1" type="text" />
+                                <input class="@("staffId" + jobGroup.WorkflowStep.Step) staffId" type="hidden" asp-for="staffId" />
+                            </div>
+                        </div>
                     </div>
 
-                    @if (jobGroup.todo == "saventoassign")
-                    {
+                    <div class="row mt-2">
+                        <div class="col-12 text-center">
 
-                        <div class="row mt-2">
-                            <div class="col-sm-6">
-                                <div class="form-group">
-                                    <label>Staff Code : </label> <br />
-                                    <input class="@("staffCode" + jobGroup.WorkflowStep.Step) staffCode form-control-sm ml-1" onchange="getStaff(@jobGroup.WorkflowStep.Step);" type="text" />
-                                    <button id="btnSearch" class="btn btn-sm btn-outline-primary" onclick="event.preventDefault();">
-                                        <i class="fas fa-search"></i>
-                                    </button>
-                                </div>
-                            </div>
-
-                            <div class="col-sm-6">
-                                <div class="form-group">
-                                    <label>Staff Name : </label>
-                                    <input readonly="readonly" class="@("staffName" + jobGroup.WorkflowStep.Step) staffName form-control ml-1" type="text" />
-                                    <input class="@("staffId" + jobGroup.WorkflowStep.Step) staffId" type="hidden" asp-for="staffId" />
-                                </div>
-                            </div>
+                            <button type="submit" asp-route-postedStep="@jobGroup.WorkflowStep.Step" disabled class="@("btn" + jobGroup.WorkflowStep.Step) btn btn-primary">Assign to Staff</button>
                         </div>
-
-                        <div class="row mt-2">
-                            <div class="col-12 text-center">
-                                <button type="submit" asp-route-postedStep="@jobGroup.WorkflowStep.Step" disabled class="@("btn" + jobGroup.WorkflowStep.Step) btn btn-primary">Assign to Staff</button>
-                            </div>
-                        </div>
-                    }
-                </div>
+                    </div>
+                }
             </div>
         </div>
+    </div>
 
-    </form>
+</form>
 
 }
 
