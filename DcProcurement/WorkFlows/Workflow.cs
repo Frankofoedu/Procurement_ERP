@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 using System.Text;
 
 namespace DcProcurement
@@ -16,8 +17,12 @@ namespace DcProcurement
         public bool ToPersonOrAssign { get; set; }
 
         public string StaffId { get; set; }
+       public string AlternativeStaffId { get; set; }
 
-
+        [ForeignKey("StaffId")]
         public Staff StaffToAssign { get; set; }
+
+        [ForeignKey("AlternativeStaffId")]
+        public Staff AlternativeStaffToAssign { get; set; }
     }
 }

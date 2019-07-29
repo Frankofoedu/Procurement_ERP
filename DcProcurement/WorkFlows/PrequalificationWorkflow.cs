@@ -6,5 +6,6 @@ namespace DcProcurement
 {
     public class PrequalificationWorkflow:Workflow
     {
+
     }
 }

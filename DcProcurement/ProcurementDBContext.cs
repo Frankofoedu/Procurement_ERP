@@ -6,7 +6,7 @@ namespace DcProcurement
 {
     public class ProcurementDBContext : IdentityDbContext<User>
     {
-        public ProcurementDBContext(DbContextOptions options)
+        public ProcurementDBContext(DbContextOptions<ProcurementDBContext> options)
            : base(options)
         { }
 
@@ -72,6 +72,11 @@ namespace DcProcurement
 
 
             modelBuilder.Entity<CompanyInfo>().HasOne(m => m.Vendor).WithOne(n => n.CompanyInfo).HasForeignKey<VendorUser>(l => l.CompanyInfoId);
+
+            modelBuilder.Entity<Workflow>().HasOne(m => m.StaffToAssign).WithMany(n => n.StaffWorkflows).HasForeignKey(w => w.StaffId);
+
+            modelBuilder.Entity<Workflow>().HasOne(m => m.AlternativeStaffToAssign).WithMany(n => n.AdditionalStaffWorkflows).HasForeignKey(w => w.AlternativeStaffId);
+
             base.OnModelCreating(modelBuilder);
 
         }

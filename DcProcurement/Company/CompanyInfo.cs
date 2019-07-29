@@ -28,8 +28,14 @@ namespace DcProcurement
         public string ContactDesignation { get; set; }
         public string ContactPhoneNumber { get; set; }
         public string ContactEmail { get; set; }
-        public string VendorId { get; set; } //The identity User attached to this company. (User of type vendor)
-        public bool Approved { get; set; } //Becomes True after going the workflow stages
+        /// <summary>
+        /// The identity User attached to this company. (User of type vendor)
+        /// </summary>
+        public string VendorId { get; set; } //
+        /// <summary>
+        /// Becomes True after going the workflow stages
+        /// </summary>
+        public bool Approved { get; set; } 
         public bool Disqualified { get; set; }
 
         public DateTime CreationDate { get; set; } 

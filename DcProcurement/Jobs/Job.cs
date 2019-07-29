@@ -20,6 +20,7 @@ namespace DcProcurement
         public DateTime? DoneDate { get; set; }
         public bool Done { get; set; }
 
+        public string  Remark { get; set; }
         public string StaffId { get; set; } // if staff field is null then any staff can see the job.
 
 
