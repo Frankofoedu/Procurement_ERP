@@ -4,14 +4,16 @@ using DcProcurement;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace BsslProcurement.Migrations
 {
     [DbContext(typeof(ProcurementDBContext))]
-    partial class ProcurementDBContextModelSnapshot : ModelSnapshot
+    [Migration("20190712115638_remarks")]
+    partial class remarks
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -450,8 +452,6 @@ namespace BsslProcurement.Migrations
                         .ValueGeneratedOnAdd()
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-                    b.Property<string>("AlternativeStaffId");
-
                     b.Property<string>("Description")
                         .IsRequired();
 
@@ -465,8 +465,6 @@ namespace BsslProcurement.Migrations
                     b.Property<bool>("ToPersonOrAssign");
 
                     b.HasKey("Id");
-
-                    b.HasIndex("AlternativeStaffId");
 
                     b.HasIndex("StaffId");
 
@@ -764,12 +762,8 @@ namespace BsslProcurement.Migrations
 
             modelBuilder.Entity("DcProcurement.Workflow", b =>
                 {
-                    b.HasOne("DcProcurement.Staff", "AlternativeStaffToAssign")
-                        .WithMany("AdditionalStaffWorkflows")
-                        .HasForeignKey("AlternativeStaffId");
-
                     b.HasOne("DcProcurement.Staff", "StaffToAssign")
-                        .WithMany("StaffWorkflows")
+                        .WithMany()
                         .HasForeignKey("StaffId");
                 });
 
