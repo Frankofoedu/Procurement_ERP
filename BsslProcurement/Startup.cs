@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using DcProcurement;
+using DcProcurement.Contexts;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
@@ -43,18 +44,25 @@ namespace BsslProcurement
 
 
             string connection;
-
+            string conn;
             if (Env.IsDevelopment())
             {
                 connection = @"Server=.\sqlexpress;Database=DcProcurement;Trusted_Connection=True;ConnectRetryCount=0";
+                conn = @"Server =.\SQLExpress; Database = BSSLSYS_ITF_DEMO; Trusted_Connection = True;";
             }
             else
             {
                 connection = @"Data Source=WIN2016\BSSLDATAENGIN;Initial Catalog=DcProcurement;User ID=sa;Password=Bssl2019**;Integrated Security=False;
                   Trusted_Connection=True;ConnectRetryCount=0;MultipleActiveResultSets=true";
+
+                //TODO:update to server connection
+                conn = "";
             }
 
             services.AddDbContext<ProcurementDBContext> (options => options.UseSqlServer(connection, b => b.MigrationsAssembly("BsslProcurement")));
+
+            services.AddDbContext<BSSLSYS_ITF_DEMOContext>(options => options.UseSqlServer(conn, b => b.MigrationsAssembly("BsslProcurement")));
+
 
             services.AddIdentity<User, IdentityRole>(config =>
             {
