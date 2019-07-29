@@ -1,0 +1,100 @@
+﻿@page
+@model BsslProcurement.Pages.Staff.Reports.Preq.PreqReportModel
+@{
+    ViewData["Title"] = "PreqReport";
+}
+
+
+@if (!string.IsNullOrWhiteSpace(Model.Message))
+{
+    <div class="alert alert-success alert-dismissable fade show">
+        <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+        @Model.Message
+    </div>
+}
+@if (!string.IsNullOrWhiteSpace(Model.Error))
+{
+    <div class="alert alert-danger alert-dismissable fade show">
+        <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+        @Model.Error
+    </div>
+}
+<div class="row mt-5">
+    <div class="col-md-1"></div>
+    <div class="col-md-10">
+        <form class="panel panel-login">
+            <div class="panel-heading">
+                <div class="row">
+                    <p class="header-text">Pre-qualification Reports</p>
+
+                </div>
+                <hr>
+            </div>
+
+            <div asp-validation-summary="All" class="text-danger"></div>
+
+            <div class="row">
+                <div class="col-12">
+                    <h3 class="h3 bg-primary text-white px-3 py-1 mt-2 rounded text-center">
+                        Approved Company Details.
+                    </h3>
+                </div>
+            </div>
+
+            <table class="table" id="testTable" >
+                <thead>
+                    <tr>
+                        <th>
+                            @Html.DisplayNameFor(model => model.ApprovedCompanyInfos[0].CompanyName)
+                        </th>
+                        <th>
+                            @Html.DisplayNameFor(model => model.ApprovedCompanyInfos[0].CompanyRegNo)
+                        </th>
+                        <th>
+                            @Html.DisplayNameFor(model => model.ApprovedCompanyInfos[0].Email)
+                        </th>
+                        <th>
+                            @Html.DisplayNameFor(model => model.ApprovedCompanyInfos[0].Approved)
+                        </th>
+                        <th></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var item in Model.ApprovedCompanyInfos)
+                    {
+                        <tr>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.CompanyName)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.CompanyRegNo)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.Email)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.Approved)
+                            </td>
+                            <td>
+                                <a asp-page="./Edit" asp-route-id="@item.Id">View</a> |
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </form>
+        <button class="btn btn-danger" onclick="printData('#testTable')" ;> Print</button>
+    </div>
+</div>
+
+<script>
+    function printData(elem) {
+       
+        $(elem).printThis({
+            importCSS: true,
+            header: '<h1 class="m-5">Approved Prequalification Vendors</h1>',
+            printDelay: 20,
+
+        });
+    }
+</script>
