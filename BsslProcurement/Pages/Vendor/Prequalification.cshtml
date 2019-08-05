@@ -18,366 +18,370 @@
     </div>
 }
 
-<div class="row mt-5">
-    <div class="col-md-1"></div>
-    <div class="col-md-10">
-        <form method="post" class="panel panel-login" enctype="multipart/form-data">
-            <div class="panel-heading">
-                <div class="row">
-                    <p class="header-text">Vendor Pre-qualification</p>
-                </div>
-                <hr>
-            </div>
-            <div asp-validation-summary="All" class="text-danger"></div>
 
-            <div class="row">
-                <div class="col-12">
-                    <h3 class="h3 bg-primary text-white px-3 py-1 mt-2 rounded">
-                        Company Details.
-                    </h3>
-                </div>
-            </div>
-            <div class="row">
-                <div class="col-sm-6">
-                    <div class="form-group">
-                        <label>Registration No </label>
-                        <input class="form-control" asp-for="CompanyInfo.CompanyRegNo" placeholder="Enter Resgistration Number" />
-                    </div>
-                </div>
-                <div class="col-sm-6">
-                    <div class="form-group">
-                        <label>Company Name</label>
-                        <input class="form-control" asp-for="CompanyInfo.CompanyName" placeholder="Enter Company Name" />
-                    </div>
-                </div>
-                <div class="col-sm-6">
-                    <div class="form-group">
-                        <label>Phone Number</label>
-                        <input class="form-control" asp-for="CompanyInfo.PhoneNumber" placeholder="Enter ONE(1) Phone Number" />
-                    </div>
-                </div>
-                <div class="col-sm-6">
-                    <div class="form-group">
-                        <label>Email Address</label>
-                        <input class="form-control" asp-for="CompanyInfo.Email" placeholder="Enter ONE(1) Email Address" />
-                    </div>
-                </div>
-                <div class="col-sm-6">
-                    <div class="form-group">
-                        <label>Password</label>
-                        @* TODO move password to identity *@
-                        <input class="form-control" asp-for="CompanyInfo.Password" type="password" placeholder="Enter Password" />
-                    </div>
-                </div>
-                <div class="col-sm-6">
-                    <div class="form-group">
-                        <label>Confirm Password</label>
-                        <input class="form-control" type="password" placeholder="Repeat Password" />
-                    </div>
-                </div>
-                <div class="col-sm-12">
-                    <div class="form-group">
-                        <label>Company Address </label>
-                        <input class="form-control" asp-for="CompanyInfo.Address" placeholder="Enter Company Address" />
-                    </div>
-                </div>
-                <div class="col-sm-6">
-                    <div class="form-group">
-                        <label>Select State</label>
-                        <select class="states form-control" asp-for="CompanyInfo.State">
-                        </select>
-                    </div>
-                </div>
-                <div class="col-sm-6">
-                    <div class="form-group">
-                        <label>Select LGA</label>
-                        <select class="lgas form-control" asp-for="CompanyInfo.City">
-                        </select>
-                    </div>
-                </div>
-                <div class="col-sm-12">
-                    <div class="form-group">
-                        <label>Postal Address</label>
-                        <input class="form-control" asp-for="CompanyInfo.PostalAddress" placeholder="Enter Postal Address" />
-                    </div>
-                </div>
-                <div class="col-sm-6">
-                    <div class="form-group">
-                        <label>Nature of Business </label>
-                        <select class="form-control" asp-for="CompanyInfo.NatureOfBusiness">
-                            <option>--Select--</option>
-                        </select>
-                    </div>
-                </div>
-                <div class="col-sm-6">
-                    <div class="form-group">
-                        <label>Economic Sector</label>
-                        <select class="form-control" asp-for="CompanyInfo.Sector">
-                            <option>--Select--</option>
-                        </select>
-                    </div>
-                </div>
-                <div class="col-sm-6">
-                    <div class="form-group">
-                        <label>Date of Establishment</label>
-                        <input class="form-control" asp-for="CompanyInfo.DateEstablishment" />
-                    </div>
-                </div>
-                <div class="col-sm-6">
-                    <div class="form-group">
-                        <label>Tax Identification Number (TIN)</label>
-                        <input class="form-control" placeholder="Enter Tax Identification Number" asp-for="CompanyInfo.TIN" />
-                    </div>
-                </div>
-            </div>
-
-
-            <div class="row">
-                <div class="col-12">
-                    <h3 class="h3 bg-primary text-white px-3 py-1 mt-2 rounded">
-                        Contact Person Details
-                    </h3>
-                </div>
-            </div>
-            <div class="row">
-                <div class="col-sm-6">
-                    <div class="form-group">
-                        <label>Name </label>
-                        <input class="form-control" placeholder="Enter Fullname" asp-for="CompanyInfo.ContactName" />
-                    </div>
-                </div>
-                <div class="col-sm-6">
-                    <div class="form-group">
-                        <label>Designation </label>
-                        <input class="form-control" placeholder="Enter Designation in Company" asp-for="CompanyInfo.ContactDesignation" />
-                    </div>
-                </div>
-                <div class="col-sm-6">
-                    <div class="form-group">
-                        <label>Phone Number</label>
-                        <input class="form-control" placeholder="Enter ONE(1) Phone Number" asp-for="CompanyInfo.ContactPhoneNumber" />
-                    </div>
-                </div>
-                <div class="col-sm-6">
-                    <div class="form-group">
-                        <label>Email Address</label>
-                        <input class="form-control" placeholder="Enter ONE(1) Email Address" type="email" asp-for="CompanyInfo.ContactEmail" />
-                    </div>
-                </div>
-            </div>
-
-
-            <div class="row">
-                <div class="col-12">
-                    <h3 class="h3 bg-primary text-white px-3 py-1 mt-2 rounded">
-                        Category of Contract for Prequalification
-                    </h3>
-                </div>
-            </div>
-            <div class="row">
-                @for (int i = 0; i < Model.CategoryCount; i++)
-                {
-
-                    <div class="col-sm-6">
-                        <div class="form-group">
-                            <label>Main Category </label>
-                            <select class="form-control" onchange="getSubCategories(this.value, @i);" asp-items="Model.Categories">
-                                <option>--Select--</option>
-                            </select>
-                        </div>
-                    </div>
-                    <div class="col-sm-6">
-                        <div class="form-group">
-                            <label>Sub Category </label>
-                            <select id="ddlSelectCategory_@i" asp-for="SelectedSubcategories[i].ProcurementSubcategoryId" class="form-control">
-                                <option>--Select--</option>
-                            </select>
-                        </div>
-                    </div>
-                }
-            </div>
-
-
-            <div class="text-center p-3">
-                <button id="btnHideDocs" onclick="getCatAndhideDocBtn(); return false" class="btn btn-info ">Add Documents and Requirements</button>
-            </div>
-
-            <div class="row">
-                <div class="col-12">
-                    <h3 class="h3 bg-primary text-white px-3 py-1 mt-2 rounded">
-                        Documents and Requirements
-                    </h3>
-                </div>
-            </div>
-
-            <div id="ShowDocs" class="row" style="">
-                <div class="col-12">
-                    @*<input type="button" value="Test" onclick="addDocFields();" />*@
-                    <table class="table table-responsive-sm table-striped">
-                        <thead>
-                            <tr class="table-primary">
-                                <th>S/N</th>
-                                <th>Requirement</th>
-                                <th>Value</th>
-                            </tr>
-                        </thead>
-                        <tbody id="table_docs">
-
-                            @*<tr>
-                                    <td>(1) <input type="hidden"  asp-for="DocImages[0].Id" value="1"/></td>
-                                    <td><input type="file" class="form-control-file" asp-for="DocImages[0].Image" /></td>
-                                </tr>*@
-                        </tbody>
-                    </table>
-                </div>
-            </div>
-
-
-            <div class="row">
-                <div class="col-12">
-                    <h3 class="h3 bg-primary text-white px-3 py-1 mt-2 rounded">
-                        Experience Record
-                    </h3>
-                </div>
-            </div>
-            <div class="row">
-                <div class="col-12">
-                    <table class="table table-responsive table-striped">
-                        <thead>
-                            <tr class="table-primary">
-                                <th>S/N</th>
-                                <th>Client Name</th>
-                                <th>Client Address</th>
-                                <th>Project Description</th>
-                                <th>Start Date</th>
-                                <th>Completion Date</th>
-                                <th>Contact Person</th>
-                                <th>Phone Number</th>
-                            </tr>
-                        </thead>
-                        <tbody id="experienceTbody">
-                            @for (int i = 0; i < 1; i++)
-                            {
-                                <tr>
-                                    <td>@(i + 1)</td>
-                                    <td><input type="text" class="form-control" asp-for="ExperienceRecords[i].Name" /></td>
-                                    <td><input type="text" class="form-control" asp-for="ExperienceRecords[i].Address" /></td>
-                                    <td><input type="text" class="form-control" asp-for="ExperienceRecords[i].ProjectDescription" /></td>
-                                    <td><input type="date" class="form-control" asp-for="ExperienceRecords[i].StartDate" /></td>
-                                    <td><input type="date" class="form-control" asp-for="ExperienceRecords[i].CompletionDate" /></td>
-                                    <td><input type="text" class="form-control" asp-for="ExperienceRecords[i].ContactPerson" /></td>
-                                    <td><input type="text" class="form-control" asp-for="ExperienceRecords[i].PhoneNumber" /></td>
-                                </tr>
-                            }
-                        </tbody>
-                    </table>
-
-                    <input id="experienceLastIndex" type="hidden" value="0">
-                    <button id="btnAddMoreExperience" class=""> Add More</button>
-                </div>
-            </div>
-
-
-            <div class="row">
-                <div class="col-12">
-                    <h3 class="h3 bg-primary text-white px-3 py-1 mt-2 rounded">
-                        Equipment Details
-                    </h3>
-                </div>
-            </div>
-            <div class="row">
-                <div class="col-12">
-                    <table class="table table-responsive-sm table-striped">
-                        <thead>
-                            <tr class="table-primary">
-                                <th>S/N</th>
-                                <th>Equipment Name</th>
-                                <th>Equipment Description</th>
-                                <th>Quantity</th>
-                            </tr>
-                        </thead>
-                        <tbody id="equipmentTbody">
-                            @for (int i = 0; i < 1; i++)
-                            {
-                                <tr>
-                                    <td>@(i + 1)</td>
-                                    <td><input type="text" class="form-control" asp-for="EquipmentDetails[i].Name" /></td>
-                                    <td><input type="text" class="form-control" asp-for="EquipmentDetails[i].Description" /></td>
-                                    <td><input type="text" class="form-control" asp-for="EquipmentDetails[i].Quantity" /></td>
-                                </tr>
-                            }
-                        </tbody>
-                    </table>
-
-                    <input id="equipmentLastIndex" type="hidden" value="0">
-                    <button id="btnAddMoreEquipment" class=""> Add More</button>
-                </div>
-            </div>
-
-
-            <div class="row">
-                <div class="col-12">
-                    <h3 class="h3 bg-primary text-white px-3 py-1 mt-2 rounded">
-                        Key Personnel Details
-                    </h3>
-                </div>
-            </div>
-            <div class="row">
-                <div class="col-12">
-                    <table class="table table-responsive-sm table-striped">
-                        <thead>
-                            <tr class="table-primary">
-                                <th>S/N</th>
-                                <th>Name</th>
-                                <th>Professional Qualification</th>
-                                <th>CV</th>
-                                <th>Professional Certificate</th>
-                                <th>Passport Photograph</th>
-                            </tr>
-                        </thead>
-                        <tbody id="personnelTbody">
-                            @for (int i = 0; i < 1; i++)
-                            {
-                                <tr>
-                                    <td> @(i + 1) </td>
-                                    <td><input type="text" class="form-control" asp-for="PersonnelDetailIntputs[i].Name" /></td>
-                                    <td><input type="text" class="form-control" asp-for="PersonnelDetailIntputs[i].Qualification" /></td>
-                                    <td><input type="file" class="form-control-file" asp-for="PersonnelDetailIntputs[i].CVFile" /></td>
-                                    <td><input type="file" class="form-control-file" asp-for="PersonnelDetailIntputs[i].CertFile" /></td>
-                                    <td><input type="file" class="form-control-file" asp-for="PersonnelDetailIntputs[i].PassportFile" /></td>
-                                </tr>
-                            }
-
-
-                        </tbody>
-
-                    </table>
-                    <input id="personnelLastIndex" type="hidden" value="0">
-                    <button id="btnAddMorePersonnel" class=""> Add More</button>
-                </div>
-            </div>
-
-            <div class="col-12 mt-4">
-                <div class="form-group">
+@if (Model.CategoryCount != null)
+    //checks if the number of category has ale=ready been setup
+{
+    <div class="row mt-5">
+        <div class="col-md-1"></div>
+        <div class="col-md-10">
+            <form method="post" class="panel panel-login" enctype="multipart/form-data">
+                <div class="panel-heading">
                     <div class="row">
-                        <div class="col-sm-4 text-center">
-                            <button type="submit" class="btn btn-outline-primary">Save for Later</button>
+                        <p class="header-text">Vendor Pre-qualification</p>
+                    </div>
+                    <hr>
+                </div>
+                <div asp-validation-summary="All" class="text-danger"></div>
+
+                <div class="row">
+                    <div class="col-12">
+                        <h3 class="h3 bg-primary text-white px-3 py-1 mt-2 rounded">
+                            Company Details.
+                        </h3>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-sm-6">
+                        <div class="form-group">
+                            <label>Registration No </label>
+                            <input class="form-control" asp-for="CompanyInfo.CompanyRegNo" placeholder="Enter Resgistration Number" />
                         </div>
-                        <div class="col-sm-4">
-                            <button type="submit" class="btn form-btn">Submit</button>
+                    </div>
+                    <div class="col-sm-6">
+                        <div class="form-group">
+                            <label>Company Name</label>
+                            <input class="form-control" asp-for="CompanyInfo.CompanyName" placeholder="Enter Company Name" />
                         </div>
-                        <div class="col-sm-4 text-center">
-                            <button type="submit" class="btn btn-outline-dark">Print/Preview Form</button>
+                    </div>
+                    <div class="col-sm-6">
+                        <div class="form-group">
+                            <label>Phone Number</label>
+                            <input class="form-control" asp-for="CompanyInfo.PhoneNumber" placeholder="Enter ONE(1) Phone Number" />
+                        </div>
+                    </div>
+                    <div class="col-sm-6">
+                        <div class="form-group">
+                            <label>Email Address</label>
+                            <input class="form-control" asp-for="CompanyInfo.Email" placeholder="Enter ONE(1) Email Address" />
+                        </div>
+                    </div>
+                    <div class="col-sm-6">
+                        <div class="form-group">
+                            <label>Password</label>
+                            @* TODO move password to identity *@
+                            <input class="form-control" asp-for="CompanyInfo.Password" type="password" placeholder="Enter Password" />
+                        </div>
+                    </div>
+                    <div class="col-sm-6">
+                        <div class="form-group">
+                            <label>Confirm Password</label>
+                            <input class="form-control" type="password" placeholder="Repeat Password" />
+                        </div>
+                    </div>
+                    <div class="col-sm-12">
+                        <div class="form-group">
+                            <label>Company Address </label>
+                            <input class="form-control" asp-for="CompanyInfo.Address" placeholder="Enter Company Address" />
+                        </div>
+                    </div>
+                    <div class="col-sm-6">
+                        <div class="form-group">
+                            <label>Select State</label>
+                            <select class="states form-control" asp-for="CompanyInfo.State"></select>
+                        </div>
+                    </div>
+                    <div class="col-sm-6">
+                        <div class="form-group">
+                            <label>Select LGA</label>
+                            <select class="lgas form-control" asp-for="CompanyInfo.City"></select>
+                        </div>
+                    </div>
+                    <div class="col-sm-12">
+                        <div class="form-group">
+                            <label>Postal Address</label>
+                            <input class="form-control" asp-for="CompanyInfo.PostalAddress" placeholder="Enter Postal Address" />
+                        </div>
+                    </div>
+                    <div class="col-sm-6">
+                        <div class="form-group">
+                            <label>Nature of Business </label>
+                            <select class="form-control" asp-for="CompanyInfo.NatureOfBusiness">
+                                <option>--Select--</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="col-sm-6">
+                        <div class="form-group">
+                            <label>Economic Sector</label>
+                            <select class="form-control" asp-for="CompanyInfo.Sector">
+                                <option>--Select--</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="col-sm-6">
+                        <div class="form-group">
+                            <label>Date of Establishment</label>
+                            <input class="form-control" asp-for="CompanyInfo.DateEstablishment" />
+                        </div>
+                    </div>
+                    <div class="col-sm-6">
+                        <div class="form-group">
+                            <label>Tax Identification Number (TIN)</label>
+                            <input class="form-control" placeholder="Enter Tax Identification Number" asp-for="CompanyInfo.TIN" />
                         </div>
                     </div>
                 </div>
-            </div>
-        </form>
 
-        <hr />
+
+                <div class="row">
+                    <div class="col-12">
+                        <h3 class="h3 bg-primary text-white px-3 py-1 mt-2 rounded">
+                            Contact Person Details
+                        </h3>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-sm-6">
+                        <div class="form-group">
+                            <label>Name </label>
+                            <input class="form-control" placeholder="Enter Fullname" asp-for="CompanyInfo.ContactName" />
+                        </div>
+                    </div>
+                    <div class="col-sm-6">
+                        <div class="form-group">
+                            <label>Designation </label>
+                            <input class="form-control" placeholder="Enter Designation in Company" asp-for="CompanyInfo.ContactDesignation" />
+                        </div>
+                    </div>
+                    <div class="col-sm-6">
+                        <div class="form-group">
+                            <label>Phone Number</label>
+                            <input class="form-control" placeholder="Enter ONE(1) Phone Number" asp-for="CompanyInfo.ContactPhoneNumber" />
+                        </div>
+                    </div>
+                    <div class="col-sm-6">
+                        <div class="form-group">
+                            <label>Email Address</label>
+                            <input class="form-control" placeholder="Enter ONE(1) Email Address" type="email" asp-for="CompanyInfo.ContactEmail" />
+                        </div>
+                    </div>
+                </div>
+
+
+                <div class="row">
+                    <div class="col-12">
+                        <h3 class="h3 bg-primary text-white px-3 py-1 mt-2 rounded">
+                            Category of Contract for Prequalification
+                        </h3>
+                    </div>
+                </div>
+                <div class="row">
+                    @for (int i = 0; i < Model.CategoryCount; i++)
+                    {
+
+                        <div class="col-sm-6">
+                            <div class="form-group">
+                                <label>Main Category </label>
+                                <select class="form-control" onchange="getSubCategories(this.value, @i);" asp-items="Model.Categories">
+                                    <option>--Select--</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="col-sm-6">
+                            <div class="form-group">
+                                <label>Sub Category </label>
+                                <select id="ddlSelectCategory_@i" asp-for="SelectedSubcategories[i].ProcurementSubcategoryId" class="form-control">
+                                    <option>--Select--</option>
+                                </select>
+                            </div>
+                        </div>
+                    }
+                </div>
+
+
+                <div class="text-center p-3">
+                    <button id="btnHideDocs" onclick="getCatAndhideDocBtn(); return false" class="btn btn-info ">Add Documents and Requirements</button>
+                </div>
+
+                <div class="row">
+                    <div class="col-12">
+                        <h3 class="h3 bg-primary text-white px-3 py-1 mt-2 rounded">
+                            Documents and Requirements
+                        </h3>
+                    </div>
+                </div>
+
+                <div id="ShowDocs" class="row" style="">
+                    <div class="col-12">
+                        @*<input type="button" value="Test" onclick="addDocFields();" />*@
+                        <table class="table table-responsive-sm table-striped">
+                            <thead>
+                                <tr class="table-primary">
+                                    <th>S/N</th>
+                                    <th>Requirement</th>
+                                    <th>Value</th>
+                                </tr>
+                            </thead>
+                            <tbody id="table_docs">
+
+                                @*<tr>
+                                        <td>(1) <input type="hidden"  asp-for="DocImages[0].Id" value="1"/></td>
+                                        <td><input type="file" class="form-control-file" asp-for="DocImages[0].Image" /></td>
+                                    </tr>*@
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+
+                <div class="row">
+                    <div class="col-12">
+                        <h3 class="h3 bg-primary text-white px-3 py-1 mt-2 rounded">
+                            Experience Record
+                        </h3>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-12">
+                        <table class="table table-responsive table-striped">
+                            <thead>
+                                <tr class="table-primary">
+                                    <th>S/N</th>
+                                    <th>Client Name</th>
+                                    <th>Client Address</th>
+                                    <th>Project Description</th>
+                                    <th>Start Date</th>
+                                    <th>Completion Date</th>
+                                    <th>Contact Person</th>
+                                    <th>Phone Number</th>
+                                </tr>
+                            </thead>
+                            <tbody id="experienceTbody">
+                                @for (int i = 0; i < 1; i++)
+                                {
+                                    <tr>
+                                        <td>@(i + 1)</td>
+                                        <td><input type="text" class="form-control" asp-for="ExperienceRecords[i].Name" /></td>
+                                        <td><input type="text" class="form-control" asp-for="ExperienceRecords[i].Address" /></td>
+                                        <td><input type="text" class="form-control" asp-for="ExperienceRecords[i].ProjectDescription" /></td>
+                                        <td><input type="date" class="form-control" asp-for="ExperienceRecords[i].StartDate" /></td>
+                                        <td><input type="date" class="form-control" asp-for="ExperienceRecords[i].CompletionDate" /></td>
+                                        <td><input type="text" class="form-control" asp-for="ExperienceRecords[i].ContactPerson" /></td>
+                                        <td><input type="text" class="form-control" asp-for="ExperienceRecords[i].PhoneNumber" /></td>
+                                    </tr>
+                                }
+                            </tbody>
+                        </table>
+
+                        <input id="experienceLastIndex" type="hidden" value="0">
+                        <button id="btnAddMoreExperience" class=""> Add More</button>
+                    </div>
+                </div>
+
+
+                <div class="row">
+                    <div class="col-12">
+                        <h3 class="h3 bg-primary text-white px-3 py-1 mt-2 rounded">
+                            Equipment Details
+                        </h3>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-12">
+                        <table class="table table-responsive-sm table-striped">
+                            <thead>
+                                <tr class="table-primary">
+                                    <th>S/N</th>
+                                    <th>Equipment Name</th>
+                                    <th>Equipment Description</th>
+                                    <th>Quantity</th>
+                                </tr>
+                            </thead>
+                            <tbody id="equipmentTbody">
+                                @for (int i = 0; i < 1; i++)
+                                {
+                                    <tr>
+                                        <td>@(i + 1)</td>
+                                        <td><input type="text" class="form-control" asp-for="EquipmentDetails[i].Name" /></td>
+                                        <td><input type="text" class="form-control" asp-for="EquipmentDetails[i].Description" /></td>
+                                        <td><input type="text" class="form-control" asp-for="EquipmentDetails[i].Quantity" /></td>
+                                    </tr>
+                                }
+                            </tbody>
+                        </table>
+
+                        <input id="equipmentLastIndex" type="hidden" value="0">
+                        <button id="btnAddMoreEquipment" class=""> Add More</button>
+                    </div>
+                </div>
+
+
+                <div class="row">
+                    <div class="col-12">
+                        <h3 class="h3 bg-primary text-white px-3 py-1 mt-2 rounded">
+                            Key Personnel Details
+                        </h3>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-12">
+                        <table class="table table-responsive-sm table-striped">
+                            <thead>
+                                <tr class="table-primary">
+                                    <th>S/N</th>
+                                    <th>Name</th>
+                                    <th>Professional Qualification</th>
+                                    <th>CV</th>
+                                    <th>Professional Certificate</th>
+                                    <th>Passport Photograph</th>
+                                </tr>
+                            </thead>
+                            <tbody id="personnelTbody">
+                                @for (int i = 0; i < 1; i++)
+                                {
+                                    <tr>
+                                        <td> @(i + 1) </td>
+                                        <td><input type="text" class="form-control" asp-for="PersonnelDetailIntputs[i].Name" /></td>
+                                        <td><input type="text" class="form-control" asp-for="PersonnelDetailIntputs[i].Qualification" /></td>
+                                        <td><input type="file" class="form-control-file" asp-for="PersonnelDetailIntputs[i].CVFile" /></td>
+                                        <td><input type="file" class="form-control-file" asp-for="PersonnelDetailIntputs[i].CertFile" /></td>
+                                        <td><input type="file" class="form-control-file" asp-for="PersonnelDetailIntputs[i].PassportFile" /></td>
+                                    </tr>
+                                }
+
+
+                            </tbody>
+
+                        </table>
+                        <input id="personnelLastIndex" type="hidden" value="0">
+                        <button id="btnAddMorePersonnel" class=""> Add More</button>
+                    </div>
+                </div>
+
+                <div class="col-12 mt-4">
+                    <div class="form-group">
+                        <div class="row">
+                            <div class="col-sm-4 text-center">
+                                <button type="submit" class="btn btn-outline-primary">Save for Later</button>
+                            </div>
+                            <div class="col-sm-4">
+                                <button type="submit" class="btn form-btn">Submit</button>
+                            </div>
+                            <div class="col-sm-4 text-center">
+                                <button type="submit" class="btn btn-outline-dark">Print/Preview Form</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </form>
+
+            <hr />
+        </div>
     </div>
-</div>
-    <script src="~/js/StatenLGA.js" ></script>
+
+}
+<script src="~/js/StatenLGA.js"></script>
 
 <script>
 

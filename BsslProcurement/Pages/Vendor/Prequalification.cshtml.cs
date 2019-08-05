@@ -78,14 +78,20 @@ namespace BsslProcurement.Pages.Vendor
 
         public string Message { get; set; }
         public string Error { get; set; }
-        public int CategoryCount { get; set; }
+        public int? CategoryCount { get; set; }
 
         [BindProperty]
         public List<int> subCatsId { get; set; }
         public void OnGet()
         {
             // gets the number of categories from the setup page
-            CategoryCount = _context.PrequalificationPolicies.FirstOrDefault().NoOfCategory;
+            var setup = _context.PrequalificationPolicies.FirstOrDefault();
+            if (setup == null)
+            {
+                Error = "Prequalification has not yet started";
+                return;
+            }
+            CategoryCount = setup.NoOfCategory;
 
             GetCategories();
 
