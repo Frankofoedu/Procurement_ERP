@@ -15,8 +15,11 @@ namespace DcProcurement.Contexts
         {
         }
 
+        public virtual DbSet<Codestab> Codestab { get; set; }
         public virtual DbSet<Procreq1> Procreq1 { get; set; }
         public virtual DbSet<Procreq2> Procreq2 { get; set; }
+
+       
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
@@ -29,6 +32,45 @@ namespace DcProcurement.Contexts
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
+            modelBuilder.Entity<Codestab>(entity =>
+            {
+                entity.ToTable("codestab");
+
+                entity.Property(e => e.Id).HasColumnName("id");
+
+                entity.Property(e => e.Code)
+                    .HasColumnName("code")
+                    .HasMaxLength(50)
+                    .IsUnicode(false);
+
+                entity.Property(e => e.Copny)
+                    .HasColumnName("copny")
+                    .HasMaxLength(20)
+                    .IsUnicode(false);
+
+                entity.Property(e => e.Desc1)
+                    .HasColumnName("desc1")
+                    .HasMaxLength(150)
+                    .IsUnicode(false);
+
+                entity.Property(e => e.Option1)
+                    .HasColumnName("option1")
+                    .HasMaxLength(50)
+                    .IsUnicode(false);
+
+                entity.Property(e => e.Option2)
+                    .HasColumnName("option2")
+                    .HasMaxLength(50)
+                    .IsUnicode(false)
+                    .HasDefaultValueSql("('')");
+
+                entity.Property(e => e.Option3)
+                    .HasColumnName("option3")
+                    .HasMaxLength(50)
+                    .IsUnicode(false)
+                    .HasDefaultValueSql("('')");
+            });
+
             modelBuilder.Entity<Procreq1>(entity =>
             {
                 entity.ToTable("procreq1");
