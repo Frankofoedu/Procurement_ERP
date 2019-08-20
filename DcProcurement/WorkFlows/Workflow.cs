@@ -9,20 +9,28 @@ namespace DcProcurement
     public class Workflow
     {
         public int Id { get; set; }
+        public int? WorkflowActionId { get; set; }
+        public int? WorkflowCategoryId { get; set; }
 
         public int Step { get; set; }
+
         [Required(ErrorMessage = "The Description field is required.")]
         public string Description { get; set; }
+
+        public double Threshold { get; set; }
 
         public bool ToPersonOrAssign { get; set; }
 
         public string StaffId { get; set; }
-       public string AlternativeStaffId { get; set; }
+        public string AlternativeStaffId { get; set; }
 
         [ForeignKey("StaffId")]
         public Staff StaffToAssign { get; set; }
 
         [ForeignKey("AlternativeStaffId")]
         public Staff AlternativeStaffToAssign { get; set; }
+
+        public WorkflowCategory WorkflowCategory { get; set; }
+        public WorkflowAction WorkflowAction { get; set; }
     }
 }

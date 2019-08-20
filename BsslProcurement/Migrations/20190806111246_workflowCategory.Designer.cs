@@ -4,14 +4,16 @@ using DcProcurement;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace BsslProcurement.Migrations
 {
     [DbContext(typeof(ProcurementDBContext))]
-    partial class ProcurementDBContextModelSnapshot : ModelSnapshot
+    [Migration("20190806111246_workflowCategory")]
+    partial class workflowCategory
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -455,6 +457,9 @@ namespace BsslProcurement.Migrations
                     b.Property<string>("Description")
                         .IsRequired();
 
+                    b.Property<string>("Discriminator")
+                        .IsRequired();
+
                     b.Property<string>("StaffId");
 
                     b.Property<int>("Step");
@@ -463,11 +468,7 @@ namespace BsslProcurement.Migrations
 
                     b.Property<bool>("ToPersonOrAssign");
 
-                    b.Property<int?>("WorkflowActionId");
-
                     b.Property<int?>("WorkflowCategoryId");
-
-                    b.Property<int?>("WorkflowTypeId");
 
                     b.HasKey("Id");
 
@@ -475,29 +476,11 @@ namespace BsslProcurement.Migrations
 
                     b.HasIndex("StaffId");
 
-                    b.HasIndex("WorkflowActionId");
-
                     b.HasIndex("WorkflowCategoryId");
 
                     b.ToTable("Workflows");
-                });
 
-            modelBuilder.Entity("DcProcurement.WorkflowAction", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
-
-                    b.Property<DateTime?>("DateAdded");
-
-                    b.Property<string>("Description");
-
-                    b.Property<string>("Name")
-                        .IsRequired();
-
-                    b.HasKey("Id");
-
-                    b.ToTable("WorkflowActions");
+                    b.HasDiscriminator<string>("Discriminator").HasValue("Workflow");
                 });
 
             modelBuilder.Entity("DcProcurement.WorkflowCategory", b =>
@@ -506,17 +489,15 @@ namespace BsslProcurement.Migrations
                         .ValueGeneratedOnAdd()
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-                    b.Property<string>("Code")
-                        .IsRequired();
+                    b.Property<string>("Code");
 
                     b.Property<string>("Description");
 
-                    b.Property<string>("Name")
-                        .IsRequired();
+                    b.Property<string>("Name");
 
                     b.HasKey("Id");
 
-                    b.ToTable("WorkflowCategories");
+                    b.ToTable("WorkflowCategory");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRole", b =>
@@ -717,6 +698,16 @@ namespace BsslProcurement.Migrations
                     b.HasDiscriminator().HasValue("VendorUser");
                 });
 
+            modelBuilder.Entity("DcProcurement.PrequalificationWorkflow", b =>
+                {
+                    b.HasBaseType("DcProcurement.Workflow");
+
+
+                    b.ToTable("PrequalificationWorkflow");
+
+                    b.HasDiscriminator().HasValue("PrequalificationWorkflow");
+                });
+
             modelBuilder.Entity("DcProcurement.CompanyInfoProcurementSubCategory", b =>
                 {
                     b.HasOne("DcProcurement.CompanyInfo", "CompanyInfo")
@@ -805,10 +796,6 @@ namespace BsslProcurement.Migrations
                     b.HasOne("DcProcurement.Staff", "StaffToAssign")
                         .WithMany("StaffWorkflows")
                         .HasForeignKey("StaffId");
-
-                    b.HasOne("DcProcurement.WorkflowAction", "WorkflowAction")
-                        .WithMany("Workflows")
-                        .HasForeignKey("WorkflowActionId");
 
                     b.HasOne("DcProcurement.WorkflowCategory", "WorkflowCategory")
                         .WithMany("Workflows")
