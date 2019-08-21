@@ -21,9 +21,11 @@ namespace BsslProcurement.Pages.Staff.Transaction
 
         [BindProperty]
         public List<Procreq2> ApprovedRequests { get; set; }
+
+        public Procreq2 NewRequisition { get; set; }
         public async Task OnGetAsync()
         {
-            ApprovedRequests = await _context.Procreq2.ToListAsync();
+          //  ApprovedRequests = await _context.Procreq2.ToListAsync();
         }
     }
 }
