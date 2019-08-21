@@ -23,6 +23,7 @@ namespace BsslProcurement.Pages.Staff.Workflow
         {
             public int Step { get; set; }
             public int WorkflowActionId { get; set; }
+            public double Threshold { get; set; }
             public string Description { get; set; }
             public bool Assign { get; set; }
             public string StaffId { get; set; }
@@ -88,6 +89,7 @@ namespace BsslProcurement.Pages.Staff.Workflow
                         ToPersonOrAssign = item.Assign,
                         WorkflowCategoryId = CategoryId,
                         WorkflowActionId = item.WorkflowActionId,
+                        Threshold = item.Threshold,
 
                         Step = i + 1,
                     };

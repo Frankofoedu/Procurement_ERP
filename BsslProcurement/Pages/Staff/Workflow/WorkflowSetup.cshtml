@@ -38,6 +38,7 @@
                             <th>Step</th>
                             <th>Description</th>
                             <th>Action</th>
+                            <th>Threshold</th>
                             <th>For Specific<br />Staff</th>
                             <th>Staff<br /> Code</th>
                             <th>Staff<br /> Name</th>
@@ -89,6 +90,7 @@
                             <th>Step</th>
                             <th>Description</th>
                             <th>Action</th>
+                            <th>Threshold</th>
                             <th>For Specific<br />Staff</th>
                             <th>Staff<br /> Code</th>
                             <th>Staff<br /> Name</th>
@@ -105,6 +107,7 @@
                             <td>@(i + 1) <input type="hidden" asp-for="InputModel[i].Step" value="@(i+1)" /></td>
                             <td><input type="text" asp-for="InputModel[i].Description" class="form-control" /></td>
                             <td><select asp-for="InputModel[i].WorkflowActionId" class="form-control @("selectAction" + i)"></select></td>
+                            <td><input type="number" asp-for="InputModel[i].Threshold" class="form-control" /></td>
                             <td><input type="checkbox" asp-for="InputModel[i].Assign" class="checkbox" /></td>
                             <td>
                                 <input type="hidden" class="staffIdInput @("staffIdInput" + i)" asp-for="InputModel[i].StaffId" />
@@ -133,6 +136,7 @@
                         <td>@(i + 1) <input type="hidden" asp-for="InputModel[i].Step" value="@item.Step" /></td>
                         <td><input type="text" asp-for="InputModel[i].Description" value="@item.Description" class="form-control" /></td>
                         <td><select asp-for="InputModel[i].WorkflowActionId" class="form-control @("selectAction" + i)"></select></td>
+                        <td><input type="number" asp-for="InputModel[i].Threshold" class="form-control" /></td>
                         <td><input type="checkbox" asp-for="InputModel[i].Assign" class="checkbox" /></td>
 
                         <td>
@@ -237,7 +241,7 @@
 
         function NewWorkflowRow(workflow) {
             var html = '<tr><td>' + workflow.step + '</td> <td>' + workflow.description + '</td>' +
-                '<td>' + workflow.workflowAction.name + '</td><td>' + workflow.toPersonOrAssign + '</td>';
+                '<td>' + workflow.workflowAction.name + '</td><td>' + workflow.threshold + '</td><td>' + workflow.toPersonOrAssign + '</td>';
 
             if (workflow.staffToAssign) {
                 html += '<td>' + workflow.staffToAssign.staffCode + '</td> <td>' + workflow.staffToAssign.name + '</td>';
@@ -275,6 +279,7 @@
             var html = ' <tr> <td>' + (Number(index) + 1) + ' <input type="hidden" id="InputModel_' + index + '__Step" name="InputModel[' + index + '].Step" value="' + (Number(index) + 1) + '" /></td > <td>' +
                 '<input type="text" class="form-control"  id="InputModel_' + index + '__Description" name="InputModel[' + index + '].Description" value=""/></td>' +
                 '<td><select id="InputModel_' + index + '__WorkflowActionId" name="InputModel[' + index + '].WorkflowActionId" class="form-control selectAction' + index + '"></select></td>' +
+                '<td><input type="number" id="InputModel_' + index + '__Threshold" name="InputModel[' + index + '].Threshold" class="form-control" /></td>' +
                 '<td><input type="checkbox" class="checkbox" data-val="true" data-val-required="The Assign field is required." id="InputModel_' + index + '__Assign" name="InputModel[' + index + '].Assign" value="true" /></td>' +
                 '<td><input type="hidden" class="staffIdInput staffIdInput' + index + '" id="InputModel_' + index + '__StaffId" name="InputModel[' + index + '].StaffId" value="" />' +
                 '<input type="text" sIndex="' + index + '" class="staffCodeInput staffCodeInput' + index + ' form-control" id="InputModel_' + index + '__StaffCode" name="InputModel[' + index + '].StaffCode" value="" /></td>' +
