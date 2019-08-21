@@ -11,12 +11,17 @@
     <Compile Remove="Migrations\20190618114143_many2ManyComp_Procurement.Designer.cs" />
     <Compile Remove="Migrations\20190626095754_selectedProcurement.cs" />
     <Compile Remove="Migrations\20190626095754_selectedProcurement.Designer.cs" />
+    <Compile Remove="Migrations\20190806110652_workflowCategory.cs" />
+    <Compile Remove="Migrations\20190806110652_workflowCategory.Designer.cs" />
+    <Compile Remove="Migrations\20190806111213_workflowCategory.cs" />
+    <Compile Remove="Migrations\20190806111213_workflowCategory.Designer.cs" />
   </ItemGroup>
 
   <ItemGroup>
     <PackageReference Include="Microsoft.AspNet.WebApi.Core" Version="5.2.7" />
     <PackageReference Include="Microsoft.AspNetCore.App" />
     <PackageReference Include="Microsoft.AspNetCore.Razor.Design" Version="2.2.0" PrivateAssets="All" />
+    <PackageReference Include="Microsoft.NET.Sdk.Razor" Version="2.2.0" />
     <PackageReference Include="Microsoft.VisualStudio.Web.BrowserLink" Version="2.1.1" />
     <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="2.1.9" />
     <PackageReference Include="morelinq" Version="3.1.1" />

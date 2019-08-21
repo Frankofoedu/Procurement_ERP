@@ -26,7 +26,7 @@ namespace BsslProcurement.Pages.Staff.JobViews
     public class JobGroup
     {
         public string todo { get; set; }
-        public PrequalificationWorkflow WorkflowStep { get; set; }
+        public DcProcurement.Workflow WorkflowStep { get; set; }
         public List<PrequalificationJob> Jobs { get; set; }
     }
     [Authorize]
@@ -55,7 +55,7 @@ namespace BsslProcurement.Pages.Staff.JobViews
         public string Message { get; set; }
         public string Error { get; set; }
 
-        public List<PrequalificationWorkflow> PrequalificationWorkflow { get; set; }
+        public List<DcProcurement.Workflow> PrequalificationWorkflow { get; set; }
 
 
         //get current user
@@ -74,7 +74,7 @@ namespace BsslProcurement.Pages.Staff.JobViews
             if (user != null)
             {
                 //get all the workflow steps
-                var allWorkflow = _context.PrequalificationWorkflows.ToList();
+                var allWorkflow = _context.Workflows.Where(m=>m.WorkflowCategory.Name == "procurement").OrderBy(n=>n.Step).ToList();
                 //get all prequalification jobs pending for user or all users
                 var allJobs = await _context.PrequalificationJobs.Where(x => x.Done == false).Where(x => x.StaffId == user.Id || x.StaffId == null)
                     .Include(p => p.CompanyInfo)
@@ -87,7 +87,7 @@ namespace BsslProcurement.Pages.Staff.JobViews
                 {
                     var curWorkFlowStep = allWorkflow[i];
 
-                    PrequalificationWorkflow nextWorkFlowStep;
+                    DcProcurement.Workflow nextWorkFlowStep;
                     var todo = "";
 
                     if ((i + 1) < allWorkflow.Count)
@@ -123,7 +123,7 @@ namespace BsslProcurement.Pages.Staff.JobViews
                     var jg = new JobGroup()
                     {
                         Jobs = step0jobs,
-                        WorkflowStep = new PrequalificationWorkflow()
+                        WorkflowStep = new DcProcurement.Workflow()
                         {
                             Step = 0,
                             Description = "Validate Files and Approve Company",
@@ -216,7 +216,7 @@ namespace BsslProcurement.Pages.Staff.JobViews
                 .Include(p => p.CompanyInfo).ToListAsync();
 
             //get all the workflow steps
-            var allWorkflow = _context.PrequalificationWorkflows.ToList();
+            var allWorkflow = _context.Workflows.Where(m => m.WorkflowCategory.Name == "procurement").OrderBy(n => n.Step).ToList();
 
             foreach (var item in CheckInputs)
             {

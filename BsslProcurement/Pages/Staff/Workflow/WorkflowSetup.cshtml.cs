@@ -5,16 +5,16 @@ using System.Threading.Tasks;
 using DcProcurement;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
+using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 
 namespace BsslProcurement.Pages.Staff.Workflow
 {
-    public class PrequalificationModel : PageModel
+    public class WorkflowSetupModel : PageModel
     {
-
         private readonly ProcurementDBContext _context;
 
-        public PrequalificationModel(ProcurementDBContext context)
+        public WorkflowSetupModel(ProcurementDBContext context)
         {
             _context = context;
         }
@@ -22,8 +22,7 @@ namespace BsslProcurement.Pages.Staff.Workflow
         public class Input
         {
             public int Step { get; set; }
-            public int WorkflowAction { get; set; }
-            public int WorkflowCategory { get; set; }
+            public int WorkflowActionId { get; set; }
             public string Description { get; set; }
             public bool Assign { get; set; }
             public string StaffId { get; set; }
@@ -36,30 +35,38 @@ namespace BsslProcurement.Pages.Staff.Workflow
 
         [BindProperty]
         public List<Input> InputModel { get; set; }
+        [BindProperty]
+        public int CategoryId { get; set; }
 
-        public List<DcProcurement.Workflow> currentPrequalificationWorkflows { get; set; }
+        public List<DcProcurement.WorkflowAction> WorkflowActions { get; set; }
 
         public string Message { get; set; }
         public string Error { get; set; }
 
         public void OnGet()
         {
-            currentPrequalificationWorkflows = _context.Workflows.Include(m=>m.StaffToAssign).Where(m => m.WorkflowCategory.Name == "procurement").OrderBy(n => n.Step).ToList();
-        }
+            WorkflowActions = _context.WorkflowActions.ToList();
+            foreach (var item in WorkflowActions) item.Workflows = null;
 
+            ViewData["Categories"] = new SelectList(_context.WorkflowCategories, "Id", "Name");
+
+        }
 
         public void OnPost()
         {
             if (!ModelState.IsValid)
             {
                 Error = "An Error occured. Please check the data and try again.";
-                currentPrequalificationWorkflows = _context.Workflows.Include(m => m.StaffToAssign).Where(m => m.WorkflowCategory.Name == "procurement").OrderBy(n => n.Step).ToList();
+                WorkflowActions = _context.WorkflowActions.ToList();
+                foreach (var item in WorkflowActions) item.Workflows = null;
+
+                ViewData["Categories"] = new SelectList(_context.WorkflowCategories, "Id", "Name");
                 return;
             }
 
             var newPWF = new List<DcProcurement.Workflow>();
 
-            for (var i= 0; i< InputModel.Count; i++)
+            for (var i = 0; i < InputModel.Count; i++)
             {
                 var item = InputModel[i];
 
@@ -68,7 +75,10 @@ namespace BsslProcurement.Pages.Staff.Workflow
                     if (item.Assign && string.IsNullOrWhiteSpace(item.StaffName))
                     {
                         Error = "An Error Occured. Make sure that if 'For Specific Staff' field is checked, a valid staff code is Entered.";
-                        currentPrequalificationWorkflows = _context.Workflows.Include(m => m.StaffToAssign).Where(m => m.WorkflowCategory.Name == "procurement").OrderBy(n => n.Step).ToList();
+                        WorkflowActions = _context.WorkflowActions.ToList();
+                        foreach (var x in WorkflowActions) x.Workflows = null;
+
+                        ViewData["Categories"] = new SelectList(_context.WorkflowCategories, "Id", "Name");
                         return;
                     }
 
@@ -76,6 +86,9 @@ namespace BsslProcurement.Pages.Staff.Workflow
                     {
                         Description = item.Description,
                         ToPersonOrAssign = item.Assign,
+                        WorkflowCategoryId = CategoryId,
+                        WorkflowActionId = item.WorkflowActionId,
+
                         Step = i + 1,
                     };
 
@@ -89,24 +102,29 @@ namespace BsslProcurement.Pages.Staff.Workflow
                 }
             }
 
-            if (newPWF.Count<1)
+            if (newPWF.Count < 1)
             {
                 Error = "An Error Occured. Make sure make sure one or more workflow steps are added.";
-                currentPrequalificationWorkflows = _context.Workflows.Include(m => m.StaffToAssign).Where(m => m.WorkflowCategory.Name == "procurement").OrderBy(n => n.Step).ToList();
+                WorkflowActions = _context.WorkflowActions.ToList();
+                foreach (var item in WorkflowActions) item.Workflows = null;
+
+                ViewData["Categories"] = new SelectList(_context.WorkflowCategories, "Id", "Name");
                 return;
             }
 
-            var curWF = _context.Workflows.Where(m => m.WorkflowCategory.Name == "procurement").OrderBy(n => n.Step).ToList();
+            var curWF = _context.Workflows.Where(m => m.WorkflowCategoryId == CategoryId).OrderBy(n => n.Step).ToList();
             _context.Workflows.RemoveRange(curWF);
             _context.Workflows.AddRange(newPWF);
 
             _context.SaveChanges();
 
             InputModel = null;
-            currentPrequalificationWorkflows = _context.Workflows.Include(m => m.StaffToAssign).Where(m => m.WorkflowCategory.Name == "procurement").OrderBy(n => n.Step).ToList();
+            WorkflowActions = _context.WorkflowActions.ToList();
+            foreach (var item in WorkflowActions) item.Workflows = null;
+
+            ViewData["Categories"] = new SelectList(_context.WorkflowCategories, "Id", "Name");
 
             Message = "Saved Successfully";
         }
-        //TODO: Add code to move all companies to least workflow
     }
 }

@@ -115,7 +115,7 @@ namespace BsslProcurement.Pages.Staff.Review
                 personnelFilesApproveds.Add(FA);
             }
 
-            var curStep = _context.PrequalificationWorkflows.FirstOrDefault(m => m.Step == Job.WorkFlowStep);
+            var curStep = _context.Workflows.FirstOrDefault(m => m.WorkflowCategory.Name=="procurement" && m.Step == Job.WorkFlowStep);
 
             if (curStep == null) // if there is no workflow in the db
             {
@@ -125,9 +125,9 @@ namespace BsslProcurement.Pages.Staff.Review
             else {
                 Description = curStep.Description;
 
-                var nextStep = _context.PrequalificationWorkflows.Include(st => st.StaffToAssign)
+                var nextStep = _context.Workflows.Include(st => st.StaffToAssign)
                                         .Include(w => w.AlternativeStaffToAssign)
-                                        .FirstOrDefault(m => m.Step == Job.WorkFlowStep + 1);
+                                        .FirstOrDefault(m => m.WorkflowCategory.Name=="procurement" && m.Step == Job.WorkFlowStep + 1);
 
                 if (nextStep == null)
                 { todo = "approve"; }
@@ -197,7 +197,7 @@ namespace BsslProcurement.Pages.Staff.Review
                     }
                 }
 
-                var nextStep = _context.PrequalificationWorkflows.FirstOrDefault(m => m.Step == Job.WorkFlowStep + 1);
+                var nextStep = _context.Workflows.FirstOrDefault(m => m.WorkflowCategory.Name == "procurement" && m.Step == Job.WorkFlowStep + 1);
 
                 if (nextStep == null)
                 {

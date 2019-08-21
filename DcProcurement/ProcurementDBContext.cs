@@ -43,7 +43,8 @@ namespace DcProcurement
 
         #region Workflow Tables
         public DbSet<Workflow> Workflows { get; set; }
-        public DbSet<PrequalificationWorkflow> PrequalificationWorkflows { get; set; }
+        public DbSet<WorkflowCategory> WorkflowCategories { get; set; }
+        public DbSet<WorkflowAction> WorkflowActions { get; set; }
         #endregion
 
         #region Users Tables

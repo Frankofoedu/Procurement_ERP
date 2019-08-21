@@ -364,9 +364,9 @@ namespace BsslProcurement.Pages.Vendor
 
         public void AddPrequalificationJob(int companyID)
         {
-            if (_context.PrequalificationWorkflows.Any())
+            if (_context.Workflows.Where(m => m.WorkflowCategory.Name == "procurement").Any())
             {
-                var wkflw = _context.Workflows.OrderBy(x=> x.Step).First();
+                var wkflw = _context.Workflows.Where(m => m.WorkflowCategory.Name == "procurement").OrderBy(x=> x.Step).First();
 
                 _context.PrequalificationJobs.Add(new PrequalificationJob
                 {
@@ -401,7 +401,7 @@ namespace BsslProcurement.Pages.Vendor
 
 
 
-            var wrkFlow = _context.PrequalificationWorkflows.MinBy(x => x.Step).FirstOrDefault();
+            var wrkFlow = _context.Workflows.Where(m => m.WorkflowCategory.Name == "procurement").MinBy(x => x.Step).FirstOrDefault();
 
             if (wrkFlow.ToPersonOrAssign)
             {
