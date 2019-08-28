@@ -5,12 +5,12 @@ namespace DcProcurement.Contexts
 {
     public partial class Stafftab
     {
-        public decimal RecordId { get; set; }
+        public int Id { get; set; }
         public string Staffid { get; set; }
         public string Surname { get; set; }
+        public string Othernames { get; set; }
         public string Firstname { get; set; }
         public string Middlename { get; set; }
-        public string Othernames { get; set; }
         public string Initials { get; set; }
         public string Deptcode { get; set; }
         public string Gradelvl { get; set; }
@@ -40,7 +40,7 @@ namespace DcProcurement.Contexts
         public bool? Rentad { get; set; }
         public string Cc { get; set; }
         public string Picpath { get; set; }
-        public string Compcode { get; set; }
+        public string Copny { get; set; }
         public string Email { get; set; }
         public string Natidno { get; set; }
         public decimal? Percent2 { get; set; }
@@ -67,6 +67,7 @@ namespace DcProcurement.Contexts
         public decimal? Ovtcum { get; set; }
         public bool? Cessation { get; set; }
         public DateTime? Cesdate { get; set; }
+        public DateTime? Datebirth { get; set; }
         public DateTime? Dpromoted { get; set; }
         public string Taxref { get; set; }
         public string Pfa { get; set; }
@@ -105,30 +106,14 @@ namespace DcProcurement.Contexts
         public bool? Indu { get; set; }
         public string Rsapin { get; set; }
         public string Cadre { get; set; }
-        public string Accountid1 { get; set; }
         public string Acctype { get; set; }
         public string Bankcode1 { get; set; }
         public string Branchcode1 { get; set; }
-        public byte[] Picimg { get; set; }
-        public string Pictype { get; set; }
-        public byte[] Thbimg { get; set; }
-        public string Thbtype { get; set; }
-        public byte[] Sigimg { get; set; }
-        public string Sigtype { get; set; }
-        public string Ethnicity { get; set; }
-        public string Bankbvn { get; set; }
-        public bool? Psal { get; set; }
-        public int? Pwhen { get; set; }
-        public bool? Newstaff { get; set; }
-        public int? Losyears { get; set; }
-        public int? Losmonths { get; set; }
-        public int? Losdays { get; set; }
-        public int? Lostotal { get; set; }
-        public string BankAcType { get; set; }
-        public string BankSwitchCode { get; set; }
-        public bool? Excldfrmbudget { get; set; }
-        public string Sen { get; set; }
-        public string Fed { get; set; }
-        public string Sed { get; set; }
+        public string Function1 { get; set; }
+        public string Sortcode { get; set; }
+        public string Accountid1 { get; set; }
+        public string Zone { get; set; }
+        public string Office2 { get; set; }
+        public string Acctname { get; set; }
     }
 }

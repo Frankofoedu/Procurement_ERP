@@ -56,7 +56,8 @@ namespace DcProcurement
         public DbSet<Job> Jobs { get; set; }
         public DbSet<PrequalificationJob> PrequalificationJobs { get; set; }
         #endregion
-        
+
+        public DbSet<PRNo> PRNos { get; set; }
 
         public DbSet<PrequalificationPolicy> PrequalificationPolicies { get; set; }
 

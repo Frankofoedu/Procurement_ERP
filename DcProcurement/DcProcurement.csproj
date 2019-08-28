@@ -18,4 +18,9 @@
     </Reference>
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="modelTest\" />
+    <Folder Include="Requisition\" />
+  </ItemGroup>
+
 </Project>
