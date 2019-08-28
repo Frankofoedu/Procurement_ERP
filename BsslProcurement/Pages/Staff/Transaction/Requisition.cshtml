@@ -32,8 +32,9 @@
             }
 
 
-            <button type="button" class="btn btn-primary pt-2" data-toggle="modal" data-target="#exampleModalCenter">Add New</button>
+            @*<button class="btn btn-primary pt-2" asp-page="NewRequisition">Add New</button>*@
 
+            <a asp-page="NewRequisition" role="button" class="btn btn-primary">New Requisition</a>
 
             <div class="row pt-3 " style="">
                 <div class="col-12 table-responsive table-responsive-sm">
@@ -83,118 +84,7 @@
             </div>
 
 
-            <div class="modal fade" id="exampleModalCenter" tabindex="-1" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
-                <div class="modal-dialog modal-lg modal-dialog-centered" role="document">
-                    <div class="modal-content">
-                        <div class="modal-header">                            
-                            <div class="align-content-end modal-title">
-                                <div class="col-12">
-                                    <h3 class="h3 bg-primary text-white px-3 py-1 mt-2 rounded">
-                                        New Requisition
-                                    </h3>
-                                </div>
-                            </div>
-                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                <span aria-hidden="true">&times;</span>
-                            </button>
-                        </div>
-                        <div class="modal-body panel">
-                          
-                            <div class="">
-
-                                <div class="form-check form-check-inline">
-                                    <input class="form-check-input" type="radio" name="inlineRadioOptions" id="inlineRadio1" value="option1">
-                                    <label class="form-check-label" for="inlineRadio1">  Capital Procurement  </label>
-                                </div>
-                                <div class="form-check form-check-inline">
-                                    <input class="form-check-input" type="radio" name="inlineRadioOptions" id="inlineRadio2" value="option2">
-                                    <label class="form-check-label" for="inlineRadio2">  Recurrent Procurement  </label>
-                                </div>
-
-                            </div>
-
-
-
-                        </div>
-                        <div class="row p-2">
-                            <div class="col-sm-4">
-                                <div class="form-group">
-                                    <label>PR No : </label>
-                                    <input class="form-control" @*asp-for="NewRequisition.Reqno"*@ placeholder="" />
-                                </div>
-                            </div>
-                            <div class="col-sm-4">
-                                <div class="form-group">
-                                    <label>Date : </label>
-                                    <input class="form-control" type="date" placeholder="Pick Date" />
-                                </div>
-                            </div>
-                            <div class="col-sm-4">
-                                <div class="form-group">
-                                    <label>Delivery Date : </label>
-                                    <input class="form-control" type="date" placeholder="Pick Delivery Date" />
-                                </div>
-                            </div>
-                            <div class="col-sm-6">
-                                <div class="form-group">
-                                    <label>Requesting Dept/Section : </label>
-                                    <input class="form-control" placeholder="Enter Department" />
-                                </div>
-                            </div>
-                            <div class="col-sm-6">
-                                <div class="form-group">
-                                    <label>Required At : </label>
-                                    <input class="form-control" placeholder="" />
-                                </div>
-                            </div>
-                            <div class="col-sm-7">
-                                <div class="form-group">
-                                    <label>Purpose : </label>
-                                    <textarea class="form-control" rows="6" placeholder=""></textarea>
-                                </div>
-                            </div>
-                            <div class="col-sm-5">
-                                <div class="row">
-                                    <div class="col-sm-6">
-                                        <label>Prepared By : </label>
-                                        <input class="form-control" rows="6" placeholder="" />
-                                    </div>
-                                    <div class="col-sm-6">
-                                        <label>For : </label>
-                                        <input class="form-control" rows="6" placeholder="" />
-
-                                    </div>
-                                    <div class="col-sm-6">
-                                        <label>Rank : </label>
-                                        <input class="form-control" rows="6" placeholder="" />
-
-                                    </div>
-
-                                </div>
-                            </div>
-
-          
-                            <div class="col-sm-4">
-                                <div class="form-group">
-                                    <input class="custom-file" value="Add Attachment" type="file" />
-                                </div>
-                            </div>
-                            <div class="col-sm-4">
-                                </div>
-                            <div class="col-sm-4">
-                                <div class="form-group">
-                                    <input class="btn btn-block btn-danger fa-print" value="Print" type="button" placeholder="Enter Resgistration Number" />
-                                </div>
-                            </div>
-                        </div>
-                        <div class="modal-footer justify-content-center">
-                            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                            <input class="btn btn-primary" value="Send For Approval" type="button" placeholder="Enter Resgistration Number" />
-
-                        </div>
-                    </div>
-                </div>
-            </div>
+         
 
         </form>
     </div>

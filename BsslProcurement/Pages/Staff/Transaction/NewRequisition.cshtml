@@ -1,0 +1,248 @@
+﻿@page
+@model BsslProcurement.Pages.Staff.Transaction.NewRequisitionModel
+@{
+    ViewData["Title"] = "New Requisition";
+}
+
+@if (!string.IsNullOrWhiteSpace(Model.Message))
+{
+    <div class="alert alert-success alert-dismissable fade show">
+        <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+        @Model.Message
+    </div>
+}
+@if (!string.IsNullOrWhiteSpace(Model.Error))
+{
+    <div class="alert alert-danger alert-dismissable fade show">
+        <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+        @Model.Error
+    </div>
+}
+
+<div class="row mt-5">
+    <div class="col-md-1"></div>
+    <div class="col-md-11">
+        <form class="panel panel-login">
+            <div class="panel-heading">
+                <div class="row">
+                    <p class="header-text">New Purchase Requisition</p>
+
+                </div>
+                <hr>
+            </div>
+
+            <div asp-validation-summary="All" class="text-danger"></div>
+
+            <div>
+                <div class="">
+
+                    <div class=" panel">
+
+                        <div class="d-flex justify-content-center mb-3">
+
+                            <div class="form-check form-check-inline">
+                                <input class="form-check-input" type="radio" name="inlineRadioOptions" id="inlineRadio1" value="option1">
+                                <label class="form-check-label" for="inlineRadio1">  Capital Procurement  </label>
+                            </div>
+                            <div class="form-check form-check-inline">
+                                <input class="form-check-input" type="radio" name="inlineRadioOptions" id="inlineRadio2" value="option2">
+                                <label class="form-check-label" for="inlineRadio2">  Recurrent Procurement  </label>
+                            </div>
+
+                        </div>
+
+
+
+                    </div>
+                    <div class="row p-2">
+                        <div class="col-sm-4">
+                            <div class="form-group">
+                                <label>PR No : </label>
+                                <input class="form-control" asp-for="PrNo" placeholder="" />
+                            </div>
+                        </div>
+                        <div class="col-sm-4">
+                            <div class="form-group">
+                                <label>Date : </label>
+                                <input class="form-control" type="date" placeholder="Pick Date" />
+                            </div>
+                        </div>
+                        <div class="col-sm-4">
+                            <div class="form-group">
+                                <label>Delivery Date : </label>
+                                <input class="form-control" type="date" placeholder="Pick Delivery Date" />
+                            </div>
+                        </div>
+                        <div class="col-sm-6">
+                            <div class="form-group">
+                                <label>Requesting Dept/Section : </label>
+                                <input class="form-control" disabled asp-for="RequestingDept" placeholder="Enter Department" />
+                            </div>
+                        </div>
+                        <div class="col-sm-6">
+                            <div class="form-group">
+                                <label>Required At : </label>
+                                <select asp-items="Model.Departments" class="form-control"></select>
+                            </div>
+                        </div>
+
+                        <div class="mt-3 mb-5 col-sm-12 table-responsive">
+                            <table class="table table-striped">
+                                <thead>
+                                    <tr class="table-primary">
+                                        <th>S/No</th>
+                                        <th>Store Item Code</th>
+                                        <th>Description Of <br />Goods/Services</th>
+                                        <th>Quantity</th>
+                                        <th>Unit</th>
+                                        <th>Supplier ID</th>
+                                        <th>Supplier Name</th>
+                                        <th>Unit Price</th>
+                                        <th>Amount</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="requisitionBody">
+                                    <tr>
+                                        
+                                        <td class="col-sm-1">
+                                            <label>1</label>
+                                            <input type="hidden" />
+                                        </td>
+
+                                        <td class="col-sm-1">
+                                        <input type="text" asp-for="ItemInputModel[0].ItemCode" />
+                                            
+                                        </td>
+                                        <td>
+                                            <input type="text" asp-for="ItemInputModel[0].Descrip"/>
+                                                                                    
+                                        </td>
+                                        <td>
+                                            <input type="text"asp-for="ItemInputModel[0].Quantity" />
+                                            
+                                        </td>
+                                        <td>
+                                            <input type="text" asp-for="ItemInputModel[0].Unit"/>
+                                     
+                                        </td>
+                                        <td>
+                                            <input type="text" asp-for="ItemInputModel[0].SuppId"/>
+                                            
+                                        </td>
+                                        <td>
+                                        <input type="text" asp-for="ItemInputModel[0].SuppName" />
+                                           
+                                        </td>
+                                        <td>
+                                            <input type="text" asp-for="ItemInputModel[0].UnitPrice"/>
+                                            
+                                        </td>
+                                        <td>
+                                            <input type="text" asp-for="ItemInputModel[0].Amount" />
+                                            
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                            <input type="hidden" id="lastIndex" value="0" />
+                            <div class="form-group">
+                                <div class="row">
+                                    <div class="col-sm-3"> </div>
+                                    <div class="col-sm-6 text-center">
+                                        <button id="btnMore" class="btn btn-outline-primary">New Item</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="col-sm-7">
+                            <div class="form-group">
+                                <label>Purpose : </label>
+                                <textarea class="form-control" rows="6" placeholder=""></textarea>
+                            </div>
+                        </div>
+                        <div class="col-sm-5">
+                            <div class="row">
+                                <div class="col-sm-6">
+                                    <label>Prepared By : </label>
+                                    <input class="form-control" rows="6" placeholder="" />
+                                    
+                                </div>
+                                <div class="col-sm-6">
+                                    <label>For : </label>
+                                    <input class="form-control" rows="6" placeholder="" />
+
+                                </div>
+                                <div class="col-sm-6">
+                                    <label>Rank : </label>
+                                    <input class="form-control" rows="6" placeholder="" />
+
+                                </div>
+
+                            </div>
+                        </div>
+
+
+                        <div class="col-sm-4">
+                            <div class="form-group">
+                                <input class="custom-file" value="Add Attachment" type="file" />
+                            </div>
+                        </div>
+                        <div class="col-sm-4">
+                        </div>
+                        @*<div class="col-sm-4">
+                            <div class="form-group">
+                                <input class="btn btn-block btn-danger fa-print" value="Print" type="button" placeholder="Enter Resgistration Number" />
+                            </div>
+                        </div>*@
+                    </div>
+                    <div class="modal-footer justify-content-center">
+                        @*  <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>*@
+                        <input class="btn btn-lg btn-primary" value="Save" type="button" placeholder="" />
+
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+
+
+<script>
+
+
+      $('#btnMore').on('click', function (event) {
+            event.preventDefault;
+            var lastIndex = $('#lastIndex').val();
+            var newIndex = Number(lastIndex) + 1;
+
+            newStepRow(newIndex);
+            $('#lastIndex').val(newIndex);
+            return false;
+        });
+    function newStepRow(index) {
+            //var html = ' <tr> <td>' + (Number(index) + 1) + ' <input type="hidden" id="InputModel_' + index + '__Step" name="InputModel[' + index + '].Step" value="' + (Number(index) + 1) + '" /></td > <td>' +
+            //    '<input type="text" class="form-control"  id="InputModel_' + index + '__Description" name="InputModel[' + index + '].Description" value=""/></td>' +
+            //    '<td><input type="checkbox" class="checkbox" data-val="true" data-val-required="The Assign field is required." id="InputModel_' + index + '__Assign" name="InputModel[' + index + '].Assign" value="true" /></td>' +
+            //    '<td><input type="hidden" class="staffIdInput staffIdInput' + index + '" id="InputModel_' + index + '__StaffId" name="InputModel[' + index + '].StaffId" value="" />' +
+            //    '<input type="text" sIndex="' + index + '" class="staffCodeInput staffCodeInput' + index + ' form-control" id="InputModel_' + index + '__StaffCode" name="InputModel[' + index + '].StaffCode" value="" /></td>' +
+            //    '<td><input type="text" readonly="readonly" class="staffNameInput staffNameInput' + index + '" id="InputModel_' + index + '__StaffName" name="InputModel[' + index + '].StaffName" value="" /></td>' +
+            //    '<td><input type="hidden" class="AltstaffIdInput AltStaffIdInput' + index + ' id="InputModel_' + index + '__AlternativeStaffId" name="InputModel[' + index + '].AlternativeStaffId" value="">'+
+            //    '<input type="text" sindex="' + index + '" class="AltstaffCodeInput AltStaffCodeInput' + index + ' form-control" id="InputModel_' + index + '__AlternativeStaffCode" name="InputModel[' + index + '].AlternativeStaffCode" value=""></td>'+
+            //    '<td><input type="text" readonly="readonly" class="AltStaffNameInput AltStaffNameInput' + index + '" id="InputModel_' + index + '__AlternativeStaffName" name="InputModel[' + index + '].AlternativeStaffName" value=""></td></tr > ';
+
+
+        var html = '<tr><td class="col-sm-1"><label>' + (Number(index) + 1) + ' </label><input type="hidden"></td>' +
+            '<td class="col-sm-1"><input type="text" id="ItemInputModel_' + index + '__ItemCode" name="ItemInputModel[' + index + '].ItemCode" value=""></td>' +
+            '<td><input type="text" id="ItemInputModel_' + index + '__Descrip" name="ItemInputModel[' + index + '].Descrip" value=""></td>' +
+            '<td><input type="text" id="ItemInputModel_' + index + '__Quantity" name="ItemInputModel[' + index + '].Quantity" value=""></td>' +
+            '<td><input type="text" id="ItemInputModel_' + index + '__Unit" name="ItemInputModel[' + index + '].Unit" value=""></td>' +
+            '<td><input type="text" id="ItemInputModel_' + index + '__SuppId" name="ItemInputModel[' + index + '].SuppId" value=""></td>' +
+            '<td><input type="text" id="ItemInputModel_' + index + '__SuppName" name="ItemInputModel[' + index + '].SuppName" value=""></td>' +
+            '<td><input type="text" id="ItemInputModel_' + index + '__UnitPrice" name="ItemInputModel[' + index + '].UnitPrice" value=""></td>' +
+            '<td><input type="text" id="ItemInputModel_' + index + '__Amount" name="ItemInputModel[' + index + '].Amount" value=""></td></tr> ';
+
+
+            $('#requisitionBody').append(html);
+        }
+</script>
