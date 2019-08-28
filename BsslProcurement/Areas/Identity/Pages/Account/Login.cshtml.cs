@@ -10,6 +10,7 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.Extensions.Logging;
+using DcProcurement.Contexts;
 
 namespace BsslProcurement.Areas.Identity.Pages.Account
 {
@@ -18,11 +19,13 @@ namespace BsslProcurement.Areas.Identity.Pages.Account
     {
         private readonly SignInManager<User> _signInManager;
         private readonly ILogger<LoginModel> _logger;
+        private readonly BSSLSYS_ITF_DEMOContext _bsslContext;
 
-        public LoginModel(SignInManager<User> signInManager, ILogger<LoginModel> logger)
+        public LoginModel(SignInManager<User> signInManager, ILogger<LoginModel> logger, BSSLSYS_ITF_DEMOContext bsslContext)
         {
             _signInManager = signInManager;
             _logger = logger;
+            _bsslContext = bsslContext;
         }
 
         [BindProperty]
@@ -38,7 +41,7 @@ namespace BsslProcurement.Areas.Identity.Pages.Account
         public class InputModel
         {
             [Required]
-            [EmailAddress]
+           // [EmailAddress]
             public string Email { get; set; }
 
             [Required]
@@ -74,6 +77,19 @@ namespace BsslProcurement.Areas.Identity.Pages.Account
             {
                 // This doesn't count login failures towards account lockout
                 // To enable password failures to trigger account lockout, set lockoutOnFailure: true
+
+                var staff = _bsslContext.Useracct.FirstOrDefault(x => x.Userid == Input.Email && x.Pwd == Input.Password);
+                if (staff == null )
+                {
+                    ModelState.AddModelError(string.Empty, "Invalid login attempt.");
+                    return Page();
+                }
+                else if(!(bool)staff.Procurement)
+                {
+                    ModelState.AddModelError(string.Empty, "You are not authorized to view procurement");
+                    return Page();
+                }
+
                 var result = await _signInManager.PasswordSignInAsync(Input.Email, Input.Password, Input.RememberMe, lockoutOnFailure: true);
                 if (result.Succeeded)
                 {
