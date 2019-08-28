@@ -14,6 +14,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.DependencyInjection.Extensions;
+using Swashbuckle.AspNetCore.Swagger;
 
 namespace BsslProcurement
 {
@@ -48,7 +49,7 @@ namespace BsslProcurement
             if (Env.IsDevelopment())
             {
                 connection = @"Server=.\sqlexpress;Database=DcProcurement;Trusted_Connection=True;ConnectRetryCount=0";
-                conn = @"Server =.\SQLExpress; Database = BSSLSYS_ITF_DEMO; Trusted_Connection = True;";
+                conn = @"Server =.\SQLExpress; Database = BSSLSYS_ITF; Trusted_Connection = True;";
             }
             else
             {
@@ -56,7 +57,8 @@ namespace BsslProcurement
                   Trusted_Connection=True;ConnectRetryCount=0;MultipleActiveResultSets=true";
 
                 //TODO:update to server connection
-                conn = "";
+                conn = @"Data Source=WIN2016\BSSLDATAENGIN;Initial Catalog=BSSLSYS_ITFDEMO;User ID=sa;Password=Bssl2019**;Integrated Security=False;
+                  Trusted_Connection=True;ConnectRetryCount=0;MultipleActiveResultSets=true";
             }
 
             services.AddDbContext<ProcurementDBContext> (options => options.UseSqlServer(connection, b => b.MigrationsAssembly("BsslProcurement")));
@@ -102,6 +104,11 @@ namespace BsslProcurement
                 //"abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789-._@+";
                 options.User.RequireUniqueEmail = true;
             });
+
+            services.AddSwaggerGen(c =>
+            {
+                c.SwaggerDoc("v1", new Info { Title = "Procurement API Docs", Version = "v1" });
+            });
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -119,6 +126,15 @@ namespace BsslProcurement
             app.UseHsts();
             //}
 
+            // Enable middleware to serve generated Swagger as a JSON endpoint.
+            app.UseSwagger();
+
+            // Enable middleware to serve swagger-ui (HTML, JS, CSS, etc.), 
+            // specifying the Swagger JSON endpoint.
+            app.UseSwaggerUI(c =>
+            {
+                c.SwaggerEndpoint("/swagger/v1/swagger.json", "My API V1");
+            });
             app.UseHttpsRedirection();
             app.UseStaticFiles();
             app.UseCookiePolicy();
