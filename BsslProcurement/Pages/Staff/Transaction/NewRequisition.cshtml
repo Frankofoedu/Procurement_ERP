@@ -212,7 +212,7 @@
 
 
                                     </div>
-                                    <div class="col-sm-6">
+                                    <div class="col-sm-12">
                                         <label>Rank : </label>
                                         <span class="d-flex flex-row">
                                             <input class="form-control" id="txtpreparedRank" rows="6" placeholder="" />
@@ -230,7 +230,7 @@
                                         </span>
 
                                     </div>
-                                    <div class="col-sm-6">
+                                    <div class="col-sm-12">
                                         <label>Rank : </label>
                                         <span class="d-flex flex-row">
                                             <input class="form-control" id="forStaffTextRank" rows="6" placeholder="" />
@@ -321,9 +321,7 @@
                         txtToAssign.val($(this).val());
 
                         //assign staff rank textbox
-                        var s = '#' + $(this).val();
-                        var rank = $().val(s);
-                        txtRankToAssign.val(rank);
+                        txtRankToAssign.val($(this).attr('staffrank'));
 
                        //$('#forStaffText').val();
                         $('#staffModal').modal("hide");

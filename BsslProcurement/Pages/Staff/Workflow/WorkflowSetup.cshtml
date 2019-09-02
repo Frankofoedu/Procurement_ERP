@@ -56,12 +56,12 @@
 
 
 <div class="row mt-5">
-    <div class="col-md-12">
+    @*<div class="col-md-12">
         <form method="post" class="panel panel-login">
             <div class="panel-heading">
                 <div class="row">
                     <p class="header-text">Add New <span class="workflowType">Prequalification</span> Workflow</p>
-                    <input id="CategoryId" type="hidden" asp-for="CategoryId"/>
+                    <input id="CategoryId" type="hidden" asp-for="CategoryId" />
                 </div>
                 <hr>
             </div>
@@ -103,27 +103,27 @@
                         {
                             for (int i = 0; i < 1; i++)
                             {
-                        <tr>
-                            <td>@(i + 1) <input type="hidden" asp-for="InputModel[i].Step" value="@(i+1)" /></td>
-                            <td><input type="text" asp-for="InputModel[i].Description" class="form-control" /></td>
-                            <td><select asp-for="InputModel[i].WorkflowActionId" class="form-control @("selectAction" + i)"></select></td>
-                            <td><input type="number" asp-for="InputModel[i].Threshold" class="form-control" /></td>
-                            <td><input type="checkbox" asp-for="InputModel[i].Assign" class="checkbox" /></td>
-                            <td>
-                                <input type="hidden" class="staffIdInput @("staffIdInput" + i)" asp-for="InputModel[i].StaffId" />
-                                <input type="text" sIndex="@i" class="staffCodeInput @("staffCodeInput" + i) form-control" asp-for="InputModel[i].StaffCode" />
-                            </td>
-                            <td>
-                                <input type="text" readonly="readonly" class="staffNameInput @("staffNameInput" + i)" asp-for="InputModel[i].StaffName" />
-                            </td>
-                            <td>
-                                <input type="hidden" class="AltStaffIdInput @("AltStaffIdInput" + i)" asp-for="InputModel[i].AlternativeStaffId" />
-                                <input type="text" sIndex="@i" class="AltStaffCodeInput @("AltStaffCodeInput" + i) form-control" asp-for="InputModel[i].AlternativeStaffCode" />
-                            </td>
-                            <td>
-                                <input type="text" readonly="readonly" class="AltStaffNameInput @("AltStaffNameInput" + i)" asp-for="InputModel[i].AlternativeStaffName" />
-                            </td>
-                        </tr>
+                                <tr>
+                                    <td>@(i + 1) <input type="hidden" asp-for="InputModel[i].Step" value="@(i+1)" /></td>
+                                    <td><input type="text" asp-for="InputModel[i].Description" class="form-control" /></td>
+                                    <td><select asp-for="InputModel[i].WorkflowActionId" class="form-control @("selectAction" + i)"></select></td>
+                                    <td><input type="number" asp-for="InputModel[i].Threshold" class="form-control" /></td>
+                                    <td><input type="checkbox" asp-for="InputModel[i].Assign" class="checkbox" /></td>
+                                    <td>
+                                        <input type="hidden" class="staffIdInput @("staffIdInput" + i)" asp-for="InputModel[i].StaffId" />
+                                        <input type="text" sIndex="@i" class="staffCodeInput @("staffCodeInput" + i) form-control" asp-for="InputModel[i].StaffCode" />
+                                    </td>
+                                    <td>
+                                        <input type="text" readonly="readonly" class="staffNameInput @("staffNameInput" + i)" asp-for="InputModel[i].StaffName" />
+                                    </td>
+                                    <td>
+                                        <input type="hidden" class="AltStaffIdInput @("AltStaffIdInput" + i)" asp-for="InputModel[i].AlternativeStaffId" />
+                                        <input type="text" sIndex="@i" class="AltStaffCodeInput @("AltStaffCodeInput" + i) form-control" asp-for="InputModel[i].AlternativeStaffCode" />
+                                    </td>
+                                    <td>
+                                        <input type="text" readonly="readonly" class="AltStaffNameInput @("AltStaffNameInput" + i)" asp-for="InputModel[i].AlternativeStaffName" />
+                                    </td>
+                                </tr>
                             }
                         }
                         else
@@ -132,28 +132,28 @@
                             {
                                 var item = Model.InputModel[i];
 
-                    <tr>
-                        <td>@(i + 1) <input type="hidden" asp-for="InputModel[i].Step" value="@item.Step" /></td>
-                        <td><input type="text" asp-for="InputModel[i].Description" value="@item.Description" class="form-control" /></td>
-                        <td><select asp-for="InputModel[i].WorkflowActionId" class="form-control @("selectAction" + i)"></select></td>
-                        <td><input type="number" asp-for="InputModel[i].Threshold" class="form-control" /></td>
-                        <td><input type="checkbox" asp-for="InputModel[i].Assign" class="checkbox" /></td>
+                                <tr>
+                                    <td>@(i + 1) <input type="hidden" asp-for="InputModel[i].Step" value="@item.Step" /></td>
+                                    <td><input type="text" asp-for="InputModel[i].Description" value="@item.Description" class="form-control" /></td>
+                                    <td><select asp-for="InputModel[i].WorkflowActionId" class="form-control @("selectAction" + i)"></select></td>
+                                    <td><input type="number" asp-for="InputModel[i].Threshold" class="form-control" /></td>
+                                    <td><input type="checkbox" asp-for="InputModel[i].Assign" class="checkbox" /></td>
 
-                        <td>
-                            <input type="hidden" class="staffIdInput @("staffIdInput" + i)" asp-for="InputModel[i].StaffId" value="@item.StaffId" />
-                            <input type="text" sIndex="@i" class="staffCodeInput @("staffCodeInput" + i) form-control" asp-for="InputModel[i].StaffCode" value="@item.StaffCode" />
-                        </td>
-                        <td>
-                            <input type="text" readonly="readonly" class="staffNameInput @("staffNameInput" + i)" asp-for="InputModel[i].StaffName" value="@item.StaffName" />
-                        </td>
-                        <td>
-                            <input type="hidden" class="AltStaffIdInput @("AltStaffIdInput" + i)" asp-for="InputModel[i].AlternativeStaffId" value="@item.AlternativeStaffId" />
-                            <input type="text" sIndex="@i" class="AltStaffCodeInput @("AltStaffCodeInput" + i) form-control" asp-for="InputModel[i].AlternativeStaffCode" value="@item.AlternativeStaffCode" />
-                        </td>
-                        <td>
-                            <input type="text" readonly="readonly" class="AltStaffNameInput @("AltStaffNameInput" + i)" asp-for="InputModel[i].AlternativeStaffName" value="@item.AlternativeStaffName" />
-                        </td>
-                    </tr>
+                                    <td>
+                                        <input type="hidden" class="staffIdInput @("staffIdInput" + i)" asp-for="InputModel[i].StaffId" value="@item.StaffId" />
+                                        <input type="text" sIndex="@i" class="staffCodeInput @("staffCodeInput" + i) form-control" asp-for="InputModel[i].StaffCode" value="@item.StaffCode" />
+                                    </td>
+                                    <td>
+                                        <input type="text" readonly="readonly" class="staffNameInput @("staffNameInput" + i)" asp-for="InputModel[i].StaffName" value="@item.StaffName" />
+                                    </td>
+                                    <td>
+                                        <input type="hidden" class="AltStaffIdInput @("AltStaffIdInput" + i)" asp-for="InputModel[i].AlternativeStaffId" value="@item.AlternativeStaffId" />
+                                        <input type="text" sIndex="@i" class="AltStaffCodeInput @("AltStaffCodeInput" + i) form-control" asp-for="InputModel[i].AlternativeStaffCode" value="@item.AlternativeStaffCode" />
+                                    </td>
+                                    <td>
+                                        <input type="text" readonly="readonly" class="AltStaffNameInput @("AltStaffNameInput" + i)" asp-for="InputModel[i].AlternativeStaffName" value="@item.AlternativeStaffName" />
+                                    </td>
+                                </tr>
                             }
                         }
                     </tbody>
@@ -172,8 +172,156 @@
                 </div>
             </div>
         </form>
+    </div>*@
+</div>
+
+
+<div class="row mt-5">
+    <div class="col-md-12">
+        <form method="post" class="panel panel-login">
+            <div class="panel-heading">
+                <div class="row">
+                    <p class="header-text">Add New <span class="workflowType">Prequalification</span> Workflow</p>
+                    <input id="CategoryId" type="hidden" asp-for="CategoryId" />
+                </div>
+                <hr>
+            </div>
+
+            @if (!string.IsNullOrWhiteSpace(Model.Message))
+            {
+                <div class="alert alert-success alert-dismissable fade show">
+                    <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                    @Model.Message
+                </div>
+            }
+            @if (!string.IsNullOrWhiteSpace(Model.Error))
+            {
+                <div class="alert alert-danger alert-dismissable fade show">
+                    <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                    @Model.Error
+                </div>
+            }
+
+            <div asp-validation-summary="All" class="text-danger"></div>
+
+            <div id="workflowCards" class="row justify-content-center">
+
+                @for (int i = 0; i < 1; i++)
+                {
+                    <div class="col-md-6">
+                        <div class="card mt-3">
+                            <div class="card-header">
+                                <h2>Step @(i + 1) <input type="hidden" asp-for="InputModel[i].Step" value="@(i + 1)" /></h2>
+                            </div>
+                            <div class="card-body">
+                                <div class="form-group">
+                                    <div class="row">
+                                        <div class="col-sm-3 text-right">
+                                            <label>Description</label>
+                                        </div>
+                                        <div class="col-sm-9">
+                                            <input type="text" asp-for="InputModel[i].Description" class="form-control" />
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <div class="row">
+                                        <div class="col-sm-3 text-right">
+                                            <label>Action</label>
+                                        </div>
+                                        <div class="col-sm-9">
+                                            <select asp-for="InputModel[i].WorkflowActionId" class="form-control @("selectAction" + i)"></select>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <div class="row">
+                                        <div class="col-sm-3 text-right">
+                                            <label>Threshold</label>
+                                        </div>
+                                        <div class="col-sm-9">
+                                            <input type="number" asp-for="InputModel[i].Threshold" class="form-control" />
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <div class="row">
+                                        <div class="col-sm-3 text-right">
+                                            <label>For Specific Staff</label>
+                                        </div>
+                                        <div class="col-sm-9">
+                                            <input type="checkbox" asp-for="InputModel[i].Assign" class="checkbox" />
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <div class="row">
+                                        <div class="col-sm-3 text-right">
+                                            <label>Staff Code</label>
+                                        </div>
+                                        <div class="col-sm-9">
+                                            <input type="hidden" class="staffIdInput @("staffIdInput" + i)" asp-for="InputModel[i].StaffId" />
+                                            <input type="text" sIndex="@i" class="staffCodeInput @("staffCodeInput" + i) form-control" asp-for="InputModel[i].StaffCode" />
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <div class="row">
+                                        <div class="col-sm-3 text-right">
+                                            <label>Staff Name</label>
+                                        </div>
+                                        <div class="col-sm-9">
+                                            <input type="text" readonly="readonly" class="staffNameInput @("staffNameInput" + i)" asp-for="InputModel[i].StaffName" />
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <div class="row">
+                                        <div class="col-sm-3 text-right">
+                                            <label>Alt. Staff Code</label>
+                                        </div>
+                                        <div class="col-sm-9">
+                                            <input type="hidden" class="AltStaffIdInput @("AltStaffIdInput" + i)" asp-for="InputModel[i].AlternativeStaffId" />
+                                            <input type="text" sIndex="@i" class="AltStaffCodeInput @("AltStaffCodeInput" + i) form-control" asp-for="InputModel[i].AlternativeStaffCode" />
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <div class="row">
+                                        <div class="col-sm-3 text-right">
+                                            <label>Alt. Staff Name</label>
+                                        </div>
+                                        <div class="col-sm-9">
+                                            <input type="text" readonly="readonly" class="AltStaffNameInput @("AltStaffNameInput" + i)" asp-for="InputModel[i].AlternativeStaffName" />
+                                        </div>
+                                    </div>
+                                </div>
+
+                            </div>
+                        </div>
+                    </div>
+                }
+            </div>
+
+
+            <div class="mt-3">
+                <input type="hidden" id="lastIndex" value="0" />
+                <div class="form-group card">
+                    <div class="row">
+                        <div class="col-sm-3"> </div>
+                        <div class="col-sm-6 text-center">
+                            <button id="btnNewCard" class="btn btn-outline-primary">New Step</button>
+                            <button type="submit" class="btnSubmit btn btn-primary ml-sm-2">Save</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </form>
     </div>
 </div>
+
+
+
 
 @section Scripts {
     @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
@@ -183,7 +331,7 @@
 
 <script>
     var arrayOfWorkflowActions = JSON.parse('@Json.Serialize(Model.WorkflowActions)');
-    
+
     function MakeActionsOptions(index) {
         for (var i = 0; i < arrayOfWorkflowActions.length; i++) {
             var o = new Option(arrayOfWorkflowActions[i].name, arrayOfWorkflowActions[i].id);
@@ -195,7 +343,7 @@
     }
 
     $(document).ready(function () {
-        
+
         fetchWorkflows();
         MakeActionsOptions(0);
 
@@ -262,8 +410,8 @@
             return html;
         }
 
-        
-        $('#btnMore').on('click', function (event) {
+
+        $('#btnNewCard').on('click', function (event) {
             event.preventDefault;
             var lastIndex = $('#lastIndex').val();
             var newIndex = Number(lastIndex) + 1;
@@ -274,8 +422,24 @@
             $('#lastIndex').val(newIndex);
             return false;
         });
-
+        
         function newStepRow(index) {
+            var html = '<div class="col-md-6"> <div class="card mt-3"> <div class="card-header"> <h2>Step ' + (Number(index) + 1) + ' <input type="hidden" id="InputModel_' + index + '__Step" name="InputModel[' + index + '].Step" value="' + (Number(index) + 1) + '" /></h2></div>' +
+                '<div class="card-body"> <div class="form-group"> <div class="row"> <div class="col-sm-3 text-right"> <label>Description</label> </div> <div class="col-sm-9"> <input type="text" class="form-control"  id="InputModel_' + index + '__Description" name="InputModel[' + index + '].Description" value=""/> </div> </div> </div>' +
+                '<div class="form-group"> <div class="row"> <div class="col-sm-3 text-right"> <label>Action</label> </div> <div class="col-sm-9"><select id="InputModel_' + index + '__WorkflowActionId" name="InputModel[' + index + '].WorkflowActionId" class="form-control selectAction' + index + '"></select> </div> </div> </div>' +
+                '<div class="form-group"> <div class="row"> <div class="col-sm-3 text-right"> <label>Threshold</label> </div> <div class="col-sm-9"> <input type="number" id="InputModel_' + index + '__Threshold" name="InputModel[' + index + '].Threshold" class="form-control" /> </div> </div> </div>' +
+                '<div class="form-group"> <div class="row"> <div class="col-sm-3 text-right"> <label>For Specific Staff</label> </div> <div class="col-sm-9"> <input type="checkbox" class="checkbox" data-val="true" data-val-required="The Assign field is required." id="InputModel_' + index + '__Assign" name="InputModel[' + index + '].Assign" value="true" /> </div> </div> </div>' +
+                '<div class="form-group"> <div class="row"> <div class="col-sm-3 text-right"> <label>Staff Code</label> </div> <div class="col-sm-9"> <input type="hidden" class="staffIdInput staffIdInput' + index + '" id="InputModel_' + index + '__StaffId" name="InputModel[' + index + '].StaffId" value="" />' +
+                '<input type="text" sIndex="' + index + '" class="staffCodeInput staffCodeInput' + index + ' form-control" id="InputModel_' + index + '__StaffCode" name="InputModel[' + index + '].StaffCode" value="" /> </div> </div> </div>' +
+                '<div class="form-group"> <div class="row"> <div class="col-sm-3 text-right"> <label>Staff Name</label> </div> <div class="col-sm-9"> <input type="text" readonly="readonly" class="staffNameInput staffNameInput' + index + '" id="InputModel_' + index + '__StaffName" name="InputModel[' + index + '].StaffName" value="" /> </div> </div> </div>' +
+                '<div class="form-group"> <div class="row"> <div class="col-sm-3 text-right"> <label>Alt. Staff Code</label> </div> <div class="col-sm-9"> <input type="hidden" class="AltstaffIdInput AltStaffIdInput' + index + ' id="InputModel_' + index + '__AlternativeStaffId" name="InputModel[' + index + '].AlternativeStaffId" value="">'+
+                '<input type="text" sindex="' + index + '" class="AltstaffCodeInput AltStaffCodeInput' + index + ' form-control" id="InputModel_' + index + '__AlternativeStaffCode" name="InputModel[' + index + '].AlternativeStaffCode" value=""> </div> </div> </div>'+
+                '<div class="form-group"> <div class="row"> <div class="col-sm-3 text-right"> <label>Alt. Staff Name</label> </div> <div class="col-sm-9"> <input type="text" readonly="readonly" class="AltStaffNameInput AltStaffNameInput' + index + '" id="InputModel_' + index + '__AlternativeStaffName" name="InputModel[' + index + '].AlternativeStaffName" value=""> </div> </div> </div> </div> </div> </div> ';
+
+            $('#workflowCards').append(html);
+        }
+
+        function newStepRo(index) {
             var html = ' <tr> <td>' + (Number(index) + 1) + ' <input type="hidden" id="InputModel_' + index + '__Step" name="InputModel[' + index + '].Step" value="' + (Number(index) + 1) + '" /></td > <td>' +
                 '<input type="text" class="form-control"  id="InputModel_' + index + '__Description" name="InputModel[' + index + '].Description" value=""/></td>' +
                 '<td><select id="InputModel_' + index + '__WorkflowActionId" name="InputModel[' + index + '].WorkflowActionId" class="form-control selectAction' + index + '"></select></td>' +
@@ -290,7 +454,7 @@
 
             $('#workflowTbody').append(html);
         }
-        
+
         $('#workflowTbody').on('change', '.staffCodeInput', function () {
 
             var code = this.value;
