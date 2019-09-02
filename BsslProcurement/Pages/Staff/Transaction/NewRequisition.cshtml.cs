@@ -3,14 +3,18 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using DcProcurement.Contexts;
+using DcProcurement.ViewModels;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.AspNetCore.Mvc.Rendering;
+using Microsoft.AspNetCore.Mvc.ViewFeatures;
 
 namespace BsslProcurement.Pages.Staff.Transaction
 {
+   
     public class ItemViewModel
     {
         public string ItemCode { get; set; }
@@ -39,10 +43,16 @@ namespace BsslProcurement.Pages.Staff.Transaction
 
         [BindProperty]
         public List<ItemViewModel> ItemInputModel { get; set; }
+
+        //[BindProperty]
+        //public IFormFile File { get; set; }
+
         [BindProperty]
         public string  RequestingDept { get; set; }
+
         [BindProperty]
         public List<SelectListItem> Departments { get; set; }
+
         public NewRequisitionModel(UserManager<DcProcurement.User> userManager,
             BSSLSYS_ITF_DEMOContext bsslContext,
             DcProcurement.ProcurementDBContext procContext)
@@ -63,6 +73,25 @@ namespace BsslProcurement.Pages.Staff.Transaction
                 Error = $"An error occured. Please contact Support. {ex.Message}"; 
             }
 
+        }
+
+        public async Task OnPostAsync(List<IFormFile> files)
+        {
+            
+        }
+        public PartialViewResult OnGetStaffPartial()
+        {
+
+            //get all staff and thier ranks
+            var staffs = _bsslContext.Stafftab.Select(x => new StaffLayoutModel { Staff = x, Rank = _bsslContext.Codestab.Where(m => m.Option1 == "f4" && m.Code == x.Positionid).FirstOrDefault().Desc1 }).ToList();
+
+
+//           var  = _bsslContext.Stafftab.ToList();
+            return new PartialViewResult
+            {
+                ViewName = "_StaffLayout",
+                ViewData = new ViewDataDictionary<List<StaffLayoutModel>>(ViewData, staffs)
+            };
         }
 
         private async Task<(string,string, List<SelectListItem>)> GeneratePRNo()

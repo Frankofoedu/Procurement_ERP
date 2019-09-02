@@ -4,6 +4,34 @@
     ViewData["Title"] = "New Requisition";
 }
 
+@section Styles{
+
+    <link href="~/css/jquery.dataTables.min.css" rel="stylesheet" />
+    <link href="~/css/fileupload.css" rel="stylesheet" />
+    <link href="~/css/site.css" rel="stylesheet" />
+    <link href="~/css/quill.snow.css" rel="stylesheet" />
+    <style>
+        .custom-file-container {
+            max-width: 400px;
+            margin: 0 auto;
+        }
+
+        .loader {
+            border: 16px solid #f3f3f3;
+            border-top: 16px solid #3498db;
+            border-radius: 50%;
+            width: 120px;
+            height: 120px;
+            -webkit-animation: spin 2s linear infinite;
+            animation: spin 2s linear infinite;
+        }
+        @@keyframes spin{
+            0% {transform : rotate(0deg);}
+            100% {transform: rotate(360deg);}
+        }
+    </style>
+}
+
 @if (!string.IsNullOrWhiteSpace(Model.Message))
 {
     <div class="alert alert-success alert-dismissable fade show">
@@ -22,7 +50,7 @@
 <div class="row mt-5">
     <div class="col-md-1"></div>
     <div class="col-md-11">
-        <form class="panel panel-login">
+        <form class="panel panel-login" method="post" enctype="multipart/form-data">
             <div class="panel-heading">
                 <div class="row">
                     <p class="header-text">New Purchase Requisition</p>
@@ -103,43 +131,43 @@
                                 </thead>
                                 <tbody id="requisitionBody">
                                     <tr>
-                                        
+
                                         <td class="col-sm-1">
                                             <label>1</label>
                                             <input type="hidden" />
                                         </td>
 
                                         <td class="col-sm-1">
-                                        <input type="text" asp-for="ItemInputModel[0].ItemCode" />
-                                            
+                                            <input type="text" asp-for="ItemInputModel[0].ItemCode" />
+
                                         </td>
                                         <td>
-                                            <input type="text" asp-for="ItemInputModel[0].Descrip"/>
-                                                                                    
+                                            <input type="text" asp-for="ItemInputModel[0].Descrip" />
+
                                         </td>
                                         <td>
-                                            <input type="text"asp-for="ItemInputModel[0].Quantity" />
-                                            
+                                            <input type="text" asp-for="ItemInputModel[0].Quantity" />
+
                                         </td>
                                         <td>
-                                            <input type="text" asp-for="ItemInputModel[0].Unit"/>
-                                     
+                                            <input type="text" asp-for="ItemInputModel[0].Unit" />
+
                                         </td>
                                         <td>
-                                            <input type="text" asp-for="ItemInputModel[0].SuppId"/>
-                                            
+                                            <input type="text" asp-for="ItemInputModel[0].SuppId" />
+
                                         </td>
                                         <td>
-                                        <input type="text" asp-for="ItemInputModel[0].SuppName" />
-                                           
+                                            <input type="text" asp-for="ItemInputModel[0].SuppName" />
+
                                         </td>
                                         <td>
-                                            <input type="text" asp-for="ItemInputModel[0].UnitPrice"/>
-                                            
+                                            <input type="text" asp-for="ItemInputModel[0].UnitPrice" />
+
                                         </td>
                                         <td>
                                             <input type="text" asp-for="ItemInputModel[0].Amount" />
-                                            
+
                                         </td>
                                     </tr>
                                 </tbody>
@@ -155,50 +183,90 @@
                             </div>
                         </div>
 
+
                         <div class="col-sm-7">
-                            <div class="form-group">
-                                <label>Purpose : </label>
-                                <textarea class="form-control" rows="6" placeholder=""></textarea>
+
+                            <div class="custom-file-container" data-upload-id="myUniqueUploadId">
+                                <label>
+                                    Attach Multiple Files <a href="javascript:void(0)" class="custom-file-container__image-clear"
+                                                             title="Clear Image">&times;</a>
+                                </label>
+                                <label class="custom-file-container__custom-file">
+                                    <input type="file" name="files" class="custom-file-container__custom-file__custom-file-input" accept="*" multiple
+                                           aria-label="Choose File">
+                                    <input type="hidden" name="MAX_FILE_SIZE" value="10485760" />
+                                    <span class="custom-file-container__custom-file__custom-file-control"></span>
+                                </label>
+                                <div class="custom-file-container__image-preview"></div>
                             </div>
+
                         </div>
+
                         <div class="col-sm-5">
                             <div class="row">
-                                <div class="col-sm-6">
-                                    <label>Prepared By : </label>
-                                    <input class="form-control" rows="6" placeholder="" />
-                                    
-                                </div>
-                                <div class="col-sm-6">
-                                    <label>For : </label>
-                                    <input class="form-control" rows="6" placeholder="" />
+                                <div class="my-2">
+                                    <div class="col-sm-12">
+                                        <label>Prepared By : </label>
+                                        <span class="d-flex flex-row">
+                                            <input id="txtprepared" class="form-control" disabled rows="6" placeholder="" />
+                                            <button class="btn loadStaffModal" value="txtprepared" data-toggle="modal" data-target="#staffModal"><i class="fa fa-search"></i></button>
 
-                                </div>
-                                <div class="col-sm-6">
-                                    <label>Rank : </label>
-                                    <input class="form-control" rows="6" placeholder="" />
+                                        </span>
 
+
+                                    </div>
+                                    <div class="col-sm-6">
+                                        <label>Rank : </label>
+                                        <span class="d-flex flex-row">
+                                            <input class="form-control" id="txtpreparedRank" rows="6" placeholder="" />
+                                        </span>
+
+                                    </div>
+                                </div>
+                                <div class="my-2">
+                                    <div class="col-sm-12">
+                                        <label>For : </label>
+                                        <span class="d-flex flex-row">
+                                            <input class="form-control"  disabled id="forStaffText" rows="6" placeholder="" />
+                                            <button class="btn loadStaffModal" value="forStaffText" data-toggle="modal" data-target="#staffModal"><i class="fa fa-search"></i></button>
+
+                                        </span>
+
+                                    </div>
+                                    <div class="col-sm-6">
+                                        <label>Rank : </label>
+                                        <span class="d-flex flex-row">
+                                            <input class="form-control" id="forStaffTextRank" rows="6" placeholder="" />
+                                        </span>
+
+                                    </div>
                                 </div>
 
                             </div>
                         </div>
 
-
-                        <div class="col-sm-4">
+                        <div class="col-sm-12">
                             <div class="form-group">
-                                <input class="custom-file" value="Add Attachment" type="file" />
+                                <label>Purpose : </label>
+                                <div id="editor">
+                                    <p>hello world</p>
+                                    <p>Some intial<strong>bold</strong>text</p>
+                                    <p><br /></p>
+                                </div>
                             </div>
                         </div>
+
                         <div class="col-sm-4">
                         </div>
                         @*<div class="col-sm-4">
-                            <div class="form-group">
-                                <input class="btn btn-block btn-danger fa-print" value="Print" type="button" placeholder="Enter Resgistration Number" />
-                            </div>
-                        </div>*@
+                                <div class="form-group">
+                                    <input class="btn btn-block btn-danger fa-print" value="Print" type="button" placeholder="Enter Resgistration Number" />
+                                </div>
+                            </div>*@
                     </div>
                     <div class="modal-footer justify-content-center">
                         @*  <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>*@
-                        <input class="btn btn-lg btn-primary" value="Save" type="button" placeholder="" />
+                        <input class="btn btn-lg btn-primary" value="Save" type="submit" placeholder="" />
 
                     </div>
                 </div>
@@ -206,12 +274,73 @@
         </form>
     </div>
 </div>
+<div class="modal" id="staffModal">
+    <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title">Staff Details</h4>
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+            </div>
+            <div class="modal-body">
+                <div id="grid"></div>
+            </div>
+            <div id="spinner" class="d-flex justify-content-center">
+                <div class="loader">
+                </div>
+            </div>
+
+            <div class="modal-footer">
+                <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
 
 
-<script>
 
+@section Scripts{
+    <script src="~/js/fileUpload.js"></script>
+    <script src="~/js/quill.js"></script>
+    <script src="~/js/jquery.dataTables.min.js"></script>
+    
+    <script>
+        //to load staff modal
+        $(function () {
+            $('.loadStaffModal').on('click', function () {
+                $('#staffModal').modal("show");
 
-      $('#btnMore').on('click', function (event) {
+                //get staff name textbox
+                var txtToAssign = $('#' + $(this).val() + '');
+                //get staff rank textbox
+                
+                var txtRankToAssign = $('#' + $(this).val() + 'Rank');
+                $('#grid').load(this.baseURI + '?handler=StaffPartial', function () {
+                    $('#spinner').removeClass('d-flex');
+                    $('#spinner').hide();
+                    $('#staffTable').dataTable();
+
+                    $('.btnStaffName').on('click', function () {
+                        //assign staff name textbox
+                        txtToAssign.val($(this).val());
+
+                        //assign staff rank textbox
+                        var s = '#' + $(this).val();
+                        var rank = $().val(s);
+                        txtRankToAssign.val(rank);
+
+                       //$('#forStaffText').val();
+                        $('#staffModal').modal("hide");
+                        return false;
+                    });
+                });
+
+                return false;
+            });
+        });
+
+         //to attach multiple files in preview mode
+        var upload = new FileUploadWithPreview('myUniqueUploadId');
+        $('#btnMore').on('click', function (event) {
             event.preventDefault;
             var lastIndex = $('#lastIndex').val();
             var newIndex = Number(lastIndex) + 1;
@@ -220,7 +349,25 @@
             $('#lastIndex').val(newIndex);
             return false;
         });
-    function newStepRow(index) {
+
+        //to create a custom memo field/ textbox
+        var quill = new Quill('#editor', {
+            theme: 'snow'
+        });
+
+
+        //to attach multiple files in preview mode
+        var upload = new FileUploadWithPreview('myUniqueUploadId');
+        $('#btnMore').on('click', function (event) {
+            event.preventDefault;
+            var lastIndex = $('#lastIndex').val();
+            var newIndex = Number(lastIndex) + 1;
+
+            newStepRow(newIndex);
+            $('#lastIndex').val(newIndex);
+            return false;
+        });
+        function newStepRow(index) {
             //var html = ' <tr> <td>' + (Number(index) + 1) + ' <input type="hidden" id="InputModel_' + index + '__Step" name="InputModel[' + index + '].Step" value="' + (Number(index) + 1) + '" /></td > <td>' +
             //    '<input type="text" class="form-control"  id="InputModel_' + index + '__Description" name="InputModel[' + index + '].Description" value=""/></td>' +
             //    '<td><input type="checkbox" class="checkbox" data-val="true" data-val-required="The Assign field is required." id="InputModel_' + index + '__Assign" name="InputModel[' + index + '].Assign" value="true" /></td>' +
@@ -232,17 +379,19 @@
             //    '<td><input type="text" readonly="readonly" class="AltStaffNameInput AltStaffNameInput' + index + '" id="InputModel_' + index + '__AlternativeStaffName" name="InputModel[' + index + '].AlternativeStaffName" value=""></td></tr > ';
 
 
-        var html = '<tr><td class="col-sm-1"><label>' + (Number(index) + 1) + ' </label><input type="hidden"></td>' +
-            '<td class="col-sm-1"><input type="text" id="ItemInputModel_' + index + '__ItemCode" name="ItemInputModel[' + index + '].ItemCode" value=""></td>' +
-            '<td><input type="text" id="ItemInputModel_' + index + '__Descrip" name="ItemInputModel[' + index + '].Descrip" value=""></td>' +
-            '<td><input type="text" id="ItemInputModel_' + index + '__Quantity" name="ItemInputModel[' + index + '].Quantity" value=""></td>' +
-            '<td><input type="text" id="ItemInputModel_' + index + '__Unit" name="ItemInputModel[' + index + '].Unit" value=""></td>' +
-            '<td><input type="text" id="ItemInputModel_' + index + '__SuppId" name="ItemInputModel[' + index + '].SuppId" value=""></td>' +
-            '<td><input type="text" id="ItemInputModel_' + index + '__SuppName" name="ItemInputModel[' + index + '].SuppName" value=""></td>' +
-            '<td><input type="text" id="ItemInputModel_' + index + '__UnitPrice" name="ItemInputModel[' + index + '].UnitPrice" value=""></td>' +
-            '<td><input type="text" id="ItemInputModel_' + index + '__Amount" name="ItemInputModel[' + index + '].Amount" value=""></td></tr> ';
+            var html = '<tr><td class="col-sm-1"><label>' + (Number(index) + 1) + ' </label><input type="hidden"></td>' +
+                '<td class="col-sm-1"><input type="text" id="ItemInputModel_' + index + '__ItemCode" name="ItemInputModel[' + index + '].ItemCode" value=""></td>' +
+                '<td><input type="text" id="ItemInputModel_' + index + '__Descrip" name="ItemInputModel[' + index + '].Descrip" value=""></td>' +
+                '<td><input type="text" id="ItemInputModel_' + index + '__Quantity" name="ItemInputModel[' + index + '].Quantity" value=""></td>' +
+                '<td><input type="text" id="ItemInputModel_' + index + '__Unit" name="ItemInputModel[' + index + '].Unit" value=""></td>' +
+                '<td><input type="text" id="ItemInputModel_' + index + '__SuppId" name="ItemInputModel[' + index + '].SuppId" value=""></td>' +
+                '<td><input type="text" id="ItemInputModel_' + index + '__SuppName" name="ItemInputModel[' + index + '].SuppName" value=""></td>' +
+                '<td><input type="text" id="ItemInputModel_' + index + '__UnitPrice" name="ItemInputModel[' + index + '].UnitPrice" value=""></td>' +
+                '<td><input type="text" id="ItemInputModel_' + index + '__Amount" name="ItemInputModel[' + index + '].Amount" value=""></td></tr> ';
 
 
             $('#requisitionBody').append(html);
         }
-</script>
+    </script>
+
+}
