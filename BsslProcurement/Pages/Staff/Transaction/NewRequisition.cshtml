@@ -122,8 +122,7 @@
                                         <th>Store Item Code</th>
                                         <th>Description Of <br />Goods/Services</th>
                                         <th>Quantity</th>
-                                        <th>Unit</th>
-                                        <th>Supplier ID</th>
+                                        <th>Unit Of<br />Measurement</th>
                                         <th>Supplier Name</th>
                                         <th>Unit Price</th>
                                         <th>Amount</th>
@@ -154,11 +153,9 @@
 
                                         </td>
                                         <td>
-                                            <input type="text" asp-for="ItemInputModel[0].SuppId" />
-
-                                        </td>
-                                        <td>
                                             <input type="text" asp-for="ItemInputModel[0].SuppName" />
+                                            <button class="btn loadStaffModal" value="forStaffText" data-toggle="modal" data-target="#staffModal"><i class="fa fa-search"></i></button>
+
 
                                         </td>
                                         <td>
