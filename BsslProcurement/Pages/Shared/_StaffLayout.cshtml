@@ -1,0 +1,40 @@
+﻿@*
+    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
+*@
+@using DcProcurement.ViewModels
+@model List<StaffLayoutModel>
+@{
+}
+@section Styles{
+}
+<table id="staffTable" class="table table-striped">
+    <thead>
+        <tr>
+            <th>StaffId</th>
+            <th>Surname</th>
+            <th>Other Names</th>
+            <th>Dept Code</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var staff in Model)
+        {
+            <tr>
+                <td>
+                    <input type="hidden" id="@staff.Staff.Othernames" value="@staff.Rank" />
+                    <button class="btn btn-link btnStaffName" value="@staff.Staff.Othernames">@staff.Staff.Staffid</button>
+                </td>
+                <td>@staff.Staff.Surname</td>
+                <td>@staff.Staff.Othernames</td>
+                <td>@staff.Staff.Deptcode</td>
+
+
+            </tr>
+        }
+    </tbody>
+</table>
+
+@section Scripts{
+
+
+}
