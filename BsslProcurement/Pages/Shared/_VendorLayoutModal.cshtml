@@ -1,0 +1,42 @@
+﻿@page
+@*
+    For more information on enabling MVC for empty projects, visit http://go.microsoft.com/fwlink/?LinkID=397860
+*@
+
+@using DcProcurement
+@model List<VendorUser>
+@{
+}
+@section Styles{
+}
+    <table id="vendorTable" class="table table-striped">
+        <thead>
+            <tr>
+                <th>Vendor Id</th>
+                <th>Company Name</th>
+                <th>Company Number</th>
+                <th>Company Email</th>
+                <th>Contact Name</th>
+                <th>Contact Number</th>
+                <th>Contact Email</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var vendor in Model)
+            {
+            <tr>
+                <td>
+                    <button class="btn btn-link btnVendorName" value="@vendor.CompanyInfo.CompanyName">@vendor.Id</button>
+                </td>
+                <td>@vendor.CompanyInfo.CompanyName</td>
+                <td>@vendor.CompanyInfo.PhoneNumber</td>
+                <td>@vendor.CompanyInfo.Email</td>
+                <td>@vendor.CompanyInfo.ContactName</td>
+                <td>@vendor.CompanyInfo.ContactPhoneNumber</td>
+                <td>@vendor.CompanyInfo.ContactEmail</td>
+
+
+            </tr>
+            }
+        </tbody>
+    </table>
