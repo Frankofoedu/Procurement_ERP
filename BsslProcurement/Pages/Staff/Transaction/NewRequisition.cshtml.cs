@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using DcProcurement;
 using DcProcurement.Contexts;
 using DcProcurement.ViewModels;
 using Microsoft.AspNetCore.Authorization;
@@ -14,14 +15,14 @@ using Microsoft.AspNetCore.Mvc.ViewFeatures;
 
 namespace BsslProcurement.Pages.Staff.Transaction
 {
-   
+
     public class ItemViewModel
     {
         public string ItemCode { get; set; }
         public string Descrip { get; set; }
         public string Quantity { get; set; }
         public string Unit { get; set; }
-        public string  SuppId { get; set; }
+        public string SuppId { get; set; }
         public string SuppName { get; set; }
         public string UnitPrice { get; set; }
         public string Amount { get; set; }
@@ -48,7 +49,7 @@ namespace BsslProcurement.Pages.Staff.Transaction
         //public IFormFile File { get; set; }
 
         [BindProperty]
-        public string  RequestingDept { get; set; }
+        public string RequestingDept { get; set; }
 
         [BindProperty]
         public List<SelectListItem> Departments { get; set; }
@@ -62,7 +63,7 @@ namespace BsslProcurement.Pages.Staff.Transaction
             _procContext = procContext;
         }
         public async Task OnGetAsync()
-        {           
+        {
 
             try
             {
@@ -70,14 +71,14 @@ namespace BsslProcurement.Pages.Staff.Transaction
             }
             catch (Exception ex)
             {
-                Error = $"An error occured. Please contact Support. {ex.Message}"; 
+                Error = $"An error occured. Please contact Support. {ex.Message}";
             }
 
         }
 
         public async Task OnPostAsync(List<IFormFile> files)
         {
-            
+
         }
         public PartialViewResult OnGetStaffPartial()
         {
@@ -86,7 +87,7 @@ namespace BsslProcurement.Pages.Staff.Transaction
             var staffs = _bsslContext.Stafftab.Select(x => new StaffLayoutModel { Staff = x, Rank = _bsslContext.Codestab.Where(m => m.Option1 == "f4" && m.Code == x.Positionid).FirstOrDefault().Desc1 }).ToList();
 
 
-//           var  = _bsslContext.Stafftab.ToList();
+            //           var  = _bsslContext.Stafftab.ToList();
             return new PartialViewResult
             {
                 ViewName = "_StaffLayout",
@@ -94,7 +95,22 @@ namespace BsslProcurement.Pages.Staff.Transaction
             };
         }
 
-        private async Task<(string,string, List<SelectListItem>)> GeneratePRNo()
+        public PartialViewResult OnGetVendorPartial()
+        {
+
+            //get all vendor 
+            var vendors = _procContext.Vendors.ToList();
+
+
+            //           var  = _bsslContext.Stafftab.ToList();
+            return new PartialViewResult
+            {
+                ViewName = "_VendorLayoutModal",
+                ViewData = new ViewDataDictionary<List<VendorUser>>(ViewData, vendors)
+            };
+        }
+
+        private async Task<(string, string, List<SelectListItem>)> GeneratePRNo()
         {
             //get current logged in user
             var u = await GetCurrentUserAsync();
@@ -123,8 +139,8 @@ namespace BsslProcurement.Pages.Staff.Transaction
                     var Depts = _bsslContext.Codestab.Where(opt => opt.Option1 == "F5");
 
                     var Dept = Depts.FirstOrDefault(cd => cd.Code == deptCode);
-                        
-                      var DeptPrefix = Dept.Prefixcode;
+
+                    var DeptPrefix = Dept.Prefixcode;
 
                     var year = DateTime.Now.Year.ToString();
 
@@ -139,11 +155,11 @@ namespace BsslProcurement.Pages.Staff.Transaction
                     else
                     {
                         serialNo = (Convert.ToInt32(PrNo.LastUsedSerialNo) + 1).ToString("0000");
-                    }                    
+                    }
 
                     //itf/deptcode/deptprefix/year/serial no
 
-                    return ($"{compPrefix.Trim()}/{deptCode.Trim()}/{DeptPrefix.Trim()}/{year}/{serialNo}",Dept.Desc1, Depts.Select(depts=> new SelectListItem { Text = depts.Desc1 }).ToList());
+                    return ($"{compPrefix.Trim()}/{deptCode.Trim()}/{DeptPrefix.Trim()}/{year}/{serialNo}", Dept.Desc1, Depts.Select(depts => new SelectListItem { Text = depts.Desc1 }).ToList());
 
                 }
 
@@ -155,6 +171,42 @@ namespace BsslProcurement.Pages.Staff.Transaction
         }
 
         private Task<DcProcurement.User> GetCurrentUserAsync() => _userManager.GetUserAsync(HttpContext.User);
+
+        static int getValue(int[] arr
+                            )
+        {
+            int n = arr.Length;
+
+            // sum of left elements 
+            // array from 0 
+            int[] leftSum = new int[n];
+
+            leftSum[0] = arr[0];
+            for (int i = 1; i < n; i++)
+            {
+                leftSum[i] = leftSum[i - 1] + arr[i];
+            }
+
+            // Forming right sum  
+            // array from n-1 
+            int[] rightSum = new int[n];
+            rightSum[n - 1] = arr[n - 1];
+            for (int i = n - 2; i >= 0; i--)
+            {
+                rightSum[i] = rightSum[i + 1] + arr[i];
+            }
+            // Find the point where left  
+            // and right sums are same. 
+            for (int i = 1; i < n - 1; i++)
+            {
+                if (leftSum[i] == rightSum[i])
+                {
+                    return arr[i];
+                }
+            }
+
+            return -1;
+        }
 
     }
 }

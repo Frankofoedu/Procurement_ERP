@@ -25,9 +25,15 @@
             -webkit-animation: spin 2s linear infinite;
             animation: spin 2s linear infinite;
         }
-        @@keyframes spin{
-            0% {transform : rotate(0deg);}
-            100% {transform: rotate(360deg);}
+
+        @@keyframes spin {
+            0% {
+                transform: rotate(0deg);
+            }
+
+            100% {
+                transform: rotate(360deg);
+            }
         }
     </style>
 }
@@ -152,9 +158,9 @@
                                             <input type="text" asp-for="ItemInputModel[0].Unit" />
 
                                         </td>
-                                        <td>
-                                            <input type="text" asp-for="ItemInputModel[0].SuppName" />
-                                            <button class="btn loadStaffModal" value="forStaffText" data-toggle="modal" data-target="#staffModal"><i class="fa fa-search"></i></button>
+                                        <td class="d-flex justify-content-start">
+                                            <input class="supinput0" type="text" disabled asp-for="ItemInputModel[0].SuppName" />
+                                            <button class="btn loadVendorModal" inputclass="supinput0" data-toggle="modal" data-target="#staffModal"><i class="fa fa-search"></i></button>
 
 
                                         </td>
@@ -215,7 +221,7 @@
                                     <div class="col-sm-12">
                                         <label>Rank : </label>
                                         <span class="d-flex flex-row">
-                                            <input class="form-control" id="txtpreparedRank" rows="6" placeholder="" />
+                                            <input class="form-control" disabled id="txtpreparedRank" rows="6" placeholder="" />
                                         </span>
 
                                     </div>
@@ -224,7 +230,7 @@
                                     <div class="col-sm-12">
                                         <label>For : </label>
                                         <span class="d-flex flex-row">
-                                            <input class="form-control"  disabled id="forStaffText" rows="6" placeholder="" />
+                                            <input class="form-control" disabled id="forStaffText" rows="6" placeholder="" />
                                             <button class="btn loadStaffModal" value="forStaffText" data-toggle="modal" data-target="#staffModal"><i class="fa fa-search"></i></button>
 
                                         </span>
@@ -233,7 +239,7 @@
                                     <div class="col-sm-12">
                                         <label>Rank : </label>
                                         <span class="d-flex flex-row">
-                                            <input class="form-control" id="forStaffTextRank" rows="6" placeholder="" />
+                                            <input class="form-control" disabled id="forStaffTextRank" rows="6" placeholder="" />
                                         </span>
 
                                     </div>
@@ -292,6 +298,27 @@
         </div>
     </div>
 </div>
+<div class="modal" id="vendorModal">
+    <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title">Vendor Details</h4>
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+            </div>
+            <div class="modal-body">
+                <div id="Vendorgrid"></div>
+            </div>
+            <div id="Vendorspinner" class="d-flex justify-content-center">
+                <div class="loader">
+                </div>
+            </div>
+
+            <div class="modal-footer">
+                <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
 
 
 
@@ -299,8 +326,35 @@
     <script src="~/js/fileUpload.js"></script>
     <script src="~/js/quill.js"></script>
     <script src="~/js/jquery.dataTables.min.js"></script>
-    
+
     <script>
+        //loads vendor modal
+        $(function () {
+            $('.loadVendorModal').on('click', function () {
+                $('#vendorModal').modal("show");
+
+                //get supplier name textbox
+                var txtToAssign = $('.' + $(this).attr('inputclass') + '');
+                 $('#Vendorgrid').load(this.baseURI + '?handler=VendorPartial', function () {
+                    $('#Vendorspinner').removeClass('d-flex');
+                    $('#Vendorspinner').hide();
+                    $('#vendorTable').dataTable();
+
+                    $('.btnVendorName').on('click', function () {
+                        //assign staff name textbox
+                        txtToAssign.val($(this).val());
+
+                        
+                        $('#staffModal').modal("hide");
+                        return false;
+                    });
+                });
+
+                return false;
+
+            });
+        });
+
         //to load staff modal
         $(function () {
             $('.loadStaffModal').on('click', function () {
@@ -309,7 +363,7 @@
                 //get staff name textbox
                 var txtToAssign = $('#' + $(this).val() + '');
                 //get staff rank textbox
-                
+
                 var txtRankToAssign = $('#' + $(this).val() + 'Rank');
                 $('#grid').load(this.baseURI + '?handler=StaffPartial', function () {
                     $('#spinner').removeClass('d-flex');
@@ -323,7 +377,7 @@
                         //assign staff rank textbox
                         txtRankToAssign.val($(this).attr('staffrank'));
 
-                       //$('#forStaffText').val();
+                        //$('#forStaffText').val();
                         $('#staffModal').modal("hide");
                         return false;
                     });
@@ -333,17 +387,6 @@
             });
         });
 
-         //to attach multiple files in preview mode
-        var upload = new FileUploadWithPreview('myUniqueUploadId');
-        $('#btnMore').on('click', function (event) {
-            event.preventDefault;
-            var lastIndex = $('#lastIndex').val();
-            var newIndex = Number(lastIndex) + 1;
-
-            newStepRow(newIndex);
-            $('#lastIndex').val(newIndex);
-            return false;
-        });
 
         //to create a custom memo field/ textbox
         var quill = new Quill('#editor', {
@@ -353,6 +396,9 @@
 
         //to attach multiple files in preview mode
         var upload = new FileUploadWithPreview('myUniqueUploadId');
+
+
+        //add new items to grid
         $('#btnMore').on('click', function (event) {
             event.preventDefault;
             var lastIndex = $('#lastIndex').val();
@@ -362,6 +408,8 @@
             $('#lastIndex').val(newIndex);
             return false;
         });
+
+
         function newStepRow(index) {
             //var html = ' <tr> <td>' + (Number(index) + 1) + ' <input type="hidden" id="InputModel_' + index + '__Step" name="InputModel[' + index + '].Step" value="' + (Number(index) + 1) + '" /></td > <td>' +
             //    '<input type="text" class="form-control"  id="InputModel_' + index + '__Description" name="InputModel[' + index + '].Description" value=""/></td>' +
@@ -379,8 +427,9 @@
                 '<td><input type="text" id="ItemInputModel_' + index + '__Descrip" name="ItemInputModel[' + index + '].Descrip" value=""></td>' +
                 '<td><input type="text" id="ItemInputModel_' + index + '__Quantity" name="ItemInputModel[' + index + '].Quantity" value=""></td>' +
                 '<td><input type="text" id="ItemInputModel_' + index + '__Unit" name="ItemInputModel[' + index + '].Unit" value=""></td>' +
-                '<td><input type="text" id="ItemInputModel_' + index + '__SuppId" name="ItemInputModel[' + index + '].SuppId" value=""></td>' +
-                '<td><input type="text" id="ItemInputModel_' + index + '__SuppName" name="ItemInputModel[' + index + '].SuppName" value=""></td>' +
+                '<td class="d-flex justify-content-start"><input class="supinput' + index + '" type="text" disabled="" id="ItemInputModel_' + index +
+                '__SuppName" name="ItemInputModel[' + index + '].SuppName" value=""> <button class="btn loadVendorModal" inputclass="supinput' + index +
+                '" data-toggle="modal" data-target="#staffModal"><i class="fa fa-search"></i></button> </td>' +
                 '<td><input type="text" id="ItemInputModel_' + index + '__UnitPrice" name="ItemInputModel[' + index + '].UnitPrice" value=""></td>' +
                 '<td><input type="text" id="ItemInputModel_' + index + '__Amount" name="ItemInputModel[' + index + '].Amount" value=""></td></tr> ';
 
