@@ -57,6 +57,13 @@ namespace DcProcurement
         public DbSet<PrequalificationJob> PrequalificationJobs { get; set; }
         #endregion
 
+        #region Requisition Tables
+        public DbSet<Requisition> Requisitions { get; set; }
+        public DbSet<RequisitionItem> RequisitionItems { get; set; }
+        #endregion
+
+        public DbSet<Attachment> Attachments { get; set; }
+
         public DbSet<PRNo> PRNos { get; set; }
 
         public DbSet<PrequalificationPolicy> PrequalificationPolicies { get; set; }
@@ -69,11 +76,14 @@ namespace DcProcurement
             modelBuilder.Entity<CompanyInfoProcurementSubCategory>().HasKey(sc => new { sc.CompanyInfoId, sc.ProcurementSubcategoryId });
             modelBuilder.Entity<CompanyInfoProcurementSubCategory>().HasOne(x => x.CompanyInfo).WithMany(m => m.CompanyInfoSelectedSubcategory);
             modelBuilder.Entity<CompanyInfoProcurementSubCategory>().HasOne(x => x.ProcurementSubcategory).WithMany(m => m.CompanyInfos);
-            
+
             #endregion
 
+            modelBuilder.Entity<Attachment>().Property(m => m.DateCreated).HasDefaultValueSql("getdate()");
 
             modelBuilder.Entity<CompanyInfo>().HasOne(m => m.Vendor).WithOne(n => n.CompanyInfo).HasForeignKey<VendorUser>(l => l.CompanyInfoId);
+
+            modelBuilder.Entity<RequisitionItem>().HasOne(m => m.Vendor).WithMany(n => n.RequisitionItems).HasForeignKey(w => w.VendorId);
 
             modelBuilder.Entity<Workflow>().HasOne(m => m.StaffToAssign).WithMany(n => n.StaffWorkflows).HasForeignKey(w => w.StaffId);
 

@@ -9,5 +9,7 @@ namespace DcProcurement
         public int? CompanyInfoId { get; set; }
 
         public virtual CompanyInfo CompanyInfo { get; set; }
+
+        public ICollection<RequisitionItem> RequisitionItems { get; set; }
     }
 }

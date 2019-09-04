@@ -31,7 +31,7 @@ namespace DcProcurement
         /// <summary>
         /// The identity User attached to this company. (User of type vendor)
         /// </summary>
-        public string VendorId { get; set; } //
+        public string VendorId { get; set; }
         /// <summary>
         /// Becomes True after going the workflow stages
         /// </summary>
