@@ -28,7 +28,7 @@
             </div>
             <div asp-validation-summary="All" class="text-danger"></div>
 
-            <input type="hidden" asp-for="workflowCategory.Id" />
+            <input type="hidden" asp-for="workflowType.Id" />
 
             <div class="form-group">
                 <div class="row">
@@ -36,9 +36,9 @@
                         <label>Category Code</label>
                     </div>
                     <div class="col-sm-9">
-                        <input class="form-control-sm" asp-for="workflowCategory.Code" />
+                        <input class="form-control-sm" asp-for="workflowType.Code" />
                         <button class="btn btn-outline-primary btn-sm"><i class="fas fa-search"></i></button>
-                        <span asp-validation-for="workflowCategory.Code" class="text-danger"></span>
+                        <span asp-validation-for="workflowType.Code" class="text-danger"></span>
                     </div>
                 </div>
             </div>
@@ -48,8 +48,8 @@
                         <label>Category Name</label>
                     </div>
                     <div class="col-sm-9">
-                        <input class="form-control" asp-for="workflowCategory.Name" />
-                        <span asp-validation-for="workflowCategory.Name" class="text-danger"></span>
+                        <input class="form-control" asp-for="workflowType.Name" />
+                        <span asp-validation-for="workflowType.Name" class="text-danger"></span>
                     </div>
                 </div>
             </div>
@@ -59,7 +59,7 @@
                         <label>Description</label>
                     </div>
                     <div class="col-sm-9">
-                        <textarea class="form-control" asp-for="workflowCategory.Description"></textarea>
+                        <textarea class="form-control" asp-for="workflowType.Description"></textarea>
                     </div>
                 </div>
             </div>
@@ -101,9 +101,9 @@
                         </tr>
                     </thead>
                     <tbody>
-                        @for (int i = 0; i < Model.workflowCategories.Count; i++)
+                        @for (int i = 0; i < Model.workflowTypes.Count; i++)
                         {
-                            var item = Model.workflowCategories[i];
+                            var item = Model.workflowTypes[i];
                             <tr>
                                 <td>@(i + 1)</td>
                                 <td>@item.Code</td>
