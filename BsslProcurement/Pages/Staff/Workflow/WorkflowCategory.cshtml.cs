@@ -23,18 +23,18 @@ namespace BsslProcurement.Pages.Staff.Workflow
         public string Error { get; set; }
 
         [BindProperty]
-        public DcProcurement.WorkflowCategory workflowCategory { get; set; }
-        public List<WorkflowCategory> workflowCategories { get; set; }
+        public DcProcurement.WorkflowType workflowType { get; set; }
+        public List<WorkflowType> workflowTypes { get; set; }
 
         public void OnGet(int? id )
         {
             if (id != null)
             {
-                workflowCategory = _context.WorkflowCategories.Find(id.Value);
+                workflowType = _context.WorkflowTypes.Find(id.Value);
             }
-            else workflowCategory = new WorkflowCategory();
+            else workflowType = new WorkflowType();
 
-            workflowCategories = _context.WorkflowCategories.ToList();
+            workflowTypes = _context.WorkflowTypes.ToList();
         }
 
         public async void OnPost(int? id)
@@ -43,14 +43,14 @@ namespace BsslProcurement.Pages.Staff.Workflow
             {
                 Error = "Invalid Data!";
             }
-            else if (id.HasValue && workflowCategory.Id == id.Value)
+            else if (id.HasValue && workflowType.Id == id.Value)
             {
-                var wfc = _context.WorkflowCategories.Find(id.Value);
+                var wfc = _context.WorkflowTypes.Find(id.Value);
 
                 if (wfc!=null)
                 {
-                    wfc.Description = workflowCategory.Description;
-                    wfc.Name = workflowCategory.Name;
+                    wfc.Description = workflowType.Description;
+                    wfc.Name = workflowType.Name;
                     _context.SaveChanges();
 
                     Message = "Update was successful.";
@@ -64,7 +64,7 @@ namespace BsslProcurement.Pages.Staff.Workflow
             {
                 try
                 {
-                    _context.WorkflowCategories.Add(workflowCategory);
+                    _context.WorkflowTypes.Add(workflowType);
                     _context.SaveChanges();
                     Message = "Category added successfully.";
                 }
@@ -74,7 +74,7 @@ namespace BsslProcurement.Pages.Staff.Workflow
                 }
             }
 
-            workflowCategories = _context.WorkflowCategories.ToList();
+            workflowTypes = _context.WorkflowTypes.ToList();
         }
     }
 }

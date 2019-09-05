@@ -30,7 +30,7 @@ namespace DcProcurement
         [ForeignKey("AlternativeStaffId")]
         public Staff AlternativeStaffToAssign { get; set; }
 
-        public WorkflowCategory WorkflowCategory { get; set; }
+        public WorkflowType WorkflowType { get; set; }
         public WorkflowAction WorkflowAction { get; set; }
     }
 }

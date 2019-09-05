@@ -49,7 +49,7 @@ namespace BsslProcurement.Pages.Staff.Workflow
             WorkflowActions = _context.WorkflowActions.ToList();
             foreach (var item in WorkflowActions) item.Workflows = null;
 
-            ViewData["Categories"] = new SelectList(_context.WorkflowCategories, "Id", "Name");
+            ViewData["Categories"] = new SelectList(_context.WorkflowTypes, "Id", "Name");
 
         }
 
@@ -61,7 +61,7 @@ namespace BsslProcurement.Pages.Staff.Workflow
                 WorkflowActions = _context.WorkflowActions.ToList();
                 foreach (var item in WorkflowActions) item.Workflows = null;
 
-                ViewData["Categories"] = new SelectList(_context.WorkflowCategories, "Id", "Name");
+                ViewData["Categories"] = new SelectList(_context.WorkflowTypes, "Id", "Name");
                 return;
             }
 
@@ -79,7 +79,7 @@ namespace BsslProcurement.Pages.Staff.Workflow
                         WorkflowActions = _context.WorkflowActions.ToList();
                         foreach (var x in WorkflowActions) x.Workflows = null;
 
-                        ViewData["Categories"] = new SelectList(_context.WorkflowCategories, "Id", "Name");
+                        ViewData["Categories"] = new SelectList(_context.WorkflowTypes, "Id", "Name");
                         return;
                     }
 
@@ -110,7 +110,7 @@ namespace BsslProcurement.Pages.Staff.Workflow
                 WorkflowActions = _context.WorkflowActions.ToList();
                 foreach (var item in WorkflowActions) item.Workflows = null;
 
-                ViewData["Categories"] = new SelectList(_context.WorkflowCategories, "Id", "Name");
+                ViewData["Categories"] = new SelectList(_context.WorkflowTypes, "Id", "Name");
                 return;
             }
 
@@ -124,7 +124,7 @@ namespace BsslProcurement.Pages.Staff.Workflow
             WorkflowActions = _context.WorkflowActions.ToList();
             foreach (var item in WorkflowActions) item.Workflows = null;
 
-            ViewData["Categories"] = new SelectList(_context.WorkflowCategories, "Id", "Name");
+            ViewData["Categories"] = new SelectList(_context.WorkflowTypes, "Id", "Name");
 
             Message = "Saved Successfully";
         }

@@ -102,6 +102,7 @@ namespace BsslProcurement.Pages.Staff.Transaction
         {
             (PrNo, RequestingDept, Departments) = await GeneratePRNo();
         }
+
         public PartialViewResult OnGetStaffPartial()
         {
 

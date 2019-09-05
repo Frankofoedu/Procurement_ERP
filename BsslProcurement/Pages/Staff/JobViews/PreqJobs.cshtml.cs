@@ -74,7 +74,7 @@ namespace BsslProcurement.Pages.Staff.JobViews
             if (user != null)
             {
                 //get all the workflow steps
-                var allWorkflow = _context.Workflows.Where(m=>m.WorkflowCategory.Name == "procurement").OrderBy(n=>n.Step).ToList();
+                var allWorkflow = _context.Workflows.Where(m=>m.WorkflowType.Name == "procurement").OrderBy(n=>n.Step).ToList();
                 //get all prequalification jobs pending for user or all users
                 var allJobs = await _context.PrequalificationJobs.Where(x => x.Done == false).Where(x => x.StaffId == user.Id || x.StaffId == null)
                     .Include(p => p.CompanyInfo)
@@ -216,7 +216,7 @@ namespace BsslProcurement.Pages.Staff.JobViews
                 .Include(p => p.CompanyInfo).ToListAsync();
 
             //get all the workflow steps
-            var allWorkflow = _context.Workflows.Where(m => m.WorkflowCategory.Name == "procurement").OrderBy(n => n.Step).ToList();
+            var allWorkflow = _context.Workflows.Where(m => m.WorkflowType.Name == "procurement").OrderBy(n => n.Step).ToList();
 
             foreach (var item in CheckInputs)
             {
