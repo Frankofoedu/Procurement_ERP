@@ -1,11 +1,14 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
+using BsslProcurement.UtilityMethods;
 using DcProcurement;
 using DcProcurement.Contexts;
 using DcProcurement.ViewModels;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
@@ -16,17 +19,6 @@ using Microsoft.AspNetCore.Mvc.ViewFeatures;
 namespace BsslProcurement.Pages.Staff.Transaction
 {
 
-    public class ItemViewModel
-    {
-        public string ItemCode { get; set; }
-        public string Descrip { get; set; }
-        public string Quantity { get; set; }
-        public string Unit { get; set; }
-        public string SuppId { get; set; }
-        public string SuppName { get; set; }
-        public string UnitPrice { get; set; }
-        public string Amount { get; set; }
-    }
 
     [Authorize]
     public class NewRequisitionModel : PageModel
@@ -34,6 +26,7 @@ namespace BsslProcurement.Pages.Staff.Transaction
         private readonly UserManager<DcProcurement.User> _userManager;
         private readonly DcProcurement.Contexts.BSSLSYS_ITF_DEMOContext _bsslContext;
         private readonly DcProcurement.ProcurementDBContext _procContext;
+        private IHostingEnvironment _environment;
 
 
 
@@ -43,7 +36,7 @@ namespace BsslProcurement.Pages.Staff.Transaction
         public string PrNo { get; set; }
 
         [BindProperty]
-        public List<ItemViewModel> ItemInputModel { get; set; }
+        public List<RequisitionItem> RequisitionItems { get; set; }
 
         //[BindProperty]
         //public IFormFile File { get; set; }
@@ -54,20 +47,24 @@ namespace BsslProcurement.Pages.Staff.Transaction
         [BindProperty]
         public List<SelectListItem> Departments { get; set; }
 
+        [BindProperty]
+        public Requisition Requisition { get; set; }
+
         public NewRequisitionModel(UserManager<DcProcurement.User> userManager,
             BSSLSYS_ITF_DEMOContext bsslContext,
-            DcProcurement.ProcurementDBContext procContext)
+            DcProcurement.ProcurementDBContext procContext, IHostingEnvironment environment)
         {
             _userManager = userManager;
             _bsslContext = bsslContext;
             _procContext = procContext;
+            _environment = environment;
         }
         public async Task OnGetAsync()
         {
 
             try
             {
-                (PrNo, RequestingDept, Departments) = await GeneratePRNo();
+                await LoadData();
             }
             catch (Exception ex)
             {
@@ -78,7 +75,32 @@ namespace BsslProcurement.Pages.Staff.Transaction
 
         public async Task OnPostAsync(List<IFormFile> files)
         {
+            if (ModelState.IsValid)
+            {
+                try
+                {
+                    var filepaths = (await FileUpload.GetFilePathsAsync(files, _environment));
 
+                    Requisition.Attachments = filepaths;
+
+                    _procContext.Requisitions.Add(Requisition);
+
+                    _procContext.SaveChanges();
+
+                    Message = "Requisition Added successfully";
+                }
+                catch (Exception ex)
+                {
+                    Error = "An error has occurred." + Environment.NewLine + ex.Message;
+                }
+
+            }
+            await LoadData();
+        }
+
+        private async Task LoadData()
+        {
+            (PrNo, RequestingDept, Departments) = await GeneratePRNo();
         }
 
         public PartialViewResult OnGetStaffPartial()
@@ -173,41 +195,6 @@ namespace BsslProcurement.Pages.Staff.Transaction
 
         private Task<DcProcurement.User> GetCurrentUserAsync() => _userManager.GetUserAsync(HttpContext.User);
 
-        static int getValue(int[] arr
-                            )
-        {
-            int n = arr.Length;
-
-            // sum of left elements 
-            // array from 0 
-            int[] leftSum = new int[n];
-
-            leftSum[0] = arr[0];
-            for (int i = 1; i < n; i++)
-            {
-                leftSum[i] = leftSum[i - 1] + arr[i];
-            }
-
-            // Forming right sum  
-            // array from n-1 
-            int[] rightSum = new int[n];
-            rightSum[n - 1] = arr[n - 1];
-            for (int i = n - 2; i >= 0; i--)
-            {
-                rightSum[i] = rightSum[i + 1] + arr[i];
-            }
-            // Find the point where left  
-            // and right sums are same. 
-            for (int i = 1; i < n - 1; i++)
-            {
-                if (leftSum[i] == rightSum[i])
-                {
-                    return arr[i];
-                }
-            }
-
-            return -1;
-        }
-
+        
     }
 }
