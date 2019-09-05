@@ -24,7 +24,7 @@ namespace BsslProcurement.UtilityMethods
                 {
                     await file.CopyToAsync(fileStream);
                 }
-                filePaths.Add(new Attachment { FilePath =  Path.Combine(folderPath, file.FileName});
+                filePaths.Add(new Attachment { FilePath =  Path.Combine(folderPath, file.FileName)});
 
             }
 
