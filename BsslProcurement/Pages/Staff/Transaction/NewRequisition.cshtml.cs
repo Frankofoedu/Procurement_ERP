@@ -82,6 +82,7 @@ namespace BsslProcurement.Pages.Staff.Transaction
                     var filepaths = (await FileUpload.GetFilePathsAsync(files, _environment));
 
                     Requisition.Attachments = filepaths;
+                    Requisition.RequisitionItems = RequisitionItems;
 
                     _procContext.Requisitions.Add(Requisition);
 

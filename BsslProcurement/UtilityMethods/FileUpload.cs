@@ -20,7 +20,7 @@ namespace BsslProcurement.UtilityMethods
             foreach (var file in files)
             {               
                
-                using (var fileStream = new FileStream(folderPath, FileMode.Create))
+                using (var fileStream = new FileStream(Path.Combine( folderPath,file.FileName), FileMode.Create))
                 {
                     await file.CopyToAsync(fileStream);
                 }
