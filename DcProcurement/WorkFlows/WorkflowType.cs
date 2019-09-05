@@ -8,7 +8,7 @@ namespace DcProcurement
     /// <summary>
     /// Category or type of workflow. e.g. prequalification etc
     /// </summary>
-    public class WorkflowCategory
+    public class WorkflowType
     {
         public int Id { get; set; }
         [Required(ErrorMessage = "This Field is required.")]

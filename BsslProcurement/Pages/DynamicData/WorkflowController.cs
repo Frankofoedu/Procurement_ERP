@@ -39,7 +39,7 @@ namespace BsslProcurement.Pages.DynamicData
             foreach (var item in Workflows)
             {
                 item.WorkflowAction.Workflows = null;
-                item.WorkflowCategory = null;
+                item.WorkflowType = null;
                 if (item.AlternativeStaffToAssign !=null)
                 {
                     item.AlternativeStaffToAssign.StaffWorkflows = null;

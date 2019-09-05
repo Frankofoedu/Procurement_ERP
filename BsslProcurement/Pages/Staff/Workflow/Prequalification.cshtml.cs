@@ -44,7 +44,7 @@ namespace BsslProcurement.Pages.Staff.Workflow
 
         public void OnGet()
         {
-            currentPrequalificationWorkflows = _context.Workflows.Include(m=>m.StaffToAssign).Where(m => m.WorkflowCategory.Name == "procurement").OrderBy(n => n.Step).ToList();
+            currentPrequalificationWorkflows = _context.Workflows.Include(m=>m.StaffToAssign).Where(m => m.WorkflowType.Name == "procurement").OrderBy(n => n.Step).ToList();
         }
 
 
@@ -53,7 +53,7 @@ namespace BsslProcurement.Pages.Staff.Workflow
             if (!ModelState.IsValid)
             {
                 Error = "An Error occured. Please check the data and try again.";
-                currentPrequalificationWorkflows = _context.Workflows.Include(m => m.StaffToAssign).Where(m => m.WorkflowCategory.Name == "procurement").OrderBy(n => n.Step).ToList();
+                currentPrequalificationWorkflows = _context.Workflows.Include(m => m.StaffToAssign).Where(m => m.WorkflowType.Name == "procurement").OrderBy(n => n.Step).ToList();
                 return;
             }
 
@@ -68,7 +68,7 @@ namespace BsslProcurement.Pages.Staff.Workflow
                     if (item.Assign && string.IsNullOrWhiteSpace(item.StaffName))
                     {
                         Error = "An Error Occured. Make sure that if 'For Specific Staff' field is checked, a valid staff code is Entered.";
-                        currentPrequalificationWorkflows = _context.Workflows.Include(m => m.StaffToAssign).Where(m => m.WorkflowCategory.Name == "procurement").OrderBy(n => n.Step).ToList();
+                        currentPrequalificationWorkflows = _context.Workflows.Include(m => m.StaffToAssign).Where(m => m.WorkflowType.Name == "procurement").OrderBy(n => n.Step).ToList();
                         return;
                     }
 
@@ -92,18 +92,18 @@ namespace BsslProcurement.Pages.Staff.Workflow
             if (newPWF.Count<1)
             {
                 Error = "An Error Occured. Make sure make sure one or more workflow steps are added.";
-                currentPrequalificationWorkflows = _context.Workflows.Include(m => m.StaffToAssign).Where(m => m.WorkflowCategory.Name == "procurement").OrderBy(n => n.Step).ToList();
+                currentPrequalificationWorkflows = _context.Workflows.Include(m => m.StaffToAssign).Where(m => m.WorkflowType.Name == "procurement").OrderBy(n => n.Step).ToList();
                 return;
             }
 
-            var curWF = _context.Workflows.Where(m => m.WorkflowCategory.Name == "procurement").OrderBy(n => n.Step).ToList();
+            var curWF = _context.Workflows.Where(m => m.WorkflowType.Name == "procurement").OrderBy(n => n.Step).ToList();
             _context.Workflows.RemoveRange(curWF);
             _context.Workflows.AddRange(newPWF);
 
             _context.SaveChanges();
 
             InputModel = null;
-            currentPrequalificationWorkflows = _context.Workflows.Include(m => m.StaffToAssign).Where(m => m.WorkflowCategory.Name == "procurement").OrderBy(n => n.Step).ToList();
+            currentPrequalificationWorkflows = _context.Workflows.Include(m => m.StaffToAssign).Where(m => m.WorkflowType.Name == "procurement").OrderBy(n => n.Step).ToList();
 
             Message = "Saved Successfully";
         }
