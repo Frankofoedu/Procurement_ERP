@@ -1,0 +1,91 @@
+﻿@page
+@model BsslProcurement.Pages.Staff.ItemRequisition.AllRequisitionModel
+@{
+    ViewData["Title"] = "Approved Purchase Requisition";
+}
+
+<div class="row mt-5">
+    <div class="col-md-1"></div>
+    <div class="col-md-11">
+        <form method="post" class="panel panel-login">
+            <div class="panel-heading">
+                <div class="row">
+                    <p class="header-text">@ViewData["Title"]</p>
+                </div>
+                <hr>
+            </div>
+            <div asp-validation-summary="All" class="text-danger"></div>
+
+            @if (!string.IsNullOrWhiteSpace(Model.Message))
+            {
+                <div class="alert alert-success alert-dismissable fade show">
+                    <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                    @Model.Message
+                </div>
+            }
+            @if (!string.IsNullOrWhiteSpace(Model.Error))
+            {
+                <div class="alert alert-danger alert-dismissable fade show">
+                    <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                    @Model.Error
+                </div>
+            }
+
+
+            @*<button class="btn btn-primary pt-2" asp-page="NewRequisition">Add New</button>*@
+
+            <a asp-page="NewRequisition" role="button" class="btn btn-primary">New Requisition</a>
+
+            <div class="row pt-3 " style="">
+                <div class="col-12 table-responsive table-responsive-sm">
+                    <table class="table  table-striped">
+                        <thead>
+                            <tr class="table-primary">
+                                <th>S/N</th>
+                                <th>Item Code</th>
+                                <th>Description Of Goods/Services</th>
+                                <th>Quantity</th>
+                                <th>Unit</th>
+                                <th>Suggested Supplier Id</th>
+                                <th>Supplier Name</th>
+                                <th>Unit Price</th>
+                                <th>Amount</th>
+                            </tr>
+                        </thead>
+
+
+                        <tbody>
+                            @for (int i = 0; i < Model.ApprovedRequests.Count; i++)
+                            {
+                                var item = Model.ApprovedRequests[i];
+                                <tr>
+                                    <td>@(i + 1)</td>
+                                    <td>@item.Icode</td>
+                                    <td>@item.Idescr</td>
+                                    <td>@item.Qty</td>
+                                    <td>@item.Uofm</td>
+                                    <td>@item.Suggsup</td>
+                                    <td></td>
+                                    <td>@item.Price</td>
+                                    <td>@item.Oamount</td>
+
+                                </tr>
+                            }
+
+                        </tbody>
+                        <tfoot>
+                            <tr class="font-weight-bold">
+                                <td class="text-right" style="text-align: right;" colspan="8">Total :</td>
+                                <td>@Model.ApprovedRequests.Sum(x => x.Amtrquest)</td>
+                            </tr>
+                        </tfoot>
+                    </table>
+                </div>
+            </div>
+
+
+         
+
+        </form>
+    </div>
+</div>

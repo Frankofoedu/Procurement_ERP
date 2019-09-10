@@ -15,6 +15,8 @@
     <Compile Remove="Migrations\20190806110652_workflowCategory.Designer.cs" />
     <Compile Remove="Migrations\20190806111213_workflowCategory.cs" />
     <Compile Remove="Migrations\20190806111213_workflowCategory.Designer.cs" />
+    <Compile Remove="Migrations\20190909152540_requisition_update.cs" />
+    <Compile Remove="Migrations\20190909152540_requisition_update.Designer.cs" />
   </ItemGroup>
 
   <ItemGroup>
