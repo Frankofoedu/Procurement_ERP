@@ -81,7 +81,7 @@ namespace BsslProcurement.Pages.Staff.ItemRequisition
             {
                 try
                 {
-                    var filepaths = (await FileUpload.GetFilePathsAsync(files, _environment));
+                    var filepaths = (await FileUpload.GetFilePathsAsync(files, _environment, "Attachments"));
 
                     Requisition.Attachments = filepaths;
                     Requisition.RequisitionItems = RequisitionItems;

@@ -3,6 +3,11 @@
 @{
     ViewData["Title"] = "RequisitionItemPricing";
 }
+@section  Styles{
+    
+<link rel="stylesheet" href="~/css/jquery.fancybox.css" type="text/css"/>
+
+ }
 
 <h2>Item Pricing</h2>
 
@@ -24,226 +29,244 @@
 
 @if (Model.Requisition == null)
 {
-       
+
 }
-else {
+else
+{
 
-<div class="row mt-5">
-    <div class="col-md-12">
-        <form class="panel panel-login" method="post" enctype="multipart/form-data">
-            <div class="panel-heading">
-                <div class="row">
-                    <p class="header-text">Purchase Requisition @Model.Requisition.PRNumber</p>
-
-                </div>
-                <hr>
-            </div>
-
-            <div asp-validation-summary="All" class="text-danger"></div>
-
-            <div>
-                <div class="">
-
-                    <div class=" panel">
-
-                        <div class="d-flex justify-content-center mb-3">
-
-                            <div class="form-check form-check-inline">
-                                <input class="form-check-input" type="radio" asp-for="Requisition.ProcurementType" value="Capital Procurement">
-                                <label class="form-check-label" for="inlineRadio1"> @Model.Requisition.ProcurementType </label>
-                            </div>
-                            
-                            
-                        </div>
-
-
+    <div class="row mt-5">
+        <div class="col-md-12">
+            <form class="panel panel-login" method="post" enctype="multipart/form-data">
+                <div class="panel-heading">
+                    <div class="row">
+                        <p class="header-text">Purchase Requisition @Model.Requisition.PRNumber</p>
 
                     </div>
-                    <div class="row p-2">
-                        <div class="col-sm-4">
-                            <div class="form-group">
-                                <label>PR No : </label>
-                                <input class="form-control" readonly asp-for="Requisition.PRNumber" value="@Model.Requisition.PRNumber" placeholder="" />
-                            </div>
-                        </div>
-                        <div class="col-sm-4">
-                            <div class="form-group">
-                                <label>Date : </label>
-                                <input class="form-control" readonly asp-for="Requisition.Date" value="@DateTime.Today.ToString("yyyy-MM-dd")" type="date" placeholder="Pick Date" />
-                            </div>
-                        </div>
-                        <div class="col-sm-4">
-                            <div class="form-group">
-                                <label>Delivery Date : </label>
-                                <input class="form-control"  type="date" readonly asp-for="Requisition.DeliveryDate" placeholder="Pick Delivery Date" />
-                            </div>
-                        </div>
-                        <div class="col-sm-6">
-                            <div class="form-group">
-                                <label>Requesting Dept/Section : </label>
-                                <input class="form-control" readonly asp-for="Requisition.RequestionDepartment" value="@Model.Requisition.RequestionDepartment" placeholder="Enter Department" />
-                            </div>
-                        </div>
-                        <div class="col-sm-6">
-                            <div class="form-group">
-                                <label>Required At : </label>
-                                <input class="form-control" readonly value=@Model.Requisition.RequestionDepartment />
-                               @*o0 <select asp-items="Model.Departments" asp-for="Requisition.RequiredAtDepartment" class="form-control"></select>*@
-                            </div>
-                        </div>
+                    <hr>
+                </div>
 
-                        <div class="mt-3 mb-5 col-sm-12 table-responsive">
-                            <table class="table table-striped">
-                                <thead>
-                                    <tr class="table-primary">
-                                        <th>S/No</th>
-                                        <th>Store Item Code</th>
-                                        <th>Description Of <br />Goods/Services <i class="fa fa-asterisk fa-xs faRedColour"></i></th>
-                                        <th>Quantity <i class="fa fa-asterisk fa-xs faRedColour"></i></th>
-                                        <th>Unit Of<br />Measurement</th>
-                                        <th>Unit Price</th>
-                                    </tr>
-                                </thead>
-                                <tbody id="requisitionBody">
-                                    @for (int i = 0; i < Model.Requisition.RequisitionItems.Count; i++)
-                                    {
-                                        var item = Model.Requisition.RequisitionItems[i];
-                                       
-                                        <tr>
+                <div asp-validation-summary="All" class="text-danger"></div>
 
-                                            <td class="col-sm-1">
-                                                <label>1</label>
-                                                <input type="hidden" />
-                                            </td>
+                <div>
+                    <div class="">
 
-                                            <td class="col-sm-1">
-                                                <input type="text" readonly />
+                        <div class=" panel">
 
-                                            </td>
-                                            <td>
-                                                <input type="text" required asp-for="Requisition.RequisitionItems[i].Description" value="@item.Description" />
+                            <div class="d-flex justify-content-center mb-3">
 
-                                            </td>
-                                            <td>
-                                                <input type="number" required asp-for="Requisition.RequisitionItems[i].Quantity" value="@item.Quantity" />
-
-                                            </td>
-                                            <td>
-                                                <input type="text" required asp-for="Requisition.RequisitionItems[0].UnitOfMeasurement"  value="@item.UnitOfMeasurement"  />
-
-                                            </td>
-                                            <!-- <td class="d-flex justify-content-start">
-                <input class="supinput0" type="text" readonly @*asp-for="RequisitionItems[0].VendorId"*@ />
-                @*<button class="btn loadVendorModal" inputclass="supinput0" data-toggle="modal" data-target="#staffModal"><i class="fa fa-search"></i></button>*@
-
-
-            </td>-->
-                                            <td>
-                                                <input type="number" asp-for="Requisition.RequisitionItems[0].UnitPrice" value="@item.UnitPrice" />
-
-                                            </td>
-                                        </tr>
-
-                                    }
-                                </tbody>
-                            </table>
-                            <input type="hidden" id="lastIndex" value="0" />
-                            @*<div class="form-group">
-                                <div class="row">
-                                    <div class="col-sm-3"> </div>
-                                    <div class="col-sm-6 text-center">
-                                        <button id="btnMore" class="btn btn-outline-primary">New Item</button>
-                                    </div>
-                                </div>
-                            </div>*@
-                        </div>
-
-
-                        <div class="col-sm-7">
-                            @if (Model.Requisition.Attachments.Count > 0)
-                            {
-                                foreach (var file in Model.Requisition.Attachments)
-                                {
-
-                                    <p>
-                                        <a href="@file.FilePath"><img src="@file.FilePath"/></a>
-                                    </p>
-                                }
-                            }
-
-                        </div>
-
-                        <div class="col-sm-5">
-                            <div class="row">
-                                <div class="my-2">
-                                    <div class="col-sm-12">
-                                        <label>Prepared By : </label>
-                                        <span class="d-flex flex-row">
-                                            <input id="txtprepared"  asp-for="Requisition.PreparedBy" class="form-control" readonly rows="6" placeholder="" />
-                                            @*<button class="btn loadStaffModal" value="txtprepared" data-toggle="modal" data-target="#staffModal"><i class="fa fa-search"></i></button>*@
-
-                                        </span>
-
-
-                                    </div>
-                                    <div class="col-sm-12">
-                                        <label>Rank : </label>
-                                        <span class="d-flex flex-row">
-                                            <input class="form-control" asp-for="Requisition.PreparedByRank" readonly id="txtpreparedRank" rows="6" placeholder="" />
-                                        </span>
-
-                                    </div>
-                                </div>
-                                <div class="my-2">
-                                    <div class="col-sm-12">
-                                        <label>For : </label>
-                                        <span class="d-flex flex-row">
-                                            <input class="form-control" asp-for="Requisition.PreparedFor" readonly id="forStaffText" rows="6" placeholder="" />
-                                            <button class="btn loadStaffModal" value="forStaffText" data-toggle="modal" data-target="#staffModal"><i class="fa fa-search"></i></button>
-
-                                        </span>
-
-                                    </div>
-                                    <div class="col-sm-12">
-                                        <label>Rank : </label>
-                                        <span class="d-flex flex-row">
-                                            <input class="form-control" asp-for="Requisition.PreparedForRank" readonly id="forStaffTextRank" rows="6" placeholder="" />
-                                        </span>
-
-                                    </div>
+                                <div class="form-check form-check-inline">
+                                    <input class="form-check-input" type="radio" asp-for="Requisition.ProcurementType" value="Capital Procurement">
+                                    <label class="form-check-label" for="inlineRadio1"> @Model.Requisition.ProcurementType </label>
                                 </div>
 
-                            </div>
-                        </div>
 
-                        <div class="col-sm-12">
-                            <div class="form-group">
-                                <label>Purpose : </label>
-                                <input type="hidden" asp-for="Requisition.Purpose" />
-                                <div id="editor">
-                                    <p>hello world</p>
-                                    <p>Some intial<strong>bold</strong>text</p>
-                                    <p><br /></p>
-                                </div>
                             </div>
-                        </div>
 
-                        <div class="col-sm-4">
+
+
                         </div>
-                        @*<div class="col-sm-4">
+                        <div class="row p-2">
+                            <div class="col-sm-4">
                                 <div class="form-group">
-                                    <input class="btn btn-block btn-danger fa-print" value="Print" type="button" placeholder="Enter Resgistration Number" />
+                                    <label>PR No : </label>
+                                    <input class="form-control" readonly asp-for="Requisition.PRNumber" value="@Model.Requisition.PRNumber" placeholder="" />
                                 </div>
-                            </div>*@
-                    </div>
-                    <div class="modal-footer justify-content-center">
-                        @*  <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>*@
-                        <input id="btnSubmit" class="btn btn-lg btn-primary" value="Save" type="submit" placeholder="" />
+                            </div>
+                            <div class="col-sm-4">
+                                <div class="form-group">
+                                    <label>Date : </label>
+                                    <input class="form-control" readonly asp-for="Requisition.Date" value="@DateTime.Today.ToString("yyyy-MM-dd")" type="date" placeholder="Pick Date" />
+                                </div>
+                            </div>
+                            <div class="col-sm-4">
+                                <div class="form-group">
+                                    <label>Delivery Date : </label>
+                                    <input class="form-control" type="date" readonly asp-for="Requisition.DeliveryDate" placeholder="Pick Delivery Date" />
+                                </div>
+                            </div>
+                            <div class="col-sm-6">
+                                <div class="form-group">
+                                    <label>Requesting Dept/Section : </label>
+                                    <input class="form-control" readonly asp-for="Requisition.RequestionDepartment" value="@Model.Requisition.RequestionDepartment" placeholder="Enter Department" />
+                                </div>
+                            </div>
+                            <div class="col-sm-6">
+                                <div class="form-group">
+                                    <label>Required At : </label>
+                                    <input class="form-control" readonly value=@Model.Requisition.RequestionDepartment />
+                                    @*o0 <select asp-items="Model.Departments" asp-for="Requisition.RequiredAtDepartment" class="form-control"></select>*@
+                                </div>
+                            </div>
 
+                            <div class="mt-3 mb-5 col-sm-12 table-responsive">
+                                <table class="table table-striped">
+                                    <thead>
+                                        <tr class="table-primary">
+                                            <th>S/No</th>
+                                            <th>Store Item Code</th>
+                                            <th>Description Of <br />Goods/Services <i class="fa fa-asterisk fa-xs faRedColour"></i></th>
+                                            <th>Quantity <i class="fa fa-asterisk fa-xs faRedColour"></i></th>
+                                            <th>Unit Of<br />Measurement</th>
+                                            <th>Unit Price</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody id="requisitionBody">
+                                        @for (int i = 0; i < Model.Requisition.RequisitionItems.Count; i++)
+                                        {
+                                            var item = Model.Requisition.RequisitionItems[i];
+
+                                            <tr>
+
+                                                <td class="col-sm-1">
+                                                    <label>1</label>
+                                                    <input type="hidden" />
+                                                </td>
+
+                                                <td class="col-sm-1">
+                                                    <input type="text" readonly />
+
+                                                </td>
+                                                <td>
+                                                    <input type="text" required asp-for="Requisition.RequisitionItems[i].Description" value="@item.Description" />
+
+                                                </td>
+                                                <td>
+                                                    <input type="number" required asp-for="Requisition.RequisitionItems[i].Quantity" value="@item.Quantity" />
+
+                                                </td>
+                                                <td>
+                                                    <input type="text" required asp-for="Requisition.RequisitionItems[0].UnitOfMeasurement" value="@item.UnitOfMeasurement" />
+
+                                                </td>
+                                                <!-- <td class="d-flex justify-content-start">
+                                                    <input class="supinput0" type="text" readonly @*asp-for="RequisitionItems[0].VendorId"*@ />
+                                                    @*<button class="btn loadVendorModal" inputclass="supinput0" data-toggle="modal" data-target="#staffModal"><i class="fa fa-search"></i></button>*@
+
+
+                                                </td>-->
+                                                <td>
+                                                    <input type="number" asp-for="Requisition.RequisitionItems[0].UnitPrice" value="@item.UnitPrice" />
+
+                                                </td>
+                                            </tr>
+
+                                        }
+                                    </tbody>
+                                </table>
+                                <input type="hidden" id="lastIndex" value="0" />
+                                @*<div class="form-group">
+                                        <div class="row">
+                                            <div class="col-sm-3"> </div>
+                                            <div class="col-sm-6 text-center">
+                                                <button id="btnMore" class="btn btn-outline-primary">New Item</button>
+                                            </div>
+                                        </div>
+                                    </div>*@
+                            </div>
+
+
+                            <div class="col-sm-12">
+                                <div class="row">
+                                    <div class="my-2 col-sm-6">
+                                        <div class="col-sm-12">
+                                            <label>Prepared By : </label>
+                                            <span class="d-flex flex-row">
+                                                <input id="txtprepared" asp-for="Requisition.PreparedBy" class="form-control" readonly rows="6" placeholder="" />
+                                                @*<button class="btn loadStaffModal" value="txtprepared" data-toggle="modal" data-target="#staffModal"><i class="fa fa-search"></i></button>*@
+
+                                            </span>
+
+
+                                        </div>
+                                        <div class="col-sm-12 mt-2">
+                                            <label>Rank : </label>
+                                            <span class="d-flex flex-row">
+                                                <input class="form-control" asp-for="Requisition.PreparedByRank" readonly id="txtpreparedRank" rows="6" placeholder="" />
+                                            </span>
+
+                                        </div>
+                                    </div>
+                                    <div class="my-2 col-sm-6">
+                                        <div class="col-sm-12">
+                                            <label>For : </label>
+                                            <span class="d-flex flex-row">
+                                                <input class="form-control" asp-for="Requisition.PreparedFor" readonly id="forStaffText" rows="6" placeholder="" />
+                                                @*<button class="btn loadStaffModal" value="forStaffText" data-toggle="modal" data-target="#staffModal"><i class="fa fa-search"></i></button>*@
+
+                                            </span>
+
+                                        </div>
+                                        <div class="col-sm-12 mt-2">
+                                            <label>Rank : </label>
+                                            <span class="d-flex flex-row">
+                                                <input class="form-control" asp-for="Requisition.PreparedForRank" readonly id="forStaffTextRank" rows="6" placeholder="" />
+                                            </span>
+
+                                        </div>
+                                    </div>
+
+                                </div>
+                            </div>
+                            <div class="col-sm-12 m-4 ">
+                                @if (Model.Requisition.Attachments.Count > 0)
+                                {
+                                    <h5 class="font-weight-bold">Attachments</h5>
+                                    <br>
+                                    <div class="d-flex flex-row">
+                                        <p>
+                                            @foreach (var file in Model.Requisition.Attachments)
+                                            {
+
+                                                <a class="fancybox" href="@Url.Content("~/Attachments/" + file.FilePath)"><img src="@Url.Content("~/Attachments/" + file.FilePath)" class="img-thumbnail" style="max-width : 20% !important" asp-append-version="true" /></a>
+
+                                            }
+                                        </p>
+
+                                    </div>
+                                }
+
+                            </div>
+
+
+                            <div class="col-sm-12 m-4">
+                                <div class="form-group">
+                                    <h5 class="font-weight-bold">Purpose : </h5>
+                                    <input type="hidden" asp-for="Requisition.Purpose" />
+                                    <div id="editor">
+                                        <p>hello world</p>
+                                        <p>Some intial<strong>bold</strong>text</p>
+                                        <p><br /></p>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="col-sm-4">
+                            </div>
+                            @*<div class="col-sm-4">
+                                    <div class="form-group">
+                                        <input class="btn btn-block btn-danger fa-print" value="Print" type="button" placeholder="Enter Resgistration Number" />
+                                    </div>
+                                </div>*@
+                        </div>
+                        <div class="modal-footer justify-content-center">
+                            @*  <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>*@
+                            <input id="btnSubmit" class="btn btn-lg btn-primary" value="Save" type="submit" placeholder="" />
+
+                        </div>
                     </div>
                 </div>
-            </div>
-        </form>
+            </form>
+        </div>
     </div>
-</div>
+}
+@section Scripts{ 
+
+<script src="~/js/jquery.fancybox.pack.js"></script>
+<script>
+
+    $(document).ready(function () {
+        $('.fancybox').fancybox();
+    })
+</script>
+
 }
