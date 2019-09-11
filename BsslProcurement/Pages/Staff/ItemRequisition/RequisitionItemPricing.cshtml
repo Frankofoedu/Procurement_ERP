@@ -84,7 +84,7 @@ else
                                     <input class="form-control" type="date" readonly asp-for="Requisition.DeliveryDate" placeholder="Pick Delivery Date" />
                                 </div>
                             </div>
-                            <div class="col-sm-6">
+                            @*<div class="col-sm-6">
                                 <div class="form-group">
                                     <label>Requesting Dept/Section : </label>
                                     <input class="form-control" readonly asp-for="Requisition.RequestionDepartment" value="@Model.Requisition.RequestionDepartment" placeholder="Enter Department" />
@@ -94,9 +94,9 @@ else
                                 <div class="form-group">
                                     <label>Required At : </label>
                                     <input class="form-control" readonly value=@Model.Requisition.RequestionDepartment />
-                                    @*o0 <select asp-items="Model.Departments" asp-for="Requisition.RequiredAtDepartment" class="form-control"></select>*@
+                                    o0 <select asp-items="Model.Departments" asp-for="Requisition.RequiredAtDepartment" class="form-control"></select>
                                 </div>
-                            </div>
+                            </div>*@
 
                             <div class="mt-3 mb-5 col-sm-12 table-responsive">
                                 <table class="table table-striped">
