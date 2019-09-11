@@ -5,6 +5,38 @@
     Layout = "~/Pages/Shared/_Layout.cshtml";
 }
 
+@section Styles{
+
+    <link href="~/css/jquery.dataTables.min.css" rel="stylesheet" />
+    <link href="~/css/fileupload.css" rel="stylesheet" />
+    <link href="~/css/site.css" rel="stylesheet" />
+    <link href="~/css/quill.snow.css" rel="stylesheet" />
+    <style>
+        .custom-file-container {
+            max-width: 400px;
+        }
+
+        .loader {
+            border: 16px solid #f3f3f3;
+            border-top: 16px solid #3498db;
+            border-radius: 50%;
+            width: 120px;
+            height: 120px;
+            -webkit-animation: spin 2s linear infinite;
+            animation: spin 2s linear infinite;
+        }
+
+        @@keyframes spin {
+            0% {
+                transform: rotate(0deg);
+            }
+
+            100% {
+                transform: rotate(360deg);
+            }
+        }
+    </style>
+}
 
 <div class="row my-3">
     <div class="col-12">
@@ -139,7 +171,7 @@
                                         </div>
                                         <div class="col-sm-9">
                                             <input type="hidden" class="staffIdInput @("staffIdInput" + i)" asp-for="InputModel[i].StaffId" />
-                                            <input type="text" sIndex="@i" class="staffCodeInput @("staffCodeInput" + i) form-control" asp-for="InputModel[i].StaffCode" />
+                                            <input type="text" readonly="readonly" sIndex="@i" class="staffCodeInput @("staffCodeInput" + i) form-control" asp-for="InputModel[i].StaffCode" />
                                         </div>
                                     </div>
                                 </div>
@@ -160,7 +192,7 @@
                                         </div>
                                         <div class="col-sm-9">
                                             <input type="hidden" class="AltStaffIdInput @("AltStaffIdInput" + i)" asp-for="InputModel[i].AlternativeStaffId" />
-                                            <input type="text" sIndex="@i" class="AltStaffCodeInput @("AltStaffCodeInput" + i) form-control" asp-for="InputModel[i].AlternativeStaffCode" />
+                                            <input type="text" readonly="readonly" sIndex="@i" class="AltStaffCodeInput @("AltStaffCodeInput" + i) form-control" asp-for="InputModel[i].AlternativeStaffCode" />
                                         </div>
                                     </div>
                                 </div>
@@ -199,216 +231,204 @@
 </div>
 
 
+<div class="modal" id="staffModal">
+    <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title">Staff Details</h4>
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+            </div>
+            <div class="modal-body">
+                <div id="grid"></div>
+            </div>
+            <div id="spinner" class="d-flex justify-content-center">
+                <div class="loader">
+                </div>
+            </div>
+
+            <div class="modal-footer">
+                <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
 
 
 @section Scripts {
+
     @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
-}
+
+    <script src="~/js/fileUpload.js"></script>
+    <script src="~/js/quill.js"></script>
+    <script src="~/js/jquery.dataTables.min.js"></script>
 
 
+    <script>
+        var arrayOfWorkflowActions = JSON.parse('@Json.Serialize(Model.WorkflowActions)');
 
-<script>
-    var arrayOfWorkflowActions = JSON.parse('@Json.Serialize(Model.WorkflowActions)');
-
-    function MakeActionsOptions(index) {
-        for (var i = 0; i < arrayOfWorkflowActions.length; i++) {
-            var o = new Option(arrayOfWorkflowActions[i].name, arrayOfWorkflowActions[i].id);
-            /// jquerify the DOM object 'o' so we can use the html method
-            $(o).html(arrayOfWorkflowActions[i].name);
-            $(".selectAction" + index).append(o);
-        }
-
-    }
-
-    $(document).ready(function () {
-
-        fetchWorkflows();
-        MakeActionsOptions(0);
-
-        function fetchWorkflows() {
-            var select = document.getElementById("categorySelect");
-            var id = select.value;
-            $("#CategoryId").val(id);
-            $('.workflowType').text(select.options[select.selectedIndex].innerHTML);
-
-            if (id) {
-
-                var baseUrl = window.location.origin;
-
-                $.ajax({
-                    url: baseUrl + '/api/Workflow/' + id.trim(),
-                    type: 'get',
-                    xhrFields: {
-                        withCredentials: true
-                    },
-                    contentType: 'application/json',
-                    error: function () {
-                        alert('An Error occured...');
-                    },
-                    success: function (data) {
-                        if (!data) {
-                            alert('No Workflow for the selected category.');
-                            return;
-                        }
-
-                        displayWorkflow(data);
-                    },
-                });
+        function MakeActionsOptions(index) {
+            for (var i = 0; i < arrayOfWorkflowActions.length; i++) {
+                var o = new Option(arrayOfWorkflowActions[i].name, arrayOfWorkflowActions[i].id);
+                /// jquerify the DOM object 'o' so we can use the html method
+                $(o).html(arrayOfWorkflowActions[i].name);
+                $(".selectAction" + index).append(o);
             }
+
         }
 
-        function displayWorkflow(workflows) {
-            $("#workflowBody").html("");
+        $(document).ready(function () {
 
-            for (var i = 0; i < workflows.length; i++) {
-                $("#workflowBody").append(NewWorkflowRow(workflows[i]));
+            fetchWorkflows();
+            MakeActionsOptions(0);
+
+            function fetchWorkflows() {
+                var select = document.getElementById("categorySelect");
+                var id = select.value;
+                $("#CategoryId").val(id);
+                $('.workflowType').text(select.options[select.selectedIndex].innerHTML);
+
+                if (id) {
+
+                    var baseUrl = window.location.origin;
+
+                    $.ajax({
+                        url: baseUrl + '/api/Workflow/' + id.trim(),
+                        type: 'get',
+                        xhrFields: {
+                            withCredentials: true
+                        },
+                        contentType: 'application/json',
+                        error: function () {
+                            alert('An Error occured...');
+                        },
+                        success: function (data) {
+                            if (!data) {
+                                alert('No Workflow for the selected category.');
+                                return;
+                            }
+
+                            displayWorkflow(data);
+                        },
+                    });
+                }
             }
-        }
 
-        function NewWorkflowRow(workflow) {
-            var html = '<tr><td>' + workflow.step + '</td> <td>' + workflow.description + '</td>' +
-                '<td>' + workflow.workflowAction.name + '</td><td>' + workflow.threshold + '</td><td>' + workflow.toPersonOrAssign + '</td>';
+            function displayWorkflow(workflows) {
+                $("#workflowBody").html("");
 
-            if (workflow.staffToAssign) {
-                html += '<td>' + workflow.staffToAssign.staffCode + '</td> <td>' + workflow.staffToAssign.name + '</td>';
-                if (workflow.alternativeStaffToAssign) {
-                    html += '<td>' + workflow.alternativeStaffToAssign.staffCode + '</td> <td>' +
-                        workflow.alternativeStaffToAssign.name + '</td>';
+                for (var i = 0; i < workflows.length; i++) {
+                    $("#workflowBody").append(NewWorkflowRow(workflows[i]));
+                }
+            }
+
+            function NewWorkflowRow(workflow) {
+                var html = '<tr><td>' + workflow.step + '</td> <td>' + workflow.description + '</td>' +
+                    '<td>' + workflow.workflowAction.name + '</td><td>' + workflow.threshold + '</td><td>' + workflow.toPersonOrAssign + '</td>';
+
+                if (workflow.staffToAssign) {
+                    html += '<td>' + workflow.staffToAssign.staffCode + '</td> <td>' + workflow.staffToAssign.name + '</td>';
+                    if (workflow.alternativeStaffToAssign) {
+                        html += '<td>' + workflow.alternativeStaffToAssign.staffCode + '</td> <td>' +
+                            workflow.alternativeStaffToAssign.name + '</td>';
+                    }
+                    else {
+                        html += '<td></td> <td></td>';
+                    }
                 }
                 else {
                     html += '<td></td> <td></td>';
                 }
+
+                html += '</tr>';
+
+                return html;
             }
-            else {
-                html += '<td></td> <td></td>';
+
+
+            $('#btnNewCard').on('click', function (event) {
+                event.preventDefault;
+                var lastIndex = $('#lastIndex').val();
+                var newIndex = Number(lastIndex) + 1;
+
+                newStepCard(newIndex);
+                MakeActionsOptions(newIndex);
+
+                $('#lastIndex').val(newIndex);
+                return false;
+            });
+
+            function newStepCard(index) {
+                var html = '<div class="col-md-6"> <div class="card mt-3"> <div class="card-header"> <h2>Step ' + (Number(index) + 1) + ' <input type="hidden" id="InputModel_' + index + '__Step" name="InputModel[' + index + '].Step" value="' + (Number(index) + 1) + '" /></h2></div>' +
+                    '<div class="card-body"> <div class="form-group"> <div class="row"> <div class="col-sm-3 text-right"> <label>Description</label> </div> <div class="col-sm-9"> <input type="text" class="form-control"  id="InputModel_' + index + '__Description" name="InputModel[' + index + '].Description" value=""/> </div> </div> </div>' +
+                    '<div class="form-group"> <div class="row"> <div class="col-sm-3 text-right"> <label>Action</label> </div> <div class="col-sm-9"><select id="InputModel_' + index + '__WorkflowActionId" name="InputModel[' + index + '].WorkflowActionId" class="form-control selectAction' + index + '"></select> </div> </div> </div>' +
+                    '<div class="form-group"> <div class="row"> <div class="col-sm-3 text-right"> <label>Threshold</label> </div> <div class="col-sm-9"> <input type="number" id="InputModel_' + index + '__Threshold" name="InputModel[' + index + '].Threshold" class="form-control" /> </div> </div> </div>' +
+                    '<div class="form-group"> <div class="row"> <div class="col-sm-3 text-right"> <label>For Specific Staff</label> </div> <div class="col-sm-9"> <input type="checkbox" class="checkbox" data-val="true" data-val-required="The Assign field is required." id="InputModel_' + index + '__Assign" name="InputModel[' + index + '].Assign" value="true" /> </div> </div> </div>' +
+                    '<div class="form-group"> <div class="row"> <div class="col-sm-3 text-right"> <label>Staff Code</label> </div> <div class="col-sm-9"> <input type="hidden" class="staffIdInput staffIdInput' + index + '" id="InputModel_' + index + '__StaffId" name="InputModel[' + index + '].StaffId" value="" />' +
+                    '<input type="text" sIndex="' + index + '" readonly="readonly" class="staffCodeInput staffCodeInput' + index + ' form-control" id="InputModel_' + index + '__StaffCode" name="InputModel[' + index + '].StaffCode" value="" /> </div> </div> </div>' +
+                    '<div class="form-group"> <div class="row"> <div class="col-sm-3 text-right"> <label>Staff Name</label> </div> <div class="col-sm-9"> <input type="text" readonly="readonly" class="staffNameInput staffNameInput' + index + '" id="InputModel_' + index + '__StaffName" name="InputModel[' + index + '].StaffName" value="" /> </div> </div> </div>' +
+                    '<div class="form-group"> <div class="row"> <div class="col-sm-3 text-right"> <label>Alt. Staff Code</label> </div> <div class="col-sm-9"> <input type="hidden" class="AltStaffIdInput AltStaffIdInput' + index + '" id="InputModel_' + index + '__AlternativeStaffId" name="InputModel[' + index + '].AlternativeStaffId" value="">'+
+                    '<input type="text" sindex="' + index + '" readonly="readonly" class="AltStaffCodeInput AltStaffCodeInput' + index + ' form-control" id="InputModel_' + index + '__AlternativeStaffCode" name="InputModel[' + index + '].AlternativeStaffCode" value=""> </div> </div> </div>'+
+                    '<div class="form-group"> <div class="row"> <div class="col-sm-3 text-right"> <label>Alt. Staff Name</label> </div> <div class="col-sm-9"> <input type="text" readonly="readonly" class="AltStaffNameInput AltStaffNameInput' + index + '" id="InputModel_' + index + '__AlternativeStaffName" name="InputModel[' + index + '].AlternativeStaffName" value=""> </div> </div> </div> </div> </div> </div> ';
+
+                $('#workflowCards').append(html);
             }
 
-            html += '</tr>';
-
-            return html;
-        }
-
-
-        $('#btnNewCard').on('click', function (event) {
-            event.preventDefault;
-            var lastIndex = $('#lastIndex').val();
-            var newIndex = Number(lastIndex) + 1;
-
-            newStepRow(newIndex);
-            MakeActionsOptions(newIndex);
-
-            $('#lastIndex').val(newIndex);
-            return false;
-        });
+            $('#workflowCards').on('click', '.staffCodeInput', function () {
         
-        function newStepRow(index) {
-            var html = '<div class="col-md-6"> <div class="card mt-3"> <div class="card-header"> <h2>Step ' + (Number(index) + 1) + ' <input type="hidden" id="InputModel_' + index + '__Step" name="InputModel[' + index + '].Step" value="' + (Number(index) + 1) + '" /></h2></div>' +
-                '<div class="card-body"> <div class="form-group"> <div class="row"> <div class="col-sm-3 text-right"> <label>Description</label> </div> <div class="col-sm-9"> <input type="text" class="form-control"  id="InputModel_' + index + '__Description" name="InputModel[' + index + '].Description" value=""/> </div> </div> </div>' +
-                '<div class="form-group"> <div class="row"> <div class="col-sm-3 text-right"> <label>Action</label> </div> <div class="col-sm-9"><select id="InputModel_' + index + '__WorkflowActionId" name="InputModel[' + index + '].WorkflowActionId" class="form-control selectAction' + index + '"></select> </div> </div> </div>' +
-                '<div class="form-group"> <div class="row"> <div class="col-sm-3 text-right"> <label>Threshold</label> </div> <div class="col-sm-9"> <input type="number" id="InputModel_' + index + '__Threshold" name="InputModel[' + index + '].Threshold" class="form-control" /> </div> </div> </div>' +
-                '<div class="form-group"> <div class="row"> <div class="col-sm-3 text-right"> <label>For Specific Staff</label> </div> <div class="col-sm-9"> <input type="checkbox" class="checkbox" data-val="true" data-val-required="The Assign field is required." id="InputModel_' + index + '__Assign" name="InputModel[' + index + '].Assign" value="true" /> </div> </div> </div>' +
-                '<div class="form-group"> <div class="row"> <div class="col-sm-3 text-right"> <label>Staff Code</label> </div> <div class="col-sm-9"> <input type="hidden" class="staffIdInput staffIdInput' + index + '" id="InputModel_' + index + '__StaffId" name="InputModel[' + index + '].StaffId" value="" />' +
-                '<input type="text" sIndex="' + index + '" class="staffCodeInput staffCodeInput' + index + ' form-control" id="InputModel_' + index + '__StaffCode" name="InputModel[' + index + '].StaffCode" value="" /> </div> </div> </div>' +
-                '<div class="form-group"> <div class="row"> <div class="col-sm-3 text-right"> <label>Staff Name</label> </div> <div class="col-sm-9"> <input type="text" readonly="readonly" class="staffNameInput staffNameInput' + index + '" id="InputModel_' + index + '__StaffName" name="InputModel[' + index + '].StaffName" value="" /> </div> </div> </div>' +
-                '<div class="form-group"> <div class="row"> <div class="col-sm-3 text-right"> <label>Alt. Staff Code</label> </div> <div class="col-sm-9"> <input type="hidden" class="AltstaffIdInput AltStaffIdInput' + index + ' id="InputModel_' + index + '__AlternativeStaffId" name="InputModel[' + index + '].AlternativeStaffId" value="">'+
-                '<input type="text" sindex="' + index + '" class="AltstaffCodeInput AltStaffCodeInput' + index + ' form-control" id="InputModel_' + index + '__AlternativeStaffCode" name="InputModel[' + index + '].AlternativeStaffCode" value=""> </div> </div> </div>'+
-                '<div class="form-group"> <div class="row"> <div class="col-sm-3 text-right"> <label>Alt. Staff Name</label> </div> <div class="col-sm-9"> <input type="text" readonly="readonly" class="AltStaffNameInput AltStaffNameInput' + index + '" id="InputModel_' + index + '__AlternativeStaffName" name="InputModel[' + index + '].AlternativeStaffName" value=""> </div> </div> </div> </div> </div> </div> ';
+                var sindex = this.getAttribute('sIndex');
 
-            $('#workflowCards').append(html);
-        }
+                $('#grid').empty();
+                $('#spinner').addClass('d-flex');
+                $('#spinner').show();
+                $('#staffModal').modal("show");
 
-        function newStepRo(index) {
-            var html = ' <tr> <td>' + (Number(index) + 1) + ' <input type="hidden" id="InputModel_' + index + '__Step" name="InputModel[' + index + '].Step" value="' + (Number(index) + 1) + '" /></td > <td>' +
-                '<input type="text" class="form-control"  id="InputModel_' + index + '__Description" name="InputModel[' + index + '].Description" value=""/></td>' +
-                '<td><select id="InputModel_' + index + '__WorkflowActionId" name="InputModel[' + index + '].WorkflowActionId" class="form-control selectAction' + index + '"></select></td>' +
-                '<td><input type="number" id="InputModel_' + index + '__Threshold" name="InputModel[' + index + '].Threshold" class="form-control" /></td>' +
-                '<td><input type="checkbox" class="checkbox" data-val="true" data-val-required="The Assign field is required." id="InputModel_' + index + '__Assign" name="InputModel[' + index + '].Assign" value="true" /></td>' +
-                '<td><input type="hidden" class="staffIdInput staffIdInput' + index + '" id="InputModel_' + index + '__StaffId" name="InputModel[' + index + '].StaffId" value="" />' +
-                '<input type="text" sIndex="' + index + '" class="staffCodeInput staffCodeInput' + index + ' form-control" id="InputModel_' + index + '__StaffCode" name="InputModel[' + index + '].StaffCode" value="" /></td>' +
-                '<td><input type="text" readonly="readonly" class="staffNameInput staffNameInput' + index + '" id="InputModel_' + index + '__StaffName" name="InputModel[' + index + '].StaffName" value="" /></td>' +
-                '<td><input type="hidden" class="AltstaffIdInput AltStaffIdInput' + index + ' id="InputModel_' + index + '__AlternativeStaffId" name="InputModel[' + index + '].AlternativeStaffId" value="">'+
-                '<input type="text" sindex="' + index + '" class="AltstaffCodeInput AltStaffCodeInput' + index + ' form-control" id="InputModel_' + index + '__AlternativeStaffCode" name="InputModel[' + index + '].AlternativeStaffCode" value=""></td>'+
-                '<td><input type="text" readonly="readonly" class="AltStaffNameInput AltStaffNameInput' + index + '" id="InputModel_' + index + '__AlternativeStaffName" name="InputModel[' + index + '].AlternativeStaffName" value=""></td></tr > ';
+                $('#grid').load(this.baseURI + '?handler=StaffPartial', function () {
+                    $('#spinner').removeClass('d-flex');
+                    $('#spinner').hide();
+                    $('#staffTable').dataTable();
 
-            $('#workflowTbody').append(html);
-        }
+                    $('.btnStaffName').on('click', function () {
 
-        $('#workflowTbody').on('change', '.staffCodeInput', function () {
+                        $('.staffIdInput' + sindex).val($(this).html());
+                        $('.staffNameInput' + sindex).val($(this).val());
+                        $('.staffCodeInput' + sindex).val($(this).html());
 
-            var code = this.value;
-            var sindex = this.getAttribute('sIndex');
-
-            if (code) {
-
-                var baseUrl = window.location.origin;
-
-                $.ajax({
-                    url: baseUrl + '/api/Codes/Staff/' + code.trim(),
-                    type: 'get',
-                    xhrFields: {
-                        withCredentials: true
-                    },
-                    contentType: 'application/json',
-                    error: function () {
-                        alert('An Error occured.');
-                        $('.staffCodeInput' + sindex).focus();
-                        $('.staffIdInput' + sindex).val('');
-                        $('.staffNameInput' + sindex).val('');
-                    },
-                    success: function (data) {
-                        if (!data) {
-                            alert('This staff code is invalid.');
-                            $('.staffCodeInput' + sindex).focus();
-                            $('.staffIdInput' + sindex).val('');
-                            $('.staffNameInput' + sindex).val('');
-                            return;
-                        }
-
-                        $('.staffIdInput' + sindex).val(data.id);
-                        $('.staffNameInput' + sindex).val(data.name);
-                    },
+                        $('#staffModal').modal("hide");
+                        return false;
+                    });
                 });
-            }
+
+            });
+
+             $('#workflowCards').on('click', '.AltStaffCodeInput', function () {
+                 
+                 var sindex = this.getAttribute('sIndex');
+
+                $('#grid').empty();
+                $('#spinner').addClass('d-flex');
+                $('#spinner').show();
+                $('#staffModal').modal("show");
+
+                $('#grid').load(this.baseURI + '?handler=StaffPartial', function () {
+                    $('#spinner').removeClass('d-flex');
+                    $('#spinner').hide();
+                    $('#staffTable').dataTable();
+
+                    $('.btnStaffName').on('click', function () {
+
+                        $('.AltStaffIdInput' + sindex).val($(this).html());
+                        $('.AltStaffNameInput' + sindex).val($(this).val());
+                        $('.AltStaffCodeInput' + sindex).val($(this).html());
+
+                        $('#staffModal').modal("hide");
+                        return false;
+                    });
+                });
+
+             });
+
+            $('#categorySelect').change(function () { fetchWorkflows(); });
         });
+    </script>
 
-         $('#workflowTbody').on('change', '.AltStaffCodeInput', function () {
-
-            var code = this.value;
-            var sindex = this.getAttribute('sIndex');
-
-            if (code) {
-
-                var baseUrl = window.location.origin;
-
-                $.ajax({
-                    url: baseUrl + '/api/Codes/Staff/' + code.trim(),
-                    type: 'get',
-                    xhrFields: {
-                        withCredentials: true
-                    },
-                    contentType: 'application/json',
-                    error: function () {
-                        alert('An Error occured.');
-                        $('.AltStaffCodeInput' + sindex).focus();
-                        $('.AltStaffIdInput' + sindex).val('');
-                        $('.AltStaffNameInput' + sindex).val('');
-                    },
-                    success: function (data) {
-                        if (!data) {
-                            alert('This staff code is invalid.');
-                            $('.AltStaffCodeInput' + sindex).focus();
-                            $('.AltStaffIdInput' + sindex).val('');
-                            $('.AltStaffNameInput' + sindex).val('');
-                            return;
-                        }
-
-                        $('.AltStaffIdInput' + sindex).val(data.id);
-                        $('.AltStaffNameInput' + sindex).val(data.name);
-                    },
-                });
-            }
-         });
-
-        $('#categorySelect').change(function () { fetchWorkflows(); });
-    });
-</script>
+}
