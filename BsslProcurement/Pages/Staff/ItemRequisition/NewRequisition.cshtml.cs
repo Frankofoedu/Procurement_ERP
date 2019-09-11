@@ -16,7 +16,7 @@ using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.AspNetCore.Mvc.ViewFeatures;
 
-namespace BsslProcurement.Pages.Staff.Transaction
+namespace BsslProcurement.Pages.Staff.ItemRequisition
 {
 
 
@@ -29,6 +29,8 @@ namespace BsslProcurement.Pages.Staff.Transaction
         private IHostingEnvironment _environment;
 
 
+        [BindProperty]
+        public string serialNo { get; set; }
 
         public string Message { get; set; }
         public string Error { get; set; }
@@ -73,22 +75,25 @@ namespace BsslProcurement.Pages.Staff.Transaction
 
         }
 
-        public async Task OnPostAsync(List<IFormFile> files)
+        public async Task<ActionResult> OnPostAsync(List<IFormFile> files)
         {
             if (ModelState.IsValid)
             {
                 try
                 {
-                    var filepaths = (await FileUpload.GetFilePathsAsync(files, _environment));
+                    var filepaths = (await FileUpload.GetFilePathsAsync(files, _environment, "Attachments"));
 
                     Requisition.Attachments = filepaths;
                     Requisition.RequisitionItems = RequisitionItems;
 
+                    
                     _procContext.Requisitions.Add(Requisition);
+                    _procContext.PRNos.Add(new PRNo { RequisitionCode = Requisition.PRNumber, LastUsedSerialNo = serialNo });
 
                     _procContext.SaveChanges();
 
                     Message = "Requisition Added successfully";
+                    return Page();
                 }
                 catch (Exception ex)
                 {
@@ -97,6 +102,7 @@ namespace BsslProcurement.Pages.Staff.Transaction
 
             }
             await LoadData();
+            return Page();
         }
 
         private async Task LoadData()
@@ -171,14 +177,14 @@ namespace BsslProcurement.Pages.Staff.Transaction
                     // implement serial no
                     var PrNo = _procContext.PRNos.OrderByDescending(t => t.LastUsedSerialNo).FirstOrDefault();
 
-                    string serialNo = "";
+                    serialNo = "";
                     if (PrNo == null)
                     {
                         serialNo = "00001";
                     }
                     else
                     {
-                        serialNo = (Convert.ToInt32(PrNo.LastUsedSerialNo) + 1).ToString("0000");
+                        serialNo = (Convert.ToInt32(PrNo.LastUsedSerialNo) + 1).ToString("00000");
                     }
 
                     //itf/deptcode/deptprefix/year/serial no

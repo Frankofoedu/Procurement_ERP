@@ -8,13 +8,13 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.EntityFrameworkCore;
 
-namespace BsslProcurement.Pages.Staff.Transaction
+namespace BsslProcurement.Pages.Staff.ItemRequisition
 {
     [Authorize]
-    public class RequisitionModel : PageModel
+    public class AllRequisitionModel : PageModel
     {
         private readonly BSSLSYS_ITF_DEMOContext _context;
-        public RequisitionModel(BSSLSYS_ITF_DEMOContext context)
+        public AllRequisitionModel(BSSLSYS_ITF_DEMOContext context)
         {
             _context = context;
         }
