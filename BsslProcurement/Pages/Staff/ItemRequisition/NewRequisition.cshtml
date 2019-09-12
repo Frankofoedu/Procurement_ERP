@@ -463,7 +463,7 @@
         $(function () {
             $('#btnSubmit').on('click', function () {
                 var purpose = $('#Requisition_Purpose');
-                purpose.val(JSON.stringify(quill.getContents()));
+                purpose.val(quill.root.innerHTML);
             })
         })
 

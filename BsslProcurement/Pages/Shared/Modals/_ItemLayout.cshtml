@@ -1,0 +1,35 @@
+﻿@page
+@*
+    For more information on enabling MVC for empty projects, visit http://go.microsoft.com/fwlink/?LinkID=397860
+*@
+
+@using DcProcurement.Contexts
+@model List<Stock>
+@{
+}
+@section Styles{
+}
+<table id="itemTable" class="table table-striped">
+    <thead>
+        <tr>
+            <th>Item Code</th>
+            <th>Description</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>
+                    <button class="btn btn-link btnStaffName" itemName="@item.Itemdesc" value="@item.Stockno">@item.Stockno</button>
+                </td>
+                <td>@item.Itemdesc</td>
+            </tr>
+        }
+    </tbody>
+</table>
+
+@section Scripts{
+
+
+}

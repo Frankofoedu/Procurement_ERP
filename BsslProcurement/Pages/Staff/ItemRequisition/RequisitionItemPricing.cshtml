@@ -3,11 +3,11 @@
 @{
     ViewData["Title"] = "RequisitionItemPricing";
 }
-@section  Styles{
-    
-<link rel="stylesheet" href="~/css/jquery.fancybox.css" type="text/css"/>
+@section Styles{
 
- }
+    <link rel="stylesheet" href="~/css/jquery.fancybox.css" type="text/css" />
+
+}
 
 <h2>Item Pricing</h2>
 
@@ -39,7 +39,7 @@ else
             <form class="panel panel-login" method="post" enctype="multipart/form-data">
                 <div class="panel-heading">
                     <div class="row">
-                        <p class="header-text">Purchase Requisition @Model.Requisition.PRNumber</p>
+                        <p class="header-text">Purchase Requisition For @Model.Requisition.PRNumber</p>
 
                     </div>
                     <hr>
@@ -123,20 +123,18 @@ else
                                                 </td>
 
                                                 <td class="col-sm-1">
-                                                    <input type="text" readonly />
+                                                    <input type="text" asp-for="Requisition.RequisitionItems[i].StoreItemCode" />
+                                                    <button class="btn loadItemModal" inputclass="itemCode" data-toggle="modal" data-target="#itemModal"><i class="fa fa-search"></i></button>
 
                                                 </td>
                                                 <td>
                                                     <input type="text" required asp-for="Requisition.RequisitionItems[i].Description" value="@item.Description" />
-
                                                 </td>
                                                 <td>
                                                     <input type="number" required asp-for="Requisition.RequisitionItems[i].Quantity" value="@item.Quantity" />
-
                                                 </td>
                                                 <td>
                                                     <input type="text" required asp-for="Requisition.RequisitionItems[0].UnitOfMeasurement" value="@item.UnitOfMeasurement" />
-
                                                 </td>
                                                 <!-- <td class="d-flex justify-content-start">
                                                     <input class="supinput0" type="text" readonly @*asp-for="RequisitionItems[0].VendorId"*@ />
@@ -212,12 +210,19 @@ else
                                 {
                                     <h5 class="font-weight-bold">Attachments</h5>
                                     <br>
-                                    <div class="d-flex flex-row">
+                                    <div class="d-flex flex-column">
                                         <p>
                                             @foreach (var file in Model.Requisition.Attachments)
                                             {
+                                                if (file.FilePath.EndsWith("pdf"))
+                                                {
+                                                    <a class="fancybox m-5 btn btn-link fas fa-file-pdf" data-fancybox-type="iframe" href="@Url.Content("~/Attachments/" + file.FilePath)">Open PDf Attachment</a>
+                                                }
+                                                else
+                                                {
+                                                    <a class="fancybox m-5" href="@Url.Content("~/Attachments/" + file.FilePath)"><img src="@Url.Content("~/Attachments/" + file.FilePath)" class="img-thumbnail" style="max-width : 10% !important" asp-append-version="true" /></a>
 
-                                                <a class="fancybox" href="@Url.Content("~/Attachments/" + file.FilePath)"><img src="@Url.Content("~/Attachments/" + file.FilePath)" class="img-thumbnail" style="max-width : 20% !important" asp-append-version="true" /></a>
+                                                }
 
                                             }
                                         </p>
@@ -231,17 +236,13 @@ else
                             <div class="col-sm-12 m-4">
                                 <div class="form-group">
                                     <h5 class="font-weight-bold">Purpose : </h5>
-                                    <input type="hidden" asp-for="Requisition.Purpose" />
+                                    <input type="hidden" id="purpose" value="@Model.Requisition.Purpose" />
                                     <div id="editor">
-                                        <p>hello world</p>
-                                        <p>Some intial<strong>bold</strong>text</p>
-                                        <p><br /></p>
+
                                     </div>
                                 </div>
                             </div>
 
-                            <div class="col-sm-4">
-                            </div>
                             @*<div class="col-sm-4">
                                     <div class="form-group">
                                         <input class="btn btn-block btn-danger fa-print" value="Print" type="button" placeholder="Enter Resgistration Number" />
@@ -258,15 +259,78 @@ else
             </form>
         </div>
     </div>
+
+    <div class="modal" id="itemModal">
+        <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h4 class="modal-title">Item Details</h4>
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                </div>
+                <div class="modal-body">
+                    <div id="Itemgrid"></div>
+                </div>
+                <div id="Itemspinner" class="d-flex justify-content-center">
+                    <div class="loader">
+                    </div>
+                </div>
+
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
+                </div>
+            </div>
+        </div>
+    </div>
 }
-@section Scripts{ 
+@section Scripts{
 
-<script src="~/js/jquery.fancybox.pack.js"></script>
-<script>
+    <script src="~/js/jquery.fancybox.pack.js"></script>
+    <script src="~/js/quill.js"></script>
+    <script>
 
-    $(document).ready(function () {
-        $('.fancybox').fancybox();
-    })
-</script>
+        $(document).ready(function () {
+            $(".fancybox").fancybox({
+                openEffect: 'none',
+                closeEffect: 'none',
+                iframe: {
+                    preload: false
+                }
+            });
+
+
+            //set purpose field
+            var purposeValue = $("#purpose").val();
+            var purposeField = document.getElementById('editor');
+            purposeField.innerHTML = purposeValue;
+
+        })
+
+        //loads vendor modal
+        $(function () {
+            $('.loadItemModal').on('click', function () {
+                $('#itemModal').modal("show");
+
+                //get supplier name textbox
+                var txtToAssign = $('.' + $(this).attr('inputclass') + '');
+                $('#Vendorgrid').load(this.baseURI + '?handler=VendorPartial', function () {
+                    $('#Vendorspinner').removeClass('d-flex');
+                    $('#Vendorspinner').hide();
+                    $('#vendorTable').dataTable();
+
+                    $('.btnVendorName').on('click', function () {
+                        //assign staff name textbox
+                        txtToAssign.val($(this).val());
+
+
+                        $('#staffModal').modal("hide");
+                        return false;
+                    });
+                });
+
+                return false;
+
+            });
+        });
+    </script>
 
 }
