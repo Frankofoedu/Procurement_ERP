@@ -21,6 +21,7 @@ namespace DcProcurement.Contexts
         public virtual DbSet<Useracct> Useracct { get; set; }
         public virtual DbSet<Compdata> Compdata { get; set; }
         public virtual DbSet<Stafftab> Stafftab { get; set; }
+        public virtual DbSet<Stock> Stock { get; set; }
 
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
@@ -1266,6 +1267,197 @@ namespace DcProcurement.Contexts
 
                 entity.Property(e => e.Zone)
                     .HasColumnName("zone")
+                    .HasMaxLength(10)
+                    .IsUnicode(false);
+            });
+
+            modelBuilder.Entity<Stock>(entity =>
+            {
+                entity.ToTable("stock");
+
+                entity.Property(e => e.Acctcode)
+                    .HasColumnName("ACCTCODE")
+                    .HasMaxLength(10)
+                    .IsUnicode(false);
+
+                entity.Property(e => e.Assetcode)
+                    .HasColumnName("ASSETCODE")
+                    .HasMaxLength(20)
+                    .IsUnicode(false);
+
+                entity.Property(e => e.Binlocat)
+                    .HasColumnName("binlocat")
+                    .HasMaxLength(50)
+                    .IsUnicode(false);
+
+                entity.Property(e => e.Copny)
+                    .HasColumnName("copny")
+                    .HasMaxLength(10)
+                    .IsUnicode(false);
+
+                entity.Property(e => e.Cosalesact)
+                    .HasColumnName("cosalesact")
+                    .HasMaxLength(10)
+                    .IsUnicode(false);
+
+                entity.Property(e => e.Details)
+                    .HasColumnName("details")
+                    .IsUnicode(false);
+
+                entity.Property(e => e.Expdate)
+                    .HasColumnName("expdate")
+                    .HasColumnType("date");
+
+                entity.Property(e => e.Groupno)
+                    .IsRequired()
+                    .HasColumnName("groupno")
+                    .HasMaxLength(5)
+                    .IsUnicode(false);
+
+                entity.Property(e => e.Inuse)
+                    .HasColumnName("inuse")
+                    .HasMaxLength(1)
+                    .IsUnicode(false)
+                    .HasDefaultValueSql("('')");
+
+                entity.Property(e => e.Inusetime)
+                    .HasColumnName("inusetime")
+                    .HasColumnType("datetime");
+
+                entity.Property(e => e.Itemdesc)
+                    .HasColumnName("itemdesc")
+                    .IsUnicode(false);
+
+                entity.Property(e => e.Lastcdate)
+                    .HasColumnName("LASTCDATE")
+                    .HasColumnType("datetime");
+
+                entity.Property(e => e.Lastcprice)
+                    .HasColumnName("LASTCPRICE")
+                    .HasColumnType("decimal(18, 2)");
+
+                entity.Property(e => e.Lastcqty)
+                    .HasColumnName("LASTCQTY")
+                    .HasColumnType("decimal(18, 2)");
+
+                entity.Property(e => e.MinQty)
+                    .HasColumnName("min_qty")
+                    .HasColumnType("decimal(11, 2)");
+
+                entity.Property(e => e.Nonestock)
+                    .IsRequired()
+                    .HasColumnName("nonestock")
+                    .HasMaxLength(3)
+                    .IsUnicode(false)
+                    .HasDefaultValueSql("('NO')");
+
+                entity.Property(e => e.Partno)
+                    .HasColumnName("partno")
+                    .HasMaxLength(10)
+                    .IsUnicode(false);
+
+                entity.Property(e => e.Perichitem)
+                    .HasColumnName("perichitem")
+                    .HasMaxLength(3)
+                    .IsUnicode(false);
+
+                entity.Property(e => e.Placcount)
+                    .HasColumnName("placcount")
+                    .HasMaxLength(10)
+                    .IsUnicode(false);
+
+                entity.Property(e => e.Project2)
+                    .HasColumnName("project2")
+                    .HasMaxLength(20)
+                    .IsUnicode(false);
+
+                entity.Property(e => e.QtyInStock)
+                    .HasColumnName("qty_in_stock")
+                    .HasColumnType("decimal(16, 2)");
+
+                entity.Property(e => e.ReorderLevel)
+                    .HasColumnName("reorder_level")
+                    .HasColumnType("decimal(11, 2)");
+
+                entity.Property(e => e.Reorderqty)
+                    .HasColumnName("REORDERQTY")
+                    .HasColumnType("decimal(18, 2)");
+
+                entity.Property(e => e.Salesacct)
+                    .HasColumnName("salesacct")
+                    .HasMaxLength(10)
+                    .IsUnicode(false);
+
+                entity.Property(e => e.Salesprice)
+                    .HasColumnName("salesprice")
+                    .HasColumnType("decimal(11, 2)");
+
+                entity.Property(e => e.StockStat)
+                    .HasColumnName("stock_stat")
+                    .HasMaxLength(1)
+                    .IsUnicode(false);
+
+                entity.Property(e => e.Stockno)
+                    .IsRequired()
+                    .HasColumnName("stockno")
+                    .HasMaxLength(7)
+                    .IsUnicode(false);
+
+                entity.Property(e => e.Surdefacct)
+                    .HasColumnName("SURDEFACCT")
+                    .HasMaxLength(20)
+                    .IsUnicode(false);
+
+                entity.Property(e => e.TypeCode)
+                    .IsRequired()
+                    .HasColumnName("type_code")
+                    .HasMaxLength(3)
+                    .IsUnicode(false);
+
+                entity.Property(e => e.Units)
+                    .HasColumnName("units")
+                    .HasMaxLength(10)
+                    .IsUnicode(false);
+
+                entity.Property(e => e.Uprice)
+                    .HasColumnName("uprice")
+                    .HasColumnType("decimal(11, 4)");
+
+                entity.Property(e => e.Userid)
+                    .HasColumnName("userid")
+                    .HasMaxLength(15)
+                    .IsUnicode(false);
+
+                entity.Property(e => e.Valmethod)
+                    .HasColumnName("valmethod")
+                    .HasMaxLength(3)
+                    .IsUnicode(false);
+
+                entity.Property(e => e.Valprice)
+                    .HasColumnName("valprice")
+                    .HasColumnType("decimal(11, 2)");
+
+                entity.Property(e => e.Vatrate)
+                    .HasColumnName("vatrate")
+                    .HasColumnType("decimal(8, 2)");
+
+                entity.Property(e => e.WBinFrom)
+                    .HasColumnName("w_bin_from")
+                    .HasMaxLength(50)
+                    .IsUnicode(false);
+
+                entity.Property(e => e.WBinTo)
+                    .HasColumnName("w_bin_to")
+                    .HasMaxLength(50)
+                    .IsUnicode(false);
+
+                entity.Property(e => e.WCode)
+                    .HasColumnName("w_code")
+                    .HasMaxLength(20)
+                    .IsUnicode(false);
+
+                entity.Property(e => e.Zcopny)
+                    .HasColumnName("zcopny")
                     .HasMaxLength(10)
                     .IsUnicode(false);
             });
