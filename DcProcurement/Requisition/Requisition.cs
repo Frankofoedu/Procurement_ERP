@@ -16,8 +16,10 @@ namespace DcProcurement
         public DateTime? Date { get; set; }
         [Required(ErrorMessage = "Select Date")]
         public DateTime? DeliveryDate { get; set; }
-        [Required(ErrorMessage = "Select Department Requesting")]
-        public string RequestionDepartment { get; set; }
+        [Required(ErrorMessage = "Select Requester Type")]
+        public string RequesterType { get; set; }
+        [Required(ErrorMessage = "Select Requester")]
+        public string RequesterValue { get; set; }
         [Required(ErrorMessage = "Select Department Required At")]
         public string RequiredAtDepartment { get; set; }
         [Required(ErrorMessage = "Select Staff Prepared By")]

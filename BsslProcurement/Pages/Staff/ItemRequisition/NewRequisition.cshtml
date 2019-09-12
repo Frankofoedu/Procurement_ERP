@@ -73,22 +73,18 @@
                 <div class="">
 
                     <div class=" panel">
-
-                        <div class="d-flex justify-content-center mb-3">
-
-                            <div class="form-check form-check-inline">
-                                <input class="form-check-input" type="radio" asp-for="Requisition.ProcurementType" value="Capital Procurement">
-                                <label class="form-check-label" for="inlineRadio1">  Capital Procurement  </label>
+                        <div class="text-center mb-3">
+                            <div class="form-group mb-0">
+                                <label class="btn btn-outline-dark pl-4">
+                                    <input class="form-check-input" type="radio" checked asp-for="Requisition.ProcurementType" value="Capital Procurement">
+                                    Capital Procurement
+                                </label>
+                                <label class="btn btn-outline-dark pl-4">
+                                    <input class="form-check-input" type="radio" asp-for="Requisition.ProcurementType" value="Recurrent Procurement">
+                                    Recurrent Procurement
+                                </label>
                             </div>
-                            <div class="form-check form-check-inline">
-                                <input class="form-check-input" type="radio" asp-for="Requisition.ProcurementType" value="Recurrent Procurement">
-                                <label class="form-check-label" for="inlineRadio2">  Recurrent Procurement  </label>
-                            </div>
-
                         </div>
-
-
-
                     </div>
                     <div class="row p-2">
                         <div class="col-sm-4">
@@ -110,11 +106,32 @@
                                 <input class="form-control" type="date" asp-for="Requisition.DeliveryDate" placeholder="Pick Delivery Date" />
                             </div>
                         </div>
-                        <div class="col-sm-6">
+                        <div class="col-sm-12">
                             <div class="form-group">
-                                <label>Requesting Dept/Section : </label>
-                                <input class="form-control" readonly asp-for="Requisition.RequestionDepartment" value="@Model.RequestingDept" placeholder="Enter Department" />
+                                <label>Requesting:</label>
+                                <div class="panel border border-dark rounded p-2">
+                                    <div class="row">
+                                        <div class="col-sm-6">
+                                            <div class="form-group mb-0">
+                                                <label class="btn btn-outline-dark"><input type="radio" checked asp-for="Requisition.RequesterType" value="Department" /> Department</label>
+                                                <label class="btn btn-outline-dark"><input type="radio" asp-for="Requisition.RequesterType" value="Division" /> Division</label>
+                                                <label class="btn btn-outline-dark"><input type="radio" asp-for="Requisition.RequesterType" value="Section" /> Section</label>
+                                                <label class="btn btn-outline-dark"><input type="radio" asp-for="Requisition.RequesterType" value="Unit" /> Unit</label>
+                                                <label class="btn btn-outline-dark"><input type="radio" asp-for="Requisition.RequesterType" value="Staff" /> Staff</label>
+                                            </div>
+                                        </div>
+                                        <div class="col-sm-6">
+                                            <div class="form-group mb-0">
+                                                <input readonly type="text" class="requesterCode form-control-sm" value="@Model.RequestingDeptCode" />
+                                                <button id="btnRequester" class="btn btn-default btn-sm"><i class="fas fa-search"></i></button>
+                                                <input class="requesterValue form-control-sm" readonly asp-for="Requisition.RequesterValue" value="@Model.RequestingDept" placeholder="Enter Department" />
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
                             </div>
+
+
                         </div>
                         <div class="col-sm-6">
                             <div class="form-group">
@@ -131,7 +148,7 @@
                                         <th>Store Item Code</th>
                                         <th>Description Of <br />Goods/Services <i class="fa fa-asterisk fa-xs faRedColour"></i></th>
                                         <th>Quantity <i class="fa fa-asterisk fa-xs faRedColour"></i></th>
-                                        <th>Unit Of<br />Measurement</th>                                        
+                                        <th>Unit Of<br />Measurement</th>
                                         <th>Unit Price</th>
                                     </tr>
                                 </thead>
@@ -160,11 +177,11 @@
 
                                         </td>
                                         <!-- <td class="d-flex justify-content-start">
-         <input class="supinput0" type="text" readonly @*asp-for="RequisitionItems[0].VendorId"*@ />
-         @*<button class="btn loadVendorModal" inputclass="supinput0" data-toggle="modal" data-target="#staffModal"><i class="fa fa-search"></i></button>*@
+                                            <input class="supinput0" type="text" readonly @*asp-for="RequisitionItems[0].VendorId"*@ />
+                                            @*<button class="btn loadVendorModal" inputclass="supinput0" data-toggle="modal" data-target="#staffModal"><i class="fa fa-search"></i></button>*@
 
 
-     </td>-->
+                                        </td>-->
                                         <td>
                                             <input type="number" asp-for="RequisitionItems[0].UnitPrice" />
 
@@ -318,6 +335,27 @@
     </div>
 </div>
 
+<div class="modal" id="requesterModal">
+    <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title">Requester Details</h4>
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+            </div>
+            <div class="modal-body">
+                <div id="Requestergrid"></div>
+            </div>
+            <div id="Requesterspinner" class="d-flex justify-content-center">
+                <div class="loader">
+                </div>
+            </div>
+
+            <div class="modal-footer">
+                <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
 
 
 @section Scripts{
@@ -344,6 +382,33 @@
 
 
                         $('#staffModal').modal("hide");
+                        return false;
+                    });
+                });
+
+                return false;
+
+            });
+        });
+
+        //loads Requester modal
+        $(function () {
+            $('#btnRequester').on('click', function () {
+                $('#requesterModal').modal("show");
+
+                var type = $("input[name='Requisition.RequesterType']:checked").val();
+
+                $('#Requestergrid').load(this.baseURI + '?handler=RequesterPartial&type=' + type, function () {
+                    $('#Requesterspinner').removeClass('d-flex');
+                    $('#Requesterspinner').hide();
+                    $('#RequesterTable').dataTable();
+
+                    $('.btnRequesterName').on('click', function () {
+
+                        $('.requesterCode').val($(this).val());
+                        $('.requesterValue').val($(this).attr("rname"));
+
+                        $('#requesterModal').modal("hide");
                         return false;
                     });
                 });

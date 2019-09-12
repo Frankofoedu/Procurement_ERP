@@ -3,9 +3,12 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using DcProcurement;
+using DcProcurement.Contexts;
+using DcProcurement.ViewModels;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.AspNetCore.Mvc.Rendering;
+using Microsoft.AspNetCore.Mvc.ViewFeatures;
 using Microsoft.EntityFrameworkCore;
 
 namespace BsslProcurement.Pages.Staff.Workflow
@@ -13,10 +16,12 @@ namespace BsslProcurement.Pages.Staff.Workflow
     public class WorkflowSetupModel : PageModel
     {
         private readonly ProcurementDBContext _context;
+        private readonly BSSLSYS_ITF_DEMOContext _bsslContext;
 
-        public WorkflowSetupModel(ProcurementDBContext context)
+        public WorkflowSetupModel(ProcurementDBContext context, BSSLSYS_ITF_DEMOContext bsslContext)
         {
             _context = context;
+            _bsslContext = bsslContext;
         }
 
         public class Input
@@ -96,8 +101,17 @@ namespace BsslProcurement.Pages.Staff.Workflow
 
                     if (item.Assign)
                     {
-                        pwf.StaffId = item.StaffId;
-                        pwf.AlternativeStaffId = item.AlternativeStaffId;
+                        var staffid = _context.Staffs.FirstOrDefault(m => m.StaffCode == item.StaffCode).Id;
+                        if (!string.IsNullOrWhiteSpace(staffid))
+                        {
+                            pwf.StaffId = staffid;
+                        }
+
+                        var altStaffid = _context.Staffs.FirstOrDefault(m => m.StaffCode == item.AlternativeStaffCode).Id;
+                        if (!string.IsNullOrWhiteSpace(staffid))
+                        {
+                            pwf.AlternativeStaffId = staffid;
+                        }
                     }
 
                     newPWF.Add(pwf);
@@ -128,5 +142,21 @@ namespace BsslProcurement.Pages.Staff.Workflow
 
             Message = "Saved Successfully";
         }
+
+        public PartialViewResult OnGetStaffPartial()
+        {
+
+            //get all staff and thier ranks
+            var staffs = _bsslContext.Stafftab.Select(x => new StaffLayoutModel { Staff = x, Rank = _bsslContext.Codestab.Where(m => m.Option1 == "f4" && m.Code == x.Positionid).FirstOrDefault().Desc1 }).ToList();
+
+
+            //           var  = _bsslContext.Stafftab.ToList();
+            return new PartialViewResult
+            {
+                ViewName = "_StaffLayout",
+                ViewData = new ViewDataDictionary<List<StaffLayoutModel>>(ViewData, staffs)
+            };
+        }
+
     }
 }

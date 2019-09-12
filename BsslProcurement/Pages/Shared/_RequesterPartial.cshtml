@@ -1,0 +1,28 @@
+﻿
+@using BsslProcurement.Pages.Staff
+@model List<BsslProcurement.Pages.Staff.ItemRequisition.NewRequisitionModel.requesterObj>
+
+@section Styles{
+}
+<table id="RequesterTable" class="table table-striped">
+    <thead>
+        <tr>
+            <th>Requester Code</th>
+            <th>Name</th>
+            <th>Type</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var requester in Model)
+        {
+            <tr>
+                <td>
+                    <button class="btn btn-link btnRequesterName" value="@requester.code" rname="@requester.name" rtype="@requester.type">@requester.code</button>
+                </td>
+                <td>@requester.name</td>
+                <td>@requester.type</td>
+
+            </tr>
+        }
+    </tbody>
+</table>
