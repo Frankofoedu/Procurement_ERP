@@ -1,0 +1,82 @@
+﻿@page
+@model BsslProcurement.Pages.Vendor.BiddingModel
+@{
+    ViewData["Title"] = "Bidding";
+    Layout = "~/Pages/Shared/_Layout.cshtml";
+}
+
+<div class="row mt-5">
+    <div class="col-md-12">
+        <form class="panel panel-login" method="post" enctype="multipart/form-data">
+            <div class="panel-heading">
+                <div class="row">
+                    <p class="header-text">Vendor Bidding</p>
+
+                </div>
+                <hr>
+            </div>
+
+            <div asp-validation-summary="All" class="text-danger"></div>
+
+            <div>
+                <div class="">
+
+                    <div class=" panel">
+                        <div class="text-center mb-3">
+                            <div class="form-group mb-0">
+                                <label class="btn btn-outline-dark pl-4">
+                                    <input class="form-check-input" type="radio" checked value="Capital Procurement">
+                                    Quotation
+                                </label>
+                                <label class="btn btn-outline-dark pl-4">
+                                    <input class="form-check-input" type="radio" value="Recurrent Procurement">
+                                    Technical/Financial Bid
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row p-2">
+                        <div class="col-sm-12">
+                            <div class="d-flex flex-row">
+                                <input id="" class="form-control" placeholder="Search table below..." />
+                                <button class="btn" data-toggle="modal">Search</button>
+                            </div>
+                        </div>
+
+                        <div class="mt-3 mb-5 col-sm-12 table-responsive">
+                            <table class="table table-striped">
+                                <thead>
+                                    <tr class="table-primary">
+                                        <th>PR No.</th>
+                                        <th>Item Description</th>
+                                        <th>Date Published</th>
+                                        <th>Quantity/Lot No</th>
+                                        <th>Budget Year</th>
+                                        <th>Quote/Submit Bid</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td></td>
+                                        <td></td>
+                                        <td></td>
+                                        <td></td>
+                                        <td></td>
+                                        <td></td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+
+
+                    </div>
+                    <div class="modal-footer justify-content-center">
+                        @*  <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>*@
+                        <input id="btnSubmit" class="btn btn-lg btn-primary" value="Save" type="submit" placeholder="" />
+
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>

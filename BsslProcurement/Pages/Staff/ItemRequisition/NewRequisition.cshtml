@@ -496,16 +496,23 @@
             //    '<td><input type="text" readonly="readonly" class="AltStaffNameInput AltStaffNameInput' + index + '" id="InputModel_' + index + '__AlternativeStaffName" name="InputModel[' + index + '].AlternativeStaffName" value=""></td></tr > ';
 
 
+            //var html = '<tr><td class="col-sm-1"><label>' + (Number(index) + 1) + ' </label><input type="hidden"></td>' +
+            //    '<td class="col-sm-1"><input type="text" id="ItemInputModel_' + index + '__ItemCode" name="ItemInputModel[' + index + '].ItemCode" value=""></td>' +
+            //    '<td><input type="text" id="ItemInputModel_' + index + '__Descrip" name="ItemInputModel[' + index + '].Descrip" value=""></td>' +
+            //    '<td><input type="text" id="ItemInputModel_' + index + '__Quantity" name="ItemInputModel[' + index + '].Quantity" value=""></td>' +
+            //    '<td><input type="text" id="ItemInputModel_' + index + '__Unit" name="ItemInputModel[' + index + '].Unit" value=""></td>' +
+            //    '<td class="d-flex justify-content-start"><input class="supinput' + index + '" type="text" disabled="" id="ItemInputModel_' + index +
+            //    '__SuppName" name="ItemInputModel[' + index + '].SuppName" value=""> <button class="btn loadVendorModal" inputclass="supinput' + index +
+            //    '" data-toggle="modal" data-target="#staffModal"><i class="fa fa-search"></i></button> </td>' +
+            //    '<td><input type="text" id="ItemInputModel_' + index + '__UnitPrice" name="ItemInputModel[' + index + '].UnitPrice" value=""></td>' +
+            //    '<td><input type="text" id="ItemInputModel_' + index + '__Amount" name="ItemInputModel[' + index + '].Amount" value=""></td></tr> ';
+
             var html = '<tr><td class="col-sm-1"><label>' + (Number(index) + 1) + ' </label><input type="hidden"></td>' +
                 '<td class="col-sm-1"><input type="text" id="ItemInputModel_' + index + '__ItemCode" name="ItemInputModel[' + index + '].ItemCode" value=""></td>' +
                 '<td><input type="text" id="ItemInputModel_' + index + '__Descrip" name="ItemInputModel[' + index + '].Descrip" value=""></td>' +
                 '<td><input type="text" id="ItemInputModel_' + index + '__Quantity" name="ItemInputModel[' + index + '].Quantity" value=""></td>' +
                 '<td><input type="text" id="ItemInputModel_' + index + '__Unit" name="ItemInputModel[' + index + '].Unit" value=""></td>' +
-                '<td class="d-flex justify-content-start"><input class="supinput' + index + '" type="text" disabled="" id="ItemInputModel_' + index +
-                '__SuppName" name="ItemInputModel[' + index + '].SuppName" value=""> <button class="btn loadVendorModal" inputclass="supinput' + index +
-                '" data-toggle="modal" data-target="#staffModal"><i class="fa fa-search"></i></button> </td>' +
-                '<td><input type="text" id="ItemInputModel_' + index + '__UnitPrice" name="ItemInputModel[' + index + '].UnitPrice" value=""></td>' +
-                '<td><input type="text" id="ItemInputModel_' + index + '__Amount" name="ItemInputModel[' + index + '].Amount" value=""></td></tr> ';
+                '<td><input type="text" id="ItemInputModel_' + index + '__UnitPrice" name="ItemInputModel[' + index + '].UnitPrice" value=""></td></tr> ';
 
 
             $('#requisitionBody').append(html);
