@@ -28,9 +28,22 @@ namespace BsslProcurement.Pages.Staff.ItemRequisition
             bsslContext = _bsslContext;
             context = _context;
         }
+
+        public void LoadData(int id)
+        {
+
+            Requisition = context.Requisitions.Include(x => x.Attachments).Include(y => y.RequisitionItems).Where(k => k.Id == id).FirstOrDefault();
+
+        }
         public void OnGet(int id)
         {
-            Requisition = context.Requisitions.Include(x => x.Attachments).Include(y => y.RequisitionItems).Where(k => k.Id== id).FirstOrDefault();
+            LoadData(id);
+        }
+
+
+        public void OnPost(int id)
+        {
+            LoadData(id);
         }
 
         public PartialViewResult OnGetItemPartial()
@@ -41,7 +54,7 @@ namespace BsslProcurement.Pages.Staff.ItemRequisition
 
             return new PartialViewResult
             {
-                ViewName = "_ItemLayout",
+                ViewName = "Modals/_ItemLayout",
                 ViewData = new ViewDataDictionary<List<DcProcurement.Contexts.Stock>>(ViewData, items)
             };
         }
