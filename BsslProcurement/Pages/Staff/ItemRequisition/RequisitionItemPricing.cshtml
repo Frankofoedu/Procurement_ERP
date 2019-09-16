@@ -32,9 +32,6 @@
 
 }
 
-<h2>Item Pricing</h2>
-
-
 @if (!string.IsNullOrWhiteSpace(Model.Message))
 {
     <div class="alert alert-success alert-dismissable fade show">
@@ -126,12 +123,13 @@ else
                                     <thead>
                                         <tr class="table-primary">
                                             <th>S/No</th>
-                                            <th>Store Item Code</th>
-                                            <th>Description Of <br />Goods/Services <i class="fa fa-asterisk fa-xs faRedColour"></i></th>
-                                            <th>Quantity <i class="fa fa-asterisk fa-xs faRedColour"></i></th>
-                                            <th>Unit Of<br />Measurement</th>
-                                            <th>Unit Price</th>
-                                            <th>Supplier</th>
+                                            <th class="text-center">Store Item Code</th>
+                                            <th class="text-center">Supplier</th>
+                                            <th class="text-center">Description Of <br />Goods/Services</th>
+                                            <th class="text-center">Quantity </th>
+                                            <th class="text-center">Unit Of<br />Measurement</th>
+                                            <th class="text-center">Unit Price</th>
+                                            <th class="text-center">Amount</th>
 
                                         </tr>
                                     </thead>
@@ -140,17 +138,26 @@ else
                                         {
                                             var item = Model.Requisition.RequisitionItems[i];
 
-                                            <tr>
+                                            <tr class="">
 
-                                                <td class="col-sm-1">
+                                                <td class="">
                                                     <label>1</label>
                                                     <input type="hidden" />
                                                 </td>
 
-                                                <td class="col-sm-1 d-flex">
-                                                    <input type="text" asp-for="Requisition.RequisitionItems[i].StoreItemCode" inputclass="code @i"/>
-                                                    <button class="btn loadItemModal" inputclass="@i" data-toggle="modal" data-target="#itemModal"><i class="fa fa-search"></i></button>
-
+                                                <td>
+                                                    <div class="flex-row d-flex">
+                                                        <input type="text" value=@item.StoreItemCode inputclass="code @i" />
+                                                        <input type="hidden" asp-for="Requisition.RequisitionItems[i].StoreItemCode" inputclass="hiddencode @i" />
+                                                        <button class="btn loadItemModal" inputclass="@i" data-toggle="modal" data-target="#itemModal"><i class="fa fa-search"></i></button>
+                                                    </div>
+                                                </td>
+                                                <td>
+                                                    <div class="flex-row d-flex">
+                                                        <input type="text" class="txtsupinput @i" />
+                                                        <input class="supinput @i" type="hidden" readonly asp-for="Requisition.RequisitionItems[i].VendorId" />
+                                                        <button class="btn loadVendorModal" inputclass="supinput @i" data-toggle="modal" data-target="#vendorModal"><i class="fa fa-search"></i></button>
+                                                    </div>
                                                 </td>
                                                 <td>
                                                     <input type="text" required asp-for="Requisition.RequisitionItems[i].Description" value="@item.Description" />
@@ -161,158 +168,181 @@ else
                                                 <td>
                                                     <input type="text" required asp-for="Requisition.RequisitionItems[i].UnitOfMeasurement" value="@item.UnitOfMeasurement" />
                                                 </td>
-                                                <!-- <td class="d-flex justify-content-start">
-                                                    <input class="supinput0" type="text" readonly @*asp-for="RequisitionItems[0].VendorId"*@ />
-                                                    @*<button class="btn loadVendorModal" inputclass="supinput0" data-toggle="modal" data-target="#staffModal"><i class="fa fa-search"></i></button>*@
 
-
-                                                </td>-->
                                                 <td>
                                                     <input type="number" asp-for="Requisition.RequisitionItems[i].UnitPrice" value="@item.UnitPrice" />
 
                                                 </td>
                                                 <td>
-                                                    <input type="text"  value="@item.UnitPrice" inputclass="vendorText @i"/>
-                                                    <input type="hidden" asp-for="Requisition.RequisitionItems[i].VendorId"/>
-                                                    `
+                                                    <input type="number" asp-for="Requisition.RequisitionItems[i].Amount" value="@(Convert.ToInt32(item.Quantity) * Convert.ToInt32(item.UnitPrice))" />
+
                                                 </td>
 
-                                                </tr>
+                                            </tr>
+
+                                        }
+                                    <tfoot>
+                                        <tr>
+                                            <td></td>
+                                            <td class="font-weight-bold text-right">Total Amount : </td>
+                                            <td class="font-weight-bold text-lg-center">@Model.Requisition.RequisitionItems.Sum(x => Convert.ToInt32(x.Amount))</td>
+                                            <td></td>
+                                        </tr>
+                                    </tfoot>
+                                </table>
+                                <input type="hidden" id="lastIndex" value="0" />
+                                @*<div class="form-group">
+                                        <div class="row">
+                                            <div class="col-sm-3"> </div>
+                                            <div class="col-sm-6 text-center">
+                                                <button id="btnMore" class="btn btn-outline-primary">New Item</button>
+                                            </div>
+                                        </div>
+                                    </div>*@
+                            </div>
+
+
+                            <div class="col-sm-12">
+                                <div class="row">
+                                    <div class="my-2 col-sm-6">
+                                        <div class="col-sm-12">
+                                            <label>Prepared By : </label>
+                                            <span class="d-flex flex-row">
+                                                <input id="txtprepared" asp-for="Requisition.PreparedBy" class="form-control" readonly rows="6" placeholder="" />
+                                                @*<button class="btn loadStaffModal" value="txtprepared" data-toggle="modal" data-target="#staffModal"><i class="fa fa-search"></i></button>*@
+
+                                            </span>
+
+
+                                        </div>
+                                        <div class="col-sm-12 mt-2">
+                                            <label>Rank : </label>
+                                            <span class="d-flex flex-row">
+                                                <input class="form-control" asp-for="Requisition.PreparedByRank" readonly id="txtpreparedRank" rows="6" placeholder="" />
+                                            </span>
+
+                                        </div>
+                                    </div>
+                                    <div class="my-2 col-sm-6">
+                                        <div class="col-sm-12">
+                                            <label>For : </label>
+                                            <span class="d-flex flex-row">
+                                                <input class="form-control" asp-for="Requisition.PreparedFor" readonly id="forStaffText" rows="6" placeholder="" />
+                                                @*<button class="btn loadStaffModal" value="forStaffText" data-toggle="modal" data-target="#staffModal"><i class="fa fa-search"></i></button>*@
+
+                                            </span>
+
+                                        </div>
+                                        <div class="col-sm-12 mt-2">
+                                            <label>Rank : </label>
+                                            <span class="d-flex flex-row">
+                                                <input class="form-control" asp-for="Requisition.PreparedForRank" readonly id="forStaffTextRank" rows="6" placeholder="" />
+                                            </span>
+
+                                        </div>
+                                    </div>
+
+                                </div>
+                            </div>
+                            <div class="col-sm-12 m-4 ">
+                                @if (Model.Requisition.Attachments.Count > 0)
+                                {
+                                    <h5 class="font-weight-bold">Attachments</h5>
+                                    <br>
+                                    <div class="d-flex flex-column">
+                                        <p>
+                                            @foreach (var file in Model.Requisition.Attachments)
+                                            {
+                                                if (file.FilePath.EndsWith("pdf"))
+                                                {
+                                                    <a class="fancybox m-5 btn btn-link fas fa-file-pdf" data-fancybox-type="iframe" href="@Url.Content("~/Attachments/" + file.FilePath)">Open PDf Attachment</a>
+                                                }
+                                                else
+                                                {
+                                                    <a class="fancybox m-5" href="@Url.Content("~/Attachments/" + file.FilePath)"><img src="@Url.Content("~/Attachments/" + file.FilePath)" class="img-thumbnail" style="max-width : 10% !important" asp-append-version="true" /></a>
 
                                                 }
-                                                </tbody>
-                                            </table>
-                                            <input type="hidden" id="lastIndex" value="0" />
-                                            @*<div class="form-group">
-                                                    <div class="row">
-                                                        <div class="col-sm-3"> </div>
-                                                        <div class="col-sm-6 text-center">
-                                                            <button id="btnMore" class="btn btn-outline-primary">New Item</button>
-                                                        </div>
-                                                    </div>
-                                                </div>*@
-                                        </div>
 
-
-                                        <div class="col-sm-12">
-                                            <div class="row">
-                                                <div class="my-2 col-sm-6">
-                                                    <div class="col-sm-12">
-                                                        <label>Prepared By : </label>
-                                                        <span class="d-flex flex-row">
-                                                            <input id="txtprepared" asp-for="Requisition.PreparedBy" class="form-control" readonly rows="6" placeholder="" />
-                                                            @*<button class="btn loadStaffModal" value="txtprepared" data-toggle="modal" data-target="#staffModal"><i class="fa fa-search"></i></button>*@
-
-                                                        </span>
-
-
-                                                    </div>
-                                                    <div class="col-sm-12 mt-2">
-                                                        <label>Rank : </label>
-                                                        <span class="d-flex flex-row">
-                                                            <input class="form-control" asp-for="Requisition.PreparedByRank" readonly id="txtpreparedRank" rows="6" placeholder="" />
-                                                        </span>
-
-                                                    </div>
-                                                </div>
-                                                <div class="my-2 col-sm-6">
-                                                    <div class="col-sm-12">
-                                                        <label>For : </label>
-                                                        <span class="d-flex flex-row">
-                                                            <input class="form-control" asp-for="Requisition.PreparedFor" readonly id="forStaffText" rows="6" placeholder="" />
-                                                            @*<button class="btn loadStaffModal" value="forStaffText" data-toggle="modal" data-target="#staffModal"><i class="fa fa-search"></i></button>*@
-
-                                                        </span>
-
-                                                    </div>
-                                                    <div class="col-sm-12 mt-2">
-                                                        <label>Rank : </label>
-                                                        <span class="d-flex flex-row">
-                                                            <input class="form-control" asp-for="Requisition.PreparedForRank" readonly id="forStaffTextRank" rows="6" placeholder="" />
-                                                        </span>
-
-                                                    </div>
-                                                </div>
-
-                                            </div>
-                                        </div>
-                                        <div class="col-sm-12 m-4 ">
-                                            @if (Model.Requisition.Attachments.Count > 0)
-                                            {
-                                                <h5 class="font-weight-bold">Attachments</h5>
-                                                <br>
-                                                <div class="d-flex flex-column">
-                                                    <p>
-                                                        @foreach (var file in Model.Requisition.Attachments)
-                                                        {
-                                                            if (file.FilePath.EndsWith("pdf"))
-                                                            {
-                                                                <a class="fancybox m-5 btn btn-link fas fa-file-pdf" data-fancybox-type="iframe" href="@Url.Content("~/Attachments/" + file.FilePath)">Open PDf Attachment</a>
-                                                            }
-                                                            else
-                                                            {
-                                                                <a class="fancybox m-5" href="@Url.Content("~/Attachments/" + file.FilePath)"><img src="@Url.Content("~/Attachments/" + file.FilePath)" class="img-thumbnail" style="max-width : 10% !important" asp-append-version="true" /></a>
-
-                                                            }
-
-                                                        }
-                                                    </p>
-
-                                                </div>
                                             }
+                                        </p>
 
-                                        </div>
-
-
-                                        <div class="col-sm-12 m-4">
-                                            <div class="form-group">
-                                                <h5 class="font-weight-bold">Purpose : </h5>
-                                                <input type="hidden" id="purpose" value="@Model.Requisition.Purpose" />
-                                                <div id="editor">
-
-                                                </div>
-                                            </div>
-                                        </div>
-
-                                        @*<div class="col-sm-4">
-                                                <div class="form-group">
-                                                    <input class="btn btn-block btn-danger fa-print" value="Print" type="button" placeholder="Enter Resgistration Number" />
-                                                </div>
-                                            </div>*@
                                     </div>
-                                    <div class="modal-footer justify-content-center">
-                                        @*  <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>*@
-                                        <input id="btnSubmit" class="btn btn-lg btn-primary" value="Save" type="submit" placeholder="" />
+                                }
+
+                            </div>
+
+
+                            <div class="col-sm-12 m-4">
+                                <div class="form-group">
+                                    <h5 class="font-weight-bold">Purpose : </h5>
+                                    <input type="hidden" id="purpose" value="@Model.Requisition.Purpose" />
+                                    <div id="editor">
 
                                     </div>
                                 </div>
                             </div>
-                        </form>
-                    </div>
-                </div>
 
-                <div class="modal" id="itemModal">
-                    <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable modal-lg">
-                        <div class="modal-content">
-                            <div class="modal-header">
-                                <h4 class="modal-title">Item Details</h4>
-                                <button type="button" class="close" data-dismiss="modal">&times;</button>
-                            </div>
-                            <div class="modal-body">
-                                <div id="Itemgrid"></div>
-                            </div>
-                            <div id="Itemspinner" class="d-flex justify-content-center">
-                                <div class="loader">
-                                </div>
-                            </div>
+                            @*<div class="col-sm-4">
+                                    <div class="form-group">
+                                        <input class="btn btn-block btn-danger fa-print" value="Print" type="button" placeholder="Enter Resgistration Number" />
+                                    </div>
+                                </div>*@
+                        </div>
+                        <div class="modal-footer justify-content-center">
+                            @*  <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>*@
+                            <input id="btnSubmit" class="btn btn-lg btn-primary" value="Save" type="submit" placeholder="" />
 
-                            <div class="modal-footer">
-                                <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
-                            </div>
                         </div>
                     </div>
                 </div>
-            }
+            </form>
+        </div>
+    </div>
+
+    <div class="modal" id="itemModal">
+        <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h4 class="modal-title">Item Details</h4>
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                </div>
+                <div class="modal-body">
+                    <div id="Itemgrid"></div>
+                </div>
+                <div id="Itemspinner" class="d-flex justify-content-center">
+                    <div class="loader">
+                    </div>
+                </div>
+
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal" id="vendorModal">
+        <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h4 class="modal-title">Vendor Details</h4>
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                </div>
+                <div class="modal-body">
+                    <div id="Vendorgrid"></div>
+                </div>
+                <div id="Vendorspinner" class="d-flex justify-content-center">
+                    <div class="loader">
+                    </div>
+                </div>
+
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
+                </div>
+            </div>
+        </div>
+    </div>
+}
 @section Scripts{
 
     <script src="~/js/jquery.fancybox.pack.js"></script>
@@ -344,10 +374,11 @@ else
 
                 //get item name textbox
                 var index = $(this).attr('inputclass');
-                var txtToAssign = $('[inputclass="' + 'code ' + index + '"]');
+                var fieldToAssign = $('[inputclass="' + 'hiddencode ' + index + '"]');
+                var txtToAssign = $('[inputclass="' + 'code ' + index + '"]')
                 //var txtToAssign = $('inputclass = '('.code.' + + ''))
                 //    ;
-               var baseUrl = [location.protocol, '//', location.host, location.pathname].join('');
+                var baseUrl = [location.protocol, '//', location.host, location.pathname].join('');
                 $('#Itemgrid').load(baseUrl + '?handler=ItemPartial', function () {
                     $('#Itemspinner').removeClass('d-flex');
                     $('#Itemspinner').hide();
@@ -355,7 +386,9 @@ else
 
                     $('.btnItemName').on('click', function () {
                         //assign staff name textbox
-                        txtToAssign.val($(this).val());
+                        var btn = $(this);
+                        fieldToAssign.val(btn.val());
+                        txtToAssign.val(btn.val() + ' -- ' + btn.attr('itemName'));
 
 
                         $('#itemModal').modal("hide");
@@ -367,6 +400,40 @@ else
 
             });
         });
+
+
+        //loads vendor modal
+        $(function () {
+            $('.loadVendorModal').on('click', function () {
+                $('#vendorModal').modal("show");
+
+                //get supplier name textbox
+                var txtToAssign = $('.txt' + $(this).attr('inputclass') + '');
+                var idToAssign = $('.' + $(this).attr('inputclass') + '');
+                var baseUrl = [location.protocol, '//', location.host, location.pathname].join('');
+                
+                $('#Vendorgrid').load(baseUrl + '?handler=VendorPartial', function () {
+                    $('#Vendorspinner').removeClass('d-flex');
+                    $('#Vendorspinner').hide();
+                    $('#vendorTable').dataTable();
+
+                    $('.btnVendorName').on('click', function () {
+                        //assign staff name textbox
+
+                        var btn = $(this);
+                        txtToAssign.val(btn.attr('vendorId') +"--" + btn.val());
+                        idToAssign.val(btn.attr('vendorId'))
+
+                        $('#vendorModal').modal("hide");
+                        return false;
+                    });
+                });
+
+                return false;
+
+            });
+        });
+
     </script>
 
 }

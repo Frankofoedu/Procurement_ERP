@@ -58,5 +58,19 @@ namespace BsslProcurement.Pages.Staff.ItemRequisition
                 ViewData = new ViewDataDictionary<List<DcProcurement.Contexts.Stock>>(ViewData, items)
             };
         }
+
+        public PartialViewResult OnGetVendorPartial()
+        {
+
+            //get all vendor 
+            var vendors = context.Vendors.ToList();
+
+
+            return new PartialViewResult
+            {
+                ViewName = "_VendorLayoutModal",
+                ViewData = new ViewDataDictionary<List<VendorUser>>(ViewData, vendors)
+            };
+        }
     }
 }
