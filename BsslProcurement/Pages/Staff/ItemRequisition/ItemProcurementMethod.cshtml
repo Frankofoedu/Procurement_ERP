@@ -1,39 +1,23 @@
 ﻿@page
-@model BsslProcurement.Pages.Vendor.BiddingModel
+@model BsslProcurement.Pages.Staff.ItemRequisition.ItemProcurementMethodModel
 @{
-    ViewData["Title"] = "Bidding";
+    ViewData["Title"] = "ItemProcurementMethod";
     Layout = "~/Pages/Shared/_Layout.cshtml";
 }
 
-<div class="row mt-5">
-    <div class="col-md-12">
+
+<div class="row mt-5 justify-content-center">
+    <div class="col-md-8">
         <form class="panel panel-login" method="post" enctype="multipart/form-data">
             <div class="panel-heading">
                 <div class="row">
-                    <p class="header-text">Vendor Bidding</p>
+                    <p class="header-text">Setup Procurement Method</p>
                 </div>
                 <hr>
             </div>
 
             <div asp-validation-summary="All" class="text-danger"></div>
 
-            <div>
-                <div class="">
-
-                    <div class=" panel">
-                        <div class="text-center mb-3">
-                            <div class="form-group mb-0">
-                                <label class="btn btn-outline-dark pl-4">
-                                    <input class="form-check-input" type="radio" checked value="Capital Procurement">
-                                    Quotation
-                                </label>
-                                <label class="btn btn-outline-dark pl-4">
-                                    <input class="form-check-input" type="radio" value="Recurrent Procurement">
-                                    Technical/Financial Bid
-                                </label>
-                            </div>
-                        </div>
-                    </div>
                     <div class="row p-2">
                         <div class="col-sm-12">
                             <div class="d-flex flex-row">
@@ -74,8 +58,6 @@
                         <input id="btnSubmit" class="btn btn-lg btn-primary" value="Save" type="submit" placeholder="" />
 
                     </div>
-                </div>
-            </div>
         </form>
     </div>
 </div>

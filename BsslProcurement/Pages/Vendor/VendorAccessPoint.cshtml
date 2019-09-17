@@ -1,0 +1,193 @@
+﻿@page
+@model BsslProcurement.Pages.Vendor.VendorAccessPointModel
+@{
+    ViewData["Title"] = "VendorAccessPoint";
+    Layout = "~/Pages/Shared/_Layout.cshtml";
+}
+
+@section Styles{
+    <link href="~/css/fileupload.css" rel="stylesheet" />
+
+}
+<div class="row mt-5">
+    <div class="col-md-12">
+        <form class="panel panel-login" method="post" enctype="multipart/form-data">
+            <div class="panel-heading">
+                <div class="row">
+                    <p class="header-text">Vendor Access Point</p>
+                </div>
+                <hr>
+            </div>
+
+            <div asp-validation-summary="All" class="text-danger"></div>
+
+            <div class="panel p-5 border rounded">
+                <div class="panel-heading text-center font-weight-bold">Invitation to Participate</div>
+                <p>Dear Esteemed Vendor,</p>
+                <p>“Company Name” has invited you to Bid for “Project Title”.</p>
+
+                <p>
+                    Please provide necessary information, download all required documents (if any) from the library, and review each document in its entirety; the Purchase Requisition, Specifications & Standards, and all relevant Drawings (if any).
+                </p>
+                <p>You are expected to fill out your Technical Information and submit to the system on or before submission deadline.</p>
+
+                <p>The deadline for Submission is “mmmm : dd : yyyy, “Time”.</p>
+
+                <p>Please confirm email receipt.</p>
+
+                <p>There is a Help button on each page, which will provide you with further assistance.</p>
+
+                <p>Best Regards,</p>
+
+                <p>
+                    Michael Jones <br />
+                    Procurement Manager
+                </p>
+
+            </div>
+            <div class="row p-2">
+                <div class="col-sm-5">
+                    <div class="form-group form-inline">
+                        <label>Vendor Id : </label> &nbsp; <input readonly class="form-control" />
+                    </div>
+                </div>
+                <div class="col-sm-7">
+                    <div class="form-group form-inline">
+                        <label>Vendor Name : </label> &nbsp; <input readonly class="form-control" />
+                    </div>
+                </div>
+            </div>
+
+            <div class="row p-2">
+                <div class="col-sm-6">
+                    <div class="form-group form-inline">
+                        <label>Organization Detail : </label> &nbsp;
+                        <button class="btn btn-dark">Review</button>
+                    </div>
+                </div>
+                <div class="col-sm-6">
+                    <div class="form-group form-inline">
+                        <label>Respondent Detail : </label> &nbsp;
+                        <button class="btn btn-dark">Review</button>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row p-2">
+                <div class="panel">
+                    <div class="panel-heading font-weight-bold">
+                        Terms and Conditions
+                    </div>
+                    <div class="p-2">
+                        Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.
+                        Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.
+                        Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur.
+                        Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
+                    </div>
+                    <div class="text-center my-2">
+                        <div class="form-group mb-0">
+                            <label class="btn btn-outline-dark pl-4">
+                                <input name="T&C" class="form-check-input" type="radio" checked value="Agree">
+                                Agree
+                            </label>
+                            <label class="btn btn-outline-dark pl-4">
+                                <input name="T&C" class="form-check-input" type="radio" value="Disagree">
+                                Disagree
+                            </label>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row p-2">
+                <div class="panel">
+                    <div class="panel-heading font-weight-bold">
+                        Declaration
+                    </div>
+                    <div class="p-2">
+                        Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.
+                        Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.
+                        Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur.
+                        Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
+                    </div>
+                    <div class="text-center my-2">
+                        <div class="form-group mb-0">
+                            <label class="btn btn-outline-dark pl-4">
+                                <input name="Declare" class="form-check-input" type="radio" checked value="Agree">
+                                Agree
+                            </label>
+                            <label class="btn btn-outline-dark pl-4">
+                                <input name="Declare" class="form-check-input" type="radio" value="Disagree">
+                                Disagree
+                            </label>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row p-2">
+                <div class="panel">
+                    <div class="panel-heading font-weight-bold">
+                        Confirm Participation
+                    </div>
+                    <div class="p-2">
+                        Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.
+                        Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.
+                        Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur.
+                        Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
+                    </div>
+                    <div class="text-center my-2">
+                        <div class="form-group mb-0">
+                            <label class="btn btn-outline-dark pl-4">
+                                <input name="Participation" class="form-check-input" type="radio" checked value="Agree">
+                                Agree
+                            </label>
+                            <label class="btn btn-outline-dark pl-4">
+                                <input name="Participation" class="form-check-input" type="radio" value="Disagree">
+                                Disagree
+                            </label>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row p-2">
+                <div class="col-sm-7">
+                    <div class="custom-file-container" data-upload-id="myUniqueUploadId">
+                        <label>
+                            Attach Multiple Files <a href="javascript:void(0)" class="custom-file-container__image-clear"
+                                                     title="Clear Image">&times;</a>
+                        </label>
+                        <label class="custom-file-container__custom-file">
+                            <input type="file" name="files" class="custom-file-container__custom-file__custom-file-input" accept="*" multiple
+                                   aria-label="Choose File">
+                            <input type="hidden" name="MAX_FILE_SIZE" value="10485760" />
+                            <span class="custom-file-container__custom-file__custom-file-control"></span>
+                        </label>
+                        <div class="custom-file-container__image-preview"></div>
+                    </div>
+                </div>
+            </div>
+
+
+            <div class="row">
+                <div class="col-sm-3">
+                    <button class="btn btn-sm btn-primary" type="submit">Help</button>
+                </div>
+                <div class="col-sm-6 justify-content-center">
+                    <button class="btn btn-lg btn-primary" type="submit">Save</button>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+
+
+@section Scripts{
+    <script src="~/js/fileUpload.js"></script>
+    <script>
+        //to attach multiple files in preview mode
+        var upload = new FileUploadWithPreview('myUniqueUploadId');
+    </script>
+
+}
