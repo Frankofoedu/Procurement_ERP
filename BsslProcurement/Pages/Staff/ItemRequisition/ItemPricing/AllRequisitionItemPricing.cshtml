@@ -1,0 +1,79 @@
+﻿@page
+@model BsslProcurement.Pages.Staff.ItemRequisition.ItemPricing.AllRequisitionItemPricingModel
+@using BsslProcurement.UtilityMethods;
+@{
+    ViewData["Title"] = "All Item Pricing";
+}
+
+
+<div class="row mt-5">
+    <div class="col-md-1"></div>
+    <div class="col-md-11">
+        <form method="post" class="panel panel-login">
+            <div class="panel-heading">
+                <div class="row">
+                    <p class="header-text">@ViewData["Title"]</p>
+                </div>
+                <hr>
+            </div>
+            <div asp-validation-summary="All" class="text-danger"></div>
+
+            @if (!string.IsNullOrWhiteSpace(Model.Message))
+            {
+                <div class="alert alert-success alert-dismissable fade show">
+                    <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                    @Model.Message
+                </div>
+            }
+            @if (!string.IsNullOrWhiteSpace(Model.Error))
+            {
+                <div class="alert alert-danger alert-dismissable fade show">
+                    <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                    @Model.Error
+                </div>
+            }
+
+
+            @*<button class="btn btn-primary pt-2" asp-page="NewRequisition">Add New</button>*@
+
+
+            <div class="row pt-3 " style="">
+                <div class="col-12 table-responsive table-responsive-sm">
+                    <table class="table  table-striped">
+                        <thead>
+                            <tr class="table-primary">
+                                <th>S/N</th>
+                                <th>PR Number</th>
+                                <th>Procurement Type</th>
+                                <th>Date</th>
+                                <th>Requisition Amount</th>
+                                <th>Action</th>
+                            </tr>
+                        </thead>
+
+
+                        <tbody>
+                            @for (int i = 0; i < Model.Requisitions.Count; i++)
+                            {
+                                var item = Model.Requisitions[i];
+                            <tr>
+                                <td>@(i + 1)</td>
+                                <td>@item.PRNumber</td>
+                                <td>@item.ProcurementType</td>
+                                <td>@item.Date.Value.ToShortDateString()</td>
+                                <td class="text-center font-weight-bold"> @NairaFormat.GetNairaValue(item.RequisitionItems.Sum(c => (Convert.ToInt32( c.UnitPrice) * Convert.ToInt32( c.Quantity))))</td>
+                                <td><a asp-page="./RequisitionItemPricing" asp-route-id="@item.Id"><h6 class="text-primary">View Requisition</h6></a></td>
+                            </tr>
+                            }
+
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+
+
+
+        </form>
+    </div>
+</div>
