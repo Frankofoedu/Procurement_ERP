@@ -183,7 +183,7 @@ namespace BsslProcurement.Pages.Staff.ItemRequisition
 
             return new PartialViewResult
             {
-                ViewName = "_RequesterPartial",
+                ViewName = "Modals/_RequesterPartial",
                 ViewData = new ViewDataDictionary<List<requesterObj>>(ViewData, requesters)
             };
         }
