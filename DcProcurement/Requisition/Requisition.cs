@@ -14,7 +14,7 @@ namespace DcProcurement
         public string ProcurementType { get; set; }
         [Required(ErrorMessage ="Select Date")]
         public DateTime? Date { get; set; }
-        [Required(ErrorMessage = "Select Date")]
+        [Required(ErrorMessage = "Select Estimated Delivery Date")]
         public DateTime? DeliveryDate { get; set; }
         [Required(ErrorMessage = "Select Requester Type")]
         public string RequesterType { get; set; }
@@ -29,6 +29,11 @@ namespace DcProcurement
         public string PreparedFor { get; set; }
         public string PreparedForRank { get; set; }
         public string Purpose { get; set; }
+
+        //== true when requisition items has been priced
+        public bool isPriced { get; set; }
+        //default database creation date
+        public DateTime DateCreated { get; set; }
         public List<RequisitionItem> RequisitionItems { get; set; }
         public List<Attachment> Attachments { get; set; }
     }
