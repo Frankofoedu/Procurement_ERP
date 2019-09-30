@@ -16,6 +16,7 @@ namespace BsslProcurement.Pages.Staff.ItemRequisition.ItemPricing
         public AllRequisitionItemPricingModel(ProcurementDBContext context)
         {
             _context = context;
+            
         }
 
 
@@ -30,6 +31,7 @@ namespace BsslProcurement.Pages.Staff.ItemRequisition.ItemPricing
         {
             //get all requisitions that havent been priced
             Requisitions = await _context.Requisitions.Where(r => r.isPriced == false).Include(x => x.RequisitionItems).ToListAsync();
+            
         }
     }
 }
