@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
-using System.Threading.Tasks;
-using DcProcurement;
+﻿using DcProcurement;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
@@ -12,10 +7,15 @@ using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.Extensions.Logging;
 using MoreLinq;
+using System;
+using System.Collections.Generic;
+using System.IO;
+using System.Linq;
+using System.Threading.Tasks;
+
 namespace BsslProcurement.Pages.Vendor
 {
     //TODO: Cheeck for errors if any returned entity doesnt and display error meesage
-
 
     public class DocsModel
     {
@@ -25,6 +25,7 @@ namespace BsslProcurement.Pages.Vendor
         public string FileName { get; set; }
         public string Value { get; set; }
     }
+
     public class PrequalificationModel : PageModel
     {
         private readonly ProcurementDBContext _context;
@@ -34,6 +35,7 @@ namespace BsslProcurement.Pages.Vendor
         private readonly UserManager<User> _userManager;
 
         public readonly IHostingEnvironment _hostingEnvironment;
+
         public PrequalificationModel(ProcurementDBContext context,
                                     IHostingEnvironment hostingEnvironment,
                                     UserManager<User> userManager,
@@ -47,24 +49,26 @@ namespace BsslProcurement.Pages.Vendor
             _logger = logger;
         }
 
-
-
-
         [BindProperty]
         public List<DocsModel> DocsList { get; set; }
+
         [BindProperty]
         public CompanyInfo CompanyInfo { get; set; }
+
         [BindProperty]
         public List<SelectListItem> Categories { get; set; }
+
         [BindProperty]
         public List<PersonnelDetailInput> PersonnelDetailIntputs { get; set; }//add method to convert iformfiles to file paths for personnel details table
+
         [BindProperty]
         public List<EquipmentDetails> EquipmentDetails { get; set; }
+
         [BindProperty]
         public List<ExperienceRecord> ExperienceRecords { get; set; }
+
         [BindProperty]
         public List<CompanyInfoProcurementSubCategory> SelectedSubcategories { get; set; }
-
 
         public class PersonnelDetailInput
         {
@@ -75,13 +79,13 @@ namespace BsslProcurement.Pages.Vendor
             public IFormFile PassportFile { get; set; }
         }
 
-
         public string Message { get; set; }
         public string Error { get; set; }
         public int? CategoryCount { get; set; }
 
         [BindProperty]
         public List<int> subCatsId { get; set; }
+
         public void OnGet()
         {
             // gets the number of categories from the setup page
@@ -97,11 +101,8 @@ namespace BsslProcurement.Pages.Vendor
 
         }
 
-       
-
         public async Task<IActionResult> OnPostAsync()
         {
-
             // CompanyInfo.SubCategories = GetSubCategories(subCatsId);
 
             if (!ModelState.IsValid)
@@ -118,15 +119,13 @@ namespace BsslProcurement.Pages.Vendor
             //saves company to db
             _context.CompanyInfo.Add(CompanyInfo);
 
-
             await _context.SaveChangesAsync();
 
             //saves list of submitted criterias to db
             _context.SubmittedCriteria.AddRange(GetSubmittedCriterias(CompanyInfo.Id));
 
-
             AddEquipmentsToDB(CompanyInfo.Id, EquipmentDetails);
-            
+
             AddExperienceToDB(CompanyInfo.Id, ExperienceRecords);
 
             AddSelectedSubcategoriesToDB(CompanyInfo.Id, SelectedSubcategories);
@@ -140,7 +139,7 @@ namespace BsslProcurement.Pages.Vendor
             await _context.SaveChangesAsync();
 
             var rtn = await SignUpUserAsync(CompanyInfo);
-            if ( rtn == "error")
+            if (rtn == "error")
             {
                 Error = "An Error occured!";
                 return Page();
@@ -152,8 +151,6 @@ namespace BsslProcurement.Pages.Vendor
             Message = "Your Information has been successfully uploaded";
 
             return null; //change to redirect location
-
-
         }
 
         /// <summary>
@@ -161,7 +158,6 @@ namespace BsslProcurement.Pages.Vendor
         /// </summary>
         private void GetCategories()
         {
-
             Categories = _context.ProcurementCategories
                .Select(a =>
                            new SelectListItem
@@ -171,7 +167,8 @@ namespace BsslProcurement.Pages.Vendor
                            })
                .ToList();
         }
-        List<ProcurementSubcategory> GetSubCategories(List<int> ids)
+
+        private List<ProcurementSubcategory> GetSubCategories(List<int> ids)
         {
             var subCats = _context.ProcurementSubcategories.Where(p => ids.Contains(p.Id)).ToList();
 
@@ -183,9 +180,8 @@ namespace BsslProcurement.Pages.Vendor
             return null;
         }
 
-
         //update docs model filenames
-        void GetImageFileName(List<DocsModel> formFiles, int id)
+        private void GetImageFileName(List<DocsModel> formFiles, int id)
         {
             if (formFiles.Any())
             {
@@ -217,7 +213,7 @@ namespace BsslProcurement.Pages.Vendor
         /// creates a list of submitted criterias and there docs paths
         /// </summary>
         /// <param name="id">Company Id</param>
-        List<SubmittedCriteria> GetSubmittedCriterias(int id)
+        private List<SubmittedCriteria> GetSubmittedCriterias(int id)
         {
             GetImageFileName(DocsList, id);
 
@@ -239,36 +235,34 @@ namespace BsslProcurement.Pages.Vendor
         }
 
         /// <summary>
-        /// method for saving experience record using company id 
+        /// method for saving experience record using company id
         /// </summary>
         /// <param name="id">Id of the company to be registered</param>
-        void AddExperienceToDB(int id, List<ExperienceRecord> experienceRecords)
+        private void AddExperienceToDB(int id, List<ExperienceRecord> experienceRecords)
         {
             experienceRecords.ForEach(x => x.CompanyInfoId = id);
 
             _context.ExperienceRecord.AddRange(experienceRecords);
         }
 
-
         /// <summary>
-        /// method for saving equipments details using company id 
+        /// method for saving equipments details using company id
         /// </summary>
         /// <param name="id">id of the company</param>
         /// <param name="experienceRecords">list of custom experience records model</param>
-        void AddEquipmentsToDB(int id, List<EquipmentDetails> equipmentDetails)
+        private void AddEquipmentsToDB(int id, List<EquipmentDetails> equipmentDetails)
         {
             equipmentDetails.ForEach(x => x.CompanyInfoId = id);
 
             _context.EquipmentDetails.AddRange(equipmentDetails);
         }
 
-
         /// <summary>
-        /// method for saving equipments details using company id 
+        /// method for saving equipments details using company id
         /// </summary>
         /// <param name="id">id of the company</param>
         /// <param name="experienceRecords">list of custom experience records model</param>
-        void AddSelectedSubcategoriesToDB(int id, List<CompanyInfoProcurementSubCategory> selectedSubCategorys)
+        private void AddSelectedSubcategoriesToDB(int id, List<CompanyInfoProcurementSubCategory> selectedSubCategorys)
         {
             selectedSubCategorys = selectedSubCategorys.DistinctBy(i => i.ProcurementSubcategoryId).ToList();
 
@@ -285,7 +279,7 @@ namespace BsslProcurement.Pages.Vendor
                     });
                 }
             }
-            
+
             _context.CompanyInfoProcurementSubCategory.AddRange(SubCs);
         }
 
@@ -294,9 +288,9 @@ namespace BsslProcurement.Pages.Vendor
         /// </summary>
         /// <param name="personnelDetailInputs">list of custom personnel detail model</param>
         /// <param name="id">id of the company</param>
-        void AddPersonnelDetailsToDB(List<PersonnelDetailInput> personnelDetailInputs, int id)
+        private void AddPersonnelDetailsToDB(List<PersonnelDetailInput> personnelDetailInputs, int id)
         {
-           // string companyCode = "_" + id + "_";
+            // string companyCode = "_" + id + "_";
             var pd = new List<PersonnelDetails>();
 
             foreach (var pdInput in personnelDetailInputs)
@@ -312,7 +306,7 @@ namespace BsslProcurement.Pages.Vendor
                 Directory.CreateDirectory(uploads);
 
                 //create file paths for docs
-                var CertfilePath = Path.Combine(uploads,  CertFileName);
+                var CertfilePath = Path.Combine(uploads, CertFileName);
                 var CvfilePath = Path.Combine(uploads, CvFileName);
                 var PassPortfilePath = Path.Combine(uploads, PassPortFileName);
 
@@ -330,13 +324,12 @@ namespace BsslProcurement.Pages.Vendor
                     Qualification = pdInput.Qualification,
                     CompanyInfoId = id
                 });
-
             }
 
             _context.PersonnelDetails.AddRange(pd);
         }
 
-        async Task<string> SignUpUserAsync(CompanyInfo cp)
+        private async Task<string> SignUpUserAsync(CompanyInfo cp)
         {
             var user = new VendorUser
             {
@@ -346,7 +339,7 @@ namespace BsslProcurement.Pages.Vendor
                 PhoneNumber = cp.PhoneNumber
             };
 
-            var result = await _userManager.CreateAsync(user,cp.Password);
+            var result = await _userManager.CreateAsync(user, cp.Password);
             if (result.Succeeded)
             {
                 _logger.LogInformation("Company created a new account with password.");
@@ -361,12 +354,11 @@ namespace BsslProcurement.Pages.Vendor
             return "error";
         }
 
-
         public void AddPrequalificationJob(int companyID)
         {
             if (_context.Workflows.Where(m => m.WorkflowType.Name == "procurement").Any())
             {
-                var wkflw = _context.Workflows.Where(m => m.WorkflowType.Name == "procurement").OrderBy(x=> x.Step).First();
+                var wkflw = _context.Workflows.Where(m => m.WorkflowType.Name == "procurement").OrderBy(x => x.Step).First();
 
                 _context.PrequalificationJobs.Add(new PrequalificationJob
                 {
@@ -374,7 +366,6 @@ namespace BsslProcurement.Pages.Vendor
                     CreationDate = DateTime.Now,
                     WorkFlowStep = 1,
                     StaffId = wkflw.StaffId,
-                    
                 });
             }
             else
@@ -383,8 +374,7 @@ namespace BsslProcurement.Pages.Vendor
                 {
                     CompanyInfoId = companyID,
                     CreationDate = DateTime.Now,
-                    WorkFlowStep = 0,                    
-
+                    WorkFlowStep = 0,
                 });
             }
         }
@@ -399,20 +389,16 @@ namespace BsslProcurement.Pages.Vendor
 
             //set job workflow step to 0 if no workflow exists
 
-
-
             var wrkFlow = _context.Workflows.Where(m => m.WorkflowType.Name == "procurement").MinBy(x => x.Step).FirstOrDefault();
 
             if (wrkFlow.ToPersonOrAssign)
             {
-
                 _context.PrequalificationJobs.Add(new PrequalificationJob
                 {
                     CompanyInfoId = companyID,
                     CreationDate = DateTime.Now,
                     StaffId = wrkFlow.StaffId,
                     WorkFlowStep = wrkFlow.Step,
-
                 });
             }
             else
@@ -423,10 +409,8 @@ namespace BsslProcurement.Pages.Vendor
                     CreationDate = DateTime.Now,
                     StaffId = wrkFlow.StaffId,
                     WorkFlowStep = 0,
-
                 });
             }
-
         }
     }
 }

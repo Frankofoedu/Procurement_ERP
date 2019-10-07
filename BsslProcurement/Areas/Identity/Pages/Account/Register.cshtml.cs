@@ -5,6 +5,7 @@ using System.Text.Encodings.Web;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using DcProcurement;
+using DcProcurement.Contexts;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.UI.Services;
 using Microsoft.AspNetCore.Mvc;
@@ -19,16 +20,19 @@ namespace BsslProcurement.Areas.Identity.Pages.Account
         private readonly SignInManager<User> _signInManager;
         private readonly UserManager<User> _userManager;
         private readonly ILogger<RegisterModel> _logger;
+        private readonly BSSLSYS_ITF_DEMOContext _bsslContext;
         //private readonly IEmailSender _emailSender;
 
         public RegisterModel(
             UserManager<User> userManager,
             SignInManager<User> signInManager,
-            ILogger<RegisterModel> logger)
+            ILogger<RegisterModel> logger,
+            BSSLSYS_ITF_DEMOContext bsslContext)
         {
             _userManager = userManager;
             _signInManager = signInManager;
             _logger = logger;
+            _bsslContext = bsslContext;
             //_emailSender = emailSender;
         }
 
@@ -72,37 +76,49 @@ namespace BsslProcurement.Areas.Identity.Pages.Account
         public async Task<IActionResult> OnPostAsync(string returnUrl = null)
         {
             returnUrl = returnUrl ?? Url.Content("~/");
-            if (ModelState.IsValid)
+
+            if (!ModelState.IsValid) return Page();
+
+
+            var user = new Staff { UserName = Input.Email,
+                Email = Input.Email,
+                CreationDate =DateTime.Now,
+                Name = Input.Name,
+                StaffCode = Input.StaffCode
+            };
+
+            //add staff in the user acct table first
+            _bsslContext.Useracct.Add(new Useracct {Userid = Input.StaffCode, Pwd = Input.Password});
+            var addStaffResult = _bsslContext.SaveChanges();
+            if (addStaffResult != 1)
             {
-                var user = new Staff { UserName = Input.Email,
-                    Email = Input.Email,
-                    CreationDate =DateTime.Now,
-                    Name = Input.Name,
-                    StaffCode = Input.StaffCode
-                };
+                ModelState.AddModelError(string.Empty, "An error occured while adding staff account");
+                return Page();
+            }
 
-                var result = await _userManager.CreateAsync(user, Input.Password);
-                if (result.Succeeded)
-                {
-                    _logger.LogInformation("User created a new account with password.");
 
-                    //var code = await _userManager.GenerateEmailConfirmationTokenAsync(user);
-                    //var callbackUrl = Url.Page(
-                    //    "/Account/ConfirmEmail",
-                    //    pageHandler: null,
-                    //    values: new { userId = user.Id, code = code },
-                    //    protocol: Request.Scheme);
+            //adds user to the identity tables
+            var result = await _userManager.CreateAsync(user, Input.Password);
+            if (result.Succeeded)
+            {
+                _logger.LogInformation("User created a new account with password.");
 
-                    //await _emailSender.SendEmailAsync(Input.Email, "Confirm your email",
-                    //    $"Please confirm your account by <a href='{HtmlEncoder.Default.Encode(callbackUrl)}'>clicking here</a>.");
+                //var code = await _userManager.GenerateEmailConfirmationTokenAsync(user);
+                //var callbackUrl = Url.Page(
+                //    "/Account/ConfirmEmail",
+                //    pageHandler: null,
+                //    values: new { userId = user.Id, code = code },
+                //    protocol: Request.Scheme);
 
-                    await _signInManager.SignInAsync(user, isPersistent: false);
-                    return LocalRedirect(returnUrl);
-                }
-                foreach (var error in result.Errors)
-                {
-                    ModelState.AddModelError(string.Empty, error.Description);
-                }
+                //await _emailSender.SendEmailAsync(Input.Email, "Confirm your email",
+                //    $"Please confirm your account by <a href='{HtmlEncoder.Default.Encode(callbackUrl)}'>clicking here</a>.");
+
+                await _signInManager.SignInAsync(user, isPersistent: false);
+                return LocalRedirect(returnUrl);
+            }
+            foreach (var error in result.Errors)
+            {
+                ModelState.AddModelError(string.Empty, error.Description);
             }
 
             // If we got this far, something failed, redisplay form

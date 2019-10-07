@@ -15,10 +15,7 @@ namespace BsslProcurement.Areas.Identity.Pages.Account
     {
         private readonly UserManager<User> _userManager;
 
-        public ConfirmEmailModel(UserManager<User> userManager)
-        {
-            _userManager = userManager;
-        }
+        public ConfirmEmailModel(UserManager<User> userManager) => _userManager = userManager;
 
         public async Task<IActionResult> OnGetAsync(string userId, string code)
         {
