@@ -66,6 +66,11 @@ namespace BsslProcurement.Areas.Identity.Pages.Account
             [Display(Name = "Confirm password")]
             [Compare("Password", ErrorMessage = "The password and confirmation password do not match.")]
             public string ConfirmPassword { get; set; }
+
+            [Required]
+            [Display(Name = "Company Code")]
+            public string CompCode { get; set; } = "10";
+
         }
 
         public void OnGet(string returnUrl = null)
@@ -88,7 +93,7 @@ namespace BsslProcurement.Areas.Identity.Pages.Account
             };
 
             //add staff in the user acct table first
-            _bsslContext.Useracct.Add(new Useracct {Userid = Input.StaffCode, Pwd = Input.Password});
+            _bsslContext.Useracct.Add(new Useracct {Userid = Input.StaffCode, Pwd = Input.Password, Compcode = Input.CompCode});
             var addStaffResult = _bsslContext.SaveChanges();
             if (addStaffResult != 1)
             {
