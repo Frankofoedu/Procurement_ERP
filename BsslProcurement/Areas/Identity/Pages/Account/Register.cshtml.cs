@@ -90,10 +90,11 @@ namespace BsslProcurement.Areas.Identity.Pages.Account
                 CreationDate =DateTime.Now,
                 Name = Input.Name,
                 StaffCode = Input.StaffCode
+
             };
 
             //add staff in the user acct table first
-            _bsslContext.Useracct.Add(new Useracct {Userid = Input.StaffCode, Pwd = Input.Password, Compcode = Input.CompCode});
+            _bsslContext.Useracct.Add(new Useracct {Userid = Input.StaffCode, Pwd = Input.Password, Compcode = Input.CompCode, Procurement = true});
             var addStaffResult = _bsslContext.SaveChanges();
             if (addStaffResult != 1)
             {

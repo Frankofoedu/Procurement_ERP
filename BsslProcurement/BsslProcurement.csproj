@@ -32,13 +32,13 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\DcProcurement\DcProcurement.csproj" />
-  </ItemGroup>
-
-  <ItemGroup>
     <Folder Include="Areas\Identity\Services\" />
     <Folder Include="wwwroot\JSON\" />
     <Folder Include="wwwroot\logo\" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\DcProcurement\DcProcurement.csproj" />
   </ItemGroup>
 
 </Project>

@@ -78,17 +78,17 @@ namespace BsslProcurement.Pages.Staff.ItemRequisition
 
         }
 
-        public async Task<ActionResult> OnPostAsync(List<IFormFile> files)
+        public async Task<ActionResult> OnPostSubmitAsync(List<IFormFile> files)
         {
             if (ModelState.IsValid)
             {
                 try
                 {
-                    var filepaths = (await FileUpload.GetFilePathsAsync(files, _environment, "Attachments"));
+                    var filePaths = (await FileUpload.GetFilePathsAsync(files, _environment, "Attachments"));
 
-                    Requisition.Attachments = filepaths;
+                    Requisition.Attachments = filePaths;
                     Requisition.RequisitionItems = RequisitionItems;
-
+                    Requisition.isSubmitted = true;
                     
                     _procContext.Requisitions.Add(Requisition);
                     _procContext.PRNos.Add(new PRNo { RequisitionCode = Requisition.PRNumber, LastUsedSerialNo = serialNo });
@@ -108,6 +108,37 @@ namespace BsslProcurement.Pages.Staff.ItemRequisition
             return Page();
         }
 
+        public async Task<ActionResult> OnPostSaveAsync(List<IFormFile> files)
+        {
+            if (ModelState.IsValid)
+            {
+                try
+                {
+                    var filePaths = (await FileUpload.GetFilePathsAsync(files, _environment, "Attachments"));
+
+                    Requisition.Attachments = filePaths;
+                    Requisition.RequisitionItems = RequisitionItems;
+                    Requisition.isSubmitted = true;
+
+                    _procContext.Requisitions.Add(Requisition);
+                    _procContext.PRNos.Add(new PRNo { RequisitionCode = Requisition.PRNumber, LastUsedSerialNo = serialNo });
+
+                    _procContext.SaveChanges();
+
+                    Message = "Requisition Saved For Later";
+                    return Page();
+                }
+                catch (Exception ex)
+                {
+                    Error = "An error has occurred." + Environment.NewLine + ex.Message;
+                }
+
+            }
+
+            await LoadData();
+            return Page();
+        }
+
         private async Task LoadData()
         {
             (PrNo, RequestingDeptCode, RequestingDept, Departments) = await GeneratePRNo();
@@ -117,13 +148,13 @@ namespace BsslProcurement.Pages.Staff.ItemRequisition
         {
 
             //get all staff and thier ranks
-            var staffs = _bsslContext.Stafftab.Select(x => new StaffLayoutModel { Staff = x, Rank = _bsslContext.Codestab.Where(m => m.Option1 == "f4" && m.Code == x.Positionid).FirstOrDefault().Desc1 }).ToList();
+            var staffs = _bsslContext.Stafftab.Select(x => new StaffLayoutModel { Staff = x, Rank = _bsslContext.Codestab.FirstOrDefault(m => m.Option1 == "f4" && m.Code == x.Positionid).Desc1 }).ToList();
 
 
             //           var  = _bsslContext.Stafftab.ToList();
             return new PartialViewResult
             {
-                ViewName = "_StaffLayout",
+                ViewName = "Modals/_StaffLayout",
                 ViewData = new ViewDataDictionary<List<StaffLayoutModel>>(ViewData, staffs)
             };
         }
@@ -200,52 +231,38 @@ namespace BsslProcurement.Pages.Staff.ItemRequisition
             //get current user details from staff table. From the fucking staff table
             var staff = _bsslContext.Useracct.FirstOrDefault(x => x.Userid == user.StaffCode);
 
-            if (staff != null)
-            {
-                //get company prefix 
-                var companyCode = staff.Compcode;
-                var comp = _bsslContext.Compdata.FirstOrDefault(m => m.Compcode == companyCode);
+            if (staff == null) throw new Exception("Staff Not Setup");
+            //get company prefix 
+            var companyCode = staff.Compcode;
+            var comp = _bsslContext.Compdata.FirstOrDefault(m => m.Compcode == companyCode);
 
-                if (comp != null)
-                {
-                    var compPrefix = comp.Names;
+            if (comp == null) throw new Exception("No Company Prefix found");
 
-                    var deptCode = _bsslContext.Stafftab.FirstOrDefault(st => st.Staffid == staff.Userid).Deptcode;
+            var compPrefix = comp.Names;
 
-
-
-                    var Depts = _bsslContext.Codestab.Where(opt => opt.Option1 == "F5");
-
-                    var Dept = Depts.FirstOrDefault(cd => cd.Code == deptCode);
-
-                    var DeptPrefix = Dept.Prefixcode;
-
-                    var year = DateTime.Now.Year.ToString();
-
-                    // implement serial no
-                    var PrNo = _procContext.PRNos.OrderByDescending(t => t.LastUsedSerialNo).FirstOrDefault();
-
-                    serialNo = "";
-                    if (PrNo == null)
-                    {
-                        serialNo = "00001";
-                    }
-                    else
-                    {
-                        serialNo = (Convert.ToInt32(PrNo.LastUsedSerialNo) + 1).ToString("00000");
-                    }
-
-                    //itf/deptcode/deptprefix/year/serial no
-
-                    return ($"{compPrefix.Trim()}/{deptCode.Trim()}/{DeptPrefix.Trim()}/{year}/{serialNo}", deptCode, Dept.Desc1, Depts.Select(depts => new SelectListItem { Text = depts.Desc1 }).ToList());
-
-                }
-
-                throw new Exception("No Company Prefix found");
-            }
+            var deptCode = _bsslContext.Stafftab.FirstOrDefault(st => st.Staffid == staff.Userid).Deptcode;
+            
 
 
-            throw new Exception("STaff Not Setup");
+            var Depts = _bsslContext.Codestab.Where(opt => opt.Option1 == "F5");
+
+            var Dept = Depts.FirstOrDefault(cd => cd.Code == deptCode);
+
+            var DeptPrefix = Dept.Prefixcode;
+
+            var year = DateTime.Now.Year.ToString();
+
+            // implement serial no
+            var PrNo = _procContext.PRNos.OrderByDescending(t => t.LastUsedSerialNo).FirstOrDefault();
+
+            serialNo = "";
+            serialNo = PrNo == null ? "00001" : (Convert.ToInt32(PrNo.LastUsedSerialNo) + 1).ToString("00000");
+
+            //itf/deptcode/deptprefix/year/serial no
+
+            return ($"{compPrefix.Trim()}/{deptCode.Trim()}/{DeptPrefix.Trim()}/{year}/{serialNo}", deptCode, Dept.Desc1, Depts.Select(depts => new SelectListItem { Text = depts.Desc1 }).ToList());
+
+
         }
 
         private Task<DcProcurement.User> GetCurrentUserAsync() => _userManager.GetUserAsync(HttpContext.User);

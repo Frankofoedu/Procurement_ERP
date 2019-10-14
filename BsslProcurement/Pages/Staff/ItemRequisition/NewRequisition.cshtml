@@ -172,8 +172,8 @@
 
                                         </td>
                                         <td>
-                                            <input type="number" required asp-for="RequisitionItems[0].Quantity" />
-
+                                            <input type="number" required oninput="this.value=this.value.replace(/[^0-9]/g,'');" asp-for="RequisitionItems[0].Quantity" />
+                                            
                                         </td>
                                         <td>
                                             <input type="text" required asp-for="RequisitionItems[0].UnitOfMeasurement" />
@@ -186,7 +186,7 @@
 
                                         </td>-->
                                         <td>
-                                            <input type="number" asp-for="RequisitionItems[0].UnitPrice" />
+                                            <input type="number" oninput="this.value=this.value.replace(/^0*[1-9]\d*$/g,'');"  asp-for="RequisitionItems[0].UnitPrice" />
 
                                         </td>
                                     </tr>
@@ -277,11 +277,16 @@
                                 </div>
                             </div>*@
                     </div>
-                    <div class="modal-footer justify-content-center">
-                        @*  <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>*@
-                        <input id="btnSubmit" class="btn btn-lg btn-primary" value="Save" type="submit" placeholder="" />
+                <div class="modal-footer justify-content-center">
+                    @*  <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>*@
+                    <input id="btnSubmit" class="btn btn-lg btn-primary" asp-page-handler="Submit" value="Submit" type="submit" placeholder="" />
 
-                    </div>
+                </div>
+                <div class="modal-footer justify-content-center">
+                    @*  <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>*@
+                    <input id="btnSave" class="btn btn-lg btn-primary" asp-page-handler="Save" value="Save For Later" type="submit" placeholder="" />
+
+                </div>
                 </div>
             </div>
         </form>

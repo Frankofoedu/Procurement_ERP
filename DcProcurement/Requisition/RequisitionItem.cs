@@ -9,7 +9,7 @@ namespace DcProcurement
         public int Id { get; set; }
         public string StoreItemCode { get; set; }
         public string Description { get; set; }
-        public string Quantity { get; set; }
+        public int Quantity { get; set; }
         public string UnitOfMeasurement { get; set; }
         /// <summary>
         /// The identity User attached to this company. (User of type vendor)

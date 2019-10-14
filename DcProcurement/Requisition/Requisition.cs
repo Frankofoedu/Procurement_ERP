@@ -8,6 +8,9 @@ namespace DcProcurement
     public class Requisition
     {
         public int Id { get; set; }
+
+        public bool isSubmitted { get; set; } = false;
+
         [Required(ErrorMessage ="Requisition Number is required")]
         public string PRNumber { get; set; }
         [Required(ErrorMessage = "Select Type of procuremnet")]
@@ -32,6 +35,8 @@ namespace DcProcurement
 
         //== true when requisition items has been priced
         public bool isPriced { get; set; }
+
+
         //default database creation date
         public DateTime DateCreated { get; set; }
         public List<RequisitionItem> RequisitionItems { get; set; }

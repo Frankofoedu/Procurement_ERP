@@ -40,9 +40,12 @@ namespace BsslProcurement.Areas.Identity.Pages.Account
 
         public class InputModel
         {
+            //[Required]
+            //[EmailAddress]
+            //public string Email { get; set; }
             [Required]
-           // [EmailAddress]
-            public string Email { get; set; }
+            [Display(Name = "Staff Code")]
+            public string StaffCode { get; set; }
 
             [Required]
             [DataType(DataType.Password)]
@@ -78,19 +81,20 @@ namespace BsslProcurement.Areas.Identity.Pages.Account
                 // This doesn't count login failures towards account lockout
                 // To enable password failures to trigger account lockout, set lockoutOnFailure: true
 
-                var staff = _bsslContext.Useracct.FirstOrDefault(x => x.Userid == Input.Email && x.Pwd == Input.Password);
+                var staff = _bsslContext.Useracct.FirstOrDefault(x => x.Userid == Input.StaffCode && x.Pwd == Input.Password);
                 if (staff == null )
                 {
                     ModelState.AddModelError(string.Empty, "Invalid login attempt.");
                     return Page();
                 }
-                else if(!(bool)staff.Procurement)
+
+                if(!(bool)staff.Procurement)
                 {
                     ModelState.AddModelError(string.Empty, "You are not authorized to view procurement");
                     return Page();
                 }
 
-                var result = await _signInManager.PasswordSignInAsync(Input.Email, Input.Password, Input.RememberMe, lockoutOnFailure: true);
+                var result = await _signInManager.PasswordSignInAsync(Input.StaffCode, Input.Password, Input.RememberMe, lockoutOnFailure: true);
                 if (result.Succeeded)
                 {
                     _logger.LogInformation("User logged in.");

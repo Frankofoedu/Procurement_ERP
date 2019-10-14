@@ -13,9 +13,14 @@
                 <h4>Use a local account to log in.</h4>
                 <hr />
                 <div asp-validation-summary="All" class="text-danger"></div>
-                <div class="form-group">
+                @*<div class="form-group">
                     <label asp-for="Input.Email"></label>
                     <input asp-for="Input.Email" class="form-control" />
+                    <span @*asp-validation-for="Input.Email"*@ @*class="text-danger">*@@*</span>
+                </div>*@
+                <div class="form-group">
+                    <label asp-for="Input.StaffCode"></label>
+                    <input asp-for="Input.StaffCode" class="form-control" />
                     <span @*asp-validation-for="Input.Email"*@ class="text-danger"></span>
                 </div>
                 <div class="form-group">
