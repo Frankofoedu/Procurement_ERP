@@ -100,13 +100,16 @@
                         <div class="col-sm-4">
                             <div class="form-group">
                                 <label>Date : </label>
-                                <input class="form-control" asp-for="Requisition.Date" value="@DateTime.Today.ToString("yyyy-MM-dd")" type="date" placeholder="Pick Date" />
+                                <input class="form-control" data-date="date" data-id="Rdate" />
+                                <input asp-for="Requisition.Date" type="hidden" data-id="Rdate" />
+                                
                             </div>
                         </div>
                         <div class="col-sm-4">
                             <div class="form-group">
                                 <label>Delivery Date : </label>
-                                <input class="form-control" type="date" asp-for="Requisition.DeliveryDate" placeholder="Pick Delivery Date" />
+                                <input class="form-control" data-date="date" data-id="Deliverydate" />
+                                <input hidden data-id="Deliverydate"  asp-for="Requisition.DeliveryDate" />
                             </div>
                         </div>
                         <div class="col-sm-12">
@@ -277,16 +280,14 @@
                                 </div>
                             </div>*@
                     </div>
-                <div class="modal-footer justify-content-center">
-                    @*  <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>*@
-                    <input id="btnSubmit" class="btn btn-lg btn-primary" asp-page-handler="Submit" value="Submit" type="submit" placeholder="" />
-
-                </div>
-                <div class="modal-footer justify-content-center">
-                    @*  <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>*@
-                    <input id="btnSave" class="btn btn-lg btn-primary" asp-page-handler="Save" value="Save For Later" type="submit" placeholder="" />
-
-                </div>
+                    <div class="modal-footer justify-content-lg-center">
+                        @*  <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>*@
+                        <input id="btnSave" class="btn btn-lg btn-outline-info float-left" asp-page-handler="Save" value="Save For Later" type="submit" placeholder="" />
+                        
+                       <input id="btnSubmit" class="btn btn-lg btn-primary" asp-page-handler="Submit" value="Submit" type="submit" placeholder="" />
+                        
+                    </div>
+                
                 </div>
             </div>
         </form>

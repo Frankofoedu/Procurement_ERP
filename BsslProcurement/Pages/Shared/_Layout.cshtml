@@ -53,7 +53,7 @@
                 </li>
                 <li>
                     <a href="#transactionSubMenu" data-toggle="collapse" aria-expanded="true" class="dropdown-toggle"> <i class="fas fa-comment mr-1"></i>Purchase Requisition</a>
-                    <ul class="collapse list-unstyled" id="transactionSubMenu" >
+                    <ul class="collapse list-unstyled" id="transactionSubMenu">
                         <li>
                             <a asp-page="/Staff/ItemRequisition/AllRequisition"><i class="fas fa-shopping-cart"></i> Requisition</a>
                             <a asp-page="/Staff/ItemRequisition/ItemPricing/AllRequisitionItemPricing"><i class="fas fa-shopping-cart"></i> Item Pricing</a>
@@ -201,8 +201,26 @@
     <script src="~/lib/jquery/dist/jquery.mCustomScrollbar.concat.min.js"></script>
     <script src="~/lib/jqueryui/jquery-ui.min.js"></script>
     <script src="~/lib/bootstrap/dist/js/print.js"></script>
+    <script>
+        // Use datepicker on the date inputs
+        $("input[data-date=date]").datepicker({
+            dateFormat: "dd/mm/yy",
+            minDate : new Date(),
+            onSelect: function (dateText, inst) {
+                $(inst).val(dateText); // Write the value in the input,
+                var id = $(this).data('id');
+                var hidDateField = $('input:hidden[data-id=' + id + ']').first();
+                hidDateField.val(dateText);                
+            }
+        });
+       
 
-
+        // Code below to avoid the classic date-picker
+        $("input[data-date=date]").on('click', function () {
+            return false;
+        });
+        
+    </script>
     @RenderSection("Scripts", required: false)
 </body>
 </html>

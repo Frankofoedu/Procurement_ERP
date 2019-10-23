@@ -60,12 +60,12 @@
                             <tr>
                                 <td>@(i + 1)</td>
                                 <td>@item.PRNumber</td>
-                                <td>@item.DeliveryDate</td>
+                                <td>@(((DateTime)item.DeliveryDate).ToShortDateString())</td>
                                 <td>@item.RequisitionItems.Count</td>
                                 <td>@item.RequiredAtDepartment</td>
                                 <td>@item.PreparedBy</td>
                                 <td>@item.RequisitionItems.Sum(x => x.UnitPrice * x.Quantity)</td>
-                                <td><a asp-page=""></a></td>
+                                <td><a asp-page="./DetailRequisition" asp-route-id="@item.Id" style="color: #007bff">View</a></td>
                             </tr>
                             }
 

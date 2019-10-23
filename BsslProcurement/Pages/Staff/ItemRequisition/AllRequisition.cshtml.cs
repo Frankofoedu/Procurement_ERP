@@ -27,7 +27,7 @@ namespace BsslProcurement.Pages.Staff.ItemRequisition
 
         public async Task OnGetAsync()
         {
-            Requisitions = await _context.Requisitions.ToListAsync();
+            Requisitions = await _context.Requisitions.Include(x=> x.RequisitionItems).ToListAsync();
         }
     }
 }

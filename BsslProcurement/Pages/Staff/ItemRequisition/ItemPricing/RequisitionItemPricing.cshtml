@@ -51,7 +51,10 @@
 
 @if (Model.Requisition == null)
 {
-
+    <div class="alert alert-danger alert-dismissable fade show">
+        <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+        No requisition Available
+    </div>
 }
 else
 {
@@ -97,7 +100,7 @@ else
                             <div class="col-sm-4">
                                 <div class="form-group">
                                     <label>Date : </label>
-                                    <input class="form-control" readonly asp-for="Requisition.Date" value="@DateTime.Today.ToString("yyyy-MM-dd")" type="date" placeholder="Pick Date" />
+                                    <input class="form-control" readonly asp-for="Requisition.Date" value="@Model.Requisition.Date" type="date" placeholder="Pick Date" />
                                 </div>
                             </div>
                             <div class="col-sm-4">
@@ -140,47 +143,47 @@ else
                                         {
                                             var item = Model.Requisition.RequisitionItems[i];
 
-                                        <tr class="">
+                                            <tr class="">
 
-                                            <td class="">
-                                                <label>1</label>
-                                                <input type="hidden" />
-                                            </td>
+                                                <td class="">
+                                                    <label>1</label>
+                                                    <input type="hidden" />
+                                                </td>
 
-                                            <td>
-                                                <div class="flex-row d-flex">
-                                                    <input type="text" codeID="@i" value=@item.StoreItemCode inputclass="code @i" />
-                                                    <input type="hidden" codeID="@i" asp-for="Requisition.RequisitionItems[i].StoreItemCode" inputclass="hiddencode @i" />
-                                                    <button class="btn loadItemModal" inputclass="@i" data-toggle="modal" data-target="#itemModal"><i class="fa fa-search"></i></button>
-                                                </div>
-                                            </td>
-                                            <td>
-                                                <div class="flex-row d-flex">
-                                                    <input type="text" class="txtsupinput @i" />
-                                                    <input class="supinput @i" type="hidden" readonly asp-for="Requisition.RequisitionItems[i].VendorId" />
-                                                    <button class="btn loadVendorModal" inputclass="supinput @i" data-toggle="modal" data-target="#vendorModal"><i class="fa fa-search"></i></button>
-                                                </div>
-                                            </td>
-                                            <td>
-                                                <input type="text" required asp-for="Requisition.RequisitionItems[i].Description" value="@item.Description" />
-                                            </td>
-                                            <td>
-                                                <input type="text" required asp-for="Requisition.RequisitionItems[i].UnitOfMeasurement" value="@item.UnitOfMeasurement" />
-                                            </td>
-                                            <td>
-                                                <input class="text-right" type="number" asp-for="Requisition.RequisitionItems[i].UnitPrice" value="@item.UnitPrice" />
+                                                <td>
+                                                    <div class="flex-row d-flex">
+                                                        <input type="text" codeID="@i" value=@item.StoreItemCode inputclass="code @i" />
+                                                        <input type="hidden" codeID="@i" asp-for="Requisition.RequisitionItems[i].StoreItemCode" inputclass="hiddencode @i" />
+                                                        <button class="btn loadItemModal" inputclass="@i" data-toggle="modal" data-target="#itemModal"><i class="fa fa-search"></i></button>
+                                                    </div>
+                                                </td>
+                                                <td>
+                                                    <div class="flex-row d-flex">
+                                                        <input type="text" class="txtsupinput @i" />
+                                                        <input class="supinput @i" type="hidden" readonly asp-for="Requisition.RequisitionItems[i].VendorId" />
+                                                        <button class="btn loadVendorModal" inputclass="supinput @i" data-toggle="modal" data-target="#vendorModal"><i class="fa fa-search"></i></button>
+                                                    </div>
+                                                </td>
+                                                <td>
+                                                    <input type="text" required asp-for="Requisition.RequisitionItems[i].Description" value="@item.Description" />
+                                                </td>
+                                                <td>
+                                                    <input type="text" required asp-for="Requisition.RequisitionItems[i].UnitOfMeasurement" value="@item.UnitOfMeasurement" />
+                                                </td>
+                                                <td>
+                                                    <input class="text-right" type="number" asp-for="Requisition.RequisitionItems[i].UnitPrice" value="@item.UnitPrice" />
 
-                                            </td>
-                                            <td>
-                                                <input class="text-right" type="number" required asp-for="Requisition.RequisitionItems[i].Quantity" value="@item.Quantity" />
-                                            </td>
+                                                </td>
+                                                <td>
+                                                    <input class="text-right" type="number" required asp-for="Requisition.RequisitionItems[i].Quantity" value="@item.Quantity" />
+                                                </td>
 
-                                            <td>
-                                                <input class="text-right" type="number" asp-for="Requisition.RequisitionItems[i].Amount" value="@(Convert.ToInt32(item.Quantity) * Convert.ToInt32(item.UnitPrice))" />
+                                                <td>
+                                                    <input class="text-right" type="number" asp-for="Requisition.RequisitionItems[i].Amount" value="@(Convert.ToInt32(item.Quantity) * Convert.ToInt32(item.UnitPrice))" />
 
-                                            </td>
+                                                </td>
 
-                                        </tr>
+                                            </tr>
 
                                         }
                                     <tfoot>
@@ -352,7 +355,7 @@ else
     <script src="~/js/jquery.dataTables.min.js"></script>
     <script>
 
-       
+
 
         $(document).ready(function () {
             $(".fancybox").fancybox({
@@ -363,7 +366,7 @@ else
                 }
             });
 
-              //THis function allows the user to type item code instead of using the search dialog
+            //THis function allows the user to type item code instead of using the search dialog
             //on submit, the code typed by the user will be collected
             $(function () {
                 $('#reqForm').submit(function () {
@@ -375,7 +378,7 @@ else
                             hiddenItemCode.val(txtItemCode.val());
                         }
                     });
-                   // return false;
+                    // return false;
                 });
             });
 
@@ -431,7 +434,7 @@ else
                 var txtToAssign = $('.txt' + $(this).attr('inputclass') + '');
                 var idToAssign = $('.' + $(this).attr('inputclass') + '');
                 var baseUrl = [location.protocol, '//', location.host, location.pathname].join('');
-                
+
                 $('#Vendorgrid').load(baseUrl + '?handler=VendorPartial', function () {
                     $('#Vendorspinner').removeClass('d-flex');
                     $('#Vendorspinner').hide();
@@ -441,7 +444,7 @@ else
                         //assign staff name textbox
 
                         var btn = $(this);
-                        txtToAssign.val(btn.attr('vendorId') +"--" + btn.val());
+                        txtToAssign.val(btn.attr('vendorId') + "--" + btn.val());
                         idToAssign.val(btn.attr('vendorId'))
 
                         $('#vendorModal').modal("hide");

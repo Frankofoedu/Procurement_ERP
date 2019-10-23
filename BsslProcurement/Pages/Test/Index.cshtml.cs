@@ -23,6 +23,8 @@ namespace BsslProcurement.Pages.Test
         public int StaffCount { get; set; }
         public int SuccessCount { get; set; }
 
+        [BindProperty]
+        public DateTime date { get; set; }
         public IndexModel(DcProcurement.Contexts.BSSLSYS_ITF_DEMOContext bsslContext,
             DcProcurement.ProcurementDBContext procContext,
             UserManager<User> userManager,
@@ -37,6 +39,17 @@ namespace BsslProcurement.Pages.Test
         }
         public async Task OnGetAsync()
         {
+           // await MigrateStaffFromUserAcctToIdentity();
+
+        }
+
+        public void OnPost()
+        {
+
+        }
+
+        private async Task MigrateStaffFromUserAcctToIdentity()
+        {
             var oldstaff = await _bsslContext.Useracct.ToListAsync();
 
             foreach (var staff in oldstaff)
@@ -44,8 +57,6 @@ namespace BsslProcurement.Pages.Test
                 await signUpAsync("", staff.Username, staff.Userid, staff.Pwd);
             }
             StaffCount = oldstaff.Count;
-            
-
         }
 
         async Task signUpAsync(string email, string name, string staffcode, string password)
@@ -86,5 +97,7 @@ namespace BsslProcurement.Pages.Test
             var _rdm = new Random();
             return _rdm.Next(_min, _max);
         }
+        
+        
     }
 }

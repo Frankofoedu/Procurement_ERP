@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using DcProcurement;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
+using Microsoft.EntityFrameworkCore;
 
 namespace BsslProcurement.Pages.Staff.ItemRequisition
 {
@@ -18,11 +19,23 @@ namespace BsslProcurement.Pages.Staff.ItemRequisition
         }
         public string Message { get; set; }
         public string Error { get; set; }
+        [BindProperty]
         public Requisition Requisition { get; set; }
-        public void OnGet(int id)
+        public async Task<IActionResult> OnGetAsync(int? id)
         {
-            Requisition = _context.Requisitions.FirstOrDefault(x => x.Id == id);
+            if (id == null)
+            {
+                return NotFound();
+            }
 
+            Requisition = await _context.Requisitions.Include(re => re.RequisitionItems).Include(re => re.Attachments).FirstOrDefaultAsync(x=> x.Id == id); 
+
+            if (Requisition == null)
+            {
+                return NotFound();
+            }
+
+            return Page();
         }
     }
 }
