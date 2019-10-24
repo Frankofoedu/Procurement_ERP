@@ -99,22 +99,22 @@
                         </div>
                         <div class="col-sm-4">
                             <div class="form-group">
-                                <label>Date : </label>
+                                <label>PR Date : </label>
                                 <input class="form-control" data-date="date" data-id="Rdate" />
                                 <input asp-for="Requisition.Date" type="hidden" data-id="Rdate" />
-                                
+
                             </div>
                         </div>
                         <div class="col-sm-4">
                             <div class="form-group">
-                                <label>Delivery Date : </label>
+                                <label>Expected Delivery Date : </label>
                                 <input class="form-control" data-date="date" data-id="Deliverydate" />
-                                <input hidden data-id="Deliverydate"  asp-for="Requisition.DeliveryDate" />
+                                <input hidden data-id="Deliverydate" asp-for="Requisition.DeliveryDate" />
                             </div>
                         </div>
                         <div class="col-sm-12">
                             <div class="form-group">
-                                <label>Requesting:</label>
+                                <label>Requesting :</label>
                                 <div class="panel border border-dark rounded p-2">
                                     <div class="row">
                                         <div class="col-sm-6">
@@ -124,6 +124,7 @@
                                                 <label class="btn btn-outline-dark"><input type="radio" asp-for="Requisition.RequesterType" value="Section" /> Section</label>
                                                 <label class="btn btn-outline-dark"><input type="radio" asp-for="Requisition.RequesterType" value="Unit" /> Unit</label>
                                                 <label class="btn btn-outline-dark"><input type="radio" asp-for="Requisition.RequesterType" value="Staff" /> Staff</label>
+                                                <label class="btn btn-outline-dark"><input type="radio" asp-for="Requisition.RequesterType" value="Project" /> Project</label>
                                             </div>
                                         </div>
                                         <div class="col-sm-6">
@@ -141,7 +142,7 @@
                         </div>
                         <div class="col-sm-6">
                             <div class="form-group">
-                                <label>Required At : </label>
+                                <label>Delivery Destination : </label>
                                 <select asp-items="Model.Departments" asp-for="Requisition.RequiredAtDepartment" class="form-control"></select>
                             </div>
                         </div>
@@ -156,16 +157,15 @@
                                         <th>Quantity <i class="fa fa-asterisk fa-xs faRedColour"></i></th>
                                         <th>Unit Of<br />Measurement</th>
                                         <th>Unit Price</th>
+                                        <th>Attach Supporting File</th>
                                     </tr>
                                 </thead>
                                 <tbody id="requisitionBody">
                                     <tr>
-
                                         <td class="col-sm-1">
                                             <label>1</label>
                                             <input type="hidden" />
                                         </td>
-
                                         <td class="col-sm-1">
                                             <input type="text" readonly />
 
@@ -176,21 +176,26 @@
                                         </td>
                                         <td>
                                             <input type="number" required oninput="this.value=this.value.replace(/[^0-9]/g,'');" asp-for="RequisitionItems[0].Quantity" />
-                                            
+
                                         </td>
                                         <td>
                                             <input type="text" required asp-for="RequisitionItems[0].UnitOfMeasurement" />
 
                                         </td>
                                         <!-- <td class="d-flex justify-content-start">
-                                            <input class="supinput0" type="text" readonly @*asp-for="RequisitionItems[0].VendorId"*@ />
-                                            @*<button class="btn loadVendorModal" inputclass="supinput0" data-toggle="modal" data-target="#staffModal"><i class="fa fa-search"></i></button>*@
+                            <input class="supinput0" type="text" readonly @*asp-for="RequisitionItems[0].VendorId"*@ />
+                            @*<button class="btn loadVendorModal" inputclass="supinput0" data-toggle="modal" data-target="#staffModal"><i class="fa fa-search"></i></button>*@
 
 
-                                        </td>-->
+                        </td>-->
                                         <td>
-                                            <input type="number" oninput="this.value=this.value.replace(/^0*[1-9]\d*$/g,'');"  asp-for="RequisitionItems[0].UnitPrice" />
-
+                                            <input type="number" oninput="this.value=this.value.replace(/^0*[1-9]\d*$/g,'');" asp-for="RequisitionItems[0].UnitPrice" />
+                                        </td>
+                                        <td>
+                                            <input type="text" required asp-for="RequisitionItems[0].UnitOfMeasurement" />
+                                        </td>
+                                        <td>
+                                            <input type="file" />
                                         </td>
                                     </tr>
                                 </tbody>
@@ -238,7 +243,6 @@
                                         <span class="d-flex flex-row">
                                             <input class="form-control" asp-for="Requisition.PreparedByRank" readonly id="txtpreparedRank" rows="6" placeholder="" />
                                         </span>
-
                                     </div>
                                 </div>
                                 <div class="my-2">
@@ -251,7 +255,7 @@
 
                                     </div>
                                     <div class="col-sm-12">
-                                        <label>Rank : </label>
+                                        <label>Designation : </label>
                                         <span class="d-flex flex-row">
                                             <input class="form-control" asp-for="Requisition.PreparedForRank" readonly id="forStaffTextRank" rows="6" placeholder="" />
                                         </span>
@@ -264,7 +268,7 @@
 
                         <div class="col-sm-12">
                             <div class="form-group">
-                                <label>Purpose : </label>
+                                <label>Justification : </label>
                                 <input type="hidden" asp-for="Requisition.Purpose" />
                                 <div id="editor">
 
@@ -275,19 +279,21 @@
                         <div class="col-sm-4">
                         </div>
                         @*<div class="col-sm-4">
-                                <div class="form-group">
-                                    <input class="btn btn-block btn-danger fa-print" value="Print" type="button" placeholder="Enter Resgistration Number" />
-                                </div>
-                            </div>*@
+                <div class="form-group">
+                    <input class="btn btn-block btn-danger fa-print" value="Print" type="button" placeholder="Enter Resgistration Number" />
+                </div>
+            </div>*@
                     </div>
-                    <div class="modal-footer justify-content-lg-center">
+
+                    <div class="justify-content-lg-center">
                         @*  <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>*@
                         <input id="btnSave" class="btn btn-lg btn-outline-info float-left" asp-page-handler="Save" value="Save For Later" type="submit" placeholder="" />
-                        
-                       <input id="btnSubmit" class="btn btn-lg btn-primary" asp-page-handler="Submit" value="Submit" type="submit" placeholder="" />
-                        
+
+                        <input id="btnSubmit" class="btn btn-lg btn-primary" asp-page-handler="Submit" value="Send for Approval" type="submit" placeholder="" />
+
+                        <button class="btn btn-lg btn-info">Print/Preview</button>
                     </div>
-                
+
                 </div>
             </div>
         </form>
