@@ -28,6 +28,11 @@ namespace BsslProcurement.Pages.Staff.ItemRequisition
         private readonly DcProcurement.ProcurementDBContext _procContext;
         private IHostingEnvironment _environment;
 
+        internal class ItemGridViewModel
+        {
+            public RequisitionItem RequisitionItem { get; set; }
+            public  IFormFile Attachment { get; set; }
+        }
 
         [BindProperty]
         public string serialNo { get; set; }
@@ -38,7 +43,7 @@ namespace BsslProcurement.Pages.Staff.ItemRequisition
         public string PrNo { get; set; }
 
         [BindProperty]
-        public List<RequisitionItem> RequisitionItems { get; set; }
+        internal List<ItemGridViewModel> gridVm { get; set; }
 
         //[BindProperty]
         //public IFormFile File { get; set; }
@@ -86,8 +91,8 @@ namespace BsslProcurement.Pages.Staff.ItemRequisition
                 {
                     var filePaths = (await FileUpload.GetFilePathsAsync(files, _environment, "Attachments"));
 
-                    Requisition.Attachments = filePaths;
-                    Requisition.RequisitionItems = RequisitionItems;
+                   // Requisition.Attachments = filePaths;
+                    Requisition.RequisitionItems = gridVm.Select(x => x.RequisitionItem).ToList();
                     Requisition.isSubmitted = true;
                     
                     _procContext.Requisitions.Add(Requisition);
@@ -117,8 +122,8 @@ namespace BsslProcurement.Pages.Staff.ItemRequisition
 
                     var filePaths = (await FileUpload.GetFilePathsAsync(files, _environment, "Attachments"));
 
-                    Requisition.Attachments = filePaths;
-                    Requisition.RequisitionItems = RequisitionItems;
+                   // Requisition.Attachments = filePaths;
+                    Requisition.RequisitionItems = gridVm.Select(x=> x.RequisitionItem).ToList();
                     Requisition.isSubmitted = true;
 
                     _procContext.Requisitions.Add(Requisition);
@@ -253,7 +258,7 @@ namespace BsslProcurement.Pages.Staff.ItemRequisition
 
             var year = DateTime.Now.Year.ToString();
 
-            // implement serial no
+            //implement serial no
             var PrNo = _procContext.PRNos.OrderByDescending(t => t.LastUsedSerialNo).FirstOrDefault();
 
             serialNo = "";

@@ -19,7 +19,7 @@ namespace DcProcurement
 
         public string Amount => (Convert.ToInt32(Quantity) * Convert.ToInt32(UnitPrice)).ToString();
         public int? RequisitionId { get; set; }
-
+        public Attachment Attachment { get; set; }
 
 
         public VendorUser Vendor { get; set; }

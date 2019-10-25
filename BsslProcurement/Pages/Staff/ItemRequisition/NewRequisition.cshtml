@@ -38,9 +38,17 @@
         .faRedColour {
             color: red;
         }
-        .ql-editor{
-    min-height:200px;
-}
+
+        .ql-editor {
+            min-height: 200px;
+        }
+
+        @@media (min-width: 768px) {
+            .modal-xl {
+                width: 90%;
+                max-width: 1200px;
+            }
+        }
     </style>
 }
 
@@ -75,20 +83,20 @@
             <div>
                 <div class="">
 
-                    <div class=" panel">
-                        <div class="text-center mb-3">
-                            <div class="form-group mb-0">
-                                <label class="btn btn-outline-dark pl-4">
-                                    <input class="form-check-input" type="radio" checked asp-for="Requisition.ProcurementType" value="Capital Procurement">
-                                    Capital Procurement
-                                </label>
-                                <label class="btn btn-outline-dark pl-4">
-                                    <input class="form-check-input" type="radio" asp-for="Requisition.ProcurementType" value="Recurrent Procurement">
-                                    Recurrent Procurement
-                                </label>
+                    @*<div class=" panel">
+                            <div class="text-center mb-3">
+                                <div class="form-group mb-0">
+                                    <label class="btn btn-outline-dark pl-4">
+                                        <input class="form-check-input" type="radio" checked asp-for="Requisition.ProcurementType" value="Capital Procurement">
+                                        Capital Procurement
+                                    </label>
+                                    <label class="btn btn-outline-dark pl-4">
+                                        <input class="form-check-input" type="radio" asp-for="Requisition.ProcurementType" value="Recurrent Procurement">
+                                        Recurrent Procurement
+                                    </label>
+                                </div>
                             </div>
-                        </div>
-                    </div>
+                        </div>*@
                     <div class="row p-2">
                         <div class="col-sm-4">
                             <div class="form-group">
@@ -152,7 +160,6 @@
                                 <thead>
                                     <tr class="table-primary">
                                         <th>S/No</th>
-                                        <th>Store Item Code</th>
                                         <th>Description Of <br />Goods/Services <i class="fa fa-asterisk fa-xs faRedColour"></i></th>
                                         <th>Quantity <i class="fa fa-asterisk fa-xs faRedColour"></i></th>
                                         <th>Unit Of<br />Measurement</th>
@@ -166,37 +173,32 @@
                                             <label>1</label>
                                             <input type="hidden" />
                                         </td>
-                                        <td class="col-sm-1">
-                                            <input type="text" readonly />
+                                        <td>
+                                            <input type="text" required asp-for="gridVm[0].RequisitionItem.Description" />
 
                                         </td>
                                         <td>
-                                            <input type="text" required asp-for="RequisitionItems[0].Description" />
+                                            <input type="number" required oninput="this.value=this.value.replace(/[^0-9]/g,'');" asp-for="gridVm[0].RequisitionItem.Quantity" />
 
                                         </td>
                                         <td>
-                                            <input type="number" required oninput="this.value=this.value.replace(/[^0-9]/g,'');" asp-for="RequisitionItems[0].Quantity" />
-
-                                        </td>
-                                        <td>
-                                            <input type="text" required asp-for="RequisitionItems[0].UnitOfMeasurement" />
+                                            <input type="text" required asp-for="gridVm[0].RequisitionItem.UnitOfMeasurement" />
 
                                         </td>
                                         <!-- <td class="d-flex justify-content-start">
-                            <input class="supinput0" type="text" readonly @*asp-for="RequisitionItems[0].VendorId"*@ />
-                            @*<button class="btn loadVendorModal" inputclass="supinput0" data-toggle="modal" data-target="#staffModal"><i class="fa fa-search"></i></button>*@
+                                            <input class="supinput0" type="text" readonly @*asp-for="RequisitionItems[0].VendorId"*@ />
+                                            @*<button class="btn loadVendorModal" inputclass="supinput0" data-toggle="modal" data-target="#staffModal"><i class="fa fa-search"></i></button>*@
 
 
-                        </td>-->
+                                        </td>-->
                                         <td>
-                                            <input type="number" oninput="this.value=this.value.replace(/^0*[1-9]\d*$/g,'');" asp-for="RequisitionItems[0].UnitPrice" />
+                                            <input type="number" oninput="this.value=this.value.replace(/^0*[1-9]\d*$/g,'');" asp-for="gridVm[0].RequisitionItem.UnitPrice" />
                                         </td>
                                         <td>
-                                            <input type="text" required asp-for="RequisitionItems[0].UnitOfMeasurement" />
+                                            <input asp-for="gridVm[0].Attachment" accept=".pdf" id="fileItem" />
+                                            <button id="btnPreviewItemAttachment" class="mt-2">Preview</button>
                                         </td>
-                                        <td>
-                                            <input type="file" />
-                                        </td>
+
                                     </tr>
                                 </tbody>
                             </table>
@@ -213,7 +215,7 @@
 
 
                         <div class="col-sm-7">
-                            <div class="custom-file-container" data-upload-id="myUniqueUploadId">
+                            @*<div class="custom-file-container" data-upload-id="myUniqueUploadId">
                                 <label>
                                     Attach Multiple Files <a href="javascript:void(0)" class="custom-file-container__image-clear"
                                                              title="Clear Image">&times;</a>
@@ -225,7 +227,7 @@
                                     <span class="custom-file-container__custom-file__custom-file-control"></span>
                                 </label>
                                 <div class="custom-file-container__image-preview"></div>
-                            </div>
+                            </div>*@
                         </div>
 
                         <div class="col-sm-5">
@@ -279,10 +281,10 @@
                         <div class="col-sm-4">
                         </div>
                         @*<div class="col-sm-4">
-                <div class="form-group">
-                    <input class="btn btn-block btn-danger fa-print" value="Print" type="button" placeholder="Enter Resgistration Number" />
-                </div>
-            </div>*@
+                                <div class="form-group">
+                                    <input class="btn btn-block btn-danger fa-print" value="Print" type="button" placeholder="Enter Resgistration Number" />
+                                </div>
+                            </div>*@
                     </div>
 
                     <div class="justify-content-lg-center">
@@ -341,7 +343,6 @@
         </div>
     </div>
 </div>
-
 <div class="modal" id="requesterModal">
     <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable modal-lg">
         <div class="modal-content">
@@ -364,6 +365,31 @@
     </div>
 </div>
 
+<div class="modal fade" id="modItemPreview" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg" role="document">
+
+        <!--Content-->
+        <div class="modal-content">
+
+            <!--Body-->
+            <div class="modal-body mb-0 p-0">
+
+                <div class="embed-responsive embed-responsive-4by3">
+                    <iframe id="iframeItem" class="embed-responsive-item" src="" allowfullscreen></iframe>
+                </div>
+
+            </div>
+
+            <!--Footer-->
+            
+
+        </div>
+        <!--/.Content-->
+
+    </div>
+</div>
+<!--Modal: Name-->
+
 
 @section Scripts{
     <script src="~/js/fileUpload.js"></script>
@@ -371,6 +397,38 @@
     <script src="~/js/jquery.dataTables.min.js"></script>
 
     <script>
+
+        function readURL(input, id) {
+            if (input.files && input.files[0]) {
+                var reader = new FileReader();
+
+                reader.onload = function (e) {
+                    $('#' + id).attr('src', e.target.result);
+                }
+
+                reader.readAsDataURL(input.files[0]);
+            }
+        }
+
+        //file input changes, set preview src attribute
+        $("#fileItem").change(function () {
+            readURL(this, 'btnPreviewItemAttachment');
+        });
+
+
+        //preview button
+        $('#btnPreviewItemAttachment').on('click', function (e) {
+            var url = $(this).attr('src');
+            displayPhotos(url);
+            e.preventDefault();
+        });
+        function displayPhotos(url) {
+
+             $('#iframeItem').attr('src', url);
+            $('#modItemPreview').modal();
+        }
+
+
         //loads vendor modal
         $(function () {
             $('.loadVendorModal').on('click', function () {

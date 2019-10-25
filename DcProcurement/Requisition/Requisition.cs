@@ -13,7 +13,6 @@ namespace DcProcurement
 
         [Required(ErrorMessage ="Requisition Number is required")]
         public string PRNumber { get; set; }
-        [Required(ErrorMessage = "Select Type of procuremnet")]
         public string ProcurementType { get; set; }
         [Required(ErrorMessage ="Select Date")]
         public DateTime? Date { get; set; }
@@ -40,6 +39,6 @@ namespace DcProcurement
         //default database creation date
         public DateTime DateCreated { get; set; }
         public List<RequisitionItem> RequisitionItems { get; set; }
-        public List<Attachment> Attachments { get; set; }
+       // public List<Attachment> Attachments { get; set; }
     }
 }
