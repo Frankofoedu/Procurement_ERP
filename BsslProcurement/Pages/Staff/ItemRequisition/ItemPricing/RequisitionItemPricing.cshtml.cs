@@ -32,7 +32,7 @@ namespace BsslProcurement.Pages.Staff.ItemRequisition
         public void LoadData(int id)
         {
 
-            Requisition = context.Requisitions.Include(x => x.Attachments).Include(y => y.RequisitionItems).Where(k => k.Id == id).FirstOrDefault();
+            Requisition = context.Requisitions.Include(y => y.RequisitionItems).Where(k => k.Id == id).FirstOrDefault();
 
         }
         public void OnGet(int id)

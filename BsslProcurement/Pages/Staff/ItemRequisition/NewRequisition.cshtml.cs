@@ -28,7 +28,7 @@ namespace BsslProcurement.Pages.Staff.ItemRequisition
         private readonly DcProcurement.ProcurementDBContext _procContext;
         private IHostingEnvironment _environment;
 
-        internal class ItemGridViewModel
+        public class ItemGridViewModel
         {
             public RequisitionItem RequisitionItem { get; set; }
             public  IFormFile Attachment { get; set; }
@@ -43,7 +43,7 @@ namespace BsslProcurement.Pages.Staff.ItemRequisition
         public string PrNo { get; set; }
 
         [BindProperty]
-        internal List<ItemGridViewModel> gridVm { get; set; }
+        public List<ItemGridViewModel> gridVm { get; set; }
 
         //[BindProperty]
         //public IFormFile File { get; set; }

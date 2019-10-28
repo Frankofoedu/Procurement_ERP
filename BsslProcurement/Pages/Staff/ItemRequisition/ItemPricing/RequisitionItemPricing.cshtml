@@ -143,47 +143,51 @@ else
                                         {
                                             var item = Model.Requisition.RequisitionItems[i];
 
-                                            <tr class="">
+                                        <tr class="">
 
-                                                <td class="">
-                                                    <label>1</label>
-                                                    <input type="hidden" />
-                                                </td>
+                                            <td class="">
+                                                <label>1</label>
+                                                <input type="hidden" />
+                                            </td>
 
-                                                <td>
-                                                    <div class="flex-row d-flex">
-                                                        <input type="text" codeID="@i" value=@item.StoreItemCode inputclass="code @i" />
-                                                        <input type="hidden" codeID="@i" asp-for="Requisition.RequisitionItems[i].StoreItemCode" inputclass="hiddencode @i" />
-                                                        <button class="btn loadItemModal" inputclass="@i" data-toggle="modal" data-target="#itemModal"><i class="fa fa-search"></i></button>
-                                                    </div>
-                                                </td>
-                                                <td>
-                                                    <div class="flex-row d-flex">
-                                                        <input type="text" class="txtsupinput @i" />
-                                                        <input class="supinput @i" type="hidden" readonly asp-for="Requisition.RequisitionItems[i].VendorId" />
-                                                        <button class="btn loadVendorModal" inputclass="supinput @i" data-toggle="modal" data-target="#vendorModal"><i class="fa fa-search"></i></button>
-                                                    </div>
-                                                </td>
-                                                <td>
-                                                    <input type="text" required asp-for="Requisition.RequisitionItems[i].Description" value="@item.Description" />
-                                                </td>
-                                                <td>
-                                                    <input type="text" required asp-for="Requisition.RequisitionItems[i].UnitOfMeasurement" value="@item.UnitOfMeasurement" />
-                                                </td>
-                                                <td>
-                                                    <input class="text-right" type="number" asp-for="Requisition.RequisitionItems[i].UnitPrice" value="@item.UnitPrice" />
+                                            <td>
+                                                <div class="flex-row d-flex">
+                                                    <input type="text" codeID="@i" value=@item.StoreItemCode inputclass="code @i" />
+                                                    <input type="hidden" codeID="@i" asp-for="Requisition.RequisitionItems[i].StoreItemCode" inputclass="hiddencode @i" />
+                                                    <button class="btn loadItemModal" inputclass="@i" data-toggle="modal" data-target="#itemModal"><i class="fa fa-search"></i></button>
+                                                </div>
+                                            </td>
+                                            <td>
+                                                <div class="flex-row d-flex">
+                                                    <input type="text" class="txtsupinput @i" />
+                                                    <input class="supinput @i" type="hidden" readonly asp-for="Requisition.RequisitionItems[i].VendorId" />
+                                                    <button class="btn loadVendorModal" inputclass="supinput @i" data-toggle="modal" data-target="#vendorModal"><i class="fa fa-search"></i></button>
+                                                </div>
+                                            </td>
+                                            <td>
+                                                <input type="text" required asp-for="Requisition.RequisitionItems[i].Description" value="@item.Description" />
+                                            </td>
+                                            <td>
+                                                <input type="text" required asp-for="Requisition.RequisitionItems[i].UnitOfMeasurement" value="@item.UnitOfMeasurement" />
+                                            </td>
+                                            <td>
+                                                <input class="text-right" type="number" asp-for="Requisition.RequisitionItems[i].UnitPrice" value="@item.UnitPrice" />
 
-                                                </td>
-                                                <td>
-                                                    <input class="text-right" type="number" required asp-for="Requisition.RequisitionItems[i].Quantity" value="@item.Quantity" />
-                                                </td>
+                                            </td>
+                                            <td>
+                                                <input class="text-right" type="number" required asp-for="Requisition.RequisitionItems[i].Quantity" value="@item.Quantity" />
+                                            </td>
 
-                                                <td>
-                                                    <input class="text-right" type="number" asp-for="Requisition.RequisitionItems[i].Amount" value="@(Convert.ToInt32(item.Quantity) * Convert.ToInt32(item.UnitPrice))" />
+                                            <td>
+                                                <input class="text-right" type="number" asp-for="Requisition.RequisitionItems[i].Amount" value="@(Convert.ToInt32(item.Quantity) * Convert.ToInt32(item.UnitPrice))" />
 
-                                                </td>
-
-                                            </tr>
+                                            </td>
+                                            <td>
+                                                <div class="d-flex flex-column">
+                                                    <a class="fancybox m-5 btn btn-link fas fa-file-pdf" data-fancybox-type="iframe" href="@Url.Content("~/Attachments/" + @Model.Requisition.RequisitionItems[i].Attachment.FilePath)">Open PDf Attachment</a>
+                                                </div>
+                                            </td>
+                                        </tr>
 
                                         }
                                     <tfoot>
@@ -247,10 +251,10 @@ else
                                         </div>
                                     </div>
 
-                                </div>
+                                    </div>
                             </div>
                             <div class="col-sm-12 m-4 ">
-                                @if (Model.Requisition.Attachments.Count > 0)
+                                @*@if (Model.Requisition.Attachments.Count > 0)
                                 {
                                     <h5 class="font-weight-bold">Attachments</h5>
                                     <br>
@@ -260,7 +264,7 @@ else
                                             {
                                                 if (file.FilePath.EndsWith("pdf"))
                                                 {
-                                                    <a class="fancybox m-5 btn btn-link fas fa-file-pdf" data-fancybox-type="iframe" href="@Url.Content("~/Attachments/" + file.FilePath)">Open PDf Attachment</a>
+                                                   
                                                 }
                                                 else
                                                 {
@@ -272,7 +276,7 @@ else
                                         </p>
 
                                     </div>
-                                }
+                                }*@
 
                             </div>
 

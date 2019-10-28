@@ -28,7 +28,7 @@ namespace BsslProcurement.Pages.Staff.ItemRequisition
                 return NotFound();
             }
 
-            Requisition = await _context.Requisitions.Include(re => re.RequisitionItems).Include(re => re.Attachments).FirstOrDefaultAsync(x=> x.Id == id); 
+            Requisition = await _context.Requisitions.Include(re => re.RequisitionItems).FirstOrDefaultAsync(x=> x.Id == id); 
 
             if (Requisition == null)
             {
