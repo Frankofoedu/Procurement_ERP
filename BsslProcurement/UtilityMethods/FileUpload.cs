@@ -18,7 +18,7 @@ namespace BsslProcurement.UtilityMethods
         /// <param name="_environment"></param>
         /// <param name="folder">storage folder</param>
         /// <returns></returns>
-        public static async Task<List<Attachment>> GetFilePathsAsync(List<IFormFile> files, IHostingEnvironment _environment, string folder)
+        public static async Task<List<Attachment>> GetFilePathsFromFilesListAsync(List<IFormFile> files, IHostingEnvironment _environment, string folder)
         {
             var filePaths = new List< Attachment>();
 
@@ -36,6 +36,31 @@ namespace BsslProcurement.UtilityMethods
             }
 
             return filePaths;
+        }
+        public static async Task<Attachment> GetFilePathsFromFileAsync(IFormFile file, IHostingEnvironment _environment, string folder)
+        {
+            var folderPath = Path.Combine(_environment.WebRootPath, folder);
+            Directory.CreateDirectory(folderPath);
+
+            try
+            {
+
+                using (var fileStream = new FileStream(Path.Combine(folderPath, file.FileName), FileMode.Create))
+                {
+                    await file.CopyToAsync(fileStream);
+                }
+            }
+            catch (FileNotFoundException)
+            {
+                throw new FileNotFoundException("File not found");
+            }
+            catch (Exception)
+            {
+                throw new Exception("An error occured");
+            }
+
+
+            return new Attachment { FilePath = file.FileName };
         }
     }
 }
