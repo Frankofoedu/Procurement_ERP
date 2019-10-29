@@ -15,6 +15,7 @@
             max-width: 400px;
         }
 
+
         .loader {
             border: 16px solid #f3f3f3;
             border-top: 16px solid #3498db;
@@ -163,19 +164,17 @@
                                         <th>Description Of <br />Goods/Services <i class="fa fa-asterisk fa-xs faRedColour"></i></th>
                                         <th>Quantity <i class="fa fa-asterisk fa-xs faRedColour"></i></th>
                                         <th>Unit Of<br />Measurement</th>
-                                        <th>Unit Price</th>
                                         <th>Attach Supporting File</th>
                                     </tr>
                                 </thead>
                                 <tbody id="requisitionBody">
                                     <tr>
-                                        <td class="col-sm-1">
+                                        <td>
                                             <label>1</label>
                                             <input type="hidden" />
                                         </td>
                                         <td>
                                             <input type="text" required asp-for="gridVm[0].RequisitionItem.Description" />
-
                                         </td>
                                         <td>
                                             <input type="number" required oninput="this.value=this.value.replace(/[^0-9]/g,'');" asp-for="gridVm[0].RequisitionItem.Quantity" />
@@ -191,9 +190,6 @@
 
 
                                         </td>-->
-                                        <td>
-                                            <input type="number" oninput="this.value=this.value.replace(/^0*[1-9]\d*$/g,'');" asp-for="gridVm[0].RequisitionItem.UnitPrice" />
-                                        </td>
                                         <td>
                                             <input asp-for="gridVm[0].Attachment" accept=".pdf" id="fileItem" />
                                             <button id="btnPreviewItemAttachment" class="mt-2">Preview</button>
@@ -214,30 +210,15 @@
                         </div>
 
 
-                        <div class="col-sm-7">
-                            @*<div class="custom-file-container" data-upload-id="myUniqueUploadId">
-                                <label>
-                                    Attach Multiple Files <a href="javascript:void(0)" class="custom-file-container__image-clear"
-                                                             title="Clear Image">&times;</a>
-                                </label>
-                                <label class="custom-file-container__custom-file">
-                                    <input type="file" name="files" class="custom-file-container__custom-file__custom-file-input" accept="*" multiple
-                                           aria-label="Choose File">
-                                    <input type="hidden" name="MAX_FILE_SIZE" value="10485760" />
-                                    <span class="custom-file-container__custom-file__custom-file-control"></span>
-                                </label>
-                                <div class="custom-file-container__image-preview"></div>
-                            </div>*@
-                        </div>
+                        <div class="col-sm-6">
 
-                        <div class="col-sm-5">
                             <div class="row">
                                 <div class="my-2">
                                     <div class="col-sm-12">
                                         <label>Prepared By : </label>
                                         <span class="d-flex flex-row">
                                             <input id="txtprepared" asp-for="Requisition.PreparedBy" class="form-control" readonly rows="6" placeholder="" />
-                                            <button class="btn loadStaffModal" value="txtprepared" data-toggle="modal" data-target="#staffModal"><i class="fa fa-search"></i></button>
+                                            <button class="btn loadStaffModal ml-1" value="txtprepared" data-toggle="modal" data-target="#staffModal"><i class="fa fa-search"></i></button>
                                         </span>
                                     </div>
                                     <div class="col-sm-12">
@@ -247,12 +228,30 @@
                                         </span>
                                     </div>
                                 </div>
+                            </div>
+                            @*<div class="custom-file-container" data-upload-id="myUniqueUploadId">
+                                    <label>
+                                        Attach Multiple Files <a href="javascript:void(0)" class="custom-file-container__image-clear"
+                                                                 title="Clear Image">&times;</a>
+                                    </label>
+                                    <label class="custom-file-container__custom-file">
+                                        <input type="file" name="files" class="custom-file-container__custom-file__custom-file-input" accept="*" multiple
+                                               aria-label="Choose File">
+                                        <input type="hidden" name="MAX_FILE_SIZE" value="10485760" />
+                                        <span class="custom-file-container__custom-file__custom-file-control"></span>
+                                    </label>
+                                    <div class="custom-file-container__image-preview"></div>
+                                </div>*@
+                        </div>
+
+                        <div class="col-sm-6">
+                            <div class="row">
                                 <div class="my-2">
                                     <div class="col-sm-12">
                                         <label>For : </label>
                                         <span class="d-flex flex-row">
                                             <input class="form-control" asp-for="Requisition.PreparedFor" readonly id="forStaffText" rows="6" placeholder="" />
-                                            <button class="btn loadStaffModal" value="forStaffText" data-toggle="modal" data-target="#staffModal"><i class="fa fa-search"></i></button>
+                                            <button class="btn loadStaffModal ml-1" value="forStaffText" data-toggle="modal" data-target="#staffModal"><i class="fa fa-search"></i></button>
                                         </span>
 
                                     </div>
@@ -287,13 +286,13 @@
                             </div>*@
                     </div>
 
-                    <div class="justify-content-lg-center">
+                    <div class="d-flex justify-content-around no-print">
                         @*  <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>*@
                         <input id="btnSave" class="btn btn-lg btn-outline-info float-left" asp-page-handler="Save" value="Save For Later" type="submit" placeholder="" />
 
                         <input id="btnSubmit" class="btn btn-lg btn-primary" asp-page-handler="Submit" value="Send for Approval" type="submit" placeholder="" />
 
-                        <button class="btn btn-lg btn-info">Print/Preview</button>
+                        <button id="printBtn" class="btn btn-lg btn-info" onclick="print(); return false;">Print/Preview</button>
                     </div>
 
                 </div>
@@ -381,7 +380,7 @@
             </div>
 
             <!--Footer-->
-            
+
 
         </div>
         <!--/.Content-->
@@ -398,6 +397,13 @@
 
     <script>
 
+        
+        ////print documents
+        //$('#printBtn').on('click', function (e) {
+        //    e.preventDefault();
+        //    print();
+        //})
+
         function readURL(input, id) {
             if (input.files && input.files[0]) {
                 var reader = new FileReader();
@@ -410,13 +416,13 @@
             }
         }
 
-        //file input changes, set preview src attribute
+        // file input changes, set preview src attribute
         $("#fileItem").change(function () {
             readURL(this, 'btnPreviewItemAttachment');
         });
 
 
-        //preview button
+        //attachment preview button
         $('#btnPreviewItemAttachment').on('click', function (e) {
             var url = $(this).attr('src');
             displayPhotos(url);
@@ -424,7 +430,7 @@
         });
         function displayPhotos(url) {
 
-             $('#iframeItem').attr('src', url);
+            $('#iframeItem').attr('src', url);
             $('#modItemPreview').modal();
         }
 
@@ -534,7 +540,7 @@
 
 
         //to attach multiple files in preview mode
-        var upload = new FileUploadWithPreview('myUniqueUploadId');
+        //var upload = new FileUploadWithPreview('myUniqueUploadId');
 
 
         //add new items to grid
@@ -550,36 +556,13 @@
 
 
         function newStepRow(index) {
-            //var html = ' <tr> <td>' + (Number(index) + 1) + ' <input type="hidden" id="InputModel_' + index + '__Step" name="InputModel[' + index + '].Step" value="' + (Number(index) + 1) + '" /></td > <td>' +
-            //    '<input type="text" class="form-control"  id="InputModel_' + index + '__Description" name="InputModel[' + index + '].Description" value=""/></td>' +
-            //    '<td><input type="checkbox" class="checkbox" data-val="true" data-val-required="The Assign field is required." id="InputModel_' + index + '__Assign" name="InputModel[' + index + '].Assign" value="true" /></td>' +
-            //    '<td><input type="hidden" class="staffIdInput staffIdInput' + index + '" id="InputModel_' + index + '__StaffId" name="InputModel[' + index + '].StaffId" value="" />' +
-            //    '<input type="text" sIndex="' + index + '" class="staffCodeInput staffCodeInput' + index + ' form-control" id="InputModel_' + index + '__StaffCode" name="InputModel[' + index + '].StaffCode" value="" /></td>' +
-            //    '<td><input type="text" readonly="readonly" class="staffNameInput staffNameInput' + index + '" id="InputModel_' + index + '__StaffName" name="InputModel[' + index + '].StaffName" value="" /></td>' +
-            //    '<td><input type="hidden" class="AltstaffIdInput AltStaffIdInput' + index + ' id="InputModel_' + index + '__AlternativeStaffId" name="InputModel[' + index + '].AlternativeStaffId" value="">'+
-            //    '<input type="text" sindex="' + index + '" class="AltstaffCodeInput AltStaffCodeInput' + index + ' form-control" id="InputModel_' + index + '__AlternativeStaffCode" name="InputModel[' + index + '].AlternativeStaffCode" value=""></td>'+
-            //    '<td><input type="text" readonly="readonly" class="AltStaffNameInput AltStaffNameInput' + index + '" id="InputModel_' + index + '__AlternativeStaffName" name="InputModel[' + index + '].AlternativeStaffName" value=""></td></tr > ';
 
-
-            //var html = '<tr><td class="col-sm-1"><label>' + (Number(index) + 1) + ' </label><input type="hidden"></td>' +
-            //    '<td class="col-sm-1"><input type="text" id="ItemInputModel_' + index + '__ItemCode" name="ItemInputModel[' + index + '].ItemCode" value=""></td>' +
-            //    '<td><input type="text" id="ItemInputModel_' + index + '__Descrip" name="ItemInputModel[' + index + '].Descrip" value=""></td>' +
-            //    '<td><input type="text" id="ItemInputModel_' + index + '__Quantity" name="ItemInputModel[' + index + '].Quantity" value=""></td>' +
-            //    '<td><input type="text" id="ItemInputModel_' + index + '__Unit" name="ItemInputModel[' + index + '].Unit" value=""></td>' +
-            //    '<td class="d-flex justify-content-start"><input class="supinput' + index + '" type="text" disabled="" id="ItemInputModel_' + index +
-            //    '__SuppName" name="ItemInputModel[' + index + '].SuppName" value=""> <button class="btn loadVendorModal" inputclass="supinput' + index +
-            //    '" data-toggle="modal" data-target="#staffModal"><i class="fa fa-search"></i></button> </td>' +
-            //    '<td><input type="text" id="ItemInputModel_' + index + '__UnitPrice" name="ItemInputModel[' + index + '].UnitPrice" value=""></td>' +
-            //    '<td><input type="text" id="ItemInputModel_' + index + '__Amount" name="ItemInputModel[' + index + '].Amount" value=""></td></tr> ';
-
-            var html = '<tr><td class="col-sm-1"><label>' + (Number(index) + 1) + ' </label><input type="hidden"></td>' +
-                '<td class="col-sm-1"><input type="text" id="ItemInputModel_' + index + '__ItemCode" name="ItemInputModel[' + index + '].ItemCode" value=""></td>' +
-                '<td><input type="text" id="ItemInputModel_' + index + '__Descrip" name="ItemInputModel[' + index + '].Descrip" value=""></td>' +
-                '<td><input type="text" id="ItemInputModel_' + index + '__Quantity" name="ItemInputModel[' + index + '].Quantity" value=""></td>' +
-                '<td><input type="text" id="ItemInputModel_' + index + '__Unit" name="ItemInputModel[' + index + '].Unit" value=""></td>' +
-                '<td><input type="text" id="ItemInputModel_' + index + '__UnitPrice" name="ItemInputModel[' + index + '].UnitPrice" value=""></td></tr> ';
-
-
+            var html = '<tr><td><label>' + (Number(index) + 1) + '</label><input type="hidden"></td>' +
+                '<td><input type="text" required="" id="gridVm_' + index + '__RequisitionItem_Description" name="gridVm[' + index + '].RequisitionItem.Description" value=""></td>' +
+                '<td><input type="number" required="" oninput="this.value=this.value.replace(/[^0-9]/g,'+');" data-val="true" data-val-required="The Quantity field is required." id="gridVm_' + index + '__RequisitionItem_Quantity" name="gridVm[' + index + '].RequisitionItem.Quantity" value=""></td>' +
+                '<td><input type="text" required="" id="gridVm_' + index + '__RequisitionItem_UnitOfMeasurement" name="gridVm[' + index + '].RequisitionItem.UnitOfMeasurement" value=""></td>' +
+                '<td><input accept=".pdf" id="fileItem" type="file" name="gridVm[' + index + '].Attachment"><button id="btnPreviewItemAttachment" class="mt-2">Preview</button></td>' +
+                '</tr>';
             $('#requisitionBody').append(html);
         }
     </script>

@@ -23,9 +23,9 @@ namespace BsslProcurement.Pages.Staff.ItemRequisition
     [Authorize]
     public class NewRequisitionModel : PageModel
     {
-        private readonly UserManager<DcProcurement.User> _userManager;
-        private readonly DcProcurement.Contexts.BSSLSYS_ITF_DEMOContext _bsslContext;
-        private readonly DcProcurement.ProcurementDBContext _procContext;
+        private readonly UserManager<User> _userManager;
+        private readonly BSSLSYS_ITF_DEMOContext _bsslContext;
+        private readonly ProcurementDBContext _procContext;
         private IHostingEnvironment _environment;
 
         public class ItemGridViewModel

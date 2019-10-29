@@ -10,6 +10,13 @@
     <link href="~/lib/font-awesome/css/all.css" rel="stylesheet">
     <link href="~/lib/jquery/dist/jquery.mCustomScrollbar.min.css" rel="stylesheet" />
     <link href="~/lib/jqueryui/themes/ui-lightness/jquery-ui.css" rel="stylesheet" />
+    <style>
+        @@media print {
+            .no-print, .no-print * {
+                display: none !important;
+            }
+        }
+    </style>
     @RenderSection("Styles", required: false)
 
     <script src="~/lib/jquery/dist/jquery.js"></script>
@@ -19,7 +26,7 @@
     <div class="wrapper" style="transform: none !important;">
 
         <!---- Sidebar ---->
-        <nav id="sidebar" style="transform: none !important;">
+        <nav id="sidebar" class="no-print" style="transform: none !important;">
             <div class="sidebar-header">
                 <h3>DcProcurement</h3>
             </div>
@@ -161,7 +168,7 @@
             </ul>
         </nav>
         <!----End Sidebar ---->
-        <button type="button" id="sidebarCollapse" class="navbar-btn">
+        <button type="button" id="sidebarCollapse" class="navbar-btn no-print">
             <span></span>
             <span></span>
             <span></span>
@@ -205,21 +212,21 @@
         // Use datepicker on the date inputs
         $("input[data-date=date]").datepicker({
             dateFormat: "dd/mm/yy",
-            minDate : new Date(),
+            minDate: new Date(),
             onSelect: function (dateText, inst) {
                 $(inst).val(dateText); // Write the value in the input,
                 var id = $(this).data('id');
                 var hidDateField = $('input:hidden[data-id=' + id + ']').first();
-                hidDateField.val(dateText);                
+                hidDateField.val(dateText);
             }
         });
-       
+
 
         // Code below to avoid the classic date-picker
         $("input[data-date=date]").on('click', function () {
             return false;
         });
-        
+
     </script>
     @RenderSection("Scripts", required: false)
 </body>
