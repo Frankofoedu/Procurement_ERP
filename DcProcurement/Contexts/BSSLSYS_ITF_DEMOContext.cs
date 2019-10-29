@@ -22,6 +22,7 @@ namespace DcProcurement.Contexts
         public virtual DbSet<Compdata> Compdata { get; set; }
         public virtual DbSet<Stafftab> Stafftab { get; set; }
         public virtual DbSet<Stock> Stock { get; set; }
+        public virtual DbSet<UnitOfMeasurement> UnitOfMeasurements { get; set; }
 
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
@@ -36,6 +37,34 @@ namespace DcProcurement.Contexts
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
 
+            modelBuilder.Entity<UnitOfMeasurement>(entity =>
+            {
+                entity.ToTable("uom");
+
+                entity.HasIndex(e => e.Ucode)
+                    .HasName("ucode");
+
+                entity.Property(e => e.Copny)
+                    .HasColumnName("copny")
+                    .HasMaxLength(2)
+                    .IsUnicode(false);
+
+                entity.Property(e => e.Ucode)
+                    .IsRequired()
+                    .HasColumnName("ucode")
+                    .HasMaxLength(10)
+                    .IsUnicode(false);
+
+                entity.Property(e => e.Uname)
+                    .HasColumnName("uname")
+                    .HasMaxLength(30)
+                    .IsUnicode(false);
+
+                entity.Property(e => e.Zcopny)
+                    .HasColumnName("zcopny")
+                    .HasMaxLength(10)
+                    .IsUnicode(false);
+            });
             modelBuilder.Entity<Compdata>(entity =>
             {
                 entity.HasKey(e => e.Compcode);
