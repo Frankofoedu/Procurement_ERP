@@ -26,7 +26,7 @@ namespace BsslProcurement.Pages.Staff.ItemRequisition
         private readonly UserManager<User> _userManager;
         private readonly BSSLSYS_ITF_DEMOContext _bsslContext;
         private readonly ProcurementDBContext _procContext;
-        private IHostingEnvironment _environment;
+        private readonly IHostingEnvironment _environment;
 
         public class ItemGridViewModel
         {
@@ -59,6 +59,7 @@ namespace BsslProcurement.Pages.Staff.ItemRequisition
 
         [BindProperty]
         public Requisition Requisition { get; set; }
+        public List<SelectListItem> UnitsOfMeasurementList { get; set; }
 
         public NewRequisitionModel(UserManager<DcProcurement.User> userManager,
             BSSLSYS_ITF_DEMOContext bsslContext,
@@ -89,17 +90,7 @@ namespace BsslProcurement.Pages.Staff.ItemRequisition
             {
                 try
                 {
-                    var filePaths = (await FileUpload.GetFilePathsAsync(files, _environment, "Attachments"));
-
-                   // Requisition.Attachments = filePaths;
-                    Requisition.RequisitionItems = gridVm.Select(x => x.RequisitionItem).ToList();
-                    Requisition.isSubmitted = true;
-                    
-                    _procContext.Requisitions.Add(Requisition);
-                    _procContext.PRNos.Add(new PRNo { RequisitionCode = Requisition.PRNumber, LastUsedSerialNo = serialNo });
-
-                    _procContext.SaveChanges();
-
+                    await SaveOrSubmitData(true);  
                     Message = "Requisition Added successfully";
                     return Page();
                 }
@@ -119,18 +110,7 @@ namespace BsslProcurement.Pages.Staff.ItemRequisition
             {
                 try
                 {
-
-                    var filePaths = (await FileUpload.GetFilePathsAsync(files, _environment, "Attachments"));
-
-                   // Requisition.Attachments = filePaths;
-                    Requisition.RequisitionItems = gridVm.Select(x=> x.RequisitionItem).ToList();
-                    Requisition.isSubmitted = true;
-
-                    _procContext.Requisitions.Add(Requisition);
-                    _procContext.PRNos.Add(new PRNo { RequisitionCode = Requisition.PRNumber, LastUsedSerialNo = serialNo });
-
-                    _procContext.SaveChanges();
-
+                    await SaveOrSubmitData(false);
                     Message = "Requisition Saved For Later";
                     return Page();
                 }
@@ -147,7 +127,33 @@ namespace BsslProcurement.Pages.Staff.ItemRequisition
 
         private async Task LoadData()
         {
+            UnitsOfMeasurementList = _bsslContext.UnitOfMeasurements.Select(x => new SelectListItem { Text= x.Uname, Value = x.Ucode }).ToList();
             (PrNo, RequestingDeptCode, RequestingDept, Departments) = await GeneratePRNo();
+        }
+
+        private async Task SaveOrSubmitData(bool isSubmitted)
+        {
+            //save requisition items
+            Requisition.RequisitionItems = await GetRequisitionItemsFromViewModel(gridVm);   
+                       
+            Requisition.isSubmitted = isSubmitted;
+
+            _procContext.Requisitions.Add(Requisition);
+            _procContext.PRNos.Add(new PRNo { RequisitionCode = Requisition.PRNumber, LastUsedSerialNo = serialNo });
+
+            _procContext.SaveChanges();
+        }
+
+        private async Task<List<RequisitionItem>> GetRequisitionItemsFromViewModel(List<ItemGridViewModel> gridVm)
+        {
+            List<RequisitionItem> reList = new List<RequisitionItem>();
+            foreach (ItemGridViewModel v in gridVm)
+            {
+                RequisitionItem re = v.RequisitionItem;
+                 re.Attachment = await FileUpload.GetFilePathsFromFileAsync(v.Attachment,_environment,"Attachment");
+                reList.Add(re);
+            }
+            return reList;
         }
 
         public PartialViewResult OnGetStaffPartial()
@@ -273,6 +279,5 @@ namespace BsslProcurement.Pages.Staff.ItemRequisition
 
         private Task<DcProcurement.User> GetCurrentUserAsync() => _userManager.GetUserAsync(HttpContext.User);
 
-        
     }
 }
