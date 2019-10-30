@@ -230,6 +230,20 @@ namespace BsslProcurement.Pages.Staff.ItemRequisition
                 ViewData = new ViewDataDictionary<List<requesterObj>>(ViewData, requesters)
             };
         }
+        public PartialViewResult OnGetUOMPartial()
+        {
+
+            //get all vendor 
+            var uomList = _bsslContext.UnitOfMeasurements.ToList();
+
+
+            //           var  = _bsslContext.Stafftab.ToList();
+            return new PartialViewResult
+            {
+                ViewName = "Modals/_UOMLayout",
+                ViewData = new ViewDataDictionary<List<UnitOfMeasurement>>(ViewData, uomList)
+            };
+        }
 
         private async Task<(string, string, string, List<SelectListItem>)> GeneratePRNo()
         {
