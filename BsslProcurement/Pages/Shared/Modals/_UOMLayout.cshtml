@@ -1,0 +1,27 @@
+﻿
+@using DcProcurement.Contexts
+@model List<UnitOfMeasurement>
+
+<!DOCTYPE html>
+
+
+<table id="uomTable" class="table table-striped">
+    <thead>
+        <tr>
+            <th>Unit Code</th>
+            <th>Unit Name</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>
+                    <button class="btn btn-link btnUOMName" itemName="@item.Uname" value="@item.Ucode">@item.Ucode</button>
+                </td>
+                <td>@item.Uname</td>
+            </tr>
+        }
+    </tbody>
+</table>
+
