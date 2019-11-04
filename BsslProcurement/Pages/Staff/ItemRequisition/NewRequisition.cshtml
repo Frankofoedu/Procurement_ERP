@@ -182,7 +182,7 @@
                                         </td>
                                         <td>
                                             <input type="text" required asp-for="gridVm[0].RequisitionItem.UnitOfMeasurement" />
-                                           
+
                                         </td>
                                         <!-- <td class="d-flex justify-content-start">
                                             <input class="supinput0" type="text" readonly @*asp-for="RequisitionItems[0].VendorId"*@ />
@@ -290,7 +290,7 @@
                         @*  <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>*@
                         <input id="btnSave" class="btn btn-lg btn-outline-info float-left" asp-page-handler="Save" value="Save For Later" type="submit" placeholder="" />
 
-                        <input id="btnSubmit" class="btn btn-lg btn-primary" asp-page-handler="Submit" value="Send for Approval" type="submit" placeholder="" />
+                        <input id="loadApproverModal" class="btn btn-lg btn-primary" asp-page-handler="Submit" value="Send for Approval" type="submit" placeholder="" />
 
                         <button id="printBtn" class="btn btn-lg btn-info" onclick="print(); return false;">Print/Preview</button>
                     </div>
@@ -364,6 +364,30 @@
     </div>
 </div>
 
+
+<div class="modal" id="approverModal">
+    <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title">Approver Details</h4>
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+            </div>
+            <div class="modal-body">
+                <div id="ApproverBody"></div>
+            </div>
+            <div id="Approverspinner" class="d-flex justify-content-center">
+                <div class="loader">
+                </div>
+            </div>
+
+            <div class="modal-footer">
+                <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+
 <div class="modal fade" id="modItemPreview" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
     <div class="modal-dialog modal-lg" role="document">
 
@@ -397,7 +421,7 @@
 
     <script>
 
-        
+
         ////print documents
         //$('#printBtn').on('click', function (e) {
         //    e.preventDefault();
@@ -433,6 +457,29 @@
             $('#iframeItem').attr('src', url);
             $('#modItemPreview').modal();
         }
+        
+        //loads approver modal
+        $(function () {
+            $('#loadApproverModal').on('click', function () {
+                $('#approverModal').modal("show");
+                
+                $('#ApproverBody').load(this.baseURI + '?handler=ApproverPartial', function () {
+                    $('#Approverspinner').removeClass('d-flex');
+                    $('#Approverspinner').hide();
+
+                    $('#btnSubmitApprover').on('click', function () {
+
+
+
+                        $('#approverModal').modal("hide");
+                        return false;
+                    });
+                });
+
+                return false;
+
+            });
+        });
 
 
         //loads vendor modal
@@ -559,7 +606,7 @@
 
             var html = '<tr><td><label>' + (Number(index) + 1) + '</label><input type="hidden"></td>' +
                 '<td><input type="text" required="" id="gridVm_' + index + '__RequisitionItem_Description" name="gridVm[' + index + '].RequisitionItem.Description" value=""></td>' +
-                '<td><input type="number" required="" oninput="this.value=this.value.replace(/[^0-9]/g,'+');" data-val="true" data-val-required="The Quantity field is required." id="gridVm_' + index + '__RequisitionItem_Quantity" name="gridVm[' + index + '].RequisitionItem.Quantity" value=""></td>' +
+                '<td><input type="number" required="" oninput="this.value=this.value.replace(/[^0-9]/g,' + ');" data-val="true" data-val-required="The Quantity field is required." id="gridVm_' + index + '__RequisitionItem_Quantity" name="gridVm[' + index + '].RequisitionItem.Quantity" value=""></td>' +
                 '<td><input type="text" required="" id="gridVm_' + index + '__RequisitionItem_UnitOfMeasurement" name="gridVm[' + index + '].RequisitionItem.UnitOfMeasurement" value=""></td>' +
                 '<td><input accept=".pdf" id="fileItem" type="file" name="gridVm[' + index + '].Attachment"><button id="btnPreviewItemAttachment" class="mt-2">Preview</button></td>' +
                 '</tr>';

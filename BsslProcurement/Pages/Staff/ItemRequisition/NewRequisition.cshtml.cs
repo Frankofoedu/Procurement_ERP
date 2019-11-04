@@ -186,6 +186,15 @@ namespace BsslProcurement.Pages.Staff.ItemRequisition
             };
         }
 
+        public PartialViewResult OnGetApproverPartial()
+        {
+            return new PartialViewResult
+            {
+                ViewName = "Modals/_SelectApproverPartial",
+                ViewData = new ViewDataDictionary<List<int>>(ViewData, new List<int>() { 1, 2 })
+            };
+        }
+
         public class requesterObj
         {
             public string code { get; set; }

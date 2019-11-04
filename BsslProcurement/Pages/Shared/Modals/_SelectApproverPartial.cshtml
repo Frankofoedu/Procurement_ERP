@@ -1,5 +1,5 @@
 ﻿@using BsslProcurement.Pages.Staff
-@model List<BsslProcurement.Pages.Staff.ItemRequisition.NewRequisitionModel.requesterObj>
+@model List<int>
 
 @section Styles{
 }
@@ -16,7 +16,7 @@
         <div class="col-sm-12">
             <label>Staff Id : </label>
             <span class="d-flex flex-row">
-                <input id="txtprepared"  class="form-control" readonly />
+                <input id="txtprepared" class="form-control" readonly />
                 <button class="btn loadStaffModal" value="txtprepared" data-toggle="modal" data-target="#staffModal"><i class="fa fa-search"></i></button>
             </span>
         </div>
@@ -31,5 +31,8 @@
             <span class="d-flex flex-row">
                 <input class="form-control" readonly id="txtDesignation" />
             </span>
+        </div>
+        <div class="col-sm-12">
+            <button class="btn btn-lg btn-outline-primary" id="btnSubmitApprover">Submit</button>
         </div>
     </div>
