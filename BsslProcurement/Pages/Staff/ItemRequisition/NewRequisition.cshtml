@@ -300,6 +300,29 @@
         </form>
     </div>
 </div>
+
+<div class="modal" id="approverModal">
+    <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title">Approver Details</h4>
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+            </div>
+            <div class="modal-body">
+                <div id="ApproverBody"></div>
+            </div>
+            <div id="Approverspinner" class="d-flex justify-content-center">
+                <div class="loader">
+                </div>
+            </div>
+
+            <div class="modal-footer">
+                <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
+
 <div class="modal" id="staffModal">
     <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable modal-lg">
         <div class="modal-content">
@@ -364,28 +387,6 @@
     </div>
 </div>
 
-
-<div class="modal" id="approverModal">
-    <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable modal-lg">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h4 class="modal-title">Approver Details</h4>
-                <button type="button" class="close" data-dismiss="modal">&times;</button>
-            </div>
-            <div class="modal-body">
-                <div id="ApproverBody"></div>
-            </div>
-            <div id="Approverspinner" class="d-flex justify-content-center">
-                <div class="loader">
-                </div>
-            </div>
-
-            <div class="modal-footer">
-                <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
-            </div>
-        </div>
-    </div>
-</div>
 
 
 <div class="modal fade" id="modItemPreview" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
@@ -457,12 +458,12 @@
             $('#iframeItem').attr('src', url);
             $('#modItemPreview').modal();
         }
-        
+
         //loads approver modal
         $(function () {
             $('#loadApproverModal').on('click', function () {
                 $('#approverModal').modal("show");
-                
+
                 $('#ApproverBody').load(this.baseURI + '?handler=ApproverPartial', function () {
                     $('#Approverspinner').removeClass('d-flex');
                     $('#Approverspinner').hide();
