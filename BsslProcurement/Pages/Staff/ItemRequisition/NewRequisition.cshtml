@@ -181,8 +181,11 @@
 
                                         </td>
                                         <td>
-                                            <input type="text" required asp-for="gridVm[0].RequisitionItem.UnitOfMeasurement" />
+                                            <div class="d-flex flex-row">
+                                                <input type="text" readonly required data-value="forUOM 0" asp-for="gridVm[0].RequisitionItem.UnitOfMeasurement" />
 
+                                                <button class="btn loadUOMModal ml-1" value="forUOM 0" data-toggle="modal" data-target="#uomModal"><i class="fa fa-search"></i></button>
+                                            </div>
                                         </td>
                                         <!-- <td class="d-flex justify-content-start">
                                             <input class="supinput0" type="text" readonly @*asp-for="RequisitionItems[0].VendorId"*@ />
@@ -191,8 +194,10 @@
 
                                         </td>-->
                                         <td>
-                                            <input asp-for="gridVm[0].Attachment" accept=".pdf" id="fileItem" />
-                                            <button id="btnPreviewItemAttachment" class="mt-2">Preview</button>
+                                            <div class="d-flex flex-row">
+                                                <input asp-for="gridVm[0].Attachment" data-attachment="0" accept=".pdf" class="fileItem" />
+                                                <button data-preview="0" class="mt-2 btnPreviewItemAttachment">Preview</button>
+                                            </div>
                                         </td>
 
                                     </tr>
@@ -300,29 +305,6 @@
         </form>
     </div>
 </div>
-
-<div class="modal" id="approverModal">
-    <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h4 class="modal-title">Approver Details</h4>
-                <button type="button" class="close" data-dismiss="modal">&times;</button>
-            </div>
-            <div class="modal-body">
-                <div id="ApproverBody"></div>
-            </div>
-            <div id="Approverspinner" class="d-flex justify-content-center">
-                <div class="loader">
-                </div>
-            </div>
-
-            <div class="modal-footer">
-                <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
-            </div>
-        </div>
-    </div>
-</div>
-
 <div class="modal" id="staffModal">
     <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable modal-lg">
         <div class="modal-content">
@@ -387,7 +369,51 @@
     </div>
 </div>
 
+<div class="modal" id="approverModal">
+    <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title">Approver Details</h4>
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+            </div>
+            <div class="modal-body">
+                <div id="ApproverBody"></div>
+            </div>
+            <div id="Approverspinner" class="d-flex justify-content-center">
+                <div class="loader">
+                </div>
+            </div>
 
+            <div class="modal-footer">
+                <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+<div class="modal" id="uomModal">
+    <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title">Units Of Measurements</h4>
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+            </div>
+            <div class="modal-body">
+                <div id="UOMgrid"></div>
+            </div>
+            <div id="UOMspinner" class="d-flex justify-content-center">
+                <div class="loader">
+                </div>
+            </div>
+
+            <div class="modal-footer">
+                <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
 
 <div class="modal fade" id="modItemPreview" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
     <div class="modal-dialog modal-lg" role="document">
@@ -428,27 +454,31 @@
         //    e.preventDefault();
         //    print();
         //})
+        
+        // file input changes, set preview src attribute
+        $(".container-fluid").on('change','.fileItem',function () {
+            var index = $(this).data('attachment');
+            readURL(this, index);
+        });
+
 
         function readURL(input, id) {
             if (input.files && input.files[0]) {
                 var reader = new FileReader();
 
                 reader.onload = function (e) {
-                    $('#' + id).attr('src', e.target.result);
+                    var previewBtn = $(`button[data-preview=${id}]`);
+                    previewBtn.attr('src', e.target.result)
                 }
 
                 reader.readAsDataURL(input.files[0]);
             }
         }
 
-        // file input changes, set preview src attribute
-        $("#fileItem").change(function () {
-            readURL(this, 'btnPreviewItemAttachment');
-        });
 
 
         //attachment preview button
-        $('#btnPreviewItemAttachment').on('click', function (e) {
+        $('#requisitionBody').on('click', '.btnPreviewItemAttachment', function (e) {
             var url = $(this).attr('src');
             displayPhotos(url);
             e.preventDefault();
@@ -458,6 +488,8 @@
             $('#iframeItem').attr('src', url);
             $('#modItemPreview').modal();
         }
+
+
 
         //loads approver modal
         $(function () {
@@ -481,6 +513,7 @@
 
             });
         });
+
 
 
         //loads vendor modal
@@ -572,6 +605,35 @@
             });
         });
 
+        //loads unit of measurement modal
+        $(function () {
+            $('#requisitionBody').on('click', '.loadUOMModal', function () {
+                $('#UOMgrid').empty();
+                $('#UOMspinner').addClass('d-flex');
+                $('#UOMspinner').show();
+                $('#uomModal').modal("show");
+
+                //get unit name textbox
+                var value = $(this).val();
+                var txtToAssign = $('input[data-value="' + value + '"]');
+
+                $('#UOMgrid').load(this.baseURI + '?handler=UOMPartial', function () {
+                    $('#UOMspinner').removeClass('d-flex');
+                    $('#UOMspinner').hide();
+                    $('#uomTable').dataTable();
+
+                    $('.btnUOMName').on('click', function () {
+                        //assign unit of measurement name textbox
+                        txtToAssign.val($(this).attr('itemName'));
+
+                        $('#uomModal').modal("hide");
+                        return false;
+                    });
+                });
+                return false;
+            });
+        });
+
 
         //to create a custom memo field/ textbox
         var quill = new Quill('#editor', {
@@ -605,12 +667,12 @@
 
         function newStepRow(index) {
 
-            var html = '<tr><td><label>' + (Number(index) + 1) + '</label><input type="hidden"></td>' +
-                '<td><input type="text" required="" id="gridVm_' + index + '__RequisitionItem_Description" name="gridVm[' + index + '].RequisitionItem.Description" value=""></td>' +
-                '<td><input type="number" required="" oninput="this.value=this.value.replace(/[^0-9]/g,' + ');" data-val="true" data-val-required="The Quantity field is required." id="gridVm_' + index + '__RequisitionItem_Quantity" name="gridVm[' + index + '].RequisitionItem.Quantity" value=""></td>' +
-                '<td><input type="text" required="" id="gridVm_' + index + '__RequisitionItem_UnitOfMeasurement" name="gridVm[' + index + '].RequisitionItem.UnitOfMeasurement" value=""></td>' +
-                '<td><input accept=".pdf" id="fileItem" type="file" name="gridVm[' + index + '].Attachment"><button id="btnPreviewItemAttachment" class="mt-2">Preview</button></td>' +
-                '</tr>';
+            var html = `<tr><td><label> ${(Number(index) + 1)} </label><input type="hidden"></td>
+                <td><input type="text" required="" id="gridVm_'${index}__RequisitionItem_Description" name="gridVm[${index}].RequisitionItem.Description" value=""></td>
+                <td><input type="number" required="" oninput="this.value=this.value.replace(/[^0-9]/g,' + ');" data-val="true" data-val-required="The Quantity field is required." id="gridVm_${index}__RequisitionItem_Quantity" name="gridVm[${index}].RequisitionItem.Quantity" value=""></td>
+                <td><div class="d-flex flex-row"><input type="text" readonly required="" data-value="forUOM ${index}" id="gridVm_${index}__RequisitionItem_UnitOfMeasurement" name="gridVm[${index}].RequisitionItem.UnitOfMeasurement" value=""><button class="btn loadUOMModal ml-1" value="forUOM ${index}" data-toggle="modal" data-target="#uomModal"><i class="fa fa-search"></i></button> </div></td>
+                <td> <div class="d-flex flex-row"><input data-attachment="${index}" accept=".pdf" class="fileItem" type="file" id="gridVm_${index}__Attachment" name="gridVm[${index}].Attachment"><button data-preview="${index}" class="mt-2 btnPreviewItemAttachment">Preview</button>  </div></td>
+                </tr>`;
             $('#requisitionBody').append(html);
         }
     </script>

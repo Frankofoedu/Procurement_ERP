@@ -61,18 +61,18 @@ namespace BsslProcurement.Pages.Staff.ItemRequisition
         public Requisition Requisition { get; set; }
         public List<SelectListItem> UnitsOfMeasurementList { get; set; }
 
-        public NewRequisitionModel(UserManager<DcProcurement.User> userManager,
+        public NewRequisitionModel(UserManager<User> userManager,
             BSSLSYS_ITF_DEMOContext bsslContext,
-            DcProcurement.ProcurementDBContext procContext, IHostingEnvironment environment)
+            ProcurementDBContext procContext, IHostingEnvironment environment)
         {
             _userManager = userManager;
             _bsslContext = bsslContext;
             _procContext = procContext;
             _environment = environment;
         }
+
         public async Task OnGetAsync()
         {
-
             try
             {
                 await LoadData();
@@ -98,7 +98,6 @@ namespace BsslProcurement.Pages.Staff.ItemRequisition
                 {
                     Error = "An error has occurred." + Environment.NewLine + ex.Message;
                 }
-
             }
             await LoadData();
             return Page();
