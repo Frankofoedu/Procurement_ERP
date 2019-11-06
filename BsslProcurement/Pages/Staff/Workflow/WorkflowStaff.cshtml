@@ -1,0 +1,55 @@
+﻿@page
+@model BsslProcurement.Pages.Staff.Workflow.WorkflowStaffModel
+@{
+    ViewData["Title"] = "WorkflowStaff";
+}
+
+<div class="row my-3">
+    <div class="col-12">
+        <div class="panel panel-login">
+            <div class="panel-heading">
+                <div class="row">
+                    <div class="form-group form-inline">
+                        <label>Workflow Category : </label> <select id="categorySelect" class="form-control" asp-items="ViewBag.Categories"> </select>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<div class="row my-3">
+    <div class="col-md-6">
+        <div class="panel panel-login">
+            <div class="panel-heading">
+                <div class="row">
+                    <p class="header-text">Current <span class="workflowType">@Model.curCategory.Name</span> Setup</p>
+                </div>
+                <hr>
+            </div>
+
+            <div class="mt-1">
+                <table class="table table-responsive table-striped">
+                    <thead>
+                        <tr class="table-primary">
+                            <th>Action</th>
+                            <th>Staff Name</th>
+                        </tr>
+                    </thead>
+                    <tbody id="workflowBody">
+                        @foreach (var item in Model.WorkflowStaffs)
+                        {
+                            <tr>
+                                <td>@item.WorkflowAction.Name</td>
+                            </tr>
+                            <tr>
+                                <td>@item.Staff.Name</td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>

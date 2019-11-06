@@ -3,9 +3,9 @@ using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Text;
 
-namespace DcProcurement.WorkFlows
+namespace DcProcurement
 {
-    class WorkflowCategoryActionStaff
+    public class WorkflowCategoryActionStaff
     {
         public int Id { get; set; }
         [Required(ErrorMessage = "This Field is required.")]
