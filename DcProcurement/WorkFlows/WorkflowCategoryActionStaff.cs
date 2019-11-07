@@ -8,8 +8,7 @@ namespace DcProcurement
     public class WorkflowCategoryActionStaff
     {
         public int Id { get; set; }
-        [Required(ErrorMessage = "This Field is required.")]
-        public int WorkflowCategoryId { get; set; }
+        public int WorkflowTypeId { get; set; }
         public int WorkflowActionId { get; set; }
         public string StaffId { get; set; }
 
