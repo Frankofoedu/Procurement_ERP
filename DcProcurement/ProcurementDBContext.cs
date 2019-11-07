@@ -1,6 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using System;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
+using System.Collections.Generic;
 
 namespace DcProcurement
 {
@@ -82,7 +83,6 @@ namespace DcProcurement
             modelBuilder.Entity<Attachment>().Property(m => m.DateCreated).HasDefaultValueSql("getdate()");
             modelBuilder.Entity<Requisition>().Property(m => m.DateCreated).HasDefaultValueSql("getdate()");
 
-
             modelBuilder.Entity<CompanyInfo>().HasOne(m => m.Vendor).WithOne(n => n.CompanyInfo).HasForeignKey<VendorUser>(l => l.CompanyInfoId);
 
             modelBuilder.Entity<RequisitionItem>().HasOne(m => m.Vendor).WithMany(n => n.RequisitionItems).HasForeignKey(w => w.VendorId);
@@ -90,6 +90,42 @@ namespace DcProcurement
             modelBuilder.Entity<Workflow>().HasOne(m => m.StaffToAssign).WithMany(n => n.StaffWorkflows).HasForeignKey(w => w.StaffId);
 
             modelBuilder.Entity<Workflow>().HasOne(m => m.AlternativeStaffToAssign).WithMany(n => n.AdditionalStaffWorkflows).HasForeignKey(w => w.AlternativeStaffId);
+
+
+            #region Seed Data
+
+            modelBuilder.Entity<RequisitionItem>().HasData(
+                new RequisitionItem
+                    {
+                        Description = "biro",
+                        Quantity = 22,
+                        RequisitionId = 22,
+                        StoreItemCode = "22",
+                        Id = 12
+                        
+                    }
+                );
+            modelBuilder.Entity<Requisition>().HasData(new Requisition
+            {
+                Id = 22,
+                Date = DateTime.Now,
+                DeliveryDate = DateTime.Now,
+                Description = "sample requisition",
+                isSubmitted = true,
+                PreparedBy = "John O",
+                PreparedByRank = "HOD",
+                PreparedForRank = "Hod",
+                PRNumber = "000222",
+                Purpose = "For general stores",
+                RequiredAtDepartment = "head office",
+                RequesterValue = "kkkkkd",
+                PreparedFor = "Abbah",
+                RequesterType = "Division"            
+
+
+            });
+
+            #endregion
 
             base.OnModelCreating(modelBuilder);
 
