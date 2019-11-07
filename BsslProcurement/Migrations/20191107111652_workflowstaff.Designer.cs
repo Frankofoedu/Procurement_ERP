@@ -4,14 +4,16 @@ using DcProcurement;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace BsslProcurement.Migrations
 {
     [DbContext(typeof(ProcurementDBContext))]
-    partial class ProcurementDBContextModelSnapshot : ModelSnapshot
+    [Migration("20191107111652_workflowstaff")]
+    partial class workflowstaff
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -626,7 +628,9 @@ namespace BsslProcurement.Migrations
 
                     b.Property<int>("WorkflowActionId");
 
-                    b.Property<int>("WorkflowTypeId");
+                    b.Property<int>("WorkflowCategoryId");
+
+                    b.Property<int?>("WorkflowTypeId");
 
                     b.HasKey("Id");
 
@@ -970,8 +974,7 @@ namespace BsslProcurement.Migrations
 
                     b.HasOne("DcProcurement.WorkflowType", "WorkflowType")
                         .WithMany()
-                        .HasForeignKey("WorkflowTypeId")
-                        .OnDelete(DeleteBehavior.Cascade);
+                        .HasForeignKey("WorkflowTypeId");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
