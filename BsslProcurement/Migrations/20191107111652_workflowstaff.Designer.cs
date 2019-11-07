@@ -4,14 +4,16 @@ using DcProcurement;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace BsslProcurement.Migrations
 {
     [DbContext(typeof(ProcurementDBContext))]
-    partial class ProcurementDBContextModelSnapshot : ModelSnapshot
+    [Migration("20191107111652_workflowstaff")]
+    partial class workflowstaff
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -411,9 +413,6 @@ namespace BsslProcurement.Migrations
                     b.Property<DateTime?>("DeliveryDate")
                         .IsRequired();
 
-                    b.Property<string>("Description")
-                        .IsRequired();
-
                     b.Property<string>("PRNumber")
                         .IsRequired();
 
@@ -447,27 +446,6 @@ namespace BsslProcurement.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("Requisitions");
-
-                    b.HasData(
-                        new
-                        {
-                            Id = 22,
-                            Date = new DateTime(2019, 11, 7, 13, 10, 25, 793, DateTimeKind.Local).AddTicks(4600),
-                            DateCreated = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            DeliveryDate = new DateTime(2019, 11, 7, 13, 10, 25, 794, DateTimeKind.Local).AddTicks(5153),
-                            Description = "sample requisition",
-                            PRNumber = "000222",
-                            PreparedBy = "John O",
-                            PreparedByRank = "HOD",
-                            PreparedFor = "Abbah",
-                            PreparedForRank = "Hod",
-                            Purpose = "For general stores",
-                            RequesterType = "Division",
-                            RequesterValue = "kkkkkd",
-                            RequiredAtDepartment = "head office",
-                            isPriced = false,
-                            isSubmitted = true
-                        });
                 });
 
             modelBuilder.Entity("DcProcurement.RequisitionItem", b =>
@@ -501,17 +479,6 @@ namespace BsslProcurement.Migrations
                     b.HasIndex("VendorId");
 
                     b.ToTable("RequisitionItems");
-
-                    b.HasData(
-                        new
-                        {
-                            Id = 12,
-                            Description = "biro",
-                            Quantity = 22,
-                            RequisitionId = 22,
-                            StoreItemCode = "22",
-                            UnitPrice = 0.0
-                        });
                 });
 
             modelBuilder.Entity("DcProcurement.SubmittedCriteria", b =>
@@ -661,7 +628,9 @@ namespace BsslProcurement.Migrations
 
                     b.Property<int>("WorkflowActionId");
 
-                    b.Property<int>("WorkflowTypeId");
+                    b.Property<int>("WorkflowCategoryId");
+
+                    b.Property<int?>("WorkflowTypeId");
 
                     b.HasKey("Id");
 
@@ -1005,8 +974,7 @@ namespace BsslProcurement.Migrations
 
                     b.HasOne("DcProcurement.WorkflowType", "WorkflowType")
                         .WithMany()
-                        .HasForeignKey("WorkflowTypeId")
-                        .OnDelete(DeleteBehavior.Cascade);
+                        .HasForeignKey("WorkflowTypeId");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>

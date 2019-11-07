@@ -46,6 +46,7 @@ namespace DcProcurement
         public DbSet<Workflow> Workflows { get; set; }
         public DbSet<WorkflowType> WorkflowTypes { get; set; }
         public DbSet<WorkflowAction> WorkflowActions { get; set; }
+        public DbSet<WorkflowCategoryActionStaff> WorkflowCategoryActionStaffs { get; set; }
         #endregion
 
         #region Users Tables

@@ -55,5 +55,20 @@ namespace BsslProcurement.Pages.DynamicData
             return Ok(Workflows);
         }
 
+        // GET: api/Workflow/WorkflowStaff/5
+        [HttpGet("WorkflowStaff/{id}")]
+        public IActionResult GetWorkflowStaff([FromRoute] int id) //id is the workflow category id
+        {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+
+            var WorkflowStaffs = _context.WorkflowCategoryActionStaffs.Include(m => m.WorkflowAction).Include(n => n.Staff)
+                .Where(x => x.WorkflowTypeId == id)
+                .OrderBy(m => m.WorkflowActionId).ToList();
+
+            return Ok(WorkflowStaffs);
+        }
     }
 }
