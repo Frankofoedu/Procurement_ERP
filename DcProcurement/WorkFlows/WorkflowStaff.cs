@@ -5,15 +5,13 @@ using System.Text;
 
 namespace DcProcurement
 {
-    public class WorkflowCategoryActionStaff
+    public class WorkflowStaff
     {
         public int Id { get; set; }
-        public int WorkflowTypeId { get; set; }
-        public int WorkflowActionId { get; set; }
+        public int WorkflowId { get; set; }
         public string StaffId { get; set; }
 
-        public WorkflowType WorkflowType { get; set; }
-        public WorkflowAction WorkflowAction { get; set; }
+        public Workflow Workflow { get; set; }
         public Staff Staff { get; set; }
     }
 }
