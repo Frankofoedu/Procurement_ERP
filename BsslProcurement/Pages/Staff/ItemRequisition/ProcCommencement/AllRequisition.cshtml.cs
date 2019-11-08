@@ -9,7 +9,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.EntityFrameworkCore;
 
-namespace BsslProcurement.Pages.Staff.ItemRequisition
+namespace BsslProcurement.Pages.Staff.ItemRequisition.ProcCommencement
 {
     [Authorize]
     public class AllRequisitionModel : PageModel
@@ -27,7 +27,7 @@ namespace BsslProcurement.Pages.Staff.ItemRequisition
 
         public async Task OnGetAsync()
         {
-            Requisitions = await _context.Requisitions.Include(x=> x.RequisitionItems).ToListAsync();
+            Requisitions = await _context.Requisitions.Include(x => x.RequisitionItems).ToListAsync();
         }
     }
 }

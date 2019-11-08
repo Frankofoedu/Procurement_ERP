@@ -52,10 +52,20 @@ else
 
                             <div class="d-flex justify-content-center mb-3">
 
-                                <div class="btn btn-outline-dark pl-4">
-                                    @Model.Requisition.ProcurementType
+                                <div class=" panel">
+                                    <div class="text-center mb-3">
+                                        <div class="form-group mb-0">
+                                            <label class="btn btn-outline-dark pl-4">
+                                                <input class="form-check-input" type="radio" checked asp-for="Requisition.ProcurementType" value="Capital Procurement">
+                                                Capital Procurement
+                                            </label>
+                                            <label class="btn btn-outline-dark pl-4">
+                                                <input class="form-check-input" type="radio" asp-for="Requisition.ProcurementType" value="Recurrent Procurement">
+                                                Recurrent Procurement
+                                            </label>
+                                        </div>
+                                    </div>
                                 </div>
-
 
                             </div>
 
@@ -81,6 +91,42 @@ else
                                     <input class="form-control" type="date" readonly value="@Model.Requisition.DeliveryDate" placeholder="Pick Delivery Date" />
                                 </div>
                             </div>
+
+                            <div class="col-sm-4">
+                                <div class="form-group">
+                                    <label>Procurement Method : </label>
+                                    <select asp-items="Constants.Constants.ProcurementMethod" required asp-for="Requisition.ProcurementMethod">
+                                        <option value="">Select Procurement Type</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="col-sm-4">
+                                <div class="form-group">
+                                    <label>Process Type : </label>
+                                    <select required asp-for="Requisition.ProcessType">
+                                        <option value="">Select Process Type</option>
+                                        <option value="Internal">Internal</option>
+                                        <option value="External">External</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="col-sm-4">
+                                <div class="form-group">
+                                    <label>eRFx Type : </label>
+                                    <select required asp-for="Requisition.ProcessType">
+                                        <option value="">Select Process Type</option>
+                                        <option value="Internal">Internal</option>
+                                        <option value="External">External</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="col-sm-4">
+                                <div class="form-group">
+                                    <label>Delivery Date : </label>
+                                    <input class="form-control" type="date" required value="@Model.Requisition.DeliveryDate" placeholder="Pick Delivery Date" />
+                                </div>
+                            </div>
+
                             <div class="col-sm-6">
                                 <div class="form-group">
                                     <label>Requesting Dept/Section : </label>
@@ -123,7 +169,7 @@ else
 
                                                 <td>
                                                     <div class="flex-row d-flex">
-                                                        <label value=@item.StoreItemCode  />
+                                                        <label value=@item.StoreItemCode />
                                                     </div>
                                                 </td>
                                                 <td>
@@ -165,13 +211,13 @@ else
                                 </table>
                                 <input type="hidden" id="lastIndex" value="0" />
                                 @*<div class="form-group">
-                                        <div class="row">
-                                            <div class="col-sm-3"> </div>
-                                            <div class="col-sm-6 text-center">
-                                                <button id="btnMore" class="btn btn-outline-primary">New Item</button>
-                                            </div>
-                                        </div>
-                                    </div>*@
+                <div class="row">
+                    <div class="col-sm-3"> </div>
+                    <div class="col-sm-6 text-center">
+                        <button id="btnMore" class="btn btn-outline-primary">New Item</button>
+                    </div>
+                </div>
+            </div>*@
                             </div>
 
 
@@ -219,28 +265,28 @@ else
                             </div>
                             <div class="col-sm-12 m-4 ">
                                 @*@if (Model.Requisition.Attachments.Count > 0)
-                                {
-                                    <h5 class="font-weight-bold">Attachments</h5>
-                                    <br>
-                                    <div class="d-flex flex-column">
-                                        <p>
-                                            @foreach (var file in Model.Requisition.Attachments)
-                                            {
-                                                if (file.FilePath.EndsWith("pdf"))
-                                                {
-                                                    <a class="fancybox m-5 btn btn-link fas fa-file-pdf" data-fancybox-type="iframe" href="@Url.Content("~/Attachments/" + file.FilePath)">Open PDf Attachment</a>
-                                                }
-                                                else
-                                                {
-                                                    <a class="fancybox m-5" href="@Url.Content("~/Attachments/" + file.FilePath)"><img src="@Url.Content("~/Attachments/" + file.FilePath)" class="img-thumbnail" style="max-width : 10% !important" asp-append-version="true" /></a>
+            {
+                <h5 class="font-weight-bold">Attachments</h5>
+                <br>
+                <div class="d-flex flex-column">
+                    <p>
+                        @foreach (var file in Model.Requisition.Attachments)
+                        {
+                            if (file.FilePath.EndsWith("pdf"))
+                            {
+                                <a class="fancybox m-5 btn btn-link fas fa-file-pdf" data-fancybox-type="iframe" href="@Url.Content("~/Attachments/" + file.FilePath)">Open PDf Attachment</a>
+                            }
+                            else
+                            {
+                                <a class="fancybox m-5" href="@Url.Content("~/Attachments/" + file.FilePath)"><img src="@Url.Content("~/Attachments/" + file.FilePath)" class="img-thumbnail" style="max-width : 10% !important" asp-append-version="true" /></a>
 
-                                                }
+                            }
 
-                                            }
-                                        </p>
+                        }
+                    </p>
 
-                                    </div>
-                                }*@
+                </div>
+            }*@
 
                             </div>
 
@@ -256,10 +302,10 @@ else
                             </div>
 
                             @*<div class="col-sm-4">
-                                    <div class="form-group">
-                                        <input class="btn btn-block btn-danger fa-print" value="Print" type="button" placeholder="Enter Resgistration Number" />
-                                    </div>
-                                </div>*@
+            <div class="form-group">
+                <input class="btn btn-block btn-danger fa-print" value="Print" type="button" placeholder="Enter Resgistration Number" />
+            </div>
+        </div>*@
                         </div>
                     </div>
                 </div>

@@ -1,5 +1,5 @@
 ﻿@page
-@model BsslProcurement.Pages.Staff.ItemRequisition.AllRequisitionModel
+@model ProcCommencement.AllRequisitionModel
 @{
     ViewData["Title"] = "Approved Purchase Requisition";
 }
@@ -43,6 +43,7 @@
                             <tr class="table-primary">
                                 <th>S/N</th>
                                 <th>PR Number</th>
+                                <th>Description</th>
                                 <th>Delivery Date</th>
                                 <th>No Of Items</th>
                                 <th>Required At</th>
@@ -60,6 +61,7 @@
                             <tr>
                                 <td>@(i + 1)</td>
                                 <td>@item.PRNumber</td>
+                                <td>@item.Description</td>
                                 <td>@(((DateTime)item.DeliveryDate).ToShortDateString())</td>
                                 <td>@item.RequisitionItems.Count</td>
                                 <td>@item.RequiredAtDepartment</td>

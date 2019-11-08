@@ -8,8 +8,10 @@ namespace DcProcurement
     public class Requisition
     {
         public int Id { get; set; }
-
         public bool isSubmitted { get; set; } = false;
+
+        [Required(ErrorMessage ="Please provide the description for this Requisition")]
+        public string Description { get; set; }
 
         [Required(ErrorMessage ="Requisition Number is required")]
         public string PRNumber { get; set; }
@@ -31,7 +33,9 @@ namespace DcProcurement
         public string PreparedFor { get; set; }
         public string PreparedForRank { get; set; }
         public string Purpose { get; set; }
-
+        public string ProcurementMethod { get; set; }
+        public string ProcessType { get; set; }
+        public string ERFx { get; set; }
         //== true when requisition items has been priced
         public bool isPriced { get; set; }
 

@@ -4,14 +4,16 @@ using DcProcurement;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace BsslProcurement.Migrations
 {
     [DbContext(typeof(ProcurementDBContext))]
-    partial class ProcurementDBContextModelSnapshot : ModelSnapshot
+    [Migration("20191107121026_seed_data")]
+    partial class seed_data
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -651,29 +653,6 @@ namespace BsslProcurement.Migrations
                     b.ToTable("WorkflowActions");
                 });
 
-            modelBuilder.Entity("DcProcurement.WorkflowCategoryActionStaff", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
-
-                    b.Property<string>("StaffId");
-
-                    b.Property<int>("WorkflowActionId");
-
-                    b.Property<int>("WorkflowTypeId");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("StaffId");
-
-                    b.HasIndex("WorkflowActionId");
-
-                    b.HasIndex("WorkflowTypeId");
-
-                    b.ToTable("WorkflowCategoryActionStaffs");
-                });
-
             modelBuilder.Entity("DcProcurement.WorkflowType", b =>
                 {
                     b.Property<int>("Id")
@@ -990,23 +969,6 @@ namespace BsslProcurement.Migrations
                     b.HasOne("DcProcurement.WorkflowType", "WorkflowType")
                         .WithMany("Workflows")
                         .HasForeignKey("WorkflowTypeId");
-                });
-
-            modelBuilder.Entity("DcProcurement.WorkflowCategoryActionStaff", b =>
-                {
-                    b.HasOne("DcProcurement.Staff", "Staff")
-                        .WithMany()
-                        .HasForeignKey("StaffId");
-
-                    b.HasOne("DcProcurement.WorkflowAction", "WorkflowAction")
-                        .WithMany()
-                        .HasForeignKey("WorkflowActionId")
-                        .OnDelete(DeleteBehavior.Cascade);
-
-                    b.HasOne("DcProcurement.WorkflowType", "WorkflowType")
-                        .WithMany()
-                        .HasForeignKey("WorkflowTypeId")
-                        .OnDelete(DeleteBehavior.Cascade);
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
