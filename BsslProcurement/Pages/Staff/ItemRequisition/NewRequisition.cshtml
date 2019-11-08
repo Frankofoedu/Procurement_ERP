@@ -50,6 +50,10 @@
                 max-width: 1200px;
             }
         }
+
+        .del{
+            cursor: pointer;
+        }
     </style>
 }
 
@@ -159,26 +163,22 @@
                         <div class="col-sm-12">
                             <div class="form-group">
                                 <label>Request Description : </label>
-                                <textarea asp-for="Requisition.Description" rows="5" placeholder="Request for Consumable Items for office Use"></textarea>
+                                <textarea asp-for="Requisition.Description" class="form-control" rows="5" placeholder="e.g Request for Consumable Items for office Use"></textarea>
                             </div>
                         </div>
                         <div class="mt-3 mb-5 col-sm-12 table-responsive">
                             <table class="table table-striped">
                                 <thead>
                                     <tr class="table-primary">
-                                        <th>S/No</th>
                                         <th>Description Of <br />Goods/Services <i class="fa fa-asterisk fa-xs faRedColour"></i></th>
                                         <th>Quantity <i class="fa fa-asterisk fa-xs faRedColour"></i></th>
                                         <th>Unit Of<br />Measurement</th>
                                         <th>Attach Supporting File</th>
+                                        <th>Action</th>
                                     </tr>
                                 </thead>
                                 <tbody id="requisitionBody">
                                     <tr>
-                                        <td>
-                                            <label>1</label>
-                                            <input type="hidden" />
-                                        </td>
                                         <td>
                                             <input type="text" required asp-for="gridVm[0].RequisitionItem.Description" />
                                         </td>
@@ -192,21 +192,27 @@
 
                                                 <button class="btn loadUOMModal ml-1" value="forUOM 0" data-toggle="modal" data-target="#uomModal"><i class="fa fa-search"></i></button>
                                             </div>
-                                        </td>
-                                        <!-- <td class="d-flex justify-content-start">
-                        <input class="supinput0" type="text" readonly @*asp-for="RequisitionItems[0].VendorId"*@ />
-                        @*<button class="btn loadVendorModal" inputclass="supinput0" data-toggle="modal" data-target="#staffModal"><i class="fa fa-search"></i></button>*@
+                                                  </td>
+                                            </td>
+                                            <!-- <td class="d-flex justify-content-start">
+            <input class="supinput0" type="text" readonly @*asp-for="RequisitionItems[0].VendorId"*@ />
+            @*<button class="btn loadVendorModal" inputclass="supinput0" data-toggle="modal" data-target="#staffModal"><i class="fa fa-search"></i></button>*@
 
 
-                    </td>-->
-                                        <td>
-                                            <div class="d-flex flex-row">
-                                                <input asp-for="gridVm[0].Attachment" data-attachment="0" accept=".pdf" class="fileItem" />
-                                                <button data-preview="0" class="mt-2 btnPreviewItemAttachment">Preview</button>
-                                            </div>
-                                        </td>
+        </td>-->
+                                            <td>
+                                                <div class="d-flex flex-row">
+                                                    <input asp-for="gridVm[0].Attachment" data-attachment="0" accept=".pdf" class="fileItem" />
+                                                    <button data-preview="0" class="mt-2 btnPreviewItemAttachment">Preview</button>
+                                                </div>
+                                            </td>
+                                            <td>
+                                                <label class="del ">
+                                                    <i class="fa fa-trash-alt"></i>
+                                                </label>
+                                            </td>
 
-                                    </tr>
+                                        </tr>
                                 </tbody>
                             </table>
                             <input type="hidden" id="lastIndex" value="0" />
@@ -673,7 +679,7 @@
 
         function newStepRow(index) {
 
-            var html = `<tr><td><label> ${(Number(index) + 1)} </label><input type="hidden"></td>
+            var html = `<tr>
                 <td><input type="text" required="" id="gridVm_'${index}__RequisitionItem_Description" name="gridVm[${index}].RequisitionItem.Description" value=""></td>
                 <td><input type="number" required="" oninput="this.value=this.value.replace(/[^0-9]/g,' + ');" data-val="true" data-val-required="The Quantity field is required." id="gridVm_${index}__RequisitionItem_Quantity" name="gridVm[${index}].RequisitionItem.Quantity" value=""></td>
                 <td><div class="d-flex flex-row"><input type="text" readonly required="" data-value="forUOM ${index}" id="gridVm_${index}__RequisitionItem_UnitOfMeasurement" name="gridVm[${index}].RequisitionItem.UnitOfMeasurement" value=""><button class="btn loadUOMModal ml-1" value="forUOM ${index}" data-toggle="modal" data-target="#uomModal"><i class="fa fa-search"></i></button> </div></td>
