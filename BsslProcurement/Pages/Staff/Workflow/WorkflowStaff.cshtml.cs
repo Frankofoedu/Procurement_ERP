@@ -25,41 +25,42 @@ namespace BsslProcurement.Pages.Staff.Workflow
         }
 
         [BindProperty]
-        public int curCategoryId { get; set; }
+        public int curWorkflowId { get; set; }
         [BindProperty]
-        public WorkflowCategoryActionStaff newWorkflowStaff { get; set; }
+        public WorkflowStaff newWorkflowStaff { get; set; }
 
-        public List<DcProcurement.WorkflowCategoryActionStaff> WorkflowStaffs { get; set; }
-        public WorkflowType curCategory { get; set; }
+        public List<DcProcurement.WorkflowStaff> WorkflowStaffs { get; set; }
+        public DcProcurement.Workflow curWorkflow { get; set; }
 
         public string Message { get; set; }
         public string Error { get; set; }
 
-        public void OnGet()
+        public async Task<IActionResult> OnGetAsync(int? id)
         {
-            var categories = _context.WorkflowTypes;
-
-            if (categories.Any())
+            if (id == null)
             {
-                curCategory = categories.First();
-                curCategoryId = curCategory.Id;
-
-                WorkflowStaffs = _context.WorkflowCategoryActionStaffs.Include(m=>m.WorkflowAction).Include(n => n.Staff)
-                    .Where(x=> x.WorkflowTypeId == categories.First().Id)
-                    .OrderBy(m=>m.WorkflowActionId).ToList();
+                return LocalRedirect("WorkflowSetup");
             }
 
-            ViewData["Categories"] = new SelectList(categories, "Id", "Name");
-            ViewData["Actions"] = new SelectList(_context.WorkflowActions, "Id", "Name");
+            await InitializeAsync(id.Value);
 
+            return Page();
         }
 
-        private void Initialize()
+        private async Task InitializeAsync(int id)
         {
+            curWorkflowId = id;
+            curWorkflow = await _context.Workflows.Include(m=>m.WorkflowAction).Include(m=>m.WorkflowType).FirstOrDefaultAsync(n=>n.Id == id);
+
+            if (curWorkflow != null)
+            {
+                WorkflowStaffs = await _context.WorkflowStaffs.Include(n => n.Staff)
+                    .Where(x => x.WorkflowId == curWorkflowId).ToListAsync();
+            }
 
         }
 
-        public void OnPost()
+        public async Task OnPostAsync()
         {
             var categories = _context.WorkflowTypes;
 
@@ -69,35 +70,28 @@ namespace BsslProcurement.Pages.Staff.Workflow
             }
             else
             {
-                var WS = new WorkflowCategoryActionStaff()
+                var WS = new WorkflowStaff()
                 {
-                    WorkflowTypeId = curCategoryId,
-                    WorkflowActionId = newWorkflowStaff.WorkflowActionId
+                    WorkflowId = curWorkflowId,
                 };
-                var staffid = _context.Staffs.First(m => m.StaffCode == newWorkflowStaff.StaffId).Id;
+                var staffid = (await _context.Staffs.FirstOrDefaultAsync(m => m.StaffCode == newWorkflowStaff.StaffId)).Id;
                 if (!string.IsNullOrWhiteSpace(staffid))
                 {
                     WS.StaffId = staffid;
+
+                    _context.WorkflowStaffs.Add(WS);
+                    _context.SaveChanges();
+
+                    Message = "Saved Successfully";
                 }
-                _context.WorkflowCategoryActionStaffs.Add(WS);
+                else
+                {
+                    Error = "Staff not found.";
+                }
 
-                _context.SaveChanges();
-
-                Message = "Saved Successfully";
             }
 
-            if (categories.Any())
-            {
-                curCategory = categories.First(m => m.Id == curCategoryId);
-
-                WorkflowStaffs = _context.WorkflowCategoryActionStaffs.Include(m => m.WorkflowAction).Include(n => n.Staff)
-                    .Where(x => x.WorkflowTypeId == curCategoryId)
-                    .OrderBy(m => m.WorkflowActionId).ToList();
-
-                newWorkflowStaff = new WorkflowCategoryActionStaff();
-            }
-            ViewData["Categories"] = new SelectList(categories, "Id", "Name", curCategoryId);
-            ViewData["Actions"] = new SelectList(_context.WorkflowActions, "Id", "Name");
+            await InitializeAsync(curWorkflowId);
         }
 
 

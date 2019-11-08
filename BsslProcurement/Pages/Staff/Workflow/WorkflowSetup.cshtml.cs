@@ -28,15 +28,6 @@ namespace BsslProcurement.Pages.Staff.Workflow
         {
             public int Step { get; set; }
             public int WorkflowActionId { get; set; }
-            public double Threshold { get; set; }
-            public string Description { get; set; }
-            public bool Assign { get; set; }
-            public string StaffId { get; set; }
-            public string StaffCode { get; set; }
-            public string StaffName { get; set; }
-            public string AlternativeStaffId { get; set; }
-            public string AlternativeStaffCode { get; set; }
-            public string AlternativeStaffName { get; set; }
         }
 
         [BindProperty]
@@ -76,46 +67,15 @@ namespace BsslProcurement.Pages.Staff.Workflow
             {
                 var item = InputModel[i];
 
-                if (!string.IsNullOrWhiteSpace(item.Description))
+                var pwf = new DcProcurement.Workflow()
                 {
-                    if (item.Assign && string.IsNullOrWhiteSpace(item.StaffName))
-                    {
-                        Error = "An Error Occured. Make sure that if 'For Specific Staff' field is checked, a valid staff code is Entered.";
-                        WorkflowActions = _context.WorkflowActions.ToList();
-                        foreach (var x in WorkflowActions) x.Workflows = null;
+                    WorkflowTypeId = CategoryId,
+                    WorkflowActionId = item.WorkflowActionId,
 
-                        ViewData["Categories"] = new SelectList(_context.WorkflowTypes, "Id", "Name");
-                        return;
-                    }
+                    Step = i + 1,
+                };
 
-                    var pwf = new DcProcurement.Workflow()
-                    {
-                        Description = item.Description,
-                        ToPersonOrAssign = item.Assign,
-                        WorkflowCategoryId = CategoryId,
-                        WorkflowActionId = item.WorkflowActionId,
-                        Threshold = item.Threshold,
-
-                        Step = i + 1,
-                    };
-
-                    if (item.Assign)
-                    {
-                        var staffid = _context.Staffs.FirstOrDefault(m => m.StaffCode == item.StaffCode).Id;
-                        if (!string.IsNullOrWhiteSpace(staffid))
-                        {
-                            pwf.StaffId = staffid;
-                        }
-
-                        var altStaffid = _context.Staffs.FirstOrDefault(m => m.StaffCode == item.AlternativeStaffCode).Id;
-                        if (!string.IsNullOrWhiteSpace(staffid))
-                        {
-                            pwf.AlternativeStaffId = staffid;
-                        }
-                    }
-
-                    newPWF.Add(pwf);
-                }
+                newPWF.Add(pwf);
             }
 
             if (newPWF.Count < 1)
@@ -128,7 +88,7 @@ namespace BsslProcurement.Pages.Staff.Workflow
                 return;
             }
 
-            var curWF = _context.Workflows.Where(m => m.WorkflowCategoryId == CategoryId).OrderBy(n => n.Step).ToList();
+            var curWF = _context.Workflows.Where(m => m.WorkflowTypeId == CategoryId).OrderBy(n => n.Step).ToList();
             _context.Workflows.RemoveRange(curWF);
             _context.Workflows.AddRange(newPWF);
 

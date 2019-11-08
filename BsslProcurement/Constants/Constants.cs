@@ -5,7 +5,7 @@ using System.Text;
 
 namespace BsslProcurement.Constants
 {
-    class Constants
+    public class Constants
     {
         public static List<SelectListItem> ProcurementMethod = new List<SelectListItem> {
             new SelectListItem { Text = "DSP – Direct Shopping Procurement", Value = "1" },

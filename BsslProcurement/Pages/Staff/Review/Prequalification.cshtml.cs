@@ -123,23 +123,22 @@ namespace BsslProcurement.Pages.Staff.Review
                 todo = "approve";
             }
             else {
-                Description = curStep.Description;
+                Description = curStep.WorkflowAction.Description;
 
-                var nextStep = _context.Workflows.Include(st => st.StaffToAssign)
-                                        .Include(w => w.AlternativeStaffToAssign)
-                                        .FirstOrDefault(m => m.WorkflowType.Name=="procurement" && m.Step == Job.WorkFlowStep + 1);
+                var nextStep = _context.Workflows
+                    .FirstOrDefault(m => m.WorkflowType.Name=="procurement" && m.Step == Job.WorkFlowStep + 1);
 
-                if (nextStep == null)
-                { todo = "approve"; }
-                else if (nextStep.ToPersonOrAssign)
-                { todo = "saventoperson";
-                    Staffs = new List<DcProcurement.Staff>();
-                    Staffs.Add(nextStep.StaffToAssign);
-                    Staffs.Add(nextStep.AlternativeStaffToAssign);
-                }
-                else {
-                    todo = "saventoassign";
-                }
+                //if (nextStep == null)
+                //{ todo = "approve"; }
+                //else if (nextStep.ToPersonOrAssign)
+                //{ todo = "saventoperson";
+                //    Staffs = new List<DcProcurement.Staff>();
+                //    Staffs.Add(nextStep.StaffToAssign);
+                //    Staffs.Add(nextStep.AlternativeStaffToAssign);
+                //}
+                //else {
+                //    todo = "saventoassign";
+                //}
                 
             }
 
@@ -207,22 +206,22 @@ namespace BsslProcurement.Pages.Staff.Review
                     Job.DoneDate = DateTime.UtcNow;
                 }
 
-                if (nextStep.ToPersonOrAssign)
-                {
-                    Job.Done = true;
-                    Job.DoneDate = DateTime.UtcNow;
+                //if (nextStep.ToPersonOrAssign)
+                //{
+                //    Job.Done = true;
+                //    Job.DoneDate = DateTime.UtcNow;
 
-                    var nextJob = new PrequalificationJob()
-                    {
-                        CreationDate = DateTime.UtcNow,
-                        Done = false,
-                        StaffId = nxtStaffId,
-                        WorkFlowStep = nextStep.Step,
-                        CompanyInfoId = CompanyInfo.Id
-                    };
+                //    var nextJob = new PrequalificationJob()
+                //    {
+                //        CreationDate = DateTime.UtcNow,
+                //        Done = false,
+                //        StaffId = nxtStaffId,
+                //        WorkFlowStep = nextStep.Step,
+                //        CompanyInfoId = CompanyInfo.Id
+                //    };
 
-                    _context.PrequalificationJobs.Add(nextJob);
-                }
+                //    _context.PrequalificationJobs.Add(nextJob);
+                //}
 
                 Job.Remark = Remark;
 

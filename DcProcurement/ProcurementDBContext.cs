@@ -46,7 +46,7 @@ namespace DcProcurement
         public DbSet<Workflow> Workflows { get; set; }
         public DbSet<WorkflowType> WorkflowTypes { get; set; }
         public DbSet<WorkflowAction> WorkflowActions { get; set; }
-        public DbSet<WorkflowStaff> WorkflowCategoryActionStaffs { get; set; }
+        public DbSet<WorkflowStaff> WorkflowStaffs { get; set; }
         #endregion
 
         #region Users Tables
@@ -87,10 +87,6 @@ namespace DcProcurement
             modelBuilder.Entity<CompanyInfo>().HasOne(m => m.Vendor).WithOne(n => n.CompanyInfo).HasForeignKey<VendorUser>(l => l.CompanyInfoId);
 
             modelBuilder.Entity<RequisitionItem>().HasOne(m => m.Vendor).WithMany(n => n.RequisitionItems).HasForeignKey(w => w.VendorId);
-
-            modelBuilder.Entity<Workflow>().HasOne(m => m.StaffToAssign).WithMany(n => n.StaffWorkflows).HasForeignKey(w => w.StaffId);
-
-            modelBuilder.Entity<Workflow>().HasOne(m => m.AlternativeStaffToAssign).WithMany(n => n.AdditionalStaffWorkflows).HasForeignKey(w => w.AlternativeStaffId);
 
 
             #region Seed Data

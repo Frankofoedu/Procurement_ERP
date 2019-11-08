@@ -64,18 +64,12 @@
             </div>
 
             <div class="mt-1">
-                <table class="table table-responsive table-striped">
+                <table class="table table-striped">
                     <thead>
                         <tr class="table-primary">
                             <th>Step</th>
-                            <th>Description</th>
                             <th>Action</th>
-                            <th>Threshold</th>
-                            <th>For Specific<br />Staff</th>
-                            <th>Staff<br /> Code</th>
-                            <th>Staff<br /> Name</th>
-                            <th>Alt. Staff<br /> Code</th>
-                            <th>Alt. Staff<br /> Name</th>
+                            <th></th>
                         </tr>
                     </thead>
                     <tbody id="workflowBody">
@@ -127,16 +121,6 @@
                                 <div class="form-group">
                                     <div class="row">
                                         <div class="col-sm-3 text-right">
-                                            <label>Description</label>
-                                        </div>
-                                        <div class="col-sm-9">
-                                            <input type="text" asp-for="InputModel[i].Description" class="form-control" />
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="form-group">
-                                    <div class="row">
-                                        <div class="col-sm-3 text-right">
                                             <label>Action</label>
                                         </div>
                                         <div class="col-sm-9">
@@ -144,69 +128,6 @@
                                         </div>
                                     </div>
                                 </div>
-                                <div class="form-group">
-                                    <div class="row">
-                                        <div class="col-sm-3 text-right">
-                                            <label>Threshold</label>
-                                        </div>
-                                        <div class="col-sm-9">
-                                            <input type="number" asp-for="InputModel[i].Threshold" class="form-control" />
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="form-group">
-                                    <div class="row">
-                                        <div class="col-sm-3 text-right">
-                                            <label>For Specific Staff</label>
-                                        </div>
-                                        <div class="col-sm-9">
-                                            <input type="checkbox" asp-for="InputModel[i].Assign" class="checkbox" />
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="form-group">
-                                    <div class="row">
-                                        <div class="col-sm-3 text-right">
-                                            <label>Staff Code</label>
-                                        </div>
-                                        <div class="col-sm-9">
-                                            <input type="hidden" class="staffIdInput @("staffIdInput" + i)" asp-for="InputModel[i].StaffId" />
-                                            <input type="text" readonly="readonly" sIndex="@i" class="staffCodeInput @("staffCodeInput" + i) form-control" asp-for="InputModel[i].StaffCode" />
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="form-group">
-                                    <div class="row">
-                                        <div class="col-sm-3 text-right">
-                                            <label>Staff Name</label>
-                                        </div>
-                                        <div class="col-sm-9">
-                                            <input type="text" readonly="readonly" class="staffNameInput @("staffNameInput" + i)" asp-for="InputModel[i].StaffName" />
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="form-group">
-                                    <div class="row">
-                                        <div class="col-sm-3 text-right">
-                                            <label>Alt. Staff Code</label>
-                                        </div>
-                                        <div class="col-sm-9">
-                                            <input type="hidden" class="AltStaffIdInput @("AltStaffIdInput" + i)" asp-for="InputModel[i].AlternativeStaffId" />
-                                            <input type="text" readonly="readonly" sIndex="@i" class="AltStaffCodeInput @("AltStaffCodeInput" + i) form-control" asp-for="InputModel[i].AlternativeStaffCode" />
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="form-group">
-                                    <div class="row">
-                                        <div class="col-sm-3 text-right">
-                                            <label>Alt. Staff Name</label>
-                                        </div>
-                                        <div class="col-sm-9">
-                                            <input type="text" readonly="readonly" class="AltStaffNameInput @("AltStaffNameInput" + i)" asp-for="InputModel[i].AlternativeStaffName" />
-                                        </div>
-                                    </div>
-                                </div>
-
                             </div>
                         </div>
                     </div>
@@ -322,24 +243,8 @@
             }
 
             function NewWorkflowRow(workflow) {
-                var html = '<tr><td>' + workflow.step + '</td> <td>' + workflow.description + '</td>' +
-                    '<td>' + workflow.workflowAction.name + '</td><td>' + workflow.threshold + '</td><td>' + workflow.toPersonOrAssign + '</td>';
-
-                if (workflow.staffToAssign) {
-                    html += '<td>' + workflow.staffToAssign.staffCode + '</td> <td>' + workflow.staffToAssign.name + '</td>';
-                    if (workflow.alternativeStaffToAssign) {
-                        html += '<td>' + workflow.alternativeStaffToAssign.staffCode + '</td> <td>' +
-                            workflow.alternativeStaffToAssign.name + '</td>';
-                    }
-                    else {
-                        html += '<td></td> <td></td>';
-                    }
-                }
-                else {
-                    html += '<td></td> <td></td>';
-                }
-
-                html += '</tr>';
+                var html = '<tr><td>' + workflow.step + '</td> <td>' + workflow.workflowAction.name + '</td>'
+                    '<td><button>Setup Staff</button></th> </tr>';
 
                 return html;
             }
@@ -359,16 +264,7 @@
 
             function newStepCard(index) {
                 var html = '<div class="col-md-6"> <div class="card mt-3"> <div class="card-header"> <h2>Step ' + (Number(index) + 1) + ' <input type="hidden" id="InputModel_' + index + '__Step" name="InputModel[' + index + '].Step" value="' + (Number(index) + 1) + '" /></h2></div>' +
-                    '<div class="card-body"> <div class="form-group"> <div class="row"> <div class="col-sm-3 text-right"> <label>Description</label> </div> <div class="col-sm-9"> <input type="text" class="form-control"  id="InputModel_' + index + '__Description" name="InputModel[' + index + '].Description" value=""/> </div> </div> </div>' +
-                    '<div class="form-group"> <div class="row"> <div class="col-sm-3 text-right"> <label>Action</label> </div> <div class="col-sm-9"><select id="InputModel_' + index + '__WorkflowActionId" name="InputModel[' + index + '].WorkflowActionId" class="form-control selectAction' + index + '"></select> </div> </div> </div>' +
-                    '<div class="form-group"> <div class="row"> <div class="col-sm-3 text-right"> <label>Threshold</label> </div> <div class="col-sm-9"> <input type="number" id="InputModel_' + index + '__Threshold" name="InputModel[' + index + '].Threshold" class="form-control" /> </div> </div> </div>' +
-                    '<div class="form-group"> <div class="row"> <div class="col-sm-3 text-right"> <label>For Specific Staff</label> </div> <div class="col-sm-9"> <input type="checkbox" class="checkbox" data-val="true" data-val-required="The Assign field is required." id="InputModel_' + index + '__Assign" name="InputModel[' + index + '].Assign" value="true" /> </div> </div> </div>' +
-                    '<div class="form-group"> <div class="row"> <div class="col-sm-3 text-right"> <label>Staff Code</label> </div> <div class="col-sm-9"> <input type="hidden" class="staffIdInput staffIdInput' + index + '" id="InputModel_' + index + '__StaffId" name="InputModel[' + index + '].StaffId" value="" />' +
-                    '<input type="text" sIndex="' + index + '" readonly="readonly" class="staffCodeInput staffCodeInput' + index + ' form-control" id="InputModel_' + index + '__StaffCode" name="InputModel[' + index + '].StaffCode" value="" /> </div> </div> </div>' +
-                    '<div class="form-group"> <div class="row"> <div class="col-sm-3 text-right"> <label>Staff Name</label> </div> <div class="col-sm-9"> <input type="text" readonly="readonly" class="staffNameInput staffNameInput' + index + '" id="InputModel_' + index + '__StaffName" name="InputModel[' + index + '].StaffName" value="" /> </div> </div> </div>' +
-                    '<div class="form-group"> <div class="row"> <div class="col-sm-3 text-right"> <label>Alt. Staff Code</label> </div> <div class="col-sm-9"> <input type="hidden" class="AltStaffIdInput AltStaffIdInput' + index + '" id="InputModel_' + index + '__AlternativeStaffId" name="InputModel[' + index + '].AlternativeStaffId" value="">'+
-                    '<input type="text" sindex="' + index + '" readonly="readonly" class="AltStaffCodeInput AltStaffCodeInput' + index + ' form-control" id="InputModel_' + index + '__AlternativeStaffCode" name="InputModel[' + index + '].AlternativeStaffCode" value=""> </div> </div> </div>'+
-                    '<div class="form-group"> <div class="row"> <div class="col-sm-3 text-right"> <label>Alt. Staff Name</label> </div> <div class="col-sm-9"> <input type="text" readonly="readonly" class="AltStaffNameInput AltStaffNameInput' + index + '" id="InputModel_' + index + '__AlternativeStaffName" name="InputModel[' + index + '].AlternativeStaffName" value=""> </div> </div> </div> </div> </div> </div> ';
+                    '<div class="form-group"> <div class="row"> <div class="col-sm-3 text-right"> <label>Action</label> </div> <div class="col-sm-9"><select id="InputModel_' + index + '__WorkflowActionId" name="InputModel[' + index + '].WorkflowActionId" class="form-control selectAction' + index + '"></select> </div> </div> </div> </div> </div> ';
 
                 $('#workflowCards').append(html);
             }

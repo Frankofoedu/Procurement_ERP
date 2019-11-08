@@ -94,9 +94,6 @@ namespace BsslProcurement.Pages.Staff.JobViews
                     {
                         nextWorkFlowStep = allWorkflow[i + 1];
 
-                        if (nextWorkFlowStep.ToPersonOrAssign)
-                        { todo = "saventoperson"; }
-                        else { todo = "saventoassign"; }
                     }
                     else
                     { todo = "approve"; }
@@ -126,8 +123,6 @@ namespace BsslProcurement.Pages.Staff.JobViews
                         WorkflowStep = new DcProcurement.Workflow()
                         {
                             Step = 0,
-                            Description = "Validate Files and Approve Company",
-                            ToPersonOrAssign = true,
                         },
                         todo = "approve",
                     };
@@ -231,24 +226,24 @@ namespace BsslProcurement.Pages.Staff.JobViews
 
                     if (nextStep != null)
                     {
-                        if (!nextStep.ToPersonOrAssign)
-                        {
-                            if (staffId != null)
-                            {
-                                job.Done = true;
-                                job.DoneDate = DateTime.UtcNow;
+                        //if (!nextStep.ToPersonOrAssign)
+                        //{
+                        //    if (staffId != null)
+                        //    {
+                        //        job.Done = true;
+                        //        job.DoneDate = DateTime.UtcNow;
 
-                                var newJob = new PrequalificationJob()
-                                {
-                                    CompanyInfoId = job.CompanyInfoId,
-                                    CreationDate = DateTime.UtcNow,
-                                    StaffId = staffId,
-                                    WorkFlowStep = job.WorkFlowStep+1,
-                                };
+                        //        var newJob = new PrequalificationJob()
+                        //        {
+                        //            CompanyInfoId = job.CompanyInfoId,
+                        //            CreationDate = DateTime.UtcNow,
+                        //            StaffId = staffId,
+                        //            WorkFlowStep = job.WorkFlowStep+1,
+                        //        };
 
-                                _context.PrequalificationJobs.Add(newJob);
-                            }
-                        }
+                        //        _context.PrequalificationJobs.Add(newJob);
+                        //    }
+                        //}
                     }
                 }
             }

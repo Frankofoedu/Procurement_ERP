@@ -365,7 +365,6 @@ namespace BsslProcurement.Pages.Vendor
                     CompanyInfoId = companyID,
                     CreationDate = DateTime.Now,
                     WorkFlowStep = 1,
-                    StaffId = wkflw.StaffId,
                 });
             }
             else
@@ -391,26 +390,26 @@ namespace BsslProcurement.Pages.Vendor
 
             var wrkFlow = _context.Workflows.Where(m => m.WorkflowType.Name == "procurement").MinBy(x => x.Step).FirstOrDefault();
 
-            if (wrkFlow.ToPersonOrAssign)
-            {
-                _context.PrequalificationJobs.Add(new PrequalificationJob
-                {
-                    CompanyInfoId = companyID,
-                    CreationDate = DateTime.Now,
-                    StaffId = wrkFlow.StaffId,
-                    WorkFlowStep = wrkFlow.Step,
-                });
-            }
-            else
-            {
-                _context.PrequalificationJobs.Add(new PrequalificationJob
-                {
-                    CompanyInfoId = companyID,
-                    CreationDate = DateTime.Now,
-                    StaffId = wrkFlow.StaffId,
-                    WorkFlowStep = 0,
-                });
-            }
+            //if (wrkFlow.ToPersonOrAssign)
+            //{
+            //    _context.PrequalificationJobs.Add(new PrequalificationJob
+            //    {
+            //        CompanyInfoId = companyID,
+            //        CreationDate = DateTime.Now,
+            //        StaffId = wrkFlow.StaffId,
+            //        WorkFlowStep = wrkFlow.Step,
+            //    });
+            //}
+            //else
+            //{
+            //    _context.PrequalificationJobs.Add(new PrequalificationJob
+            //    {
+            //        CompanyInfoId = companyID,
+            //        CreationDate = DateTime.Now,
+            //        StaffId = wrkFlow.StaffId,
+            //        WorkFlowStep = 0,
+            //    });
+            //}
         }
     }
 }

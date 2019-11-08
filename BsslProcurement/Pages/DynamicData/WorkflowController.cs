@@ -22,14 +22,14 @@ namespace BsslProcurement.Pages.DynamicData
 
         // GET: api/Workflow/5
         [HttpGet("{id}")]
-        public IActionResult GetWorkflow([FromRoute] int id) //id is the workflow category id
+        public async Task<IActionResult> GetWorkflowAsync([FromRoute] int id) //id is the workflow category id
         {
             if (!ModelState.IsValid)
             {
                 return BadRequest(ModelState);
             }
 
-            var Workflows = _context.Workflows.Include(n=>n.WorkflowAction).Include(m => m.StaffToAssign).Where(m=>m.WorkflowCategoryId == id).ToList();
+            var Workflows = await _context.Workflows.Include(m => m.WorkflowAction).Include(m => m.WorkflowType).Where(m=>m.WorkflowTypeId == id).ToListAsync();
 
             if (Workflows == null)
             {
@@ -39,17 +39,8 @@ namespace BsslProcurement.Pages.DynamicData
             foreach (var item in Workflows)
             {
                 item.WorkflowAction.Workflows = null;
-                item.WorkflowType = null;
-                if (item.AlternativeStaffToAssign !=null)
-                {
-                    item.AlternativeStaffToAssign.StaffWorkflows = null;
-                    item.AlternativeStaffToAssign.AdditionalStaffWorkflows = null;
-                }
-                if (item.StaffToAssign != null)
-                {
-                    item.StaffToAssign.StaffWorkflows = null;
-                    item.StaffToAssign.AdditionalStaffWorkflows = null;
-                }
+                item.WorkflowType.Workflows = null;
+                
             }
 
             return Ok(Workflows);
@@ -57,16 +48,15 @@ namespace BsslProcurement.Pages.DynamicData
 
         // GET: api/Workflow/WorkflowStaff/5
         [HttpGet("WorkflowStaff/{id}")]
-        public IActionResult GetWorkflowStaff([FromRoute] int id) //id is the workflow category id
+        public async Task<IActionResult> GetWorkflowStaffAsync([FromRoute] int id) //id is the workflow category id
         {
             if (!ModelState.IsValid)
             {
                 return BadRequest(ModelState);
             }
 
-            var WorkflowStaffs = _context.WorkflowCategoryActionStaffs.Include(m => m.WorkflowAction).Include(n => n.Staff)
-                .Where(x => x.WorkflowTypeId == id)
-                .OrderBy(m => m.WorkflowActionId).ToList();
+            var WorkflowStaffs = await _context.WorkflowStaffs.Include(n => n.Staff)
+                    .Where(x => x.WorkflowId == id).ToListAsync();
 
             return Ok(WorkflowStaffs);
         }

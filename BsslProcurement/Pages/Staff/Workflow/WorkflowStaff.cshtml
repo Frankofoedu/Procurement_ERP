@@ -33,27 +33,12 @@
     </style>
 }
 <div class="row my-3">
-    <div class="col-12">
-        <div class="panel panel-login">
-            <div class="panel-heading">
-                <div class="row">
-                    <div class="form-group form-inline">
-                        <label>Workflow Category : </label> <select id="categorySelect" class="form-control" asp-items="ViewBag.Categories"> </select>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-</div>
-
-
-<div class="row my-3">
     <div class="col-lg-3"></div>
     <div class="col-lg-6">
         <div class="panel panel-login">
             <div class="panel-heading">
                 <div class="row">
-                    <p class="header-text">Current <span class="workflowType">@Model.curCategory.Name</span> Setup</p>
+                    <p class="header-text">@(Model.curWorkflow.WorkflowType.Name + " " + Model.curWorkflow.WorkflowAction.Name) Staff Setup</p>
                 </div>
                 <hr>
             </div>
@@ -62,15 +47,17 @@
                 <table class="table table-striped">
                     <thead>
                         <tr class="table-primary">
-                            <th>Action</th>
+                            <th>S/N</th>
                             <th>Staff Name</th>
                         </tr>
                     </thead>
                     <tbody id="workflowBody">
-                        @foreach (var item in Model.WorkflowStaffs)
+                        @for (int i = 0; i < Model.WorkflowStaffs.Count; i++)
                         {
+                            var item = Model.WorkflowStaffs[i];
+
                             <tr>
-                                <td>@item.WorkflowAction.Name</td>
+                                <td>@(i+1)</td>
 
                                 <td>@item.Staff.Name</td>
                             </tr>
@@ -88,8 +75,8 @@
         <form method="post" class="panel panel-login">
             <div class="panel-heading">
                 <div class="row">
-                    <h3>Add New Staff to <span class="workflowType">@Model.curCategory.Name</span> Workflow</h3>
-                    <input id="CategoryId" type="hidden" asp-for="curCategoryId" />
+                    <h3>Add New Staff @(Model.curWorkflow.WorkflowType.Name + " " + Model.curWorkflow.WorkflowAction.Name) Staff Setup</h3>
+                    <input type="hidden" asp-for="curWorkflowId" />
                 </div>
                 <hr>
             </div>
@@ -115,17 +102,6 @@
                 <div class="col-md-12">
                     <div class="card mt-3">
                         <div class="card-body">
-                            <div class="form-group">
-                                <div class="row">
-                                    <div class="col-sm-4 text-sm-right">
-                                        <label class="mt-2">Action</label>
-                                    </div>
-                                    <div class="col-sm-8">
-                                        <select class="form-control" asp-for="newWorkflowStaff.WorkflowActionId" asp-items="ViewBag.Actions"> </select>
-                                    </div>
-                                </div>
-                            </div>
-
                             <div class="form-group">
                                 <div class="row">
                                     <div class="col-sm-4 text-sm-right">
@@ -197,55 +173,54 @@
         
         $(document).ready(function () {
 
-            function fetchWorkflows() {
-                var select = document.getElementById("categorySelect");
-                var id = select.value;
-                $("#CategoryId").val(id);
-                $('.workflowType').text(select.options[select.selectedIndex].innerHTML);
+            //function fetchWorkflows() {
+            //    var select = document.getElementById("categorySelect");
+            //    var id = select.value;
+            //    $("#CategoryId").val(id);
+            //    $('.workflowType').text(select.options[select.selectedIndex].innerHTML);
 
-                if (id) {
+            //    if (id) {
 
-                    var baseUrl = window.location.origin;
+            //        var baseUrl = window.location.origin;
 
-                    $.ajax({
-                        url: baseUrl + '/api/Workflow/WorkflowStaff/' + id.trim(),
-                        type: 'get',
-                        xhrFields: {
-                            withCredentials: true
-                        },
-                        contentType: 'application/json',
-                        error: function () {
-                            alert('An Error occured...');
-                        },
-                        success: function (data) {
-                            if (!data) {
-                                alert('No Workflow for the selected category.');
-                                return;
-                            }
+            //        $.ajax({
+            //            url: baseUrl + '/api/Workflow/WorkflowStaff/' + id.trim(),
+            //            type: 'get',
+            //            xhrFields: {
+            //                withCredentials: true
+            //            },
+            //            contentType: 'application/json',
+            //            error: function () {
+            //                alert('An Error occured...');
+            //            },
+            //            success: function (data) {
+            //                if (!data) {
+            //                    alert('No Workflow for the selected category.');
+            //                    return;
+            //                }
 
-                            displayWorkflow(data);
-                        },
-                    });
-                }
-            }
+            //                displayWorkflow(data);
+            //            },
+            //        });
+            //    }
+            //}
 
-            
-            function displayWorkflow(workflows) {
-                $("#workflowBody").html("");
+            //function displayWorkflow(workflows) {
+            //    $("#workflowBody").html("");
 
-                for (var i = 0; i < workflows.length; i++) {
-                    $("#workflowBody").append(NewWorkflowRow(workflows[i]));
-                }
-            }
+            //    for (var i = 0; i < workflows.length; i++) {
+            //        $("#workflowBody").append(NewWorkflowRow(workflows[i]));
+            //    }
+            //}
 
-            function NewWorkflowRow(workflow) {
-                var html = '<tr> <td>' + workflow.workflowAction.name + '</td> <td>' + workflow.staff.name + '</td> </tr>';
+            //function NewWorkflowRow(workflow) {
+            //    var html = '<tr> <td>' + workflow.workflowAction.name + '</td> <td>' + workflow.staff.name + '</td> </tr>';
 
-                return html;
-            }
+            //    return html;
+            //}
 
 
-            $('#categorySelect').change(function () { fetchWorkflows(); });
+            //$('#categorySelect').change(function () { fetchWorkflows(); });
         });
 
         //to load staff modal
