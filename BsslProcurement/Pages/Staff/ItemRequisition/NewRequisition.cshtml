@@ -203,11 +203,11 @@
                                             <td>
                                                 <div class="d-flex flex-row">
                                                     <input asp-for="gridVm[0].Attachment" data-attachment="0" accept=".pdf" class="fileItem" />
-                                                    <button data-preview="0" class="mt-2 btnPreviewItemAttachment">Preview</button>
+                                                    <button data-preview="0" class="btnPreviewItemAttachment">Preview</button>
                                                 </div>
                                             </td>
                                             <td>
-                                                <label class="del ">
+                                                <label class="del" onclick="deleteItem();">
                                                     <i class="fa fa-trash-alt"></i>
                                                 </label>
                                             </td>
@@ -676,14 +676,24 @@
             return false;
         });
 
+        //remove items from grid
+        function deleteItem() {
+            $('.table tr').click(function () {
+                $(this).remove();
+                return false;
+            });
+        }
+        
+
 
         function newStepRow(index) {
 
             var html = `<tr>
-                <td><input type="text" required="" id="gridVm_'${index}__RequisitionItem_Description" name="gridVm[${index}].RequisitionItem.Description" value=""></td>
+                <td><input type="text" required="" id="gridVm_${index}__RequisitionItem_Description" name="gridVm[${index}].RequisitionItem.Description" value=""></td>
                 <td><input type="number" required="" oninput="this.value=this.value.replace(/[^0-9]/g,' + ');" data-val="true" data-val-required="The Quantity field is required." id="gridVm_${index}__RequisitionItem_Quantity" name="gridVm[${index}].RequisitionItem.Quantity" value=""></td>
                 <td><div class="d-flex flex-row"><input type="text" readonly required="" data-value="forUOM ${index}" id="gridVm_${index}__RequisitionItem_UnitOfMeasurement" name="gridVm[${index}].RequisitionItem.UnitOfMeasurement" value=""><button class="btn loadUOMModal ml-1" value="forUOM ${index}" data-toggle="modal" data-target="#uomModal"><i class="fa fa-search"></i></button> </div></td>
-                <td> <div class="d-flex flex-row"><input data-attachment="${index}" accept=".pdf" class="fileItem" type="file" id="gridVm_${index}__Attachment" name="gridVm[${index}].Attachment"><button data-preview="${index}" class="mt-2 btnPreviewItemAttachment">Preview</button>  </div></td>
+                <td> <div class="d-flex flex-row"><input data-attachment="${index}" accept=".pdf" class="fileItem" type="file" id="gridVm_${index}__Attachment" name="gridVm[${index}].Attachment"><button data-preview="${index}" class="btnPreviewItemAttachment">Preview</button>  </div></td>
+                <td><label class="del" onclick="deleteItem();"><i class="fa fa-trash-alt"></i></label></td>
                 </tr>`;
             $('#requisitionBody').append(html);
         }
