@@ -231,7 +231,7 @@
                 $('#spinner').show();
                 $('#staffModal').modal("show");
 
-                $('#grid').load(this.baseURI + '?handler=StaffPartial', function () {
+                $('#grid').load(this.baseURI + '&handler=StaffPartial', function () {
                     $('#spinner').removeClass('d-flex');
                     $('#spinner').hide();
                     $('#staffTable').dataTable();
