@@ -39,7 +39,7 @@ namespace BsslProcurement.Pages.Test
         }
         public async Task OnGetAsync()
         {
-           // await MigrateStaffFromUserAcctToIdentity();
+           await MigrateStaffFromUserAcctToIdentity();
 
         }
 
@@ -63,6 +63,10 @@ namespace BsslProcurement.Pages.Test
         {
             string em = GetEmail(email);
 
+            if (name == null)
+            {
+                return;
+            }
             var user = new DcProcurement.Staff
             {
                 UserName = staffcode.Trim(),
