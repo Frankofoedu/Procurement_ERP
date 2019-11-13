@@ -5,6 +5,52 @@
     ViewData["Title"] = "DetailRequisition";
 }
 
+@section Styles{
+
+    <link href="~/css/jquery.dataTables.min.css" rel="stylesheet" />
+    <style>
+        .loader {
+            border: 16px solid #f3f3f3;
+            border-top: 16px solid #3498db;
+            border-radius: 50%;
+            width: 120px;
+            height: 120px;
+            -webkit-animation: spin 2s linear infinite;
+            animation: spin 2s linear infinite;
+        }
+
+        @@keyframes spin {
+            0% {
+                transform: rotate(0deg);
+            }
+
+            100% {
+                transform: rotate(360deg);
+            }
+        }
+
+        .faRedColour {
+            color: red;
+        }
+
+        .ql-editor {
+            min-height: 200px;
+        }
+
+        @@media (min-width: 768px) {
+            .modal-xl {
+                width: 90%;
+                max-width: 1200px;
+            }
+        }
+
+        .del {
+            cursor: pointer;
+        }
+    </style>
+
+}
+
 @if (!string.IsNullOrWhiteSpace(Model.Message))
 {
     <div class="alert alert-success alert-dismissable fade show">
@@ -56,7 +102,7 @@ else
                                     <div class="text-center mb-3">
                                         <div class="form-group mb-0">
                                             <label class="btn btn-outline-dark pl-4">
-                                                <input class="form-check-input" type="radio" checked asp-for="Requisition.ProcurementType" value="Capital Procurement">
+                                                <input class="form-check-input" type="radio" asp-for="Requisition.ProcurementType" value="Capital Procurement">
                                                 Capital Procurement
                                             </label>
                                             <label class="btn btn-outline-dark pl-4">
@@ -91,41 +137,6 @@ else
                                     <input class="form-control" type="date" readonly value="@Model.Requisition.DeliveryDate" placeholder="Pick Delivery Date" />
                                 </div>
                             </div>
-                            
-                            <div class="col-sm-4">
-                                <div class="form-group">
-                                    <label>Procurement Method : </label>
-                                    <select asp-items="Constants.Constants.ProcurementMethod" required asp-for="Requisition.ProcurementMethod">
-                                        <option value="">Select Procurement Type</option>
-                                    </select>
-                                </div>
-                            </div>
-                            <div class="col-sm-4">
-                                <div class="form-group">
-                                    <label>Process Type : </label>
-                                    <select required asp-for="Requisition.ProcessType">
-                                        <option value="">Select Process Type</option>
-                                        <option value="Internal">Internal</option>
-                                        <option value="External">External</option>
-                                    </select>
-                                </div>
-                            </div>
-                            <div class="col-sm-4">
-                                <div class="form-group">
-                                    <label>eRFx Type : </label>
-                                    <select required asp-for="Requisition.ProcessType">
-                                        <option value="">Select Process Type</option>
-                                        <option value="Internal">Internal</option>
-                                        <option value="External">External</option>
-                                    </select>
-                                </div>
-                            </div>
-                            <div class="col-sm-4">
-                                <div class="form-group">
-                                    <label>Delivery Date : </label>
-                                    <input class="form-control" type="date" required value="@Model.Requisition.DeliveryDate" placeholder="Pick Delivery Date" />
-                                </div>
-                            </div>
 
                             <div class="col-sm-6">
                                 <div class="form-group">
@@ -140,20 +151,49 @@ else
 
                                 </div>
                             </div>
+                            <div class="col-sm-4">
+                                <div class="form-group">
+                                    <label>Procurement Method : </label>
+                                    <select class="form-control" asp-items="Constants.Constants.ProcurementMethod" required asp-for="Requisition.ProcurementMethod">
+                                        <option value="">Select Procurement Type</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="col-sm-4">
+                                <div class="form-group">
+                                    <label>Process Type : </label>
+                                    <select class="form-control" required onchange="getERFx(this.value);" asp-for="Requisition.ProcessType">
+                                        <option value="">Select Process Type</option>
+                                        <option value="Internal">Internal</option>
+                                        <option value="External">External</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="col-sm-4">
+                                <div class="form-group">
+                                    <label>eRFx Type : </label>
+                                    <select class="form-control" required asp-for="Requisition.ERFx">
+                                        <option value="">Select eRFx</option>
+                                    </select>
+                                    <div id="staffErfx" hidden style="display:flex">
+                                        <input class="form-control" asp-for="Requisition.ERFx" readonly id="forStaffText" rows="6" placeholder="Pick Staff" />
+                                        <button class="btn loadStaffModal ml-1" value="forStaffText" data-toggle="modal" data-target="#staffModal"><i class="fa fa-search"></i></button>
+                                    </div>
+
+                                </div>
+                            </div>
+
+
 
                             <div class="mt-3 mb-5 col-sm-12 table-responsive">
                                 <table class="table table-striped">
                                     <thead>
                                         <tr class="table-primary">
                                             <th>S/No</th>
-                                            <th class="text-center">Store Item Code</th>
-                                            <th class="text-center">Supplier</th>
-                                            <th class="text-center">Description Of <br />Goods/Services</th>
-                                            <th class="text-center">Unit Of<br />Measurement</th>
-                                            <th class="text-center">Unit Price</th>
-                                            <th class="text-center">Quantity </th>
-                                            <th class="text-center">Amount</th>
-
+                                            <th>Description Of <br />Goods/Services <i class="fa fa-asterisk fa-xs faRedColour"></i></th>
+                                            <th>Quantity <i class="fa fa-asterisk fa-xs faRedColour"></i></th>
+                                            <th>Unit Of<br />Measurement</th>
+                                            <th>Attachment</th>
                                         </tr>
                                     </thead>
                                     <tbody id="requisitionBody">
@@ -166,58 +206,43 @@ else
                                                 <td class="">
                                                     <label>@(i + 1)</label>
                                                 </td>
-
                                                 <td>
-                                                    <div class="flex-row d-flex">
-                                                        <label value=@item.StoreItemCode />
-                                                    </div>
+                                                    <label  class="font-weight-bold">@item.Description</label>
                                                 </td>
                                                 <td>
-                                                    <div class="flex-row d-flex">
-                                                        <input class="supinput @i" type="hidden" readonly asp-for="Requisition.RequisitionItems[i].VendorId" />
-                                                    </div>
+                                                    <label class="font-weight-bold">@item.Quantity</label>
                                                 </td>
                                                 <td>
-                                                    <input type="text" required asp-for="Requisition.RequisitionItems[i].Description" value="@item.Description" />
-                                                </td>
-                                                <td>
-                                                    <input type="text" required asp-for="Requisition.RequisitionItems[i].UnitOfMeasurement" value="@item.UnitOfMeasurement" />
-                                                </td>
-                                                <td>
-                                                    <input class="text-right" type="number" asp-for="Requisition.RequisitionItems[i].UnitPrice" value="@item.UnitPrice" />
+                                                    <label  class="font-weight-bold">@item.UnitOfMeasurement</label>
 
                                                 </td>
 
                                                 <td>
-                                                    <input class="text-right" type="number" required asp-for="Requisition.RequisitionItems[i].Quantity" value="@item.Quantity" />
+                                                    <input type="file" hidden  />
                                                 </td>
 
-                                                <td>
-                                                    <input class="text-right" type="number" asp-for="Requisition.RequisitionItems[i].Amount" />
-
-                                                </td>
 
                                             </tr>
 
                                         }
-                                    <tfoot>
+                                    @*<tfoot>
                                         <tr>
                                             <td></td>
                                             <td class="font-weight-bold text-right">Total Amount : </td>
                                             <td class="font-weight-bold text-lg-center">@NairaFormat.GetNairaValue(Model.Requisition.RequisitionItems.Sum(x => Convert.ToInt32(x.Amount)))</td>
                                             <td></td>
                                         </tr>
-                                    </tfoot>
+                                    </tfoot>*@
                                 </table>
                                 <input type="hidden" id="lastIndex" value="0" />
                                 @*<div class="form-group">
-                <div class="row">
-                    <div class="col-sm-3"> </div>
-                    <div class="col-sm-6 text-center">
-                        <button id="btnMore" class="btn btn-outline-primary">New Item</button>
-                    </div>
-                </div>
-            </div>*@
+                                        <div class="row">
+                                            <div class="col-sm-3"> </div>
+                                            <div class="col-sm-6 text-center">
+                                                <button id="btnMore" class="btn btn-outline-primary">New Item</button>
+                                            </div>
+                                        </div>
+                                    </div>*@
                             </div>
 
 
@@ -265,28 +290,28 @@ else
                             </div>
                             <div class="col-sm-12 m-4 ">
                                 @*@if (Model.Requisition.Attachments.Count > 0)
-            {
-                <h5 class="font-weight-bold">Attachments</h5>
-                <br>
-                <div class="d-flex flex-column">
-                    <p>
-                        @foreach (var file in Model.Requisition.Attachments)
-                        {
-                            if (file.FilePath.EndsWith("pdf"))
-                            {
-                                <a class="fancybox m-5 btn btn-link fas fa-file-pdf" data-fancybox-type="iframe" href="@Url.Content("~/Attachments/" + file.FilePath)">Open PDf Attachment</a>
-                            }
-                            else
-                            {
-                                <a class="fancybox m-5" href="@Url.Content("~/Attachments/" + file.FilePath)"><img src="@Url.Content("~/Attachments/" + file.FilePath)" class="img-thumbnail" style="max-width : 10% !important" asp-append-version="true" /></a>
+                                    {
+                                        <h5 class="font-weight-bold">Attachments</h5>
+                                        <br>
+                                        <div class="d-flex flex-column">
+                                            <p>
+                                                @foreach (var file in Model.Requisition.Attachments)
+                                                {
+                                                    if (file.FilePath.EndsWith("pdf"))
+                                                    {
+                                                        <a class="fancybox m-5 btn btn-link fas fa-file-pdf" data-fancybox-type="iframe" href="@Url.Content("~/Attachments/" + file.FilePath)">Open PDf Attachment</a>
+                                                    }
+                                                    else
+                                                    {
+                                                        <a class="fancybox m-5" href="@Url.Content("~/Attachments/" + file.FilePath)"><img src="@Url.Content("~/Attachments/" + file.FilePath)" class="img-thumbnail" style="max-width : 10% !important" asp-append-version="true" /></a>
 
-                            }
+                                                    }
 
-                        }
-                    </p>
+                                                }
+                                            </p>
 
-                </div>
-            }*@
+                                        </div>
+                                    }*@
 
                             </div>
 
@@ -302,25 +327,82 @@ else
                             </div>
 
                             @*<div class="col-sm-4">
-            <div class="form-group">
-                <input class="btn btn-block btn-danger fa-print" value="Print" type="button" placeholder="Enter Resgistration Number" />
-            </div>
-        </div>*@
+                                    <div class="form-group">
+                                        <input class="btn btn-block btn-danger fa-print" value="Print" type="button" placeholder="Enter Resgistration Number" />
+                                    </div>
+                                </div>*@
                         </div>
                     </div>
                 </div>
             </form>
         </div>
     </div>
+
+    <div class="modal" id="staffModal">
+        <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h4 class="modal-title">Staff Details</h4>
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                </div>
+                <div class="modal-body">
+                    <div id="grid"></div>
+                </div>
+                <div id="spinner" class="d-flex justify-content-center">
+                    <div class="loader">
+                    </div>
+                </div>
+
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
+                </div>
+            </div>
+        </div>
+    </div>
 }
 
 @section Scripts{
-
+    <script src="~/js/fileUpload.js"></script>
+    <script src="~/js/quill.js"></script>
+    <script src="~/js/jquery.dataTables.min.js"></script>
     <script src="~/js/jquery.fancybox.pack.js"></script>
     <script src="~/js/quill.js"></script>
     <script>
 
+        //to load staff modal
+        $(function () {
+            $('.loadStaffModal').on('click', function () {
+                $('#grid').empty();
+                $('#spinner').addClass('d-flex');
+                $('#spinner').show();
+                $('#staffModal').modal("show");
 
+                //get staff name textbox
+                var txtToAssign = $('#' + $(this).val() + '');
+                //get staff rank textbox
+
+                var txtRankToAssign = $('#' + $(this).val() + 'Rank');
+                $('#grid').load(this.baseURI + '?handler=StaffPartial', function () {
+                    $('#spinner').removeClass('d-flex');
+                    $('#spinner').hide();
+                    $('#staffTable').dataTable();
+
+                    $('.btnStaffName').on('click', function () {
+                        //assign staff name textbox
+                        txtToAssign.val($(this).val());
+
+                        //assign staff rank textbox
+                        txtRankToAssign.val($(this).attr('staffrank'));
+
+                        //$('#forStaffText').val();
+                        $('#staffModal').modal("hide");
+                        return false;
+                    });
+                });
+
+                return false;
+            });
+        });
 
         $(document).ready(function () {
             $(".fancybox").fancybox({
@@ -342,6 +424,23 @@ else
         })
 
 
+        function getERFx(processType) {
+            if (processType == "Internal") {
+                $('#Requisition_ERFx').attr('hidden', true);
+                $('#staffErfx').attr('hidden', false);
+
+            } else if (processType == "External") {
+
+                $('#Requisition_ERFx').attr('hidden', false);
+                $('#staffErfx').attr('hidden', true);
+                $('#Requisition_ERFx').append(
+                    $('<option>', { value: 'RFQ ID', text: 'RFQ ID – Request for Quotation' }),
+                    $('<option>', { value: 'RFP ID', text: 'RFP ID – Request for Proposal ' }),
+                    $('<option>', { value: 'RFI ID', text: 'RFI ID – Request for Information' }),
+                    $('<option>', { value: 'RFT ID', text: 'RFT ID – Request for Tender' })
+                );
+            }
+        }
 
     </script>
 
