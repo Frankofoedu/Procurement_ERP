@@ -49,6 +49,7 @@
                                 <th>Required At</th>
                                 <th>Prepared By</th>
                                 <th>Total Amount</th>
+                                <th>Status</th>
                                 <th>Action</th>
                             </tr>
                         </thead>
@@ -67,6 +68,7 @@
                                 <td>@item.RequiredAtDepartment</td>
                                 <td>@item.PreparedBy</td>
                                 <td>@item.RequisitionItems.Sum(x => x.UnitPrice * x.Quantity)</td>
+                                <td>@item.Status</td>
                                 <td><a asp-page="./DetailRequisition" asp-route-id="@item.Id" style="color: #007bff">View</a></td>
                             </tr>
                             }
