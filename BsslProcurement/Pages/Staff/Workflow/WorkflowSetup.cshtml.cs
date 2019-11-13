@@ -98,7 +98,7 @@ namespace BsslProcurement.Pages.Staff.Workflow
             WorkflowActions = _context.WorkflowActions.ToList();
             foreach (var item in WorkflowActions) item.Workflows = null;
 
-            ViewData["Categories"] = new SelectList(_context.WorkflowTypes, "Id", "Name");
+            ViewData["Categories"] = new SelectList(_context.WorkflowTypes, "Id", "Name", CategoryId);
 
             Message = "Saved Successfully";
         }

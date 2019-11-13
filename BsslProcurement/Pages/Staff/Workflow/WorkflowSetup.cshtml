@@ -54,7 +54,8 @@
 
 
 <div class="row my-3">
-    <div class="col-md-12">
+    <div class="col-md-3"></div>
+    <div class="col-md-6">
         <div class="panel panel-login">
             <div class="panel-heading">
                 <div class="row">
@@ -81,7 +82,8 @@
 </div>
 
 <div class="row mt-5">
-    <div class="col-md-12">
+    <div class="col-md-3"></div>
+    <div class="col-md-6">
         <form method="post" class="panel panel-login">
             <div class="panel-heading">
                 <div class="row">
@@ -112,7 +114,7 @@
 
                 @for (int i = 0; i < 1; i++)
                 {
-                    <div class="col-md-6">
+                    <div class="col-md-12">
                         <div class="card mt-3">
                             <div class="card-header">
                                 <h2>Step @(i + 1) <input type="hidden" asp-for="InputModel[i].Step" value="@(i + 1)" /></h2>
@@ -124,7 +126,7 @@
                                             <label>Action</label>
                                         </div>
                                         <div class="col-sm-9">
-                                            <select asp-for="InputModel[i].WorkflowActionId" class="form-control @("selectAction" + i)"></select>
+                                            <select asp-for="InputModel[i].WorkflowActionId" class="form-control @("selectAction" + i)" asp-items="ViewBag.Actions"></select>
                                         </div>
                                     </div>
                                 </div>
@@ -243,8 +245,8 @@
             }
 
             function NewWorkflowRow(workflow) {
-                var html = '<tr><td>' + workflow.step + '</td> <td>' + workflow.workflowAction.name + '</td>'
-                    '<td><button>Setup Staff</button></th> </tr>';
+                var html = '<tr><td>' + workflow.step + '</td> <td>' + workflow.workflowAction.name + '</td>' +
+                    '<td><a class="btn btn-outline-dark" href="WorkflowStaff?id=' + workflow.id + '">Setup Staff</a></th> </tr>';
 
                 return html;
             }
@@ -263,7 +265,7 @@
             });
 
             function newStepCard(index) {
-                var html = '<div class="col-md-6"> <div class="card mt-3"> <div class="card-header"> <h2>Step ' + (Number(index) + 1) + ' <input type="hidden" id="InputModel_' + index + '__Step" name="InputModel[' + index + '].Step" value="' + (Number(index) + 1) + '" /></h2></div>' +
+                var html = '<div class="col-md-12"> <div class="card mt-3"> <div class="card-header"> <h2>Step ' + (Number(index) + 1) + ' <input type="hidden" id="InputModel_' + index + '__Step" name="InputModel[' + index + '].Step" value="' + (Number(index) + 1) + '" /></h2></div>' +
                     '<div class="form-group"> <div class="row"> <div class="col-sm-3 text-right"> <label>Action</label> </div> <div class="col-sm-9"><select id="InputModel_' + index + '__WorkflowActionId" name="InputModel[' + index + '].WorkflowActionId" class="form-control selectAction' + index + '"></select> </div> </div> </div> </div> </div> ';
 
                 $('#workflowCards').append(html);
