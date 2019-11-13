@@ -38,7 +38,7 @@ namespace DcProcurement
         public string ERFx { get; set; }
         //== true when requisition items has been priced
         public bool isPriced { get; set; }
-
+        public string Status { get; set; }
 
         //default database creation date
         public DateTime DateCreated { get; set; }

@@ -4,9 +4,9 @@ using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 using BsslProcurement.UtilityMethods;
+using BsslProcurement.ViewModels;
 using DcProcurement;
 using DcProcurement.Contexts;
-using DcProcurement.ViewModels;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
@@ -28,11 +28,7 @@ namespace BsslProcurement.Pages.Staff.ItemRequisition
         private readonly ProcurementDBContext _procContext;
         private readonly IHostingEnvironment _environment;
 
-        public class ItemGridViewModel
-        {
-            public RequisitionItem RequisitionItem { get; set; }
-            public  IFormFile Attachment { get; set; }
-        }
+       
 
         [BindProperty]
         public string serialNo { get; set; }
