@@ -13,7 +13,12 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "procTest", "procTest\procTe
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "testCbt", "testCbt\testCbt.csproj", "{4060BF0C-DD24-417C-B1DF-17A31A745DA4}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BsslProcurement.Test", "BsslProcurement.Test\BsslProcurement.Test.csproj", "{8C1317BF-CF45-442F-9127-787827B31277}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BsslProcurement.Test", "BsslProcurement.Test\BsslProcurement.Test.csproj", "{8C1317BF-CF45-442F-9127-787827B31277}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{69BBE330-D900-434E-8DB7-0CE3B11F7CC5}"
+	ProjectSection(SolutionItems) = preProject
+		ramblings.txt = ramblings.txt
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

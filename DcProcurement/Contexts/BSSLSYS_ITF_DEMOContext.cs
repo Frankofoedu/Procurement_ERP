@@ -16,6 +16,7 @@ namespace DcProcurement.Contexts
         }
 
         public virtual DbSet<Codestab> Codestab { get; set; }
+        public virtual DbSet<CodestabRel> CodestabRel { get; set; }
         public virtual DbSet<Procreq1> Procreq1 { get; set; }
         public virtual DbSet<Procreq2> Procreq2 { get; set; }
         public virtual DbSet<Useracct> Useracct { get; set; }
@@ -484,6 +485,66 @@ namespace DcProcurement.Contexts
                     .IsUnicode(false);
 
                 entity.Property(e => e.Suspend).HasColumnName("suspend");
+            });
+
+            modelBuilder.Entity<CodestabRel>(entity =>
+            {
+                entity.HasKey(e => e.KeyId);
+
+                entity.Property(e => e.KeyId)
+                    .HasColumnName("KeyID")
+                    .HasColumnType("numeric(18, 0)")
+                    .ValueGeneratedOnAdd();
+
+                entity.Property(e => e.Accountid)
+                    .HasColumnName("ACCOUNTID")
+                    .HasMaxLength(30)
+                    .IsUnicode(false)
+                    .HasDefaultValueSql("('')");
+
+                entity.Property(e => e.AppTo1)
+                    .HasMaxLength(50)
+                    .IsUnicode(false);
+
+                entity.Property(e => e.AppTo2)
+                    .HasMaxLength(50)
+                    .IsUnicode(false);
+
+                entity.Property(e => e.AppTo3)
+                    .HasMaxLength(50)
+                    .IsUnicode(false);
+
+                entity.Property(e => e.AppTo4)
+                    .HasMaxLength(50)
+                    .IsUnicode(false);
+
+                entity.Property(e => e.AppTo5)
+                    .HasMaxLength(50)
+                    .IsUnicode(false);
+
+                entity.Property(e => e.Bankid)
+                    .HasColumnName("BANKID")
+                    .HasMaxLength(20)
+                    .IsUnicode(false)
+                    .HasDefaultValueSql("('')");
+
+                entity.Property(e => e.Code)
+                    .HasMaxLength(50)
+                    .IsUnicode(false);
+
+                entity.Property(e => e.CompCode)
+                    .HasMaxLength(50)
+                    .IsUnicode(false);
+
+                entity.Property(e => e.Memoaddr).IsUnicode(false);
+
+                entity.Property(e => e.Option1)
+                    .HasMaxLength(50)
+                    .IsUnicode(false);
+
+                entity.Property(e => e.ReportTo)
+                    .HasMaxLength(50)
+                    .IsUnicode(false);
             });
             modelBuilder.Entity<Procreq1>(entity =>
             {
