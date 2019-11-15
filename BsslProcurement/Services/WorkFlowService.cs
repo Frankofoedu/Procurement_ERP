@@ -25,7 +25,7 @@ namespace BsslProcurement.Services
         /// <returns></returns>
         public Task<List<WorkFlowTypesViewModel>> GetNextWorkActionflowSteps(int workFlowTypeId, int currentStepId = 0) =>
             //gets all workflow actions for the current job stage
-            _procurementDBContext.Workflows.Where(x => x.WorkflowTypeId == workFlowTypeId && x.Step > currentStepId).Select(x => new WorkFlowTypesViewModel { Name = x.WorkflowAction.Name }).ToListAsync();
+            _procurementDBContext.Workflows.Include(y=> y.WorkflowAction).Where(x => x.WorkflowTypeId == workFlowTypeId && x.Step > currentStepId).Select(x => new WorkFlowTypesViewModel { Name = x.WorkflowAction.Name, Id = x.WorkflowActionId }).ToListAsync();
 
 
         /// <summary>
