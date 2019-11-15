@@ -1,5 +1,5 @@
 ﻿@using BsslProcurement.Pages.Staff
-@using BsslProcurement.Services
+@using BsslProcurement.Interfaces
 @using Microsoft.AspNetCore.Mvc.Rendering;
 
 @inject IWorkFlowService  WorkflowService
@@ -75,14 +75,14 @@
                 <div class="workflowloader">
                 </div>
             </div>
-
+            
             <div class="modal-footer">
                 <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
             </div>
         </div>
     </div>
 </div>
-
+<input type="hidden" id="hiddenURL" value="@Url.Action("GetStaffWorkflowPartial", "Staff", new { id = "1" })" />
 <script>
 
     //to load staff modal for selecting next workflow staff
@@ -93,8 +93,8 @@
             $('#workflowspinner').show();
             $('#staffWorkflowModal').modal("show");
 
-
-            $('#workflowgrid').load(this.baseURI + '?handler=StaffPartial', function () {
+            var url = '@Url.Action("GetStaffWorkflowPartial", "Staff", new { id = "1" })';//$('hiddenURL').val();
+            $('#workflowgrid').load(url, function () {
                 $('#workflowspinner').removeClass('d-flex');
                 $('#workflowspinner').hide();
                 $('#staffTable').dataTable();

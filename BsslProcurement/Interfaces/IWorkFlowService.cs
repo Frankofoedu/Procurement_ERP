@@ -4,14 +4,16 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace BsslProcurement.Services
+namespace BsslProcurement.Interfaces
 {
     public interface IWorkFlowService
     {
-     
+
         Task<List<WorkFlowTypesViewModel>> GetNextWorkActionflowSteps(int workFlowTypeId, int currentStepId = 0);
 
         Task<List<WorkFlowTypesViewModel>> GetPreviousWorkActionflowSteps(int workFlowTypeId, int currentStepId);
+
+
 
         //Task<WorkFlowStaffViewModel> GetMainDepartmentHead();
         //Task<WorkFlowStaffViewModel> GetDepartmentHead();

@@ -9,7 +9,7 @@ using Microsoft.AspNetCore.Identity;
 
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 
-namespace BsslProcurement.Pages.DynamicData
+namespace BsslProcurement.Controllers.API
 {
     public class UserAPIModel
     {
@@ -27,7 +27,7 @@ namespace BsslProcurement.Pages.DynamicData
         private readonly SignInManager<User> _signInManager;
         public UsersController(
             UserManager<User> userManager,
-            ILogger<UsersController> logger, 
+            ILogger<UsersController> logger,
             SignInManager<User> signInManager
             )
         {
@@ -61,7 +61,7 @@ namespace BsslProcurement.Pages.DynamicData
         {
             string em = GetEmail(model.email);
 
-            var user = new DcProcurement.Staff
+            var user = new Staff
             {
                 UserName = model.staffCode,
                 Email = em,
@@ -111,7 +111,7 @@ namespace BsslProcurement.Pages.DynamicData
             //"password": "admin1234",
             //"email": ""
 
-           
+
             var result = await _signInManager.PasswordSignInAsync(userId, password, true, lockoutOnFailure: false);
 
             if (result.Succeeded)
@@ -128,7 +128,7 @@ namespace BsslProcurement.Pages.DynamicData
             {
                 return BadRequest("Sign In Failed");
             }
-            
+
 
 
             // If we got this far, something failed, redisplay form

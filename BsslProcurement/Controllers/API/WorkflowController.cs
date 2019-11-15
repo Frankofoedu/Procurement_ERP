@@ -7,7 +7,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
-namespace BsslProcurement.Pages.DynamicData
+namespace BsslProcurement.Controllers.API
 {
     [Route("api/[controller]")]
     [ApiController]
@@ -29,7 +29,7 @@ namespace BsslProcurement.Pages.DynamicData
                 return BadRequest(ModelState);
             }
 
-            var Workflows = await _context.Workflows.Include(m => m.WorkflowAction).Include(m => m.WorkflowType).Where(m=>m.WorkflowTypeId == id).ToListAsync();
+            var Workflows = await _context.Workflows.Include(m => m.WorkflowAction).Include(m => m.WorkflowType).Where(m => m.WorkflowTypeId == id).ToListAsync();
 
             if (Workflows == null)
             {
@@ -40,7 +40,7 @@ namespace BsslProcurement.Pages.DynamicData
             {
                 item.WorkflowAction.Workflows = null;
                 item.WorkflowType.Workflows = null;
-                
+
             }
 
             return Ok(Workflows);

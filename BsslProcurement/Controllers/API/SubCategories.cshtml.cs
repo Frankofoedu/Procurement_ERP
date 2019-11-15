@@ -7,7 +7,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.EntityFrameworkCore;
 
-namespace BsslProcurement.Pages.DynamicData
+namespace BsslProcurement.Controllers.API
 {
     public class SubCategoriesModel : PageModel
     {

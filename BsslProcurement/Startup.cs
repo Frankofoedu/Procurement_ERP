@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using BsslProcurement.Interfaces;
 using BsslProcurement.Services;
 using DcProcurement;
 using DcProcurement.Contexts;
@@ -66,6 +67,7 @@ namespace BsslProcurement
 
             services.AddDbContext<BSSLSYS_ITF_DEMOContext>(options => options.UseSqlServer(conn, b => b.MigrationsAssembly("BsslProcurement")));
 
+            services.AddTransient<IStaffLayoutViewModelService, StaffLayoutViewModelService>();
             services.AddTransient<IWorkFlowService, WorkFlowService>();
 
             services.AddIdentity<User, IdentityRole>(config =>

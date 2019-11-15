@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
+using BsslProcurement.Services;
 using BsslProcurement.UtilityMethods;
 using BsslProcurement.ViewModels;
 using DcProcurement;
@@ -28,7 +29,6 @@ namespace BsslProcurement.Pages.Staff.ItemRequisition
         private readonly ProcurementDBContext _procContext;
         private readonly IHostingEnvironment _environment;
 
-       
 
         [BindProperty]
         public string serialNo { get; set; }
@@ -65,12 +65,16 @@ namespace BsslProcurement.Pages.Staff.ItemRequisition
             _bsslContext = bsslContext;
             _procContext = procContext;
             _environment = environment;
+
         }
 
         public async Task OnGetAsync()
         {
             try
             {
+                var url = Url.Action("StaffWorkflowPartial", "Staff", new { id = "1" });
+                Console.WriteLine("----------" + url + "");
+
                 await LoadData();
             }
             catch (Exception ex)
@@ -158,7 +162,7 @@ namespace BsslProcurement.Pages.Staff.ItemRequisition
             var staffs = _bsslContext.Stafftab.Select(x => new StaffLayoutModel { Staff = x, Rank = _bsslContext.Codestab.FirstOrDefault(m => m.Option1 == "f4" && m.Code == x.Positionid).Desc1 }).ToList();
 
 
-            //           var  = _bsslContext.Stafftab.ToList();
+            //var  = _bsslContext.Stafftab.ToList();
             return new PartialViewResult
             {
                 ViewName = "Modals/_StaffLayout",

@@ -7,7 +7,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
-namespace BsslProcurement.Pages.Staff
+namespace BsslProcurement.Controllers.API
 {
     [Route("api/[controller]")]
     [ApiController]
@@ -29,7 +29,7 @@ namespace BsslProcurement.Pages.Staff
                 return BadRequest(ModelState);
             }
 
-            var category = await _context.ProcurementCategories.FirstOrDefaultAsync(m=>m.ProcurementCategoryCode==code);
+            var category = await _context.ProcurementCategories.FirstOrDefaultAsync(m => m.ProcurementCategoryCode == code);
 
             if (category == null)
             {
@@ -54,7 +54,7 @@ namespace BsslProcurement.Pages.Staff
             {
                 return NotFound();
             }
-            
+
             return Ok(subcategory);
         }
 
@@ -101,11 +101,12 @@ namespace BsslProcurement.Pages.Staff
                 return Ok();
             }
 
-            var rtn = new cusStaff {
-                    Code = staff.StaffCode,
-                    Id = staff.Id,
-                    Name = staff.Name,
-                };
+            var rtn = new cusStaff
+            {
+                Code = staff.StaffCode,
+                Id = staff.Id,
+                Name = staff.Name,
+            };
 
             return Ok(rtn);
         }
@@ -120,8 +121,8 @@ namespace BsslProcurement.Pages.Staff
             }
 
             var item = await _context.Items.Where(m => m.ItemName.Contains(str)).ToListAsync();
-            
-            if (item.Count<1)
+
+            if (item.Count < 1)
             {
                 return Ok();
             }
@@ -139,11 +140,11 @@ namespace BsslProcurement.Pages.Staff
                 return BadRequest(ModelState);
             }
 
-            var category = await _context.ProcurementCategories.Include(n=> n.CategoryCriterias).FirstOrDefaultAsync(m => m.ProcurementCategoryCode == code);
+            var category = await _context.ProcurementCategories.Include(n => n.CategoryCriterias).FirstOrDefaultAsync(m => m.ProcurementCategoryCode == code);
             foreach (var item in category.CategoryCriterias)
             {
                 item.ProcurementCategory = null;
-            } 
+            }
 
             if (category == null)
             {

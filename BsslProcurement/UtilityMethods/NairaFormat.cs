@@ -11,6 +11,7 @@ namespace BsslProcurement.UtilityMethods
         public static string GetNairaValue(decimal amount)
         {
             return string.Format(new CultureInfo("en-NG", false).NumberFormat, "{0:C}", amount);
+
         }
     }
 }

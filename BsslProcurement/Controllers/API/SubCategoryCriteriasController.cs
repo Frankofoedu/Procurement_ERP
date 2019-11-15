@@ -8,7 +8,7 @@ using Microsoft.EntityFrameworkCore;
 using DcProcurement;
 using Microsoft.AspNetCore.Mvc.Rendering;
 
-namespace BsslProcurement.Pages.DynamicData
+namespace BsslProcurement.Controllers.API
 {
     [Route("api/[controller]")]
     [ApiController]
@@ -48,10 +48,10 @@ namespace BsslProcurement.Pages.DynamicData
         }
 
         // GET: api/SubCategoryCriterias/{list of ints}
-       [HttpGet("ListSubCategoryCriteria")]
+        [HttpGet("ListSubCategoryCriteria")]
         public IActionResult GetListSubCategoryCriteria([FromQuery] int[] ids)
         {
-            
+
             if (!ModelState.IsValid)
             {
                 return BadRequest(ModelState);

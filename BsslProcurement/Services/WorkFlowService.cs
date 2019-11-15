@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using BsslProcurement.Interfaces;
 using BsslProcurement.ViewModels;
 using DcProcurement;
 using DcProcurement.Contexts;
@@ -25,7 +26,7 @@ namespace BsslProcurement.Services
         /// <returns></returns>
         public Task<List<WorkFlowTypesViewModel>> GetNextWorkActionflowSteps(int workFlowTypeId, int currentStepId = 0) =>
             //gets all workflow actions for the current job stage
-            _procurementDBContext.Workflows.Include(y=> y.WorkflowAction).Where(x => x.WorkflowTypeId == workFlowTypeId && x.Step > currentStepId).Select(x => new WorkFlowTypesViewModel { Name = x.WorkflowAction.Name, Id = x.WorkflowActionId }).ToListAsync();
+            _procurementDBContext.Workflows.Include(y=> y.WorkflowAction).Where(x => x.WorkflowTypeId == workFlowTypeId && x.Step > currentStepId).Select(x => new WorkFlowTypesViewModel { Name = x.WorkflowAction.Name, Id = x.Id }).ToListAsync();
 
 
         /// <summary>
@@ -35,6 +36,6 @@ namespace BsslProcurement.Services
         /// <returns></returns>
         public Task<List<WorkFlowTypesViewModel>> GetPreviousWorkActionflowSteps(int workFlowTypeId, int currentStepId) =>
             //gets all workflow actions for the current job stage
-            _procurementDBContext.Workflows.Where(x => x.WorkflowTypeId == workFlowTypeId && x.Step < currentStepId).Select(x => new WorkFlowTypesViewModel { Name = x.WorkflowAction.Name }).ToListAsync();// throw new NotImplementedException();
+            _procurementDBContext.Workflows.Include(y => y.WorkflowAction).Where(x => x.WorkflowTypeId == workFlowTypeId && x.Step < currentStepId).Select(x => new WorkFlowTypesViewModel { Name = x.WorkflowAction.Name, Id = x.Id }).ToListAsync();
     }
 }

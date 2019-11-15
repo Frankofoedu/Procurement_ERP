@@ -7,7 +7,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using DcProcurement;
 
-namespace BsslProcurement.Pages.Staff
+namespace BsslProcurement.Controllers.API
 {
     [Route("api/[controller]")]
     [ApiController]
