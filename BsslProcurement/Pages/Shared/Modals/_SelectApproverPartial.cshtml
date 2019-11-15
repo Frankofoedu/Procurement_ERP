@@ -1,38 +1,56 @@
 ﻿@using BsslProcurement.Pages.Staff
+@using BsslProcurement.Services
+@using Microsoft.AspNetCore.Mvc.Rendering;
+
+@inject IWorkFlowService  WorkflowService
+
+@{
+    List<SelectListItem> ActionTypeItems = (await WorkflowService.GetNextWorkActionflowSteps(1)).Select(m=> new SelectListItem { Value=m.Id.ToString(), Text = m.Name}).ToList();
+}
 @model List<int>
 
 @section Styles{
 }
 
-    <div class="row">
-        <div class="col-12">
-            <div class="form-group">
-                <label>Approving Authority : </label>
-                <select class="form-control">
-                    <option>--Select--</option>
-                </select>
-            </div>
-        </div>
-        <div class="col-sm-12">
-            <label>Staff Id : </label>
-            <span class="d-flex flex-row">
-                <input id="txtprepared" class="form-control" readonly />
-                <button class="btn loadStaffModal" value="txtprepared" data-toggle="modal" data-target="#staffModal"><i class="fa fa-search"></i></button>
-            </span>
-        </div>
-        <div class="col-sm-12">
-            <label>Staff Name : </label>
-            <span class="d-flex flex-row">
-                <input class="form-control" readonly id="txtpreparedRank" />
-            </span>
-        </div>
-        <div class="col-sm-12">
-            <label>Designation : </label>
-            <span class="d-flex flex-row">
-                <input class="form-control" readonly id="txtDesignation" />
-            </span>
-        </div>
-        <div class="col-sm-12">
-            <button class="btn btn-lg btn-outline-primary" id="btnSubmitApprover">Submit</button>
+<div class="row">
+    <div class="col-12">
+        <div class="form-group">
+            <label>Approving Authority : </label>
+            <select class="form-control" asp-items="ActionTypeItems">
+                <option value="">--Select--</option>
+            </select>
         </div>
     </div>
+    <div class="col-sm-12">
+        <label>Staff Id : </label>
+        <span class="d-flex flex-row">
+            <input id="txtprepared" class="form-control" readonly />
+            <button class="btn loadStaffModal" value="txtprepared" data-toggle="modal" data-target="#staffModal"><i class="fa fa-search"></i></button>
+        </span>
+    </div>
+    <div class="col-sm-12">
+        <label>Staff Name : </label>
+        <span class="d-flex flex-row">
+            <input class="form-control" readonly id="txtpreparedRank" />
+        </span>
+    </div>
+    <div class="col-sm-12">
+        <label>Designation : </label>
+        <span class="d-flex flex-row">
+            <input class="form-control" readonly id="txtDesignation" />
+        </span>
+    </div>
+    <div class="col-sm-12">
+        <button class="btn btn-lg btn-outline-primary" id="btnSubmitApprover">Submit</button>
+    </div>
+</div>
+
+<script>
+
+    //add new items to grid
+    $('#btnSubmitApprover').on('click', function (event) {
+        event.preventDefault;
+        alert('hello');
+        return false;
+    });
+</script>
