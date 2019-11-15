@@ -5,12 +5,31 @@
 @inject IWorkFlowService  WorkflowService
 
 @{
-    List<SelectListItem> ActionTypeItems = (await WorkflowService.GetNextWorkActionflowSteps(1)).Select(m=> new SelectListItem { Value=m.Id.ToString(), Text = m.Name}).ToList();
+    List<SelectListItem> ActionTypeItems = (await WorkflowService.GetNextWorkActionflowSteps(1)).Select(m => new SelectListItem { Value = m.Id.ToString(), Text = m.Name }).ToList();
 }
 @model List<int>
 
-@section Styles{
-}
+    <style>
+        .workflowloader {
+            border: 16px solid #f3f3f3;
+            border-top: 16px solid #3498db;
+            border-radius: 50%;
+            width: 120px;
+            height: 120px;
+            -webkit-animation: workflowspin 2s linear infinite;
+            animation: spin 2s linear infinite;
+        }
+
+        @@keyframes workflowspin {
+            0% {
+                transform: rotate(0deg);
+            }
+
+            100% {
+                transform: rotate(360deg);
+            }
+        }
+    </style>
 
 <div class="row">
     <div class="col-12">
@@ -24,33 +43,79 @@
     <div class="col-sm-12">
         <label>Staff Id : </label>
         <span class="d-flex flex-row">
-            <input id="txtprepared" class="form-control" readonly />
-            <button class="btn loadStaffModal" value="txtprepared" data-toggle="modal" data-target="#staffModal"><i class="fa fa-search"></i></button>
+            <input id="txtWorkflowStaffCode" class="form-control" readonly />
+            <button class="btn loadWorkflowStaffModal"><i class="fa fa-search"></i></button>
         </span>
     </div>
     <div class="col-sm-12">
         <label>Staff Name : </label>
         <span class="d-flex flex-row">
-            <input class="form-control" readonly id="txtpreparedRank" />
+            <input class="form-control" readonly id="txtWorkflowStaffName" />
         </span>
     </div>
     <div class="col-sm-12">
         <label>Designation : </label>
         <span class="d-flex flex-row">
-            <input class="form-control" readonly id="txtDesignation" />
+            <input class="form-control" readonly id="txtWorkflowStaffDesignation" />
         </span>
     </div>
-    <div class="col-sm-12">
-        <button class="btn btn-lg btn-outline-primary" id="btnSubmitApprover">Submit</button>
+</div>
+
+<div class="modal" id="staffWorkflowModal">
+    <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title">Staff Details</h4>
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+            </div>
+            <div class="modal-body">
+                <div id="workflowgrid"></div>
+            </div>
+            <div id="workflowspinner" class="d-flex justify-content-center">
+                <div class="workflowloader">
+                </div>
+            </div>
+
+            <div class="modal-footer">
+                <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
+            </div>
+        </div>
     </div>
 </div>
 
 <script>
 
-    //add new items to grid
-    $('#btnSubmitApprover').on('click', function (event) {
-        event.preventDefault;
-        alert('hello');
-        return false;
+    //to load staff modal for selecting next workflow staff
+    $(function () {
+        $('.loadWorkflowStaffModal').on('click', function () {
+            $('#workflowgrid').empty();
+            $('#workflowspinner').addClass('d-flex');
+            $('#workflowspinner').show();
+            $('#staffWorkflowModal').modal("show");
+
+
+            $('#workflowgrid').load(this.baseURI + '?handler=StaffPartial', function () {
+                $('#workflowspinner').removeClass('d-flex');
+                $('#workflowspinner').hide();
+                $('#staffTable').dataTable();
+
+                $('.btnStaffName').on('click', function () {
+                    //assign staff name textbox
+                    $('#txtWorkflowStaffName').val($(this).val());
+
+                    //assign staff code textbox
+                    $('#txtWorkflowStaffCode').val($(this).text());
+
+                    //assign staff rank textbox
+                    $('#txtWorkflowStaffDesignation').val($(this).attr('staffrank'));
+
+                    //$('#forStaffText').val();
+                    $('#staffWorkflowModal').modal("hide");
+                    return false;
+                });
+            });
+
+            return false;
+        });
     });
 </script>
