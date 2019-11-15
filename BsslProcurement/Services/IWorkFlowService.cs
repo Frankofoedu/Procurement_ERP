@@ -9,14 +9,9 @@ namespace BsslProcurement.Services
     public interface IWorkFlowService
     {
      
-        Task<WorkFlowStaffViewModel> GetNextWorkflowSteps(int id = 0);
+        Task<List<WorkFlowTypesViewModel>> GetNextWorkActionflowSteps(int workFlowTypeId, int currentStepId = 0);
 
-        /// <summary>
-        /// gets all the steps the job has passed through
-        /// </summary>
-        /// <param name="id"></param>
-        /// <returns></returns>
-        Task<WorkFlowStaffViewModel> GetPreviousflowSteps(int id);
+        Task<List<WorkFlowTypesViewModel>> GetPreviousWorkActionflowSteps(int workFlowTypeId, int currentStepId);
 
         //Task<WorkFlowStaffViewModel> GetMainDepartmentHead();
         //Task<WorkFlowStaffViewModel> GetDepartmentHead();

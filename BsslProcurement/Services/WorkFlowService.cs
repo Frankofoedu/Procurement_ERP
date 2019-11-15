@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using BsslProcurement.ViewModels;
 using DcProcurement;
 using DcProcurement.Contexts;
+using Microsoft.EntityFrameworkCore;
 
 namespace BsslProcurement.Services
 {
@@ -22,20 +23,18 @@ namespace BsslProcurement.Services
         /// </summary>
         /// <param name="id">current step of job. default is 0 for new jobs</param>
         /// <returns></returns>
-        public Task<WorkFlowStaffViewModel> GetNextWorkflowSteps(int id = 0)
-        {
-            throw new NotImplementedException();
-            // _procurementDBContext.WorkflowActions.Where(x => x.)
-        }
+        public Task<List<WorkFlowTypesViewModel>> GetNextWorkActionflowSteps(int workFlowTypeId, int currentStepId = 0) =>
+            //gets all workflow actions for the current job stage
+            _procurementDBContext.Workflows.Where(x => x.WorkflowTypeId == workFlowTypeId && x.Step > currentStepId).Select(x => new WorkFlowTypesViewModel { Name = x.WorkflowAction.Name }).ToListAsync();
+
 
         /// <summary>
         /// gets all the steps the job has passed through
         /// </summary>
-        /// <param name="id">current step of job</param>
+        /// <param name="currentStepId">current step of job</param>
         /// <returns></returns>
-        public Task<WorkFlowStaffViewModel> GetPreviousflowSteps(int id)
-        {
-            throw new NotImplementedException();
-        }
+        public Task<List<WorkFlowTypesViewModel>> GetPreviousWorkActionflowSteps(int workFlowTypeId, int currentStepId) =>
+            //gets all workflow actions for the current job stage
+            _procurementDBContext.Workflows.Where(x => x.WorkflowTypeId == workFlowTypeId && x.Step < currentStepId).Select(x => new WorkFlowTypesViewModel { Name = x.WorkflowAction.Name }).ToListAsync();// throw new NotImplementedException();
     }
 }
