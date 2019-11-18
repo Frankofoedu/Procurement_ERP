@@ -107,7 +107,7 @@ namespace BsslProcurement.Pages.Staff.Workflow
         {
 
             //get all staff and thier ranks
-            var staffs = _bsslContext.Stafftab.Select(x => new StaffLayoutModel { Staff = x, Rank = _bsslContext.Codestab.Where(m => m.Option1 == "f4" && m.Code == x.Positionid).FirstOrDefault().Desc1 }).ToList();
+            var staffs = _bsslContext.Stafftab.Select(x => new StaffLayoutModel { StaffCode = x.Staffid, StaffName = x.Othernames, Rank = _bsslContext.Codestab.Where(m => m.Option1 == "f4" && m.Code == x.Positionid).FirstOrDefault().Desc1 }).ToList();
 
 
             //           var  = _bsslContext.Stafftab.ToList();

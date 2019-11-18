@@ -50,7 +50,7 @@ namespace BsslProcurement.Pages.Staff.ItemRequisition
         {
 
             //get all staff and thier ranks
-            var staffs = _bsslContext.Stafftab.Select(x => new StaffLayoutModel { Staff = x, Rank = null }).ToList();
+            var staffs = _bsslContext.Stafftab.Select(x => new StaffLayoutModel { StaffName = x.Othernames, StaffCode = x.Staffid, Rank = null }).ToList();
 
 
             //           var  = _bsslContext.Stafftab.ToList();
