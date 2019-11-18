@@ -6,10 +6,8 @@
 <table id="staffTable" class="table table-striped">
     <thead>
         <tr>
-            <th>StaffId</th>
-            <th>Surname</th>
-            <th>Other Names</th>
-            <th>Dept Code</th>
+            <th>Staff Code</th>
+            <th>Full Name</th>
         </tr>
     </thead>
     <tbody>
@@ -17,11 +15,9 @@
         {
             <tr>
                 <td>
-                    <button class="btn btn-link btnStaffName" staffrank="@staff.Rank" value="@staff.Staff.Othernames">@staff.Staff.Staffid</button>
+                    <button class="btn btn-link btnStaffName" staffrank="@staff.Rank" value="@staff.Staff.Name">@staff.Staff.StaffCode</button>
                 </td>
-                <td>@staff.Staff.Surname</td>
-                <td>@staff.Staff.Othernames</td>
-                <td>@staff.Staff.Deptcode</td>
+                <td>@staff.Staff.Name</td>
 
 
             </tr>
