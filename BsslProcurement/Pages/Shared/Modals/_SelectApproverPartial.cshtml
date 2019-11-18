@@ -93,7 +93,7 @@
             $('#workflowspinner').show();
             $('#staffWorkflowModal').modal("show");
 
-            var url = '@Url.Action("GetStaffWorkflowPartial", "Staff", new { id = "1" })';//$('hiddenURL').val();
+            var url = '@Url.Action("GetStaffWorkflowPartial", "Staff", new { id = "16" })';//$('hiddenURL').val();
             $('#workflowgrid').load(url, function () {
                 $('#workflowspinner').removeClass('d-flex');
                 $('#workflowspinner').hide();

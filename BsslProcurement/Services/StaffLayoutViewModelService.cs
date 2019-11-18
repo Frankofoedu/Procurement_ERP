@@ -18,8 +18,8 @@ namespace BsslProcurement.Services
         {
             _procurementDBContext = procurementDBContext;
         }
-        public async Task<List<WorkflowStaff>> GetAllStaffInWorkFlow(int workFlowId) => 
-            (await _procurementDBContext.Workflows.Include(p => p.Staffs).Where(x => x.Id == workFlowId).FirstOrDefaultAsync()).Staffs.ToList();
+        public async Task<List<StaffLayoutModel>> GetAllStaffInWorkFlow(int workFlowId) => 
+            (await _procurementDBContext.Workflows.Include(p => p.Staffs).Where(x => x.Id == workFlowId).FirstOrDefaultAsync()).Staffs.Select(c => new StaffLayoutModel { Staff=c.Staff, Rank= null });
        
         
         public void GetAllStaffRank()
