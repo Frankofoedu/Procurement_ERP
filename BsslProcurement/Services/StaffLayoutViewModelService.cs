@@ -14,25 +14,25 @@ namespace BsslProcurement.Services
     {
 
         private readonly ProcurementDBContext _procurementDBContext;
-        public StaffLayoutViewModelService(ProcurementDBContext procurementDBContext)
+        private readonly BSSLSYS_ITF_DEMOContext _bsslContext;
+        public StaffLayoutViewModelService(ProcurementDBContext procurementDBContext, BSSLSYS_ITF_DEMOContext bsslContext)
         {
             _procurementDBContext = procurementDBContext;
+            _bsslContext = bsslContext;
         }
         public async Task<List<StaffLayoutModel>> GetAllStaffInWorkFlow(int workFlowId) => 
-            (await _procurementDBContext.Workflows.Include(p => p.Staffs).Where(x => x.Id == workFlowId).FirstOrDefaultAsync()).Staffs.Select(c => new StaffLayoutModel { Staff=c.Staff, Rank= null });
-       
-        
-        public void GetAllStaffRank()
+            (await _procurementDBContext.Workflows.Include(p => p.Staffs).Where(x => x.Id == workFlowId).FirstOrDefaultAsync()).Staffs.Select(c => new StaffLayoutModel { StaffCode = c.Staff.StaffCode, StaffName = c.Staff.UserName, Rank= null }).ToList();
+
+        public Task<List<StaffLayoutModel>> GetAllStaffNoRank()
         {
-           // var staffs = _bsslContext.Stafftab.Select(x => new StaffLayoutModel { Staff = x, Rank = null }).ToList();
+            throw new NotImplementedException();
+        }
+
+        public async Task<List<StaffLayoutModel>> GetAllStaffWithRank()
+        {
+           return await _bsslContext.Stafftab.Select(x => new StaffLayoutModel { StaffName = x.Othernames, StaffCode = x.Staffid, Rank = _bsslContext.Codestab.FirstOrDefault(m => m.Option1 == "f4" && m.Code == x.Positionid).Desc1 }).ToListAsync();
 
         }
 
-        public void GetAllStaffWithRank()
-        {
-           // var staffs = _bsslContext.Stafftab.Select(x => new StaffLayoutModel { Staff = x, Rank = _bsslContext.Codestab.FirstOrDefault(m => m.Option1 == "f4" && m.Code == x.Positionid).Desc1 }).ToList();
-            
-
-        }
     }
 }

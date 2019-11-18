@@ -8,7 +8,8 @@ namespace BsslProcurement.ViewModels
 {
     public class StaffLayoutModel
     {
-        public Staff Staff { get; set; }
+        public string StaffName { get; set; }
+        public string StaffCode { get; set; }
         public string Rank { get; set; }
     }
 }

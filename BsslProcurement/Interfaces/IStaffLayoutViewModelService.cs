@@ -1,4 +1,5 @@
-﻿using DcProcurement;
+﻿using BsslProcurement.ViewModels;
+using DcProcurement;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -8,8 +9,9 @@ namespace BsslProcurement.Interfaces
 {
     public interface IStaffLayoutViewModelService
     {
-        void GetAllStaffWithRank();
-        Task<List<WorkflowStaff>> GetAllStaffInWorkFlow(int workFlowId);
+        Task<List<StaffLayoutModel>> GetAllStaffWithRank();
+        Task<List<StaffLayoutModel>> GetAllStaffNoRank();
+        Task<List<StaffLayoutModel>> GetAllStaffInWorkFlow(int workFlowId);
 
     }
 }

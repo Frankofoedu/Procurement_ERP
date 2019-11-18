@@ -73,7 +73,7 @@ namespace BsslProcurement.Pages.Test
                 Email = em,
                 CreationDate = DateTime.Now,
                 Name = name.Trim(),
-                StaffCode = staffcode.Trim()
+                StaffCode = staffcode.Trim(),
             };
             var result = await _userManager.CreateAsync(user, password.Trim());
             if (result.Succeeded)
