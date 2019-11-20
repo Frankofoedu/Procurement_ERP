@@ -34,7 +34,7 @@
 <div class="row">
     <div class="col-12">
         <div class="form-group">
-            <label>Approving Authority : </label>
+            <label>Next Authority : </label>
             <select id="selectAction" class="form-control" asp-items="ActionTypeItems">
                 <option value="">--Select--</option>
             </select>
@@ -88,19 +88,20 @@
     //to load staff modal for selecting next workflow staff
     $(function () {
         $('.loadWorkflowStaffModal').on('click', function () {
-            $('#workflowgrid').empty();
-            $('#workflowspinner').addClass('d-flex');
-            $('#workflowspinner').show();
-            $('#staffWorkflowModal').modal("show");
 
             var url = $('#hiddenURL').val();
             var selId = $('#selectAction').val();
             if (selId) {
                 url = url.replace('*id*', selId);
             } else {
+                alert('Select Next Authority.')
                 return false;
             }
 
+            $('#workflowgrid').empty();
+            $('#workflowspinner').addClass('d-flex');
+            $('#workflowspinner').show();
+            $('#staffWorkflowModal').modal("show");
 
             $('#workflowgrid').load(url, function () {
                 $('#workflowspinner').removeClass('d-flex');
