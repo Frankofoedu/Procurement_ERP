@@ -35,7 +35,7 @@
     <div class="col-12">
         <div class="form-group">
             <label>Approving Authority : </label>
-            <select class="form-control" asp-items="ActionTypeItems">
+            <select id="selectAction" class="form-control" asp-items="ActionTypeItems">
                 <option value="">--Select--</option>
             </select>
         </div>
@@ -82,7 +82,7 @@
         </div>
     </div>
 </div>
-<input type="hidden" id="hiddenURL" value="@Url.Action("GetStaffWorkflowPartial", "Staff", new { id = "1" })" />
+<input type="hidden" id="hiddenURL" value="@Url.Action("GetStaffWorkflowPartial", "Staff", new { id = "*id*" })" />
 <script>
 
     //to load staff modal for selecting next workflow staff
@@ -93,7 +93,15 @@
             $('#workflowspinner').show();
             $('#staffWorkflowModal').modal("show");
 
-            var url = '@Url.Action("GetStaffWorkflowPartial", "Staff", new { id = "1" })';//$('hiddenURL').val();
+            var url = $('#hiddenURL').val();
+            var selId = $('#selectAction').val();
+            if (selId) {
+                url = url.replace('*id*', selId);
+            } else {
+                return false;
+            }
+
+
             $('#workflowgrid').load(url, function () {
                 $('#workflowspinner').removeClass('d-flex');
                 $('#workflowspinner').hide();
