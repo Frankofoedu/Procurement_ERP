@@ -34,8 +34,8 @@
 <div class="row">
     <div class="col-12">
         <div class="form-group">
-            <label>Approving Authority : </label>
-            <select class="form-control" asp-items="ActionTypeItems" asp-for="WorkFlowActionId">
+             <label>Next Authority : </label>
+            <select class="form-control" id="selectAction" asp-items="ActionTypeItems" asp-for="WorkFlowActionId">
                 <option value="">--Select--</option>
             </select>
         </div>
@@ -82,18 +82,27 @@
         </div>
     </div>
 </div>
-<input type="hidden" id="hiddenURL" value="@Url.Action("GetStaffWorkflowPartial", "Staff", new { id = "1" })" />
+<input type="hidden" id="hiddenURL" value="@Url.Action("GetStaffWorkflowPartial", "Staff", new { id = "*id*" })" />
 <script>
 
     //to load staff modal for selecting next workflow staff
     $(function () {
         $('.loadWorkflowStaffModal').on('click', function () {
+
+            var url = $('#hiddenURL').val();
+            var selId = $('#selectAction').val();
+            if (selId) {
+                url = url.replace('*id*', selId);
+            } else {
+                alert('Select Next Authority.')
+                return false;
+            }
+
             $('#workflowgrid').empty();
             $('#workflowspinner').addClass('d-flex');
             $('#workflowspinner').show();
             $('#staffWorkflowModal').modal("show");
 
-            var url = '@Url.Action("GetStaffWorkflowPartial", "Staff", new { id = "1" })';//$('hiddenURL').val();
             $('#workflowgrid').load(url, function () {
                 $('#workflowspinner').removeClass('d-flex');
                 $('#workflowspinner').hide();
@@ -101,9 +110,8 @@
 
                 $('.btnStaffName').on('click', function () {
                     //assign staff name textbox
-                   // $().attr()
                     $('#txtWorkflowStaffName').val($(this).val());
-                        
+
                     //assign staff code textbox
                     $('#txtWorkflowStaffCode').val($(this).text());
 
