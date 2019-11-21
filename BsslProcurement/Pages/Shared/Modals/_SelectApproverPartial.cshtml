@@ -1,41 +1,41 @@
-﻿@using BsslProcurement.Pages.Staff
-@using BsslProcurement.Interfaces
+﻿@using BsslProcurement.Interfaces
 @using Microsoft.AspNetCore.Mvc.Rendering;
+@using BsslProcurement.ViewModels
 
 @inject IWorkFlowService  WorkflowService
 
 @{
     List<SelectListItem> ActionTypeItems = (await WorkflowService.GetNextWorkActionflowSteps(1)).Select(m => new SelectListItem { Value = m.Id.ToString(), Text = m.Name }).ToList();
 }
-@model List<int>
+@model WorkFlowApproverViewModel
 
-    <style>
-        .workflowloader {
-            border: 16px solid #f3f3f3;
-            border-top: 16px solid #3498db;
-            border-radius: 50%;
-            width: 120px;
-            height: 120px;
-            -webkit-animation: workflowspin 2s linear infinite;
-            animation: spin 2s linear infinite;
+<style>
+    .workflowloader {
+        border: 16px solid #f3f3f3;
+        border-top: 16px solid #3498db;
+        border-radius: 50%;
+        width: 120px;
+        height: 120px;
+        -webkit-animation: workflowspin 2s linear infinite;
+        animation: spin 2s linear infinite;
+    }
+
+    @@keyframes workflowspin {
+        0% {
+            transform: rotate(0deg);
         }
 
-        @@keyframes workflowspin {
-            0% {
-                transform: rotate(0deg);
-            }
-
-            100% {
-                transform: rotate(360deg);
-            }
+        100% {
+            transform: rotate(360deg);
         }
-    </style>
+    }
+</style>
 
 <div class="row">
     <div class="col-12">
         <div class="form-group">
             <label>Approving Authority : </label>
-            <select class="form-control" asp-items="ActionTypeItems">
+            <select class="form-control" asp-items="ActionTypeItems" asp-for="WorkFlowActionId">
                 <option value="">--Select--</option>
             </select>
         </div>
@@ -43,20 +43,20 @@
     <div class="col-sm-12">
         <label>Staff Id : </label>
         <span class="d-flex flex-row">
-            <input id="txtWorkflowStaffCode" class="form-control" readonly />
+            <input eleId="txtWorkflowStaffCode" asp-for="AssignedStaffCode"  class="form-control" readonly />
             <button class="btn loadWorkflowStaffModal"><i class="fa fa-search"></i></button>
         </span>
     </div>
     <div class="col-sm-12">
         <label>Staff Name : </label>
         <span class="d-flex flex-row">
-            <input class="form-control" readonly id="txtWorkflowStaffName" />
+            <input class="form-control" asp-for="AssignedStaffName" readonly eleId="txtWorkflowStaffName" />
         </span>
     </div>
     <div class="col-sm-12">
         <label>Designation : </label>
         <span class="d-flex flex-row">
-            <input class="form-control" readonly id="txtWorkflowStaffDesignation" />
+            <input class="form-control" readonly eleId="txtWorkflowStaffDesignation" />
         </span>
     </div>
 </div>
@@ -75,7 +75,7 @@
                 <div class="workflowloader">
                 </div>
             </div>
-            
+
             <div class="modal-footer">
                 <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
             </div>
@@ -101,8 +101,9 @@
 
                 $('.btnStaffName').on('click', function () {
                     //assign staff name textbox
+                   // $().attr()
                     $('#txtWorkflowStaffName').val($(this).val());
-
+                        
                     //assign staff code textbox
                     $('#txtWorkflowStaffCode').val($(this).text());
 

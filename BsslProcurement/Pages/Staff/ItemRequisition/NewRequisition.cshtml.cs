@@ -56,7 +56,7 @@ namespace BsslProcurement.Pages.Staff.ItemRequisition
         [BindProperty]
         public Requisition Requisition { get; set; }
         public List<SelectListItem> UnitsOfMeasurementList { get; set; }
-
+        public List<WorkFlowApproverViewModel> WfVm { get; set; }
         public NewRequisitionModel(UserManager<User> userManager,
             BSSLSYS_ITF_DEMOContext bsslContext,
             ProcurementDBContext procContext, IHostingEnvironment environment)

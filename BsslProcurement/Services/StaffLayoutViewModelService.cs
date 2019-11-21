@@ -22,6 +22,7 @@ namespace BsslProcurement.Services
         }
         public async Task<List<StaffLayoutModel>> GetAllStaffInWorkFlow(int workFlowId)
         {
+            
             var st =  _procurementDBContext.WorkflowStaffs.Include(p => p.Staff).Where(x => x.WorkflowId == workFlowId);
                 
 
@@ -29,16 +30,16 @@ namespace BsslProcurement.Services
 
             return slM;
         }
-            //(await _procurementDBContext.Workflows.Include(p => p.Staffs).Where(x => x.Id == workFlowId).FirstOrDefaultAsync()).Staffs.Select(c => new StaffLayoutModel { StaffCode = c.Staff.StaffCode, StaffName = c.Staff.UserName, Rank= null }).ToList();
 
         public Task<List<StaffLayoutModel>> GetAllStaffNoRank()
         {
-            throw new NotImplementedException();
+
+            return  _bsslContext.Stafftab.Select(x => new StaffLayoutModel { StaffName = x.Othernames, StaffCode = x.Staffid, Rank = null}).ToListAsync();
         }
 
-        public async Task<List<StaffLayoutModel>> GetAllStaffWithRank()
+        public Task<List<StaffLayoutModel>> GetAllStaffWithRank()
         {
-           return await _bsslContext.Stafftab.Select(x => new StaffLayoutModel { StaffName = x.Othernames, StaffCode = x.Staffid, Rank = _bsslContext.Codestab.FirstOrDefault(m => m.Option1 == "f4" && m.Code == x.Positionid).Desc1 }).ToListAsync();
+           return  _bsslContext.Stafftab.Select(x => new StaffLayoutModel { StaffName = x.Othernames, StaffCode = x.Staffid, Rank = _bsslContext.Codestab.FirstOrDefault(m => m.Option1 == "f4" && m.Code == x.Positionid).Desc1 }).ToListAsync();
 
         }
 
