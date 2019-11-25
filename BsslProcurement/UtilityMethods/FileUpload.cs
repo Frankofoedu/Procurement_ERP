@@ -37,7 +37,7 @@ namespace BsslProcurement.UtilityMethods
 
             return filePaths;
         }
-        public static async Task<Attachment> GetFilePathsFromFileAsync(IFormFile file, IHostingEnvironment _environment, string folder)
+        public static async Task<Attachment> GetFilePathsFromFileAsync(IFormFile file, IWebHostEnvironment _environment, string folder)
         {
             var folderPath = Path.Combine(_environment.WebRootPath, folder);
             Directory.CreateDirectory(folderPath);

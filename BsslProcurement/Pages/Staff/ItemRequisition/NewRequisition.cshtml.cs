@@ -27,7 +27,7 @@ namespace BsslProcurement.Pages.Staff.ItemRequisition
         private readonly UserManager<User> _userManager;
         private readonly BSSLSYS_ITF_DEMOContext _bsslContext;
         private readonly ProcurementDBContext _procContext;
-        private readonly IHostingEnvironment _environment;
+        private readonly IWebHostEnvironment _environment;
 
 
         [BindProperty]
@@ -59,7 +59,7 @@ namespace BsslProcurement.Pages.Staff.ItemRequisition
         public List<WorkFlowApproverViewModel> WfVm { get; set; }
         public NewRequisitionModel(UserManager<User> userManager,
             BSSLSYS_ITF_DEMOContext bsslContext,
-            ProcurementDBContext procContext, IHostingEnvironment environment)
+            ProcurementDBContext procContext, IWebHostEnvironment environment)
         {
             _userManager = userManager;
             _bsslContext = bsslContext;
@@ -148,6 +148,7 @@ namespace BsslProcurement.Pages.Staff.ItemRequisition
                 RequisitionItem re = v.RequisitionItem;
                  re.Attachment = await FileUpload.GetFilePathsFromFileAsync(v.Attachment,_environment,"Attachment");
                 reList.Add(re);
+
             }
             return reList;
         }
