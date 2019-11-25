@@ -8,16 +8,15 @@ using DcProcurement;
 using Microsoft.AspNetCore.Http;
 using System.IO;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.Hosting.Internal;
 
 namespace BsslProcurement.Pages.Staff
 {
     public class PSISSModel : PageModel
     {
         public readonly ProcurementDBContext _context;
-        public readonly IHostingEnvironment _hostingEnvironment;
+        public readonly IWebHostEnvironment _hostingEnvironment;
 
-        public PSISSModel(ProcurementDBContext context, IHostingEnvironment hostingEnvironment)
+        public PSISSModel(ProcurementDBContext context, IWebHostEnvironment hostingEnvironment)
         {
             _context = context;
             _hostingEnvironment = hostingEnvironment;
