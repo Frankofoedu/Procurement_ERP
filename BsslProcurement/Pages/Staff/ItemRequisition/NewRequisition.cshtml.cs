@@ -72,9 +72,6 @@ namespace BsslProcurement.Pages.Staff.ItemRequisition
         {
             try
             {
-                var url = Url.Action("StaffWorkflowPartial", "Staff", new { id = "1" });
-                Console.WriteLine("----------" + url + "");
-
                 await LoadData();
             }
             catch (Exception ex)
@@ -84,7 +81,7 @@ namespace BsslProcurement.Pages.Staff.ItemRequisition
 
         }
 
-        public async Task<ActionResult> OnPostSubmitAsync(List<IFormFile> files)
+        public async Task<ActionResult> OnPostSubmitAsync()
         {
             if (ModelState.IsValid)
             {
@@ -103,7 +100,7 @@ namespace BsslProcurement.Pages.Staff.ItemRequisition
             return Page();
         }
 
-        public async Task<ActionResult> OnPostSaveAsync(List<IFormFile> files)
+        public async Task<ActionResult> OnPostSaveAsync()
         {
             if (ModelState.IsValid)
             {

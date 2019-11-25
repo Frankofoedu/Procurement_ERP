@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 using System.Text;
 
 namespace DcProcurement
@@ -23,7 +24,7 @@ namespace DcProcurement
         public string  Remark { get; set; }
         public string StaffId { get; set; } // if staff field is null then any staff can see the job.
 
-
+        [ForeignKey("StaffId")]
         public Staff Staff { get; set; }
     }
 }
