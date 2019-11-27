@@ -122,19 +122,19 @@ else
                             <div class="col-sm-4">
                                 <div class="form-group">
                                     <label>PR No :</label>
-                                    <input class="form-control" readonly asp-for="Requisition.PRNumber" value="@Model.Requisition.PRNumber" placeholder="" />
+                                    <input class="form-control" readonly  value="@Model.Requisition.PRNumber" placeholder="" />
                                 </div>
                             </div>
                             <div class="col-sm-4">
                                 <div class="form-group">
                                     <label>Date : </label>
-                                    <input class="form-control" readonly asp-for="Requisition.Date" value="@Model.Requisition.Date" type="date" placeholder="Pick Date" />
+                                    <input class="form-control" readonly  value="@Model.Requisition.Date.Value.ToString("dd/MM/yyyy")" placeholder="Pick Date" />
                                 </div>
                             </div>
                             <div class="col-sm-4">
                                 <div class="form-group">
                                     <label>Delivery Date : </label>
-                                    <input class="form-control" type="date" readonly value="@Model.Requisition.DeliveryDate" placeholder="Pick Delivery Date" />
+                                    <input class="form-control"  readonly value="@Model.Requisition.DeliveryDate.Value.ToString("dd/MM/yyyy")" placeholder="Pick Delivery Date" />
                                 </div>
                             </div>
 
@@ -197,9 +197,9 @@ else
                                         </tr>
                                     </thead>
                                     <tbody id="requisitionBody">
-                                        @for (int i = 0; i < Model.Requisition.RequisitionItems.Count; i++)
+                                        @for (int i = 0; i < Model.ItemGridViewModels.Count; i++)
                                         {
-                                            var item = Model.Requisition.RequisitionItems[i];
+                                            var item = Model.ItemGridViewModels[i].RequisitionItem;
 
                                             <tr class="">
 
@@ -218,7 +218,7 @@ else
                                                 </td>
 
                                                 <td>
-                                                    <input type="file" hidden  />
+                                                    <input type="file" value="@item.Attachment"  />
                                                 </td>
 
 
