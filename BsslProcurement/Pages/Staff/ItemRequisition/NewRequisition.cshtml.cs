@@ -146,9 +146,17 @@ namespace BsslProcurement.Pages.Staff.ItemRequisition
             foreach (ItemGridViewModel v in gridVm)
             {
                 RequisitionItem re = v.RequisitionItem;
-                 re.Attachment = await FileUpload.GetFilePathsFromFileAsync(v.Attachment,_environment,"Attachment");
-                reList.Add(re);
+                if (v.Attachment != null)
+                {
+                    re.Attachment = await FileUpload.GetFilePathsFromFileAsync(v.Attachment, _environment, "Attachment");
+                    
 
+                }
+                else
+                {
+                    re.Attachment = null;
+                }
+                reList.Add(re);
             }
             return reList;
         }

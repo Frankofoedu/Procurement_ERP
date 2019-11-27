@@ -113,16 +113,15 @@
                         <div class="col-sm-4">
                             <div class="form-group">
                                 <label>PR Date : </label>
-                                <input class="form-control" data-date="date" data-id="Rdate" />
-                                <input asp-for="Requisition.Date" type="hidden" data-id="Rdate" />
+                                @*<input class="form-control" data-date="date" data-id="Rdate" />*@
+                                <input  class="form-control" asp-for="Requisition.Date"   />
 
                             </div>
                         </div>
                         <div class="col-sm-4">
                             <div class="form-group">
                                 <label>Expected Delivery Date : </label>
-                                <input class="form-control" data-date="date" data-id="Deliverydate" />
-                                <input hidden data-id="Deliverydate" asp-for="Requisition.DeliveryDate" />
+                                <input  class="form-control"  asp-for="Requisition.DeliveryDate" />
                             </div>
                         </div>
                         <div class="col-sm-12">
