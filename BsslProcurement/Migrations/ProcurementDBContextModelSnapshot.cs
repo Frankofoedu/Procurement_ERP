@@ -15,7 +15,7 @@ namespace BsslProcurement.Migrations
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("ProductVersion", "2.2.6-servicing-10079")
+                .HasAnnotation("ProductVersion", "3.0.1")
                 .HasAnnotation("Relational:MaxIdentifierLength", 128)
                 .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
@@ -23,13 +23,16 @@ namespace BsslProcurement.Migrations
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
                     b.Property<DateTime>("DateCreated")
                         .ValueGeneratedOnAdd()
+                        .HasColumnType("datetime2")
                         .HasDefaultValueSql("getdate()");
 
-                    b.Property<string>("FilePath");
+                    b.Property<string>("FilePath")
+                        .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
 
@@ -40,49 +43,71 @@ namespace BsslProcurement.Migrations
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-                    b.Property<string>("Address");
+                    b.Property<string>("Address")
+                        .HasColumnType("nvarchar(max)");
 
-                    b.Property<bool>("Approved");
+                    b.Property<bool>("Approved")
+                        .HasColumnType("bit");
 
-                    b.Property<string>("City");
+                    b.Property<string>("City")
+                        .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("CompanyName");
+                    b.Property<string>("CompanyName")
+                        .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("CompanyRegNo");
+                    b.Property<string>("CompanyRegNo")
+                        .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("ContactDesignation");
+                    b.Property<string>("ContactDesignation")
+                        .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("ContactEmail");
+                    b.Property<string>("ContactEmail")
+                        .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("ContactName");
+                    b.Property<string>("ContactName")
+                        .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("ContactPhoneNumber");
+                    b.Property<string>("ContactPhoneNumber")
+                        .HasColumnType("nvarchar(max)");
 
-                    b.Property<DateTime>("CreationDate");
+                    b.Property<DateTime>("CreationDate")
+                        .HasColumnType("datetime2");
 
-                    b.Property<DateTime>("DateEstablishment");
+                    b.Property<DateTime>("DateEstablishment")
+                        .HasColumnType("datetime2");
 
-                    b.Property<bool>("Disqualified");
+                    b.Property<bool>("Disqualified")
+                        .HasColumnType("bit");
 
-                    b.Property<string>("Email");
+                    b.Property<string>("Email")
+                        .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("NatureOfBusiness");
+                    b.Property<string>("NatureOfBusiness")
+                        .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("Password");
+                    b.Property<string>("Password")
+                        .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("PhoneNumber");
+                    b.Property<string>("PhoneNumber")
+                        .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("PostalAddress");
+                    b.Property<string>("PostalAddress")
+                        .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("Sector");
+                    b.Property<string>("Sector")
+                        .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("State");
+                    b.Property<string>("State")
+                        .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("TIN");
+                    b.Property<string>("TIN")
+                        .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("VendorId");
+                    b.Property<string>("VendorId")
+                        .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
 
@@ -91,9 +116,11 @@ namespace BsslProcurement.Migrations
 
             modelBuilder.Entity("DcProcurement.CompanyInfoProcurementSubCategory", b =>
                 {
-                    b.Property<int>("CompanyInfoId");
+                    b.Property<int>("CompanyInfoId")
+                        .HasColumnType("int");
 
-                    b.Property<int>("ProcurementSubcategoryId");
+                    b.Property<int>("ProcurementSubcategoryId")
+                        .HasColumnType("int");
 
                     b.HasKey("CompanyInfoId", "ProcurementSubcategoryId");
 
@@ -106,19 +133,25 @@ namespace BsslProcurement.Migrations
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
                     b.Property<string>("CriteriaDescription")
-                        .IsRequired();
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Discriminator")
-                        .IsRequired();
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
 
-                    b.Property<int?>("MinValue");
+                    b.Property<int?>("MinValue")
+                        .HasColumnType("int");
 
-                    b.Property<bool>("NeedsDocument");
+                    b.Property<bool>("NeedsDocument")
+                        .HasColumnType("bit");
 
-                    b.Property<bool>("isCompulsory");
+                    b.Property<bool>("isCompulsory")
+                        .HasColumnType("bit");
 
                     b.HasKey("Id");
 
@@ -131,15 +164,20 @@ namespace BsslProcurement.Migrations
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-                    b.Property<int>("CompanyInfoId");
+                    b.Property<int>("CompanyInfoId")
+                        .HasColumnType("int");
 
-                    b.Property<string>("Description");
+                    b.Property<string>("Description")
+                        .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("Name");
+                    b.Property<string>("Name")
+                        .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("Quantity");
+                    b.Property<string>("Quantity")
+                        .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
 
@@ -152,23 +190,32 @@ namespace BsslProcurement.Migrations
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-                    b.Property<string>("Address");
+                    b.Property<string>("Address")
+                        .HasColumnType("nvarchar(max)");
 
-                    b.Property<int>("CompanyInfoId");
+                    b.Property<int>("CompanyInfoId")
+                        .HasColumnType("int");
 
-                    b.Property<DateTime>("CompletionDate");
+                    b.Property<DateTime>("CompletionDate")
+                        .HasColumnType("datetime2");
 
-                    b.Property<string>("ContactPerson");
+                    b.Property<string>("ContactPerson")
+                        .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("Name");
+                    b.Property<string>("Name")
+                        .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("PhoneNumber");
+                    b.Property<string>("PhoneNumber")
+                        .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("ProjectDescription");
+                    b.Property<string>("ProjectDescription")
+                        .HasColumnType("nvarchar(max)");
 
-                    b.Property<DateTime>("StartDate");
+                    b.Property<DateTime>("StartDate")
+                        .HasColumnType("datetime2");
 
                     b.HasKey("Id");
 
@@ -181,20 +228,26 @@ namespace BsslProcurement.Migrations
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-                    b.Property<DateTime?>("DateAdded");
+                    b.Property<DateTime?>("DateAdded")
+                        .HasColumnType("datetime2");
 
-                    b.Property<string>("Description");
+                    b.Property<string>("Description")
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("ItemCode")
-                        .IsRequired();
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("ItemName")
-                        .IsRequired();
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<int?>("ProcurementSubcategoryId")
-                        .IsRequired();
+                        .IsRequired()
+                        .HasColumnType("int");
 
                     b.HasKey("Id");
 
@@ -207,24 +260,34 @@ namespace BsslProcurement.Migrations
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-                    b.Property<DateTime>("CreationDate");
+                    b.Property<DateTime>("CreationDate")
+                        .HasColumnType("datetime2");
 
                     b.Property<string>("Discriminator")
-                        .IsRequired();
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
 
-                    b.Property<bool>("Done");
+                    b.Property<bool>("Done")
+                        .HasColumnType("bit");
 
-                    b.Property<DateTime?>("DoneDate");
+                    b.Property<DateTime?>("DoneDate")
+                        .HasColumnType("datetime2");
 
-                    b.Property<string>("Remark");
+                    b.Property<string>("Remark")
+                        .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("StaffId");
+                    b.Property<string>("StaffId")
+                        .HasColumnType("nvarchar(450)");
 
-                    b.Property<int>("WorkFlowStep");
+                    b.Property<int>("WorkFlowStep")
+                        .HasColumnType("int");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("StaffId");
 
                     b.ToTable("Jobs");
 
@@ -235,11 +298,14 @@ namespace BsslProcurement.Migrations
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-                    b.Property<string>("LastUsedSerialNo");
+                    b.Property<string>("LastUsedSerialNo")
+                        .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("RequisitionCode");
+                    b.Property<string>("RequisitionCode")
+                        .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
 
@@ -250,21 +316,29 @@ namespace BsslProcurement.Migrations
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-                    b.Property<string>("CV");
+                    b.Property<string>("CV")
+                        .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("Certificate");
+                    b.Property<string>("Certificate")
+                        .HasColumnType("nvarchar(max)");
 
-                    b.Property<int?>("CompanyInfoId");
+                    b.Property<int?>("CompanyInfoId")
+                        .HasColumnType("int");
 
-                    b.Property<string>("Name");
+                    b.Property<string>("Name")
+                        .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("Passport");
+                    b.Property<string>("Passport")
+                        .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("Qualification");
+                    b.Property<string>("Qualification")
+                        .HasColumnType("nvarchar(max)");
 
-                    b.Property<int>("VerificationState");
+                    b.Property<int>("VerificationState")
+                        .HasColumnType("int");
 
                     b.HasKey("Id");
 
@@ -277,13 +351,17 @@ namespace BsslProcurement.Migrations
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-                    b.Property<int>("NoOfCategory");
+                    b.Property<int>("NoOfCategory")
+                        .HasColumnType("int");
 
-                    b.Property<DateTime>("PrequalificationEndDate");
+                    b.Property<DateTime>("PrequalificationEndDate")
+                        .HasColumnType("datetime2");
 
-                    b.Property<DateTime>("PrequalificationStartDate");
+                    b.Property<DateTime>("PrequalificationStartDate")
+                        .HasColumnType("datetime2");
 
                     b.HasKey("Id");
 
@@ -294,14 +372,18 @@ namespace BsslProcurement.Migrations
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-                    b.Property<string>("Description");
+                    b.Property<string>("Description")
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Name")
-                        .IsRequired();
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("ProcurementCategoryCode");
+                    b.Property<string>("ProcurementCategoryCode")
+                        .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
 
@@ -312,17 +394,23 @@ namespace BsslProcurement.Migrations
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-                    b.Property<DateTime?>("ClosingDate");
+                    b.Property<DateTime?>("ClosingDate")
+                        .HasColumnType("datetime2");
 
-                    b.Property<DateTime?>("DateAdded");
+                    b.Property<DateTime?>("DateAdded")
+                        .HasColumnType("datetime2");
 
-                    b.Property<string>("GroupName");
+                    b.Property<string>("GroupName")
+                        .HasColumnType("nvarchar(max)");
 
-                    b.Property<int>("NoOfCategory");
+                    b.Property<int>("NoOfCategory")
+                        .HasColumnType("int");
 
-                    b.Property<DateTime?>("OpeningDate");
+                    b.Property<DateTime?>("OpeningDate")
+                        .HasColumnType("datetime2");
 
                     b.HasKey("Id");
 
@@ -333,17 +421,23 @@ namespace BsslProcurement.Migrations
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-                    b.Property<DateTime?>("DateAdded");
+                    b.Property<DateTime?>("DateAdded")
+                        .HasColumnType("datetime2");
 
-                    b.Property<string>("Info");
+                    b.Property<string>("Info")
+                        .HasColumnType("nvarchar(max)");
 
-                    b.Property<int?>("ItemId");
+                    b.Property<int?>("ItemId")
+                        .HasColumnType("int");
 
-                    b.Property<int?>("ProcurementGroupId");
+                    b.Property<int?>("ProcurementGroupId")
+                        .HasColumnType("int");
 
-                    b.Property<int?>("ProcurementSubcategoryId");
+                    b.Property<int?>("ProcurementSubcategoryId")
+                        .HasColumnType("int");
 
                     b.HasKey("Id");
 
@@ -360,13 +454,17 @@ namespace BsslProcurement.Migrations
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-                    b.Property<string>("Legal");
+                    b.Property<string>("Legal")
+                        .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("PortalLogo");
+                    b.Property<string>("PortalLogo")
+                        .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("PortalName");
+                    b.Property<string>("PortalName")
+                        .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
 
@@ -377,16 +475,21 @@ namespace BsslProcurement.Migrations
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-                    b.Property<string>("Description");
+                    b.Property<string>("Description")
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Name")
-                        .IsRequired();
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
 
-                    b.Property<int?>("ProcurementCategoryId");
+                    b.Property<int?>("ProcurementCategoryId")
+                        .HasColumnType("int");
 
-                    b.Property<string>("ProcurementSubCategoryCode");
+                    b.Property<string>("ProcurementSubCategoryCode")
+                        .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
 
@@ -399,56 +502,79 @@ namespace BsslProcurement.Migrations
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
                     b.Property<DateTime?>("Date")
-                        .IsRequired();
+                        .IsRequired()
+                        .HasColumnType("datetime2");
 
                     b.Property<DateTime>("DateCreated")
                         .ValueGeneratedOnAdd()
+                        .HasColumnType("datetime2")
                         .HasDefaultValueSql("getdate()");
 
                     b.Property<DateTime?>("DeliveryDate")
-                        .IsRequired();
+                        .IsRequired()
+                        .HasColumnType("datetime2");
 
                     b.Property<string>("Description")
-                        .IsRequired();
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("ERFx");
+                    b.Property<string>("ERFx")
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("PRNumber")
-                        .IsRequired();
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("PreparedBy")
-                        .IsRequired();
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("PreparedByRank");
+                    b.Property<string>("PreparedByRank")
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("PreparedFor")
-                        .IsRequired();
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("PreparedForRank");
+                    b.Property<string>("PreparedForRank")
+                        .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("ProcessType");
+                    b.Property<string>("ProcessType")
+                        .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("ProcurementMethod");
+                    b.Property<string>("ProcurementMethod")
+                        .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("ProcurementType");
+                    b.Property<string>("ProcurementType")
+                        .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("Purpose");
+                    b.Property<string>("Purpose")
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("RequesterType")
-                        .IsRequired();
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("RequesterValue")
-                        .IsRequired();
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("RequiredAtDepartment")
-                        .IsRequired();
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
 
-                    b.Property<bool>("isPriced");
+                    b.Property<string>("Status")
+                        .HasColumnType("nvarchar(max)");
 
-                    b.Property<bool>("isSubmitted");
+                    b.Property<bool>("isPriced")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("isSubmitted")
+                        .HasColumnType("bit");
 
                     b.HasKey("Id");
 
@@ -458,9 +584,9 @@ namespace BsslProcurement.Migrations
                         new
                         {
                             Id = 22,
-                            Date = new DateTime(2019, 11, 13, 10, 17, 36, 870, DateTimeKind.Local).AddTicks(633),
+                            Date = new DateTime(2019, 11, 26, 15, 26, 41, 948, DateTimeKind.Local).AddTicks(2203),
                             DateCreated = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            DeliveryDate = new DateTime(2019, 11, 13, 10, 17, 36, 871, DateTimeKind.Local).AddTicks(355),
+                            DeliveryDate = new DateTime(2019, 11, 26, 15, 26, 41, 948, DateTimeKind.Local).AddTicks(7269),
                             Description = "sample requisition",
                             PRNumber = "000222",
                             PreparedBy = "John O",
@@ -480,23 +606,32 @@ namespace BsslProcurement.Migrations
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-                    b.Property<int?>("AttachmentId");
+                    b.Property<int?>("AttachmentId")
+                        .HasColumnType("int");
 
-                    b.Property<string>("Description");
+                    b.Property<string>("Description")
+                        .HasColumnType("nvarchar(max)");
 
-                    b.Property<int>("Quantity");
+                    b.Property<int>("Quantity")
+                        .HasColumnType("int");
 
-                    b.Property<int?>("RequisitionId");
+                    b.Property<int?>("RequisitionId")
+                        .HasColumnType("int");
 
-                    b.Property<string>("StoreItemCode");
+                    b.Property<string>("StoreItemCode")
+                        .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("UnitOfMeasurement");
+                    b.Property<string>("UnitOfMeasurement")
+                        .HasColumnType("nvarchar(max)");
 
-                    b.Property<double>("UnitPrice");
+                    b.Property<double>("UnitPrice")
+                        .HasColumnType("float");
 
-                    b.Property<string>("VendorId");
+                    b.Property<string>("VendorId")
+                        .HasColumnType("nvarchar(450)");
 
                     b.HasKey("Id");
 
@@ -524,15 +659,20 @@ namespace BsslProcurement.Migrations
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-                    b.Property<int>("CompanyInfoId");
+                    b.Property<int>("CompanyInfoId")
+                        .HasColumnType("int");
 
-                    b.Property<int>("CriteriaId");
+                    b.Property<int>("CriteriaId")
+                        .HasColumnType("int");
 
-                    b.Property<string>("Value");
+                    b.Property<string>("Value")
+                        .HasColumnType("nvarchar(max)");
 
-                    b.Property<int>("VerificationState");
+                    b.Property<int>("VerificationState")
+                        .HasColumnType("int");
 
                     b.HasKey("Id");
 
@@ -546,44 +686,60 @@ namespace BsslProcurement.Migrations
             modelBuilder.Entity("DcProcurement.User", b =>
                 {
                     b.Property<string>("Id")
-                        .ValueGeneratedOnAdd();
+                        .HasColumnType("nvarchar(450)");
 
-                    b.Property<int>("AccessFailedCount");
+                    b.Property<int>("AccessFailedCount")
+                        .HasColumnType("int");
 
                     b.Property<string>("ConcurrencyStamp")
-                        .IsConcurrencyToken();
+                        .IsConcurrencyToken()
+                        .HasColumnType("nvarchar(max)");
 
-                    b.Property<DateTime?>("CreationDate");
+                    b.Property<DateTime?>("CreationDate")
+                        .HasColumnType("datetime2");
 
                     b.Property<string>("Discriminator")
-                        .IsRequired();
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Email")
+                        .HasColumnType("nvarchar(256)")
                         .HasMaxLength(256);
 
-                    b.Property<bool>("EmailConfirmed");
+                    b.Property<bool>("EmailConfirmed")
+                        .HasColumnType("bit");
 
-                    b.Property<bool>("LockoutEnabled");
+                    b.Property<bool>("LockoutEnabled")
+                        .HasColumnType("bit");
 
-                    b.Property<DateTimeOffset?>("LockoutEnd");
+                    b.Property<DateTimeOffset?>("LockoutEnd")
+                        .HasColumnType("datetimeoffset");
 
                     b.Property<string>("NormalizedEmail")
+                        .HasColumnType("nvarchar(256)")
                         .HasMaxLength(256);
 
                     b.Property<string>("NormalizedUserName")
+                        .HasColumnType("nvarchar(256)")
                         .HasMaxLength(256);
 
-                    b.Property<string>("PasswordHash");
+                    b.Property<string>("PasswordHash")
+                        .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("PhoneNumber");
+                    b.Property<string>("PhoneNumber")
+                        .HasColumnType("nvarchar(max)");
 
-                    b.Property<bool>("PhoneNumberConfirmed");
+                    b.Property<bool>("PhoneNumberConfirmed")
+                        .HasColumnType("bit");
 
-                    b.Property<string>("SecurityStamp");
+                    b.Property<string>("SecurityStamp")
+                        .HasColumnType("nvarchar(max)");
 
-                    b.Property<bool>("TwoFactorEnabled");
+                    b.Property<bool>("TwoFactorEnabled")
+                        .HasColumnType("bit");
 
                     b.Property<string>("UserName")
+                        .HasColumnType("nvarchar(256)")
                         .HasMaxLength(256);
 
                     b.HasKey("Id");
@@ -605,17 +761,23 @@ namespace BsslProcurement.Migrations
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-                    b.Property<string>("StaffId");
+                    b.Property<string>("StaffId")
+                        .HasColumnType("nvarchar(450)");
 
-                    b.Property<string>("StaffId1");
+                    b.Property<string>("StaffId1")
+                        .HasColumnType("nvarchar(450)");
 
-                    b.Property<int>("Step");
+                    b.Property<int>("Step")
+                        .HasColumnType("int");
 
-                    b.Property<int?>("WorkflowActionId");
+                    b.Property<int?>("WorkflowActionId")
+                        .HasColumnType("int");
 
-                    b.Property<int?>("WorkflowTypeId");
+                    b.Property<int?>("WorkflowTypeId")
+                        .HasColumnType("int");
 
                     b.HasKey("Id");
 
@@ -634,15 +796,19 @@ namespace BsslProcurement.Migrations
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-                    b.Property<DateTime?>("DateAdded");
+                    b.Property<DateTime?>("DateAdded")
+                        .HasColumnType("datetime2");
 
                     b.Property<string>("Description")
-                        .IsRequired();
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Name")
-                        .IsRequired();
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
 
@@ -653,11 +819,14 @@ namespace BsslProcurement.Migrations
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-                    b.Property<string>("StaffId");
+                    b.Property<string>("StaffId")
+                        .HasColumnType("nvarchar(450)");
 
-                    b.Property<int>("WorkflowId");
+                    b.Property<int>("WorkflowId")
+                        .HasColumnType("int");
 
                     b.HasKey("Id");
 
@@ -672,15 +841,19 @@ namespace BsslProcurement.Migrations
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
                     b.Property<string>("Code")
-                        .IsRequired();
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("Description");
+                    b.Property<string>("Description")
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Name")
-                        .IsRequired();
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
 
@@ -690,15 +863,18 @@ namespace BsslProcurement.Migrations
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRole", b =>
                 {
                     b.Property<string>("Id")
-                        .ValueGeneratedOnAdd();
+                        .HasColumnType("nvarchar(450)");
 
                     b.Property<string>("ConcurrencyStamp")
-                        .IsConcurrencyToken();
+                        .IsConcurrencyToken()
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Name")
+                        .HasColumnType("nvarchar(256)")
                         .HasMaxLength(256);
 
                     b.Property<string>("NormalizedName")
+                        .HasColumnType("nvarchar(256)")
                         .HasMaxLength(256);
 
                     b.HasKey("Id");
@@ -715,14 +891,18 @@ namespace BsslProcurement.Migrations
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-                    b.Property<string>("ClaimType");
+                    b.Property<string>("ClaimType")
+                        .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("ClaimValue");
+                    b.Property<string>("ClaimValue")
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("RoleId")
-                        .IsRequired();
+                        .IsRequired()
+                        .HasColumnType("nvarchar(450)");
 
                     b.HasKey("Id");
 
@@ -735,14 +915,18 @@ namespace BsslProcurement.Migrations
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-                    b.Property<string>("ClaimType");
+                    b.Property<string>("ClaimType")
+                        .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("ClaimValue");
+                    b.Property<string>("ClaimValue")
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("UserId")
-                        .IsRequired();
+                        .IsRequired()
+                        .HasColumnType("nvarchar(450)");
 
                     b.HasKey("Id");
 
@@ -753,14 +937,18 @@ namespace BsslProcurement.Migrations
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserLogin<string>", b =>
                 {
-                    b.Property<string>("LoginProvider");
+                    b.Property<string>("LoginProvider")
+                        .HasColumnType("nvarchar(450)");
 
-                    b.Property<string>("ProviderKey");
+                    b.Property<string>("ProviderKey")
+                        .HasColumnType("nvarchar(450)");
 
-                    b.Property<string>("ProviderDisplayName");
+                    b.Property<string>("ProviderDisplayName")
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("UserId")
-                        .IsRequired();
+                        .IsRequired()
+                        .HasColumnType("nvarchar(450)");
 
                     b.HasKey("LoginProvider", "ProviderKey");
 
@@ -771,9 +959,11 @@ namespace BsslProcurement.Migrations
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserRole<string>", b =>
                 {
-                    b.Property<string>("UserId");
+                    b.Property<string>("UserId")
+                        .HasColumnType("nvarchar(450)");
 
-                    b.Property<string>("RoleId");
+                    b.Property<string>("RoleId")
+                        .HasColumnType("nvarchar(450)");
 
                     b.HasKey("UserId", "RoleId");
 
@@ -784,13 +974,17 @@ namespace BsslProcurement.Migrations
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserToken<string>", b =>
                 {
-                    b.Property<string>("UserId");
+                    b.Property<string>("UserId")
+                        .HasColumnType("nvarchar(450)");
 
-                    b.Property<string>("LoginProvider");
+                    b.Property<string>("LoginProvider")
+                        .HasColumnType("nvarchar(450)");
 
-                    b.Property<string>("Name");
+                    b.Property<string>("Name")
+                        .HasColumnType("nvarchar(450)");
 
-                    b.Property<string>("Value");
+                    b.Property<string>("Value")
+                        .HasColumnType("nvarchar(max)");
 
                     b.HasKey("UserId", "LoginProvider", "Name");
 
@@ -801,7 +995,8 @@ namespace BsslProcurement.Migrations
                 {
                     b.HasBaseType("DcProcurement.Criteria");
 
-                    b.Property<int?>("ProcurementCategoryId");
+                    b.Property<int?>("ProcurementCategoryId")
+                        .HasColumnType("int");
 
                     b.HasIndex("ProcurementCategoryId");
 
@@ -812,7 +1007,8 @@ namespace BsslProcurement.Migrations
                 {
                     b.HasBaseType("DcProcurement.Criteria");
 
-                    b.Property<int?>("ItemId");
+                    b.Property<int?>("ItemId")
+                        .HasColumnType("int");
 
                     b.HasIndex("ItemId");
 
@@ -823,7 +1019,8 @@ namespace BsslProcurement.Migrations
                 {
                     b.HasBaseType("DcProcurement.Criteria");
 
-                    b.Property<int?>("ProcurementSubcategoryId");
+                    b.Property<int?>("ProcurementSubcategoryId")
+                        .HasColumnType("int");
 
                     b.HasIndex("ProcurementSubcategoryId");
 
@@ -834,11 +1031,15 @@ namespace BsslProcurement.Migrations
                 {
                     b.HasBaseType("DcProcurement.Job");
 
-                    b.Property<int>("CompanyInfoId");
+                    b.Property<int>("CompanyInfoId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("StaffId1")
+                        .HasColumnType("nvarchar(450)");
 
                     b.HasIndex("CompanyInfoId");
 
-                    b.HasIndex("StaffId");
+                    b.HasIndex("StaffId1");
 
                     b.HasDiscriminator().HasValue("PrequalificationJob");
                 });
@@ -849,13 +1050,16 @@ namespace BsslProcurement.Migrations
 
                     b.Property<string>("Name")
                         .IsRequired()
+                        .HasColumnType("nvarchar(100)")
                         .HasMaxLength(100);
 
                     b.Property<string>("Position")
-                        .IsRequired();
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("StaffCode")
-                        .IsRequired();
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
 
                     b.HasDiscriminator().HasValue("Staff");
                 });
@@ -864,7 +1068,8 @@ namespace BsslProcurement.Migrations
                 {
                     b.HasBaseType("DcProcurement.User");
 
-                    b.Property<int?>("CompanyInfoId");
+                    b.Property<int?>("CompanyInfoId")
+                        .HasColumnType("int");
 
                     b.HasIndex("CompanyInfoId")
                         .IsUnique()
@@ -878,12 +1083,14 @@ namespace BsslProcurement.Migrations
                     b.HasOne("DcProcurement.CompanyInfo", "CompanyInfo")
                         .WithMany("CompanyInfoSelectedSubcategory")
                         .HasForeignKey("CompanyInfoId")
-                        .OnDelete(DeleteBehavior.Cascade);
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.HasOne("DcProcurement.ProcurementSubcategory", "ProcurementSubcategory")
                         .WithMany("CompanyInfos")
                         .HasForeignKey("ProcurementSubcategoryId")
-                        .OnDelete(DeleteBehavior.Cascade);
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
                 });
 
             modelBuilder.Entity("DcProcurement.EquipmentDetails", b =>
@@ -891,7 +1098,8 @@ namespace BsslProcurement.Migrations
                     b.HasOne("DcProcurement.CompanyInfo", "CompanyInfo")
                         .WithMany("EquipmentDetails")
                         .HasForeignKey("CompanyInfoId")
-                        .OnDelete(DeleteBehavior.Cascade);
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
                 });
 
             modelBuilder.Entity("DcProcurement.ExperienceRecord", b =>
@@ -899,7 +1107,8 @@ namespace BsslProcurement.Migrations
                     b.HasOne("DcProcurement.CompanyInfo", "CompanyInfo")
                         .WithMany("ExperienceRecords")
                         .HasForeignKey("CompanyInfoId")
-                        .OnDelete(DeleteBehavior.Cascade);
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
                 });
 
             modelBuilder.Entity("DcProcurement.Item", b =>
@@ -907,7 +1116,15 @@ namespace BsslProcurement.Migrations
                     b.HasOne("DcProcurement.ProcurementSubcategory", "ProcurementSubcategory")
                         .WithMany()
                         .HasForeignKey("ProcurementSubcategoryId")
-                        .OnDelete(DeleteBehavior.Cascade);
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("DcProcurement.Job", b =>
+                {
+                    b.HasOne("DcProcurement.Staff", "Staff")
+                        .WithMany()
+                        .HasForeignKey("StaffId");
                 });
 
             modelBuilder.Entity("DcProcurement.PersonnelDetails", b =>
@@ -927,7 +1144,7 @@ namespace BsslProcurement.Migrations
                         .WithMany("ProcurementItems")
                         .HasForeignKey("ProcurementGroupId");
 
-                    b.HasOne("DcProcurement.ProcurementSubcategory")
+                    b.HasOne("DcProcurement.ProcurementSubcategory", null)
                         .WithMany("ProcurementItems")
                         .HasForeignKey("ProcurementSubcategoryId");
                 });
@@ -959,21 +1176,23 @@ namespace BsslProcurement.Migrations
                     b.HasOne("DcProcurement.CompanyInfo", "CompanyInfo")
                         .WithMany("SubmittedCriterias")
                         .HasForeignKey("CompanyInfoId")
-                        .OnDelete(DeleteBehavior.Cascade);
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.HasOne("DcProcurement.Criteria", "Criteria")
                         .WithMany()
                         .HasForeignKey("CriteriaId")
-                        .OnDelete(DeleteBehavior.Cascade);
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
                 });
 
             modelBuilder.Entity("DcProcurement.Workflow", b =>
                 {
-                    b.HasOne("DcProcurement.Staff")
+                    b.HasOne("DcProcurement.Staff", null)
                         .WithMany("AdditionalStaffWorkflows")
                         .HasForeignKey("StaffId");
 
-                    b.HasOne("DcProcurement.Staff")
+                    b.HasOne("DcProcurement.Staff", null)
                         .WithMany("StaffWorkflows")
                         .HasForeignKey("StaffId1");
 
@@ -995,52 +1214,59 @@ namespace BsslProcurement.Migrations
                     b.HasOne("DcProcurement.Workflow", "Workflow")
                         .WithMany("Staffs")
                         .HasForeignKey("WorkflowId")
-                        .OnDelete(DeleteBehavior.Cascade);
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
                 {
-                    b.HasOne("Microsoft.AspNetCore.Identity.IdentityRole")
+                    b.HasOne("Microsoft.AspNetCore.Identity.IdentityRole", null)
                         .WithMany()
                         .HasForeignKey("RoleId")
-                        .OnDelete(DeleteBehavior.Cascade);
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserClaim<string>", b =>
                 {
-                    b.HasOne("DcProcurement.User")
+                    b.HasOne("DcProcurement.User", null)
                         .WithMany()
                         .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.Cascade);
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserLogin<string>", b =>
                 {
-                    b.HasOne("DcProcurement.User")
+                    b.HasOne("DcProcurement.User", null)
                         .WithMany()
                         .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.Cascade);
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserRole<string>", b =>
                 {
-                    b.HasOne("Microsoft.AspNetCore.Identity.IdentityRole")
+                    b.HasOne("Microsoft.AspNetCore.Identity.IdentityRole", null)
                         .WithMany()
                         .HasForeignKey("RoleId")
-                        .OnDelete(DeleteBehavior.Cascade);
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
-                    b.HasOne("DcProcurement.User")
+                    b.HasOne("DcProcurement.User", null)
                         .WithMany()
                         .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.Cascade);
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserToken<string>", b =>
                 {
-                    b.HasOne("DcProcurement.User")
+                    b.HasOne("DcProcurement.User", null)
                         .WithMany()
                         .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.Cascade);
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
                 });
 
             modelBuilder.Entity("DcProcurement.CategoryCriteria", b =>
@@ -1069,11 +1295,12 @@ namespace BsslProcurement.Migrations
                     b.HasOne("DcProcurement.CompanyInfo", "CompanyInfo")
                         .WithMany("PrequalificationJobs")
                         .HasForeignKey("CompanyInfoId")
-                        .OnDelete(DeleteBehavior.Cascade);
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
-                    b.HasOne("DcProcurement.Staff", "Staff")
+                    b.HasOne("DcProcurement.Staff", null)
                         .WithMany("AssignedPrequalificationJobs")
-                        .HasForeignKey("StaffId");
+                        .HasForeignKey("StaffId1");
                 });
 
             modelBuilder.Entity("DcProcurement.VendorUser", b =>
