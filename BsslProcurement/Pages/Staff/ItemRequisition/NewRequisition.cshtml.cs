@@ -56,7 +56,7 @@ namespace BsslProcurement.Pages.Staff.ItemRequisition
         [BindProperty]
         public Requisition Requisition { get; set; }
         public List<SelectListItem> UnitsOfMeasurementList { get; set; }
-        public List<WorkFlowApproverViewModel> WfVm { get; set; }
+        public WorkFlowApproverViewModel WfVm { get; set; }
         public NewRequisitionModel(UserManager<User> userManager,
             BSSLSYS_ITF_DEMOContext bsslContext,
             ProcurementDBContext procContext, IWebHostEnvironment environment)
@@ -68,10 +68,16 @@ namespace BsslProcurement.Pages.Staff.ItemRequisition
 
         }
 
-        public async Task OnGetAsync()
+        public async Task OnGetAsync(int? id)
         {
             try
             {
+
+                if (id != null)
+                {
+                    Requisition = _procContext.Requisitions.Find(id);
+                    gridVm = Requisition.RequisitionItems.Select(x => new ItemGridViewModel { RequisitionItem = x}).ToList();
+                }
                 await LoadData();
             }
             catch (Exception ex)
