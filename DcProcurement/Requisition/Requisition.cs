@@ -1,4 +1,5 @@
-﻿using System;
+﻿using DcProcurement.Jobs;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Text;
@@ -16,8 +17,8 @@ namespace DcProcurement
         [Required(ErrorMessage ="Requisition Number is required")]
         public string PRNumber { get; set; }
         public string ProcurementType { get; set; }
-        [Required(ErrorMessage ="Select Date")]
-        public DateTime? Date { get; set; }
+        [Required(ErrorMessage = "Select Date")]
+        public DateTime? Date { get; set; } = DateTime.Now;
         [Required(ErrorMessage = "Select Estimated Delivery Date")]
         public DateTime? DeliveryDate { get; set; }
         [Required(ErrorMessage = "Select Requester Type")]
@@ -43,6 +44,6 @@ namespace DcProcurement
         //default database creation date
         public DateTime DateCreated { get; set; }
         public List<RequisitionItem> RequisitionItems { get; set; }
-       // public List<Attachment> Attachments { get; set; }
+        public List<RequisitionJob> RequisitionJobs { get; set; }
     }
 }

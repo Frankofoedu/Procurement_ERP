@@ -18,7 +18,7 @@ namespace BsslProcurement.UtilityMethods
         /// <param name="_environment"></param>
         /// <param name="folder">storage folder</param>
         /// <returns></returns>
-        public static async Task<List<Attachment>> GetFilePathsFromFilesListAsync(List<IFormFile> files, IHostingEnvironment _environment, string folder)
+        public static async Task<List<Attachment>> GetFilePathsFromMultipleFileListAsync(List<IFormFile> files, IHostingEnvironment _environment, string folder)
         {
             var filePaths = new List< Attachment>();
 
@@ -59,8 +59,8 @@ namespace BsslProcurement.UtilityMethods
                 throw new Exception("An error occured");
             }
 
-
-            return new Attachment { FilePath = file.FileName };
+            
+            return new Attachment { FilePath = Path.Combine(folder, file.FileName) };
         }
     }
 }

@@ -211,6 +211,7 @@
     <script src="~/lib/jquery/dist/jquery.mCustomScrollbar.concat.min.js"></script>
     <script src="~/lib/jqueryui/jquery-ui.min.js"></script>
     <script src="~/lib/bootstrap/dist/js/print.js"></script>
+    <script src="~/js/date.js"></script>
     <script>
         // Use datepicker on the date inputs
         $("input[data-date=date]").datepicker({
@@ -218,12 +219,32 @@
             minDate: new Date(),
             onSelect: function (dateText, inst) {
                 $(inst).val(dateText); // Write the value in the input,
+
                 var id = $(this).data('id');
                 var hidDateField = $('input:hidden[data-id=' + id + ']').first();
-                hidDateField.val(dateText);
+                
+                //get the datepicker date in default format
+                var d = $(this).datepicker('getDate');
+
+                //format the date in asp format
+                var e = $.datepicker.formatDate("mm/dd/yy", d);
+
+                //set asp date field
+                hidDateField.val(e);
             }
         });
+        //$(".datepicker").datepicker({
+        //    dateFormat: "dd/mm/yy",
+        //    onSelect: function (dateText, inst) {
+        //        //alert(dateText);                
+        //        var d = $(this).datepicker('getDate');
 
+        //        var e = $.datepicker.formatDate("mm/dd/yy", d);
+        //        alert(e);
+        //        $(".dateee").val(e);
+        //       //alert(e);
+        //    }
+        //});
 
         // Code below to avoid the classic date-picker
         $("input[data-date=date]").on('click', function () {
