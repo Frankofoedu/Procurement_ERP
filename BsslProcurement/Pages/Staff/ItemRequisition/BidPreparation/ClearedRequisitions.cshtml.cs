@@ -10,10 +10,10 @@ using Microsoft.AspNetCore.Mvc.RazorPages;
 namespace BsslProcurement.Pages.Staff.ItemRequisition.BidPreparation
 {
     [Authorize]
-    public class ClearedRequistionsModel : PageModel
+    public class ClearedRequisitionsModel : PageModel
     {
         private readonly ProcurementDBContext _context;
-        public ClearedRequistionsModel(ProcurementDBContext context)
+        public ClearedRequisitionsModel(ProcurementDBContext context)
         {
             _context = context;
         }
@@ -26,7 +26,7 @@ namespace BsslProcurement.Pages.Staff.ItemRequisition.BidPreparation
 
         public void OnGet()
         {
-
+            Requisitions = new List<Requisition>();
         }
     }
 }
