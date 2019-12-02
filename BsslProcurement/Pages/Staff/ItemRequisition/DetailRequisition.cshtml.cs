@@ -12,7 +12,7 @@ using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.AspNetCore.Mvc.ViewFeatures;
 using Microsoft.EntityFrameworkCore;
 
-namespace BsslProcurement.Pages.Staff.ItemRequisition.ProcCommencement
+namespace BsslProcurement.Pages.Staff.ItemRequisition
 {
     public class DetailRequisitionModel : PageModel
     {
@@ -52,19 +52,6 @@ namespace BsslProcurement.Pages.Staff.ItemRequisition.ProcCommencement
         }
 
 
-        public PartialViewResult OnGetStaffPartial()
-        {
-
-            //get all staff and thier ranks
-            var staffs = _bsslContext.Stafftab.Select(x => new StaffLayoutModel { StaffName = x.Othernames, StaffCode = x.Staffid, Rank = null }).ToList();
-
-
-            //           var  = _bsslContext.Stafftab.ToList();
-            return new PartialViewResult
-            {
-                ViewName = "Modals/_StaffLayout",
-                ViewData = new ViewDataDictionary<List<StaffLayoutModel>>(ViewData, staffs)
-            };
-        }
+      
     }
 }

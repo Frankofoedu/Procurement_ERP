@@ -40,6 +40,7 @@ namespace DcProcurement
         //== true when requisition items has been priced
         public bool isPriced { get; set; }
         public string Status { get; set; }
+        public string LoggedInUserId { get; set; }
 
         //default database creation date
         public DateTime DateCreated { get; set; }

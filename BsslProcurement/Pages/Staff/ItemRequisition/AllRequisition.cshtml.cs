@@ -11,7 +11,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.EntityFrameworkCore;
 
-namespace BsslProcurement.Pages.Staff.ItemRequisition.ProcCommencement
+namespace BsslProcurement.Pages.Staff.ItemRequisition
 {
     [Authorize]
     public class AllRequisitionModel : PageModel
