@@ -289,7 +289,7 @@
                                         </span>
                                     </div>
                                     <div class="col-sm-12">
-                                        <label>Rank : </label>
+                                        <label>Designation : </label>
                                         <span class="d-flex flex-row">
                                             <input class="form-control" asp-for="Requisition.PreparedByRank" readonly id="txtpreparedRank" rows="6" placeholder="" />
                                         </span>
@@ -505,6 +505,10 @@
 
     </div>
 </div>
+
+<input type="hidden" id="hiddenURLRank" value="@Url.Action("GetStaffWithRank", "Staff")" />
+<input type="hidden" id="hiddenURLNoRank" value="@Url.Action("GetStaffNoRank", "Staff")" />
+<input type="hidden" id="uomHiddenURL" value="@Url.Action("GetUOM", "UnitsOfM")" />
 <!--Modal: Name-->
 
 
@@ -558,57 +562,57 @@
 
 
 
-        //loads approver modal
-        $(function () {
-            $('#loadApproverModal').on('click', function () {
-                $('#approverModal').modal("show");
+        ////loads approver modal
+        //$(function () {
+        //    $('#loadApproverModal').on('click', function () {
+        //        $('#approverModal').modal("show");
 
-                $('#ApproverBody').load(this.baseURI + '?handler=ApproverPartial', function () {
-                    $('#Approverspinner').removeClass('d-flex');
-                    $('#Approverspinner').hide();
+        //        $('#ApproverBody').load(this.baseURI + '?handler=ApproverPartial', function () {
+        //            $('#Approverspinner').removeClass('d-flex');
+        //            $('#Approverspinner').hide();
 
-                    $('#btnSubmitApprover').on('click', function () {
-
-
-
-                        $('#approverModal').modal("hide");
-                        return false;
-                    });
-                });
-
-                return false;
-
-            });
-        });
+        //            $('#btnSubmitApprover').on('click', function () {
 
 
 
-        //loads vendor modal
-        $(function () {
-            $('.loadVendorModal').on('click', function () {
-                $('#vendorModal').modal("show");
+        //                $('#approverModal').modal("hide");
+        //                return false;
+        //            });
+        //        });
 
-                //get supplier name textbox
-                var txtToAssign = $('.' + $(this).attr('inputclass') + '');
-                $('#Vendorgrid').load(this.baseURI + '?handler=VendorPartial', function () {
-                    $('#Vendorspinner').removeClass('d-flex');
-                    $('#Vendorspinner').hide();
-                    $('#vendorTable').dataTable();
+        //        return false;
 
-                    $('.btnVendorName').on('click', function () {
-                        //assign staff name textbox
-                        txtToAssign.val($(this).val());
+        //    });
+        //});
 
 
-                        $('#staffModal').modal("hide");
-                        return false;
-                    });
-                });
 
-                return false;
+        ////loads vendor modal
+        //$(function () {
+        //    $('.loadVendorModal').on('click', function () {
+        //        $('#vendorModal').modal("show");
 
-            });
-        });
+        //        //get supplier name textbox
+        //        var txtToAssign = $('.' + $(this).attr('inputclass') + '');
+        //        $('#Vendorgrid').load(this.baseURI + '?handler=VendorPartial', function () {
+        //            $('#Vendorspinner').removeClass('d-flex');
+        //            $('#Vendorspinner').hide();
+        //            $('#vendorTable').dataTable();
+
+        //            $('.btnVendorName').on('click', function () {
+        //                //assign staff name textbox
+        //                txtToAssign.val($(this).val());
+
+
+        //                $('#staffModal').modal("hide");
+        //                return false;
+        //            });
+        //        });
+
+        //        return false;
+
+        //    });
+        //});
 
         //loads Requester modal
         $(function () {
@@ -650,12 +654,13 @@
                 //get staff rank textbox
 
                 var txtRankToAssign = $('#' + $(this).val() + 'Rank');
-                $('#grid').load(this.baseURI + '?handler=StaffPartial', function () {
+                var url = $('#hiddenURLRank').val();
+                $('#grid').load(url, function () {
                     $('#spinner').removeClass('d-flex');
                     $('#spinner').hide();
                     $('#staffTable').dataTable();
 
-                    $('.btnStaffName').on('click', function () {
+                    $('#staffTable').on('click', '.btnStaffName', function () {
                         //assign staff name textbox
                         txtToAssign.val($(this).val());
 
@@ -684,7 +689,8 @@
                 var value = $(this).val();
                 var txtToAssign = $('input[data-value="' + value + '"]');
 
-                $('#UOMgrid').load(this.baseURI + '?handler=UOMPartial', function () {
+                var url = $('#uomHiddenURL').val();
+                $('#UOMgrid').load(url, function () {
                     $('#UOMspinner').removeClass('d-flex');
                     $('#UOMspinner').hide();
                     $('#uomTable').dataTable();
@@ -744,12 +750,12 @@
         function newStepRow(index) {
 
             var html = `<tr>
-                            <td><input type="text" required="" id="gridVm_${index}__RequisitionItem_Description" name="gridVm[${index}].RequisitionItem.Description" value=""></td>
-                            <td><input type="number" required="" oninput="this.value=this.value.replace(/[^0-9]/g,' + ');" data-val="true" data-val-required="The Quantity field is required." id="gridVm_${index}__RequisitionItem_Quantity" name="gridVm[${index}].RequisitionItem.Quantity" value=""></td>
-                            <td><div class="d-flex flex-row"><input type="text" readonly required="" data-value="forUOM ${index}" id="gridVm_${index}__RequisitionItem_UnitOfMeasurement" name="gridVm[${index}].RequisitionItem.UnitOfMeasurement" value=""><button class="btn loadUOMModal ml-1" value="forUOM ${index}" data-toggle="modal" data-target="#uomModal"><i class="fa fa-search"></i></button> </div></td>
-                            <td> <div class="d-flex flex-row"><input data-attachment="${index}" accept=".pdf" class="fileItem" type="file" id="gridVm_${index}__Attachment" name="gridVm[${index}].Attachment"><button data-preview="${index}" class="btnPreviewItemAttachment">Preview</button>  </div></td>
-                            <td><label class="del" onclick="deleteItem();"><i class="fa fa-trash-alt"></i></label></td>
-                            </tr>`;
+                                        <td><input type="text" required="" id="gridVm_${index}__RequisitionItem_Description" name="gridVm[${index}].RequisitionItem.Description" value=""></td>
+                                        <td><input type="number" required="" oninput="this.value=this.value.replace(/[^0-9]/g,' + ');" data-val="true" data-val-required="The Quantity field is required." id="gridVm_${index}__RequisitionItem_Quantity" name="gridVm[${index}].RequisitionItem.Quantity" value=""></td>
+                                        <td><div class="d-flex flex-row"><input type="text" readonly required="" data-value="forUOM ${index}" id="gridVm_${index}__RequisitionItem_UnitOfMeasurement" name="gridVm[${index}].RequisitionItem.UnitOfMeasurement" value=""><button class="btn loadUOMModal ml-1" value="forUOM ${index}" data-toggle="modal" data-target="#uomModal"><i class="fa fa-search"></i></button> </div></td>
+                                        <td> <div class="d-flex flex-row"><input data-attachment="${index}" accept=".pdf" class="fileItem" type="file" id="gridVm_${index}__Attachment" name="gridVm[${index}].Attachment"><button data-preview="${index}" class="btnPreviewItemAttachment">Preview</button>  </div></td>
+                                        <td><label class="del" onclick="deleteItem();"><i class="fa fa-trash-alt"></i></label></td>
+                                        </tr>`;
             $('#requisitionBody').append(html);
         }
     </script>

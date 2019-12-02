@@ -1,6 +1,6 @@
 ﻿@page "{id:int}"
 @using BsslProcurement.UtilityMethods
-@model BsslProcurement.Pages.Staff.ItemRequisition.ProcCommencement.DetailRequisitionModel
+@model BsslProcurement.Pages.Staff.ItemRequisition.DetailRequisitionModel
 @{
     ViewData["Title"] = "DetailRequisition";
 }
@@ -94,30 +94,7 @@ else
                 <div>
                     <div class="">
 
-                        <div class=" panel">
-
-                            <div class="d-flex justify-content-center mb-3">
-
-                                <div class=" panel">
-                                    <div class="text-center mb-3">
-                                        <div class="form-group mb-0">
-                                            <label class="btn btn-outline-dark pl-4">
-                                                <input class="form-check-input" type="radio" asp-for="Requisition.ProcurementType" value="Capital Procurement">
-                                                Capital Procurement
-                                            </label>
-                                            <label class="btn btn-outline-dark pl-4">
-                                                <input class="form-check-input" type="radio" asp-for="Requisition.ProcurementType" value="Recurrent Procurement">
-                                                Recurrent Procurement
-                                            </label>
-                                        </div>
-                                    </div>
-                                </div>
-
-                            </div>
-
-
-
-                        </div>
+                       
                         <div class="row p-2">
                             <div class="col-sm-4">
                                 <div class="form-group">
@@ -148,37 +125,6 @@ else
                                 <div class="form-group">
                                     <label>Required At : </label>
                                     <input class="form-control" readonly value=@Model.Requisition.RequiredAtDepartment />
-
-                                </div>
-                            </div>
-                            <div class="col-sm-4">
-                                <div class="form-group">
-                                    <label>Procurement Method : </label>
-                                    <select class="form-control" asp-items="Constants.Constants.ProcurementMethod" required asp-for="Requisition.ProcurementMethod">
-                                        <option value="">Select Procurement Type</option>
-                                    </select>
-                                </div>
-                            </div>
-                            <div class="col-sm-4">
-                                <div class="form-group">
-                                    <label>Process Type : </label>
-                                    <select class="form-control" required onchange="getERFx(this.value);" asp-for="Requisition.ProcessType">
-                                        <option value="">Select Process Type</option>
-                                        <option value="Internal">Internal</option>
-                                        <option value="External">External</option>
-                                    </select>
-                                </div>
-                            </div>
-                            <div class="col-sm-4">
-                                <div class="form-group">
-                                    <label>eRFx Type : </label>
-                                    <select class="form-control" required asp-for="Requisition.ERFx">
-                                        <option value="">Select eRFx</option>
-                                    </select>
-                                    <div id="staffErfx" hidden style="display:flex">
-                                        <input class="form-control" asp-for="Requisition.ERFx" readonly id="forStaffText" rows="6" placeholder="Pick Staff" />
-                                        <button class="btn loadStaffModal ml-1" value="forStaffText" data-toggle="modal" data-target="#staffModal"><i class="fa fa-search"></i></button>
-                                    </div>
 
                                 </div>
                             </div>
@@ -225,24 +171,10 @@ else
                                             </tr>
 
                                         }
-                                    @*<tfoot>
-                                        <tr>
-                                            <td></td>
-                                            <td class="font-weight-bold text-right">Total Amount : </td>
-                                            <td class="font-weight-bold text-lg-center">@NairaFormat.GetNairaValue(Model.Requisition.RequisitionItems.Sum(x => Convert.ToInt32(x.Amount)))</td>
-                                            <td></td>
-                                        </tr>
-                                    </tfoot>*@
+                                  
                                 </table>
                                 <input type="hidden" id="lastIndex" value="0" />
-                                @*<div class="form-group">
-                                        <div class="row">
-                                            <div class="col-sm-3"> </div>
-                                            <div class="col-sm-6 text-center">
-                                                <button id="btnMore" class="btn btn-outline-primary">New Item</button>
-                                            </div>
-                                        </div>
-                                    </div>*@
+                            
                             </div>
 
 
@@ -288,34 +220,7 @@ else
 
                                 </div>
                             </div>
-                            <div class="col-sm-12 m-4 ">
-                                @*@if (Model.Requisition.Attachments.Count > 0)
-                                    {
-                                        <h5 class="font-weight-bold">Attachments</h5>
-                                        <br>
-                                        <div class="d-flex flex-column">
-                                            <p>
-                                                @foreach (var file in Model.Requisition.Attachments)
-                                                {
-                                                    if (file.FilePath.EndsWith("pdf"))
-                                                    {
-                                                        <a class="fancybox m-5 btn btn-link fas fa-file-pdf" data-fancybox-type="iframe" href="@Url.Content("~/Attachments/" + file.FilePath)">Open PDf Attachment</a>
-                                                    }
-                                                    else
-                                                    {
-                                                        <a class="fancybox m-5" href="@Url.Content("~/Attachments/" + file.FilePath)"><img src="@Url.Content("~/Attachments/" + file.FilePath)" class="img-thumbnail" style="max-width : 10% !important" asp-append-version="true" /></a>
-
-                                                    }
-
-                                                }
-                                            </p>
-
-                                        </div>
-                                    }*@
-
-                            </div>
-
-
+                            
                             <div class="col-sm-12 m-4">
                                 <div class="form-group">
                                     <h5 class="font-weight-bold">Purpose : </h5>
@@ -338,27 +243,7 @@ else
         </div>
     </div>
 
-    <div class="modal" id="staffModal">
-        <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable modal-lg">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h4 class="modal-title">Staff Details</h4>
-                    <button type="button" class="close" data-dismiss="modal">&times;</button>
-                </div>
-                <div class="modal-body">
-                    <div id="grid"></div>
-                </div>
-                <div id="spinner" class="d-flex justify-content-center">
-                    <div class="loader">
-                    </div>
-                </div>
-
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
-                </div>
-            </div>
-        </div>
-    </div>
+    
 }
 
 @section Scripts{
@@ -369,40 +254,6 @@ else
     <script src="~/js/quill.js"></script>
     <script>
 
-        //to load staff modal
-        $(function () {
-            $('.loadStaffModal').on('click', function () {
-                $('#grid').empty();
-                $('#spinner').addClass('d-flex');
-                $('#spinner').show();
-                $('#staffModal').modal("show");
-
-                //get staff name textbox
-                var txtToAssign = $('#' + $(this).val() + '');
-                //get staff rank textbox
-
-                var txtRankToAssign = $('#' + $(this).val() + 'Rank');
-                $('#grid').load(this.baseURI + '?handler=StaffPartial', function () {
-                    $('#spinner').removeClass('d-flex');
-                    $('#spinner').hide();
-                    $('#staffTable').dataTable();
-
-                    $('.btnStaffName').on('click', function () {
-                        //assign staff name textbox
-                        txtToAssign.val($(this).val());
-
-                        //assign staff rank textbox
-                        txtRankToAssign.val($(this).attr('staffrank'));
-
-                        //$('#forStaffText').val();
-                        $('#staffModal').modal("hide");
-                        return false;
-                    });
-                });
-
-                return false;
-            });
-        });
 
         $(document).ready(function () {
             $(".fancybox").fancybox({
@@ -421,27 +272,7 @@ else
             var purposeField = document.getElementById('editor');
             purposeField.innerHTML = purposeValue;
 
-        })
-
-
-        function getERFx(processType) {
-            if (processType == "Internal") {
-                $('#Requisition_ERFx').attr('hidden', true);
-                $('#staffErfx').attr('hidden', false);
-
-            } else if (processType == "External") {
-
-                $('#Requisition_ERFx').attr('hidden', false);
-                $('#staffErfx').attr('hidden', true);
-                $('#Requisition_ERFx').append(
-                    $('<option>', { value: 'RFQ ID', text: 'RFQ ID – Request for Quotation' }),
-                    $('<option>', { value: 'RFP ID', text: 'RFP ID – Request for Proposal ' }),
-                    $('<option>', { value: 'RFI ID', text: 'RFI ID – Request for Information' }),
-                    $('<option>', { value: 'RFT ID', text: 'RFT ID – Request for Tender' })
-                );
-            }
-        }
-
+        });
     </script>
 
 }

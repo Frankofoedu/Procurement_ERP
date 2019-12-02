@@ -40,6 +40,15 @@ namespace BsslProcurement.Controllers.PartialViews
             };
         }
 
+        public async Task<PartialViewResult> GetStaffNoRank()
+        {
+            var staffs = await staffLayoutViewModelService.GetAllStaffNoRank();
 
+            return new PartialViewResult
+            {
+                ViewName = "Modals/_StaffLayout",
+                ViewData = new ViewDataDictionary<List<StaffLayoutModel>>(ViewData, staffs)
+            };
+        }
     }
 }

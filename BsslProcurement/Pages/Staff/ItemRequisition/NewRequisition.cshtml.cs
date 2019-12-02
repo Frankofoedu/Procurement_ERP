@@ -16,6 +16,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.AspNetCore.Mvc.ViewFeatures;
+using Microsoft.EntityFrameworkCore;
 
 namespace BsslProcurement.Pages.Staff.ItemRequisition
 {
@@ -55,7 +56,6 @@ namespace BsslProcurement.Pages.Staff.ItemRequisition
 
         [BindProperty]
         public Requisition Requisition { get; set; }
-        public List<SelectListItem> UnitsOfMeasurementList { get; set; }
         public WorkFlowApproverViewModel WfVm { get; set; }
         public NewRequisitionModel(UserManager<User> userManager,
             BSSLSYS_ITF_DEMOContext bsslContext,
@@ -78,6 +78,14 @@ namespace BsslProcurement.Pages.Staff.ItemRequisition
                     Requisition = _procContext.Requisitions.Find(id);
                     gridVm = Requisition.RequisitionItems.Select(x => new ItemGridViewModel { RequisitionItem = x}).ToList();
                 }
+
+                //load requisition workflow
+                var workflow = _procContext.WorkflowTypes.FirstOrDefault(x => x.Name == "Requisition");
+
+                if (workflow != null)
+                {
+                    WfVm = new WorkFlowApproverViewModel { WorkFlowTypeId = workflow.Id };
+                }
                 await LoadData();
             }
             catch (Exception ex)
@@ -95,7 +103,7 @@ namespace BsslProcurement.Pages.Staff.ItemRequisition
                 {
                     await SaveOrSubmitData(true);  
                     Message = "Requisition Added successfully";
-                    return Page();
+                    return RedirectToPage("AllRequisition");
                 }
                 catch (Exception ex)
                 {
@@ -114,7 +122,7 @@ namespace BsslProcurement.Pages.Staff.ItemRequisition
                 {
                     await SaveOrSubmitData(false);
                     Message = "Requisition Saved For Later";
-                    return Page();
+                    return RedirectToPage("AllRequisition");
                 }
                 catch (Exception ex)
                 {
@@ -129,8 +137,10 @@ namespace BsslProcurement.Pages.Staff.ItemRequisition
 
         private async Task LoadData()
         {
-            UnitsOfMeasurementList = _bsslContext.UnitOfMeasurements.Select(x => new SelectListItem { Text= x.Uname, Value = x.Ucode }).ToList();
-            (PrNo, RequestingDeptCode, RequestingDept, Departments) = await GeneratePRNo();
+
+            //get current logged in user
+          var loggedInUserCode = (await GetCurrentUserAsync()).Id;
+            (PrNo, RequestingDeptCode, RequestingDept, Departments) = await GeneratePRNo(loggedInUserCode);
         }
 
         private async Task SaveOrSubmitData(bool isSubmitted)
@@ -139,6 +149,7 @@ namespace BsslProcurement.Pages.Staff.ItemRequisition
             Requisition.RequisitionItems = await GetRequisitionItemsFromViewModel(gridVm);   
                        
             Requisition.isSubmitted = isSubmitted;
+            Requisition.LoggedInUserId = (await GetCurrentUserAsync()).Id;
 
             _procContext.Requisitions.Add(Requisition);
             _procContext.PRNos.Add(new PRNo { RequisitionCode = Requisition.PRNumber, LastUsedSerialNo = serialNo });
@@ -167,20 +178,20 @@ namespace BsslProcurement.Pages.Staff.ItemRequisition
             return reList;
         }
 
-        public PartialViewResult OnGetStaffPartial()
-        {
+        //public PartialViewResult OnGetStaffPartial()
+        //{
 
-            //get all staff and thier ranks
-            var staffs = _bsslContext.Stafftab.Select(x => new StaffLayoutModel { StaffName = x.Othernames,StaffCode = x.Staffid, Rank = _bsslContext.Codestab.FirstOrDefault(m => m.Option1 == "f4" && m.Code == x.Positionid).Desc1 }).ToList();
+        //    //get all staff and thier ranks
+        //    var staffs = _bsslContext.Stafftab.Select(x => new StaffLayoutModel { StaffName = x.Othernames,StaffCode = x.Staffid, Rank = _bsslContext.Codestab.FirstOrDefault(m => m.Option1 == "f4" && m.Code == x.Positionid).Desc1 }).ToList();
 
 
-            //var  = _bsslContext.Stafftab.ToList();
-            return new PartialViewResult
-            {
-                ViewName = "Modals/_StaffLayout",
-                ViewData = new ViewDataDictionary<List<StaffLayoutModel>>(ViewData, staffs)
-            };
-        }
+        //    //var  = _bsslContext.Stafftab.ToList();
+        //    return new PartialViewResult
+        //    {
+        //        ViewName = "Modals/_StaffLayout",
+        //        ViewData = new ViewDataDictionary<List<StaffLayoutModel>>(ViewData, staffs)
+        //    };
+        //}
 
         public PartialViewResult OnGetVendorPartial()
         {
@@ -250,28 +261,13 @@ namespace BsslProcurement.Pages.Staff.ItemRequisition
                 ViewData = new ViewDataDictionary<List<requesterObj>>(ViewData, requesters)
             };
         }
-        public PartialViewResult OnGetUOMPartial()
+       
+
+        private async Task<(string, string, string, List<SelectListItem>)> GeneratePRNo(string userId)
         {
-
-            //get all vendor 
-            var uomList = _bsslContext.UnitOfMeasurements.ToList();
-
-
-            //           var  = _bsslContext.Stafftab.ToList();
-            return new PartialViewResult
-            {
-                ViewName = "Modals/_UOMLayout",
-                ViewData = new ViewDataDictionary<List<UnitOfMeasurement>>(ViewData, uomList)
-            };
-        }
-
-        private async Task<(string, string, string, List<SelectListItem>)> GeneratePRNo()
-        {
-            //get current logged in user
-            var u = await GetCurrentUserAsync();
 
             //get staff object
-            var user = _procContext.Staffs.Find(u.Id);
+            var user = _procContext.Staffs.Find(userId);
 
 
             //get current user details from staff table. From the fucking staff table
