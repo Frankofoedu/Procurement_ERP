@@ -5,9 +5,6 @@
 @inject IWorkFlowService  WorkflowService
 @model WorkFlowApproverViewModel
 
-@{
-    List<SelectListItem> ActionTypeItems = (await WorkflowService.GetNextWorkActionflowSteps(Model.WorkFlowTypeId, Model.WorkflowStep)).Select(m => new SelectListItem { Value = m.Id.ToString(), Text = m.Name }).ToList();
-}
 
 <style>
     .workflowloader {
@@ -31,58 +28,74 @@
     }
 </style>
 
-<div class="row">
-    <div class="col-12">
-        <div class="form-group">
-            <label>Next Authority : </label>
-            <select class="form-control" id="selectAction" asp-items="ActionTypeItems" asp-for="WorkFlowActionId">
-                <option value="">--Select--</option>
-            </select>
+@* checks if the workflow has been setup *@
+@if (Model != null)
+{
+
+
+    List<SelectListItem> ActionTypeItems = (await WorkflowService.GetNextWorkActionflowSteps(Model.WorkFlowTypeId.Value, Model.WorkflowStep)).Select(m => new SelectListItem { Value = m.Id.ToString(), Text = m.Name }).ToList();
+
+    <div class="row">
+        <div class="col-12">
+            <div class="form-group">
+                <label>Next Authority : </label>
+                <select class="form-control" id="selectAction" asp-items="ActionTypeItems" asp-for="WorkFlowActionId">
+                    <option value="">--Select--</option>
+                </select>
+            </div>
+        </div>
+        <div class="col-sm-12">
+            <label>Staff Id : </label>
+            <span class="d-flex flex-row">
+                <input Id="txtWorkflowStaffCode" asp-for="AssignedStaffCode" class="form-control" readonly />
+                <button class="btn loadWorkflowStaffModal"><i class="fa fa-search"></i></button>
+            </span>
+        </div>
+        <div class="col-sm-12">
+            <label>Staff Name : </label>
+            <span class="d-flex flex-row">
+                <input class="form-control" asp-for="AssignedStaffName" readonly Id="txtWorkflowStaffName" />
+            </span>
+        </div>
+        <div class="col-sm-12">
+            <label>Designation : </label>
+            <span class="d-flex flex-row">
+                <input class="form-control" readonly Id="txtWorkflowStaffDesignation" />
+            </span>
         </div>
     </div>
-    <div class="col-sm-12">
-        <label>Staff Id : </label>
-        <span class="d-flex flex-row">
-            <input Id="txtWorkflowStaffCode" asp-for="AssignedStaffCode" class="form-control" readonly />
-            <button class="btn loadWorkflowStaffModal"><i class="fa fa-search"></i></button>
-        </span>
-    </div>
-    <div class="col-sm-12">
-        <label>Staff Name : </label>
-        <span class="d-flex flex-row">
-            <input class="form-control" asp-for="AssignedStaffName" readonly Id="txtWorkflowStaffName" />
-        </span>
-    </div>
-    <div class="col-sm-12">
-        <label>Designation : </label>
-        <span class="d-flex flex-row">
-            <input class="form-control" readonly Id="txtWorkflowStaffDesignation" />
-        </span>
-    </div>
-</div>
 
-<div class="modal" id="staffWorkflowModal">
-    <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable modal-lg">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h4 class="modal-title">Staff Details</h4>
-                <button type="button" class="close" data-dismiss="modal">&times;</button>
-            </div>
-            <div class="modal-body">
-                <div id="workflowgrid"></div>
-            </div>
-            <div id="workflowspinner" class="d-flex justify-content-center">
-                <div class="workflowloader">
+    <div class="modal" id="staffWorkflowModal">
+        <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h4 class="modal-title">Staff Details</h4>
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                </div>
+                <div class="modal-body">
+                    <div id="workflowgrid"></div>
+                </div>
+                <div id="workflowspinner" class="d-flex justify-content-center">
+                    <div class="workflowloader">
+                    </div>
+                </div>
+
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
                 </div>
             </div>
-
-            <div class="modal-footer">
-                <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
-            </div>
         </div>
     </div>
-</div>
-<input type="hidden" id="hiddenURL" value="@Url.Action("GetStaffWorkflowPartial", "Staff", new { id = "*id*" })" />
+    <input type="hidden" id="hiddenURL" value="@Url.Action("GetStaffWorkflowPartial", "Staff",  new { id = "*id*" })")" />
+}
+else
+{
+    <div class="alert alert-danger alert-dismissable fade show">
+        <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+        Workflow Has not been setup. Please setup workflow
+    </div>
+}
+
 <script>
 
     //to load staff modal for selecting next workflow staff
