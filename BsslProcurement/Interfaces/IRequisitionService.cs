@@ -10,5 +10,6 @@ namespace BsslProcurement.Interfaces
     {
         Task<List<Requisition>> GetRequisitionsForLoggedInUser(string userId);
 
+        Task<List<Requisition>> GetBudgetClearedRequisitions();
     }
 }

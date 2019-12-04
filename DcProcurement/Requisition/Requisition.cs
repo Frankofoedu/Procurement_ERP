@@ -39,6 +39,8 @@ namespace DcProcurement
         public string ERFx { get; set; }
         //== true when requisition items has been priced
         public bool isPriced { get; set; }
+        //== true when requisition has passed budget clearing stage
+        public bool? isBudgetCleared { get; set; }
         public string Status { get; set; }
         public string LoggedInUserId { get; set; }
 
