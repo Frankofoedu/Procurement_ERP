@@ -62,6 +62,9 @@ namespace DcProcurement
         #region Requisition Tables
         public DbSet<Requisition> Requisitions { get; set; }
         public DbSet<RequisitionItem> RequisitionItems { get; set; }
+        public DbSet<ERFXSetup> ERFXSetups { get; set; }
+        public DbSet<TechnicalERFXSetup> TechnicalERFXSetups { get; set; }
+        public DbSet<FinancialERFXSetup> FinancialERFXSetups { get; set; }
         #endregion
 
         public DbSet<Attachment> Attachments { get; set; }

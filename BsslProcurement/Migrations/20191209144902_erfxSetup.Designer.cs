@@ -4,14 +4,16 @@ using DcProcurement;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace BsslProcurement.Migrations
 {
     [DbContext(typeof(ProcurementDBContext))]
-    partial class ProcurementDBContextModelSnapshot : ModelSnapshot
+    [Migration("20191209144902_erfxSetup")]
+    partial class erfxSetup
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -176,7 +178,7 @@ namespace BsslProcurement.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("ERFXSetups");
+                    b.ToTable("ERFXSetup");
                 });
 
             modelBuilder.Entity("DcProcurement.EquipmentDetails", b =>
@@ -256,7 +258,7 @@ namespace BsslProcurement.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("FinancialERFXSetups");
+                    b.ToTable("FinancialERFXSetup");
                 });
 
             modelBuilder.Entity("DcProcurement.Item", b =>
@@ -625,9 +627,9 @@ namespace BsslProcurement.Migrations
                         new
                         {
                             Id = 22,
-                            Date = new DateTime(2019, 12, 9, 15, 54, 30, 389, DateTimeKind.Local).AddTicks(4976),
+                            Date = new DateTime(2019, 12, 9, 15, 49, 1, 742, DateTimeKind.Local).AddTicks(4131),
                             DateCreated = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            DeliveryDate = new DateTime(2019, 12, 9, 15, 54, 30, 389, DateTimeKind.Local).AddTicks(5837),
+                            DeliveryDate = new DateTime(2019, 12, 9, 15, 49, 1, 742, DateTimeKind.Local).AddTicks(4914),
                             Description = "sample requisition",
                             PRNumber = "000222",
                             PreparedBy = "John O",
@@ -737,7 +739,7 @@ namespace BsslProcurement.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("TechnicalERFXSetups");
+                    b.ToTable("TechnicalERFXSetup");
                 });
 
             modelBuilder.Entity("DcProcurement.User", b =>
