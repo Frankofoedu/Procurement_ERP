@@ -112,6 +112,7 @@ namespace BsslProcurement
 
             services.AddRazorPages().AddRazorRuntimeCompilation();
             services.AddControllers();
+            
             services.AddSwaggerGen(c =>
             {
                 c.SwaggerDoc("v1", new OpenApiInfo { Title = "My API", Version = "v1" });
@@ -146,7 +147,8 @@ namespace BsslProcurement
                 endpoints.MapRazorPages();
                 endpoints.MapControllers();
             });
-           // Enable middleware to serve generated Swagger as a JSON endpoint.
+            // Enable middleware to serve generated Swagger as a JSON endpoint.
+            app.UseSwagger();
             app.UseSwaggerUI(c =>
             {
                 c.SwaggerEndpoint("/swagger/v1/swagger.json", "My API V1");
