@@ -11,6 +11,7 @@ namespace BsslProcurement.Controllers.PartialViews
 {
 
     [Route("[controller]/[action]")]
+    [ApiExplorerSettings(IgnoreApi = true)]
     public class UnitsOfMController : Controller
     {
         private BSSLSYS_ITF_DEMOContext bsslContext;
