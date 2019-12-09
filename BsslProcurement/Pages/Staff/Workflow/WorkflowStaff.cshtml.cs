@@ -96,21 +96,5 @@ namespace BsslProcurement.Pages.Staff.Workflow
 
 
 
-
-
-        public PartialViewResult OnGetStaffPartial()
-        {
-            //get all staff and thier ranks
-            
-            ///TODO
-            var staffs = _bsslContext.Stafftab.Select(x => new StaffLayoutModel { StaffName = x.Othernames, StaffCode = x.Staffid, Rank = _bsslContext.Codestab.FirstOrDefault(m => m.Option1 == "f4" && m.Code == x.Positionid).Desc1 }).ToList();
-
-            return new PartialViewResult
-            {
-                ViewName = "Modals/_StaffLayout",
-                ViewData = new ViewDataDictionary<List<StaffLayoutModel>>(ViewData, staffs)
-            };
-        }
-
     }
 }
