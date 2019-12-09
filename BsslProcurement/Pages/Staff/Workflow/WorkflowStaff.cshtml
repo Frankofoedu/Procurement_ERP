@@ -56,11 +56,11 @@
                         {
                             var item = Model.WorkflowStaffs[i];
 
-                            <tr>
-                                <td>@(i+1)</td>
+                        <tr>
+                            <td>@(i+1)</td>
 
-                                <td>@item.Staff.Name</td>
-                            </tr>
+                            <td>@item.Staff.Name</td>
+                        </tr>
                         }
                     </tbody>
                 </table>
@@ -83,17 +83,17 @@
 
             @if (!string.IsNullOrWhiteSpace(Model.Message))
             {
-                <div class="alert alert-success alert-dismissable fade show">
-                    <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                    @Model.Message
-                </div>
+            <div class="alert alert-success alert-dismissable fade show">
+                <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                @Model.Message
+            </div>
             }
             @if (!string.IsNullOrWhiteSpace(Model.Error))
             {
-                <div class="alert alert-danger alert-dismissable fade show">
-                    <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                    @Model.Error
-                </div>
+            <div class="alert alert-danger alert-dismissable fade show">
+                <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                @Model.Error
+            </div>
             }
 
             <div asp-validation-summary="All" class="text-danger"></div>
@@ -165,12 +165,13 @@
     </div>
 </div>
 
+<input type="hidden" id="hiddenURLNoRank" value="@Url.Action("GetStaffNoRank", "Staff")" />
 @section Scripts{
 
     <script src="~/js/jquery.dataTables.min.js"></script>
 
     <script>
-        
+
         $(document).ready(function () {
 
             //function fetchWorkflows() {
@@ -231,15 +232,36 @@
                 $('#spinner').show();
                 $('#staffModal').modal("show");
 
-                $('#grid').load(this.baseURI + '&handler=StaffPartial', function () {
+                var url = $('#hiddenURLNoRank').val();
+                $('#grid').load(url, function () {
                     $('#spinner').removeClass('d-flex');
                     $('#spinner').hide();
                     $('#staffTable').dataTable();
 
                     $('.btnStaffName').on('click', function () {
                         //assign staff Id textbox
-                        $('.staffCodeInput').val($(this).text());
+                        var code = $(this).text();
+                        $('.staffCodeInput').val(code);
 
+        //code to get the staff rank
+                        $.ajax({
+                            type: "GET",
+                            url: `/api/Users/GetStaffRank/${code}`,
+                            contentType: "application/json; charset=utf-8",
+                            success: function (data) {
+                                //alert(JSON.stringify(data));                  
+                               
+                                console.log(data);
+                            }, //End of AJAX Success function  
+
+                            failure: function (data) {
+                                alert(data.responseText);
+                            }, //End of AJAX failure function  
+                            error: function (data) {
+                                alert(data.responseText);
+                            } //End of AJAX error function  
+
+                        });    
                         //assign staff name textbox
                         $('.staffNameInput').val($(this).val());
 

@@ -4,14 +4,16 @@ using DcProcurement;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace BsslProcurement.Migrations
 {
     [DbContext(typeof(ProcurementDBContext))]
-    partial class ProcurementDBContextModelSnapshot : ModelSnapshot
+    [Migration("20191204150922_workflow_setup")]
+    partial class workflow_setup
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -160,25 +162,6 @@ namespace BsslProcurement.Migrations
                     b.HasDiscriminator<string>("Discriminator").HasValue("Criteria");
                 });
 
-            modelBuilder.Entity("DcProcurement.ERFXSetup", b =>
-                {
-                    b.Property<int>("Id")
-                        .HasColumnType("int");
-
-                    b.Property<int>("BidType")
-                        .HasColumnType("int");
-
-                    b.Property<DateTime?>("ErfxDate")
-                        .HasColumnType("datetime2");
-
-                    b.Property<string>("ProjectTitle")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("ERFXSetups");
-                });
-
             modelBuilder.Entity("DcProcurement.EquipmentDetails", b =>
                 {
                     b.Property<int>("Id")
@@ -241,22 +224,6 @@ namespace BsslProcurement.Migrations
                     b.HasIndex("CompanyInfoId");
 
                     b.ToTable("ExperienceRecord");
-                });
-
-            modelBuilder.Entity("DcProcurement.FinancialERFXSetup", b =>
-                {
-                    b.Property<int>("Id")
-                        .HasColumnType("int");
-
-                    b.Property<DateTime?>("BidEndDate")
-                        .HasColumnType("datetime2");
-
-                    b.Property<DateTime?>("BidStartDate")
-                        .HasColumnType("datetime2");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("FinancialERFXSetups");
                 });
 
             modelBuilder.Entity("DcProcurement.Item", b =>
@@ -608,9 +575,6 @@ namespace BsslProcurement.Migrations
                     b.Property<string>("Status")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<bool?>("isBudgetCleared")
-                        .HasColumnType("bit");
-
                     b.Property<bool>("isPriced")
                         .HasColumnType("bit");
 
@@ -625,9 +589,9 @@ namespace BsslProcurement.Migrations
                         new
                         {
                             Id = 22,
-                            Date = new DateTime(2019, 12, 9, 15, 54, 30, 389, DateTimeKind.Local).AddTicks(4976),
+                            Date = new DateTime(2019, 12, 4, 16, 9, 20, 428, DateTimeKind.Local).AddTicks(1701),
                             DateCreated = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            DeliveryDate = new DateTime(2019, 12, 9, 15, 54, 30, 389, DateTimeKind.Local).AddTicks(5837),
+                            DeliveryDate = new DateTime(2019, 12, 4, 16, 9, 20, 428, DateTimeKind.Local).AddTicks(3344),
                             Description = "sample requisition",
                             PRNumber = "000222",
                             PreparedBy = "John O",
@@ -722,22 +686,6 @@ namespace BsslProcurement.Migrations
                     b.HasIndex("CriteriaId");
 
                     b.ToTable("SubmittedCriteria");
-                });
-
-            modelBuilder.Entity("DcProcurement.TechnicalERFXSetup", b =>
-                {
-                    b.Property<int>("Id")
-                        .HasColumnType("int");
-
-                    b.Property<DateTime?>("BidEndDate")
-                        .HasColumnType("datetime2");
-
-                    b.Property<DateTime?>("BidStartDate")
-                        .HasColumnType("datetime2");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("TechnicalERFXSetups");
                 });
 
             modelBuilder.Entity("DcProcurement.User", b =>
@@ -1182,15 +1130,6 @@ namespace BsslProcurement.Migrations
                         .IsRequired();
                 });
 
-            modelBuilder.Entity("DcProcurement.ERFXSetup", b =>
-                {
-                    b.HasOne("DcProcurement.Requisition", "Requisition")
-                        .WithOne("ERFXSetup")
-                        .HasForeignKey("DcProcurement.ERFXSetup", "Id")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-                });
-
             modelBuilder.Entity("DcProcurement.EquipmentDetails", b =>
                 {
                     b.HasOne("DcProcurement.CompanyInfo", "CompanyInfo")
@@ -1205,15 +1144,6 @@ namespace BsslProcurement.Migrations
                     b.HasOne("DcProcurement.CompanyInfo", "CompanyInfo")
                         .WithMany("ExperienceRecords")
                         .HasForeignKey("CompanyInfoId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-                });
-
-            modelBuilder.Entity("DcProcurement.FinancialERFXSetup", b =>
-                {
-                    b.HasOne("DcProcurement.ERFXSetup", "ERFXSetup")
-                        .WithOne("FinancialERFXSetup")
-                        .HasForeignKey("DcProcurement.FinancialERFXSetup", "Id")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
                 });
@@ -1289,15 +1219,6 @@ namespace BsslProcurement.Migrations
                     b.HasOne("DcProcurement.Criteria", "Criteria")
                         .WithMany()
                         .HasForeignKey("CriteriaId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-                });
-
-            modelBuilder.Entity("DcProcurement.TechnicalERFXSetup", b =>
-                {
-                    b.HasOne("DcProcurement.ERFXSetup", "ERFXSetup")
-                        .WithOne("TechnicalERFXSetup")
-                        .HasForeignKey("DcProcurement.TechnicalERFXSetup", "Id")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
                 });

@@ -10,6 +10,7 @@ using Microsoft.AspNetCore.Mvc.ViewFeatures;
 namespace BsslProcurement.Controllers.PartialViews
 {
     [Route("[controller]/[action]")]
+    [ApiExplorerSettings(IgnoreApi = true)]
     public class StaffController : Controller
     {
         private readonly IStaffLayoutViewModelService staffLayoutViewModelService;
@@ -17,6 +18,7 @@ namespace BsslProcurement.Controllers.PartialViews
         {
             staffLayoutViewModelService = _staffLayoutViewModelService;
         }
+        
         public async Task<PartialViewResult> GetStaffWorkflowPartial(int id)
         {
             var staffs = await staffLayoutViewModelService.GetAllStaffInWorkFlow(id);
