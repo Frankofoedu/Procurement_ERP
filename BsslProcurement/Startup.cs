@@ -70,6 +70,7 @@ namespace BsslProcurement
             services.AddTransient<IStaffLayoutViewModelService, StaffLayoutViewModelService>();
             services.AddTransient<IWorkFlowService, WorkFlowService>();
             services.AddTransient<IItemGridViewModelService, ItemGridViewModelService>();
+            services.AddTransient<IRequisitionService, RequisitionService>();
 
             services.AddIdentity<User, IdentityRole>(config =>
             {

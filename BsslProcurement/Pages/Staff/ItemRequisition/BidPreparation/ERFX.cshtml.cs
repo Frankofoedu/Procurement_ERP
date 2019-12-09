@@ -10,10 +10,10 @@ using Microsoft.AspNetCore.Mvc.RazorPages;
 namespace BsslProcurement.Pages.Staff.ItemRequisition.BidPreparation
 {
     [Authorize]
-    public class ClearedRequistionsModel : PageModel
+    public class ERFXModel : PageModel
     {
         private readonly ProcurementDBContext _context;
-        public ClearedRequistionsModel(ProcurementDBContext context)
+        public ERFXModel(ProcurementDBContext context)
         {
             _context = context;
         }
@@ -21,12 +21,15 @@ namespace BsslProcurement.Pages.Staff.ItemRequisition.BidPreparation
         public string Message { get; set; }
         public string Error { get; set; }
 
-        [BindProperty]
-        public List<Requisition> Requisitions { get; set; }
-
-        public void OnGet()
+        public void OnGet(int? reqId)
         {
+            if (reqId == null)
+            {
+                Error = "No Requisition was Selected.";
+                return;
+            }
 
+            var requisition = _context.Requisitions.Find(reqId.Value);
         }
     }
 }

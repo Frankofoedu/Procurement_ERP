@@ -1,12 +1,12 @@
 ﻿@page
-@model BsslProcurement.Pages.Staff.ItemRequisition.BidPreparation.ClearedRequistionsModel
+@model BsslProcurement.Pages.Staff.ItemRequisition.BidPreparation.ClearedRequisitionsModel
 @{
-    ViewData["Title"] = "Cleared Requistions";
+    ViewData["Title"] = "Cleared Requisitions";
 }
 
 <div class="row mt-5">
     <div class="col-md-1"></div>
-    <div class="col-md-11">
+    <div class="col-md-10">
         <form method="post" class="panel panel-login">
             <div class="panel-heading">
                 <div class="row">
@@ -31,6 +31,33 @@
                 </div>
             }
 
+        <div class="row">
+            <div class="col-md-4">
+                <div class="form-group form-inline">
+                    <label>PRQ No : &nbsp;</label>
+                    <select id="" class="form-control" >
+                        <option>--Select--</option>
+                    </select>
+                </div>
+            </div>
+            <div class="col-md-8">
+                <div class="row">
+                    <div class="col-12">
+                        <div class="form-group form-inline justify-content-end">
+                            <label>Requesting Dept : &nbsp;</label>
+                            <input id="" class="form-control" />
+                            <input id="" class="form-control" />
+                        </div>
+                    </div>
+                    <div class="col-12">
+                        <div class="form-group form-inline justify-content-end">
+                            <label>Est. Cost Amount : &nbsp;</label>
+                            <input id="" class="form-control" />
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
             <div class="row pt-3 " style="">
                 <div class="col-12 table-responsive table-responsive-sm">
                     <table class="table  table-striped">
@@ -53,6 +80,7 @@
                                 <th>eRFX Type</th>
                                 <th>Approving Remark</th>
                                 <th>Budget Year</th>
+                                <th>View PRQ</th>
                             </tr>
                         </thead>
 
@@ -61,18 +89,24 @@
                             @for (int i = 0; i < Model.Requisitions.Count; i++)
                             {
                                 var item = Model.Requisitions[i];
-                                <tr>
-                                    <td>@(i + 1)</td>
-                                    <td>@item.PRNumber</td>
-                                    <td>@item.Description</td>
-                                    <td>@(((DateTime)item.DeliveryDate).ToShortDateString())</td>
-                                    <td>@item.RequisitionItems.Count</td>
-                                    <td>@item.RequiredAtDepartment</td>
-                                    <td>@item.PreparedBy</td>
-                                    <td>@item.RequisitionItems.Sum(x => x.UnitPrice * x.Quantity)</td>
-                                    <td>@item.Status</td>
-                                    <td><a asp-page="./DetailRequisition" asp-route-id="@item.Id" style="color: #007bff">View</a></td>
-                                </tr>
+                            <tr>
+                                <td>@(i + 1)</td>
+                                <td>@item.Description</td>
+                                <td>@item.RequesterValue</td>
+                                <td>@item.PreparedBy</td>
+                                <td>@(((DateTime)item.DateCreated).ToShortDateString())</td>
+                                <td>@(((DateTime)item.DeliveryDate).ToShortDateString())</td>
+                                <td>--</td>
+                                <td>--</td>
+                                <td>@item.ProcurementType</td>
+                                <td>@item.ProcurementType</td>
+                                <td>@item.ProcurementMethod</td>
+                                <td>@item.ProcessType</td>
+                                <td>@item.ERFx</td>
+                                <td>--</td>
+                                <td>--</td>
+                                <td><a asp-page="./DetailRequisition" asp-route-id="@item.Id" style="color: #007bff">View PRQ</a></td>
+                            </tr>
                             }
 
                         </tbody>

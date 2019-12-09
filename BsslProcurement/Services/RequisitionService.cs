@@ -19,5 +19,9 @@ namespace BsslProcurement.Services
         {
             return _procurementDBContext.Requisitions.Include(x => x.RequisitionItems).Where(p => p.LoggedInUserId == userId).ToListAsync();
         }
+        public Task<List<Requisition>> GetBudgetClearedRequisitions()
+        {
+            return _procurementDBContext.Requisitions.Include(x => x.RequisitionItems).Where(p => p.isBudgetCleared==true).ToListAsync();
+        }
     }
 }

@@ -1,0 +1,269 @@
+﻿@page
+@model BsslProcurement.Pages.Staff.ItemRequisition.BidPreparation.ERFXModel
+@{
+    ViewData["Title"] = "ERFX";
+}
+
+<div class="row mt-5">
+    <div class="col-md-1"></div>
+    <div class="col-md-11">
+        <form method="post" class="panel panel-login">
+            <div class="panel-heading">
+                <div class="row">
+                    <p class="header-text">@ViewData["Title"]</p>
+                </div>
+                <hr>
+            </div>
+            <div asp-validation-summary="All" class="text-danger"></div>
+
+            @if (!string.IsNullOrWhiteSpace(Model.Message))
+            {
+                <div class="alert alert-success alert-dismissable fade show">
+                    <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                    @Model.Message
+                </div>
+            }
+            @if (!string.IsNullOrWhiteSpace(Model.Error))
+            {
+                <div class="alert alert-danger alert-dismissable fade show">
+                    <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                    @Model.Error
+                </div>
+            }
+
+            <div class="row">
+                <div class="col-sm-6">
+                    <div class="row">
+                        <div class="col-sm-4 text-right">
+                            <label>eRFx No : </label>
+                        </div>
+                        <div class="col-sm-7">
+                            <div class="form-group">
+                                <input id="" class="form-control" />
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-sm-6">
+                    <div class="row">
+                        <div class="col-sm-4 text-right">
+                            <label>eRFx Date : </label>
+                        </div>
+                        <div class="col-sm-7">
+                            <div class="form-group">
+                                <input id="" class="form-control" />
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+                    <div class="row">
+                        <div class="col-sm-12">
+                            <div class="row">
+                                <div class="col-sm-2 text-right">
+                                    <label>Project Title : </label>
+                                </div>
+                                <div class="col-sm-9">
+                                    <div class="form-group">
+                                        <input id="" class="form-control" />
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-sm-6">
+                            <div class="row">
+                                <div class="col-sm-4 text-right">
+                                    <label>PR No : </label>
+                                </div>
+                                <div class="col-sm-7">
+                                    <div class="form-group">
+                                        <input id="" readonly class="form-control" />
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-sm-6">
+                            <div class="row">
+                                <div class="col-sm-4 text-right">
+                                    <label>PR Date : </label>
+                                </div>
+                                <div class="col-sm-7">
+                                    <div class="form-group">
+                                        <input id="" readonly class="form-control" />
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-sm-6">
+                            <div class="row">
+                                <div class="col-sm-4 text-right">
+                                    <label>Item Category : </label>
+                                </div>
+                                <div class="col-sm-7">
+                                    <div class="form-group">
+                                        <input id="" class="form-control" />
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-sm-6">
+                            <div class="row">
+                                <div class="col-sm-4 text-right">
+                                    <label>No of Line Item : </label>
+                                </div>
+                                <div class="col-sm-7">
+                                    <div class="form-group">
+                                        <input id="" class="form-control" />
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-sm-12">
+                            <div class="row">
+                                <div class="col-sm-2 text-right">
+                                    <label>Bid Type : </label>
+                                </div>
+                                <div class="col-sm-9">
+                                    <div class="form-group">
+                                        <label class="btn btn-outline-dark"><input type="radio" value="Division" /> Technical Bid</label>
+                                        <label class="btn btn-outline-dark"><input type="radio" value="Division" /> Financial Bid</label>
+                                        <label class="btn btn-outline-dark"><input type="radio" value="Division" /> Both</label>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-sm-6">
+                            <div class="row">
+                                <div class="col-sm-4 text-right">
+                                    <label>Bid Start Date : </label>
+                                </div>
+                                <div class="col-sm-7">
+                                    <div class="form-group">
+                                        <input id="" class="form-control" />
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-sm-6">
+                            <div class="row">
+                                <div class="col-sm-4 text-right">
+                                    <label>Bid End Date : </label>
+                                </div>
+                                <div class="col-sm-7">
+                                    <div class="form-group">
+                                        <input id="" class="form-control" />
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-12">
+                            <label>Item Category : </label>
+                            <table class="table table-bordered">
+                                <thead>
+                                    <tr>
+                                        <th>Vendor ID</th>
+                                        <th>Vendor Names</th>
+                                        <th>Vendor Email</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td>
+                                            <div class="form-group form-inline">
+                                                <input id="" class="form-control" />
+                                                <button><i class="fas fa-search"></i></button>
+                                            </div>
+                                        </td>
+                                        <td>
+                                            <div class="form-group form-inline">
+                                                <input id="" class="form-control" />
+                                            </div>
+                                        </td>
+                                        <td>
+                                            <div class="form-group form-inline">
+                                                <input id="" class="form-control" />
+                                            </div>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-sm-12">
+                            <div class="row">
+                                <div class="col-sm-2 text-right">
+                                    <label>Subject : </label>
+                                </div>
+                                <div class="col-sm-9">
+                                    <div class="form-group">
+                                        <input id="" class="form-control" />
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-12">
+                            <label>CC : </label>
+                            <table class="table table-bordered">
+                                <thead>
+                                    <tr>
+                                        <td>Staff ID</td>
+                                        <td>Staff Names</td>
+                                        <td>Staff Email</td>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td>
+                                            <div class="form-group form-inline">
+                                                <input id="" class="form-control" />
+                                                <button><i class="fas fa-search"></i></button>
+                                            </div>
+                                        </td>
+                                        <td>
+                                            <div class="form-group form-inline">
+                                                <input id="" class="form-control" />
+                                            </div>
+                                        </td>
+                                        <td>
+                                            <div class="form-group form-inline">
+                                                <input id="" class="form-control" />
+                                            </div>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+
+                    <div class="d-flex justify-content-around no-print">
+                        <input id="btnSave" class="btn btn-lg btn-outline-info float-left" value="Save For Later" type="submit" placeholder="" />
+
+                        <input class="btn btn-lg btn-primary" value="Send for Approval" type="submit" placeholder="" />
+
+                        <button id="printBtn" class="btn btn-lg btn-info">Cancel</button>
+                    </div>
+
+</form>
+    </div>
+</div>
