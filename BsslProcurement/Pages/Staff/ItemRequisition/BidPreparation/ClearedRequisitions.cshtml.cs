@@ -2,6 +2,8 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using BsslProcurement.Interfaces;
+using BsslProcurement.Services;
 using DcProcurement;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -13,9 +15,12 @@ namespace BsslProcurement.Pages.Staff.ItemRequisition.BidPreparation
     public class ClearedRequisitionsModel : PageModel
     {
         private readonly ProcurementDBContext _context;
-        public ClearedRequisitionsModel(ProcurementDBContext context)
+        private readonly IRequisitionService _service;
+
+        public ClearedRequisitionsModel(ProcurementDBContext context, IRequisitionService service)
         {
             _context = context;
+            _service = service;
         }
 
         public string Message { get; set; }
@@ -24,9 +29,13 @@ namespace BsslProcurement.Pages.Staff.ItemRequisition.BidPreparation
         [BindProperty]
         public List<Requisition> Requisitions { get; set; }
 
-        public void OnGet()
+        public async void OnGet()
         {
-            Requisitions = new List<Requisition>();
+            Requisitions = await _service.GetBudgetClearedRequisitions();
+            if (Requisitions.Count<=0)
+            {
+                Requisitions = new List<Requisition>();
+            }
         }
     }
 }

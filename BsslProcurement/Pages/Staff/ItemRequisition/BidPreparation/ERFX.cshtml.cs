@@ -21,9 +21,15 @@ namespace BsslProcurement.Pages.Staff.ItemRequisition.BidPreparation
         public string Message { get; set; }
         public string Error { get; set; }
 
-        public void OnGet()
+        public void OnGet(int? reqId)
         {
+            if (reqId == null)
+            {
+                Error = "No Requisition was Selected.";
+                return;
+            }
 
+            var requisition = _context.Requisitions.Find(reqId.Value);
         }
     }
 }
