@@ -39,7 +39,7 @@ namespace BsslProcurement.Pages.Test
         }
         public async Task OnGetAsync()
         {
-         //  await MigrateStaffFromUserAcctToIdentity();
+   await MigrateStaffFromUserAcctToIdentity();
 
         }
 
