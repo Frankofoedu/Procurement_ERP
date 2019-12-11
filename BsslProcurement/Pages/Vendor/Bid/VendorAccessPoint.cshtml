@@ -1,8 +1,8 @@
 ﻿@page
-@model BsslProcurement.Pages.Vendor.VendorAccessPointModel
+@model Bid.VendorAccessPointModel
 @{
     ViewData["Title"] = "VendorAccessPoint";
-    Layout = "~/Pages/Shared/_Layout.cshtml";
+    Layout = "~/Pages/Shared/_VendorLayout.cshtml";
 }
 
 @section Styles{
@@ -152,23 +152,23 @@
             </div>
 
             <!-- <div class="row p-2">
-         <div class="col-sm-7">
-             <div class="custom-file-container" data-upload-id="myUniqueUploadId">
-                 <label>
-                     Attach Multiple Files <a href="javascript:void(0)" class="custom-file-container__image-clear"
-                                              title="Clear Image">&times;</a>
-                 </label>
-                 <label class="custom-file-container__custom-file">
-                     <input type="file" name="files" class="custom-file-container__custom-file__custom-file-input" accept="*" multiple
-                            aria-label="Choose File">
-                     <input type="hidden" name="MAX_FILE_SIZE" value="10485760" />
-                     <span class="custom-file-container__custom-file__custom-file-control"></span>
-                 </label>
-                 <div class="custom-file-container__image-preview"></div>
-             </div>
-         </div>
-     </div>
-        -->
+                <div class="col-sm-7">
+                    <div class="custom-file-container" data-upload-id="myUniqueUploadId">
+                        <label>
+                            Attach Multiple Files <a href="javascript:void(0)" class="custom-file-container__image-clear"
+                                                     title="Clear Image">&times;</a>
+                        </label>
+                        <label class="custom-file-container__custom-file">
+                            <input type="file" name="files" class="custom-file-container__custom-file__custom-file-input" accept="*" multiple
+                                   aria-label="Choose File">
+                            <input type="hidden" name="MAX_FILE_SIZE" value="10485760" />
+                            <span class="custom-file-container__custom-file__custom-file-control"></span>
+                        </label>
+                        <div class="custom-file-container__image-preview"></div>
+                    </div>
+                </div>
+            </div>
+               -->
 
             <div class="row">
                 <div class="col-sm-3">
@@ -185,9 +185,9 @@
 
 @section Scripts{
     @*<script src="~/js/fileUpload.js"></script>
-    <script>
-        //to attach multiple files in preview mode
-        var upload = new FileUploadWithPreview('myUniqueUploadId');
-    </script>*@
+        <script>
+            //to attach multiple files in preview mode
+            var upload = new FileUploadWithPreview('myUniqueUploadId');
+        </script>*@
 
 }

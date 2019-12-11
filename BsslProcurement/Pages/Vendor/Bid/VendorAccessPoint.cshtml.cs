@@ -2,11 +2,13 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 
-namespace BsslProcurement.Pages.Vendor
+namespace BsslProcurement.Pages.Vendor.Bid
 {
+    [Authorize(AuthenticationSchemes ="Vendors")]
     public class VendorAccessPointModel : PageModel
     {
         public void OnGet()

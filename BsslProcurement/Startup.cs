@@ -18,12 +18,13 @@ using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.DependencyInjection.Extensions;
 using Microsoft.OpenApi.Models;
 using Microsoft.Extensions.Logging;
+using Microsoft.AspNetCore.Authentication.Cookies;
 
 namespace BsslProcurement
 {
     public class Startup
     {
-        public Startup(IConfiguration configuration, IWebHostEnvironment  env)
+        public Startup(IConfiguration configuration, IWebHostEnvironment env)
         {
             Configuration = configuration;
             Env = env;
@@ -63,7 +64,7 @@ namespace BsslProcurement
                   Trusted_Connection=True;ConnectRetryCount=0;MultipleActiveResultSets=true";
             }
 
-            services.AddDbContext<ProcurementDBContext> (options => options.UseSqlServer(connection, b => b.MigrationsAssembly("BsslProcurement")));
+            services.AddDbContext<ProcurementDBContext>(options => options.UseSqlServer(connection, b => b.MigrationsAssembly("BsslProcurement")));
 
             services.AddDbContext<BSSLSYS_ITF_DEMOContext>(options => options.UseSqlServer(conn, b => b.MigrationsAssembly("BsslProcurement")));
 
@@ -78,15 +79,19 @@ namespace BsslProcurement
                 config.SignIn.RequireConfirmedEmail = false;
             }).AddEntityFrameworkStores<ProcurementDBContext>().AddDefaultTokenProviders();
 
-            services.ConfigureApplicationCookie(options =>
+            services.ConfigureApplicationCookie(o =>
             {
+                //o.LoginPath = new PathString("/Identity/Account/Login");
                 // Cookie settings
-                options.Cookie.HttpOnly = true;
-                options.ExpireTimeSpan = TimeSpan.FromMinutes(15);
+                o.Cookie.HttpOnly = true;
+                o.ExpireTimeSpan = TimeSpan.FromMinutes(15);
 
-                options.LoginPath = "/Identity/Account/Login";
-                options.SlidingExpiration = true;
+                o.LoginPath = "/Identity/Account/Login";
+                o.SlidingExpiration = true;
             });
+            
+
+
 
             services.AddSession(s => s.IdleTimeout = TimeSpan.FromMinutes(30));
 
@@ -114,7 +119,19 @@ namespace BsslProcurement
 
             services.AddRazorPages().AddRazorRuntimeCompilation();
             services.AddControllers();
-            
+            services.AddAuthentication()
+            .AddCookie("Vendors", o =>
+            {// Cookie settings
+                o.Cookie.HttpOnly = true;
+                o.ExpireTimeSpan = TimeSpan.FromMinutes(15);
+
+                o.LoginPath = "/VendorIdentity/Account/Login";
+                o.SlidingExpiration = true;
+                o.Cookie.IsEssential = true;
+                o.ForwardAuthenticate = "Identity.Application";
+            });
+            services.AddAuthorization();
+
             services.AddSwaggerGen(c =>
             {
                 c.SwaggerDoc("v1", new OpenApiInfo { Title = "My API", Version = "v1" });
@@ -136,13 +153,14 @@ namespace BsslProcurement
             app.UseHsts();
             //}
 
-            
+
             app.UseHttpsRedirection();
             app.UseStaticFiles();
             app.UseCookiePolicy();
             app.UseRouting();
 
             app.UseAuthentication();
+
             app.UseAuthorization();
             app.UseEndpoints(endpoints =>
             {
