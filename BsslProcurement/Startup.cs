@@ -41,7 +41,7 @@ namespace BsslProcurement
                 options.CheckConsentNeeded = context => true;
                 options.MinimumSameSitePolicy = SameSiteMode.None;
             });
-
+            services.Configure<EmailSettings>(Configuration.GetSection("EmailSettings"));
 
             services.TryAddSingleton<IHttpContextAccessor, HttpContextAccessor>();
 
@@ -67,6 +67,7 @@ namespace BsslProcurement
 
             services.AddDbContext<BSSLSYS_ITF_DEMOContext>(options => options.UseSqlServer(conn, b => b.MigrationsAssembly("BsslProcurement")));
 
+            services.AddSingleton<IEmailSenderService, EmailSenderService>();
             services.AddTransient<IStaffLayoutViewModelService, StaffLayoutViewModelService>();
             services.AddTransient<IWorkFlowService, WorkFlowService>();
             services.AddTransient<IItemGridViewModelService, ItemGridViewModelService>();

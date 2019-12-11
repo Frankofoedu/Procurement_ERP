@@ -1,7 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Threading.Tasks;
+using BsslProcurement.Interfaces;
 using DcProcurement;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
@@ -19,35 +21,56 @@ namespace BsslProcurement.Pages.Test
         private readonly SignInManager<User> _signInManager;
         private readonly UserManager<User> _userManager;
         private readonly ILogger<IndexModel> _logger;
+        private readonly IEmailSenderService _emailSender;
 
         public int StaffCount { get; set; }
         public int SuccessCount { get; set; }
 
         [BindProperty]
         public DateTime date { get; set; }
+        public string EmailStatusMessage { get; private set; }
+
+        [Required]
+        [BindProperty]
+        public string Email { get; private set; }
+
         public IndexModel(DcProcurement.Contexts.BSSLSYS_ITF_DEMOContext bsslContext,
             DcProcurement.ProcurementDBContext procContext,
             UserManager<User> userManager,
             ILogger<IndexModel> logger,
-            SignInManager<User> signInManager)
+            SignInManager<User> signInManager,
+            IEmailSenderService emailSender)
         {
             _procContext = procContext;
             _bsslContext = bsslContext;
             _userManager = userManager;
             _logger = logger;
             _signInManager = signInManager;
+            _emailSender = emailSender;
         }
         public async Task OnGetAsync()
         {
-   await MigrateStaffFromUserAcctToIdentity();
-
+   //await MigrateStaffFromUserAcctToIdentity();
+          //  await SendEmailAsync();
         }
 
         public void OnPost()
         {
 
         }
+        private async Task SendEmailAsync()
+        {
+            var email = "Frankofoedu@gmail.com";
 
+            var subject = "Email Test";
+
+            var message = "This is a test message.";
+
+            await _emailSender.SendEmailAsync(email, subject, message);
+
+            EmailStatusMessage = "Send test email was successful.";
+
+        }
         private async Task MigrateStaffFromUserAcctToIdentity()
         {
             var oldstaff = await _bsslContext.Useracct.ToListAsync();

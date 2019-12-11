@@ -8,6 +8,8 @@ namespace DcProcurement
     {
         public const string RequisitionWorkflow = "Requisition";
         public const string PrequalificationWorkFlow = "Prequalification";
-        public const string ItemPricingWorkflow = "ItemPricing";
+        public const string ItemPricingWorkflow = "Procurement";
+
+
     }
 }
