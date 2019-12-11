@@ -4,14 +4,16 @@ using DcProcurement;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace BsslProcurement.Migrations
 {
     [DbContext(typeof(ProcurementDBContext))]
-    partial class ProcurementDBContextModelSnapshot : ModelSnapshot
+    [Migration("20191209145431_erfxSetup1")]
+    partial class erfxSetup1
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -915,26 +917,6 @@ namespace BsslProcurement.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("WorkflowTypes");
-
-                    b.HasData(
-                        new
-                        {
-                            Id = 1,
-                            Code = "0001",
-                            Name = "ItemPricing"
-                        },
-                        new
-                        {
-                            Id = 2,
-                            Code = "0002",
-                            Name = "Prequalification"
-                        },
-                        new
-                        {
-                            Id = 3,
-                            Code = "0003",
-                            Name = "Requisition"
-                        });
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRole", b =>

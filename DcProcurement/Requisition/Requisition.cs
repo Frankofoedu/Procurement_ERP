@@ -48,5 +48,7 @@ namespace DcProcurement
         public DateTime DateCreated { get; set; }
         public List<RequisitionItem> RequisitionItems { get; set; }
         public List<RequisitionJob> RequisitionJobs { get; set; }
+
+        public virtual ERFXSetup ERFXSetup { get; set; }
     }
 }
