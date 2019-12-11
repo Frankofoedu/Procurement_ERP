@@ -73,11 +73,26 @@ namespace BsslProcurement.Services
             }
         }
 
-        public async Task SendEmailToListAsync(List<string> emails, string subject, string message)
+        public async Task SendInvitationEmailToListAsync(List<string> emails, string subject, string companyName, string eRFxNo, string projectTitle, DateTime erFxEndDate, string assignedStaffName, string assignedStaffDesignation)
         {
             try
             {
-
+                var message = $"{companyName.ToUpper()}" + Environment.NewLine +
+                    "Dear Esteemed Vendor," + Environment.NewLine +
+                    "Invitation to Participate" + Environment.NewLine +
+                    $"{companyName} has invited you to Bid for “Project ID ({eRFxNo})” for “{projectTitle}”." + Environment.NewLine +
+                    "Please provide necessary information, download all required documents (if any) from the library, and review each document in its entirety; the Purchase Requisition, Specifications & Standards, and all relevant Drawings (if any)." + Environment.NewLine +
+                    "You are expected to fill out the Technical Information and Financial information (where necessary) and submit to the system on or before submission deadline." + Environment.NewLine +
+                    $"The deadline for Submission is {erFxEndDate.ToString("dddd, dd MMMM yyyy")}" + Environment.NewLine +
+                    "Please confirm receipt." + Environment.NewLine +
+                    "There is a Help button at the extreme of Tabs, which will provide you with further assistance." + Environment.NewLine +
+                    "Click Vendor Access Point: https://www.bsslsoftware.com/" + Environment.NewLine +
+                    "Best Regards," + Environment.NewLine +
+                    $"{assignedStaffName}" + Environment.NewLine +
+                    $"{assignedStaffDesignation}";
+                
+                
+                
                 var mimeMessage = new MimeMessage();
 
                 mimeMessage.From.Add(new MailboxAddress(_emailSettings.SenderName, _emailSettings.Sender));
@@ -90,7 +105,7 @@ namespace BsslProcurement.Services
                 }
 
 
-                
+
                 mimeMessage.To.AddRange(list);
 
                 mimeMessage.Subject = subject;
