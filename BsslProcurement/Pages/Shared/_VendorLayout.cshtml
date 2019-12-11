@@ -1,0 +1,140 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>@ViewData["Title"] - BsslProcurement</title>
+
+    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.css" />
+    <link rel="stylesheet" href="~/css/site.css" />
+    <link href="~/lib/font-awesome/css/all.css" rel="stylesheet">
+    <link href="~/lib/jquery/dist/jquery.mCustomScrollbar.min.css" rel="stylesheet" />
+    <link href="~/lib/jqueryui/themes/ui-lightness/jquery-ui.css" rel="stylesheet" />
+    <style>
+        @@media print {
+            .no-print, .no-print * {
+                display: none !important;
+            }
+        }
+    </style>
+    @RenderSection("Styles", required: false)
+
+    <script src="~/lib/jquery/dist/jquery.js"></script>
+</head>
+<body>
+
+    <div class="wrapper" style="transform: none !important;">
+
+        <!---- Sidebar ---->
+        <nav id="sidebar" class="no-print" style="transform: none !important;">
+            <div class="sidebar-header">
+                <h3>DcProcurement</h3>
+            </div>
+
+            <ul class="list-unstyled components">
+                <li>
+                    <a href="#vendorSubmenu" data-toggle="collapse" aria-expanded="true" class="dropdown-toggle">
+                        <i class="fas fa-user-alt mr-1"></i> Vendor
+                    </a>
+                    <ul class="collapse list-unstyled" id="vendorSubmenu">
+                        <li>
+                            <a asp-page="/Vendor/Prequalification"><i class="fas fa-file-archive mr-1"></i> Prequalification</a>
+                        </li>
+                        <li>
+                            <a asp-page="/Vendor/Bidding"><i class="fas fa-file-archive mr-1"></i> Bidding</a>
+                        </li>
+                        <li>
+                            <a asp-page="/Vendor/VendorAccessPoint"><i class="fas fa-file-archive mr-1"></i> Access Point</a>
+                        </li>
+                        <li>
+                            <a asp-page="/Vendor/PreBidding"><i class="fas fa-file-archive mr-1"></i> Pre-Bidding</a>
+                        </li>
+                    </ul>
+                </li>
+            </ul>
+        </nav>
+        <!----End Sidebar ---->
+        <button type="button" id="sidebarCollapse" class="navbar-btn no-print">
+            <span></span>
+            <span></span>
+            <span></span>
+        </button>
+
+        <div id="content" class="container-fluid">
+            <nav id="navbar" class="navbar navbar-expand-lg navbar-light bg-white shadow-sm">
+                <div class="container-fluid">
+
+                    <button class="btn btn-dark d-inline-block d-lg-none ml-auto" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+                        <i class="fas fa-bars"></i>
+                    </button>
+                    <div class="collapse navbar-collapse w-100" id="navbarSupportedContent">
+                        <ul class="nav navbar-nav ml-auto">
+                            <partial name="_LoginPartial" />
+                        </ul>
+
+                    </div>
+                </div>
+            </nav>
+
+            <div class="container-fluid">
+                @RenderBody()
+            </div>
+            <hr />
+            <footer>
+                <p>&copy; 2019 - DcProcurement</p>
+            </footer>
+        </div>
+
+    </div>
+
+
+    <script src="~/lib/popper/popper.js"></script>
+    <script src="~/lib/bootstrap/dist/js/bootstrap.js"></script>
+    <script src="~/js/site.js" asp-append-version="true"></script>
+    <script src="~/lib/jquery/dist/jquery.mCustomScrollbar.concat.min.js"></script>
+    <script src="~/lib/jqueryui/jquery-ui.min.js"></script>
+    <script src="~/lib/bootstrap/dist/js/print.js"></script>
+    <script src="~/js/date.js"></script>
+    <script>
+        // Use datepicker on the date inputs
+        $("input[data-date=date]").datepicker({
+            dateFormat: "dd/mm/yy",
+            minDate: new Date(),
+            onSelect: function (dateText, inst) {
+                $(inst).val(dateText); // Write the value in the input,
+
+                var id = $(this).data('id');
+                var hidDateField = $('input:hidden[data-id=' + id + ']').first();
+
+                //get the datepicker date in default format
+                var d = $(this).datepicker('getDate');
+
+                //format the date in asp format
+                var e = $.datepicker.formatDate("mm/dd/yy", d);
+
+                //set asp date field
+                hidDateField.val(e);
+            }
+        });
+        //$(".datepicker").datepicker({
+        //    dateFormat: "dd/mm/yy",
+        //    onSelect: function (dateText, inst) {
+        //        //alert(dateText);
+        //        var d = $(this).datepicker('getDate');
+
+        //        var e = $.datepicker.formatDate("mm/dd/yy", d);
+        //        alert(e);
+        //        $(".dateee").val(e);
+        //       //alert(e);
+        //    }
+        //});
+
+        // Code below to avoid the classic date-picker
+        $("input[data-date=date]").on('click', function () {
+            return false;
+        });
+
+    </script>
+    @RenderSection("Scripts", required: false)
+</body>
+</html>
