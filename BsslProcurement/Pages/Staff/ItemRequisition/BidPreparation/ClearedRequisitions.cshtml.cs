@@ -29,10 +29,10 @@ namespace BsslProcurement.Pages.Staff.ItemRequisition.BidPreparation
         [BindProperty]
         public List<Requisition> Requisitions { get; set; }
 
-        public async void OnGet()
+        public async Task OnGet()
         {
             Requisitions = await _service.GetBudgetClearedRequisitions();
-            if (Requisitions.Count<=0)
+            if (Requisitions == null)
             {
                 Requisitions = new List<Requisition>();
             }
