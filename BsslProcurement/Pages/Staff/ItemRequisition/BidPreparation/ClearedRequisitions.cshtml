@@ -102,7 +102,13 @@
                                 <td>@item.ProcurementType</td>
                                 <td>@item.ProcurementMethod</td>
                                 <td>@item.ProcessType</td>
-                                <td>@item.ERFx</td>
+                                <td>
+                                    <a asp-page="/Staff/ItemRequisition/BidPreparation/ERFX" asp-route-reqId="@item.Id">
+                                        @item.ERFx
+                                    </a>
+                                </td>
+                                <td>--</td>
+                                <td>--</td>
                                 <td>--</td>
                                 <td>--</td>
                                 <td><a asp-page="./DetailRequisition" asp-route-id="@item.Id" style="color: #007bff">View PRQ</a></td>
