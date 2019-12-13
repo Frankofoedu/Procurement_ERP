@@ -6,16 +6,28 @@
 
 <script>
     $(document).ready(function () {
+        showBidDateBox();
+
         $("input[type='radio']").on('change', function () {
+            showBidDateBox();
+        });
+
+        function showBidDateBox() {
             var selectedValue = $("input[name='bidTypeRadioBox']:checked").val();
             if (selectedValue === 'Both') {
-                $('#singleBidDate').hide(500);
-                $('#doubleBidDate').show(500);
+                $('#finBidDate').show(500);
+                $('#techBidDate').show(500);
+                $('#sameDateDiv').show(500);
+            } else if (selectedValue === 'Technical') {
+                $('#finBidDate').hide(500);
+                $('#techBidDate').show(500);
+                $('#sameDateDiv').hide(500);
             } else {
-                $('#doubleBidDate').hide(500);
-                $('#singleBidDate').show(500);
+                $('#techBidDate').hide(500);
+                $('#finBidDate').show(500);
+                $('#sameDateDiv').hide(500);
             }
-        });
+        }
 
         $('.startDates').on('change', function () {
             if ($('#sameDateCheck').prop('checked')) {
@@ -69,6 +81,8 @@
                 </div>
             }
 
+            <input id="" class="form-control" type="hidden" asp-for="ERFXViewModel.ReqId" />
+
             <div class="row">
                 <div class="col-sm-6">
                     <div class="row">
@@ -119,7 +133,7 @@
                         </div>
                         <div class="col-sm-7">
                             <div class="form-group">
-                                <input id="" readonly class="form-control" asp-for="requisition.PRNumber" />
+                                <input id="" readonly class="form-control" asp-for="ERFXViewModel.PRQNum" />
                             </div>
                         </div>
                     </div>
@@ -131,7 +145,7 @@
                         </div>
                         <div class="col-sm-7">
                             <div class="form-group">
-                                <input id="" readonly class="form-control" asp-for="requisition.DateCreated" />
+                                <input id="" readonly class="form-control" asp-for="ERFXViewModel.PRQDate" />
                             </div>
                         </div>
                     </div>
@@ -158,7 +172,7 @@
                         </div>
                         <div class="col-sm-7">
                             <div class="form-group">
-                                <input id="" class="form-control" />
+                                <input id="" readonly class="form-control" asp-for="ERFXViewModel.ItemNum" />
                             </div>
                         </div>
                     </div>
@@ -173,88 +187,69 @@
                         </div>
                         <div class="col-sm-9">
                             <div id="bidTypeDiv" class="form-group">
-                                <label class="btn btn-outline-dark"><input name="bidTypeRadioBox" asp-for="ERFXViewModel.BidType" type="radio" value="Technical" /> Technical Bid</label>
-                                <label class="btn btn-outline-dark"><input name="bidTypeRadioBox" asp-for="ERFXViewModel.BidType" type="radio" value="Financial" /> Financial Bid</label>
-                                <label class="btn btn-outline-dark"><input name="bidTypeRadioBox" asp-for="ERFXViewModel.BidType" type="radio" checked value="Both" /> Both</label>
+                                <label class="btn btn-outline-dark"><input name="bidTypeRadioBox" asp-for="ERFXViewModel.BidType" type="radio" value="@DcProcurement.Enums.BidTypes.Technical" /> Technical Bid</label>
+                                <label class="btn btn-outline-dark"><input name="bidTypeRadioBox" asp-for="ERFXViewModel.BidType" type="radio" value="@DcProcurement.Enums.BidTypes.Financial" /> Financial Bid</label>
+                                <label class="btn btn-outline-dark"><input name="bidTypeRadioBox" asp-for="ERFXViewModel.BidType" type="radio" value="@DcProcurement.Enums.BidTypes.Both" /> Both</label>
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
 
-            <div id="singleBidDate" class="row" style="display:none">
-                <div class="col-sm-6">
-                    <div class="row">
-                        <div class="col-sm-4 text-sm-right">
-                            <label>Bid Start Date : </label>
-                        </div>
-                        <div class="col-sm-7">
-                            <div class="form-group">
-                                <input class="form-control" asp-for="ERFXViewModel.BidStartDate" />
-                            </div>
-                        </div>
-                    </div>
+            <div class="border rounded mb-3 pt-3">
+                <div id="sameDateDiv" class="row">
+                    <div class="col-12"><input class="ml-3 mb-3" id="sameDateCheck" asp-for="ERFXViewModel.SameDate" /> Same Date</div>
                 </div>
-                <div class="col-sm-6">
-                    <div class="row">
-                        <div class="col-sm-4 text-sm-right">
-                            <label>Bid End Date : </label>
-                        </div>
-                        <div class="col-sm-7">
-                            <div class="form-group">
-                                <input class="form-control" asp-for="ERFXViewModel.BidEndDate" />
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
 
-            <div id="doubleBidDate" class="row border rounded mb-3">
-                <div class="col-12 py-3 px-5"><input id="sameDateCheck" type="checkbox" checked /> Same Date</div>
-                <div class="col-sm-6">
-                    <div class="row">
-                        <div class="col-sm-5 text-sm-right">
-                            <label>Technical Bid Start Date : </label>
+                <div id="techBidDate" class="row" style="">
+                    <div class="col-sm-6">
+                        <div class="row">
+                            <div class="col-sm-5 text-sm-right">
+                                <label>Technical Bid Start Date : </label>
+                            </div>
+                            <div class="col-sm-7">
+                                <div class="form-group">
+                                    <input id="techBidStartDate" class="form-control startDates tech" dateType="tech" asp-for="ERFXViewModel.TechnicalBidStartDate" />
+                                </div>
+                            </div>
                         </div>
-                        <div class="col-sm-7">
-                            <div class="form-group">
-                                <input id="techBidStartDate" class="form-control startDates tech" dateType="tech" asp-for="ERFXViewModel.TechnicalBidStartDate" />
+                    </div>
+                    <div class="col-sm-6">
+                        <div class="row">
+                            <div class="col-sm-5 text-sm-right">
+                                <label>Technical Bid End Date : </label>
+                            </div>
+                            <div class="col-sm-7">
+                                <div class="form-group">
+                                    <input id="techBidEndDate" class="form-control endDates tech" dateType="tech" asp-for="ERFXViewModel.TechnicalBidEndDate" />
+                                </div>
                             </div>
                         </div>
                     </div>
                 </div>
-                <div class="col-sm-6">
-                    <div class="row">
-                        <div class="col-sm-5 text-sm-right">
-                            <label>Technical Bid End Date : </label>
-                        </div>
-                        <div class="col-sm-7">
-                            <div class="form-group">
-                                <input id="techBidEndDate" class="form-control endDates tech" dateType="tech" asp-for="ERFXViewModel.TechnicalBidEndDate" />
+
+                <div id="finBidDate" class="row">
+                    <div class="col-sm-6">
+                        <div class="row">
+                            <div class="col-sm-5 text-sm-right">
+                                <label>Financial Bid Start Date : </label>
+                            </div>
+                            <div class="col-sm-7">
+                                <div class="form-group">
+                                    <input id="finBidStartDate" class="form-control startDates fin" dateType="fin" asp-for="ERFXViewModel.FinancialBidStartDate" />
+                                </div>
                             </div>
                         </div>
                     </div>
-                </div>
-                <div class="col-sm-6">
-                    <div class="row">
-                        <div class="col-sm-5 text-sm-right">
-                            <label>Financial Bid Start Date : </label>
-                        </div>
-                        <div class="col-sm-7">
-                            <div class="form-group">
-                                <input id="finBidStartDate" class="form-control startDates fin" dateType="fin" asp-for="ERFXViewModel.FinancialBidStartDate" />
+                    <div class="col-sm-6">
+                        <div class="row">
+                            <div class="col-sm-5 text-sm-right">
+                                <label>Financial Bid End Date : </label>
                             </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-sm-6">
-                    <div class="row">
-                        <div class="col-sm-5 text-sm-right">
-                            <label>Financial Bid End Date : </label>
-                        </div>
-                        <div class="col-sm-7">
-                            <div class="form-group">
-                                <input id="finBidEndDate" class="form-control endDates fin" dateType="fin" asp-for="ERFXViewModel.FinancialBidEndDate" />
+                            <div class="col-sm-7">
+                                <div class="form-group">
+                                    <input id="finBidEndDate" class="form-control endDates fin" dateType="fin" asp-for="ERFXViewModel.FinancialBidEndDate" />
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -347,9 +342,9 @@
             </div>
 
             <div class="d-flex justify-content-around no-print">
-                <input id="btnSave" class="btn btn-lg btn-outline-info float-left" value="Save For Later" type="submit" placeholder="" />
+                <input id="btnSave" class="btn btn-lg btn-outline-info float-left" asp-page-handler="Save" value="Save For Later" type="submit" />
 
-                <input class="btn btn-lg btn-primary" value="Send for Approval" type="submit" placeholder="" />
+                <input class="btn btn-lg btn-primary" asp-page-handler="Submit" value="Submit" type="submit" />
 
                 <button id="printBtn" class="btn btn-lg btn-info">Cancel</button>
             </div>

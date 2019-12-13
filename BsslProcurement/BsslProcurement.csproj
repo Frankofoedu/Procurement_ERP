@@ -19,6 +19,8 @@
     <Compile Remove="Migrations\20190806111213_workflowCategory.Designer.cs" />
     <Compile Remove="Migrations\20190909152540_requisition_update.cs" />
     <Compile Remove="Migrations\20190909152540_requisition_update.Designer.cs" />
+    <Compile Remove="Migrations\20191213164504_erfxupadate.cs" />
+    <Compile Remove="Migrations\20191213164504_erfxupadate.Designer.cs" />
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="MailKit" Version="2.4.1" />

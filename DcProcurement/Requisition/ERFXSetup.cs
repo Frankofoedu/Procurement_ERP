@@ -29,6 +29,7 @@ namespace DcProcurement
         public DateTime? ErfxDate { get; set; }
         public string ProjectTitle { get; set; }
         public BidTypes BidType { get; set; }
+        public bool Submitted { get; set; } = false;
 
         public Requisition Requisition { get; set; }
 
