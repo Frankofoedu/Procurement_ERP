@@ -41,11 +41,23 @@ namespace BsslProcurement.Pages.Staff.ItemRequisition.BidPreparation
         [BindProperty]
         public ErfxViewModel ERFXViewModel { get; set; }
 
+        [BindProperty]
+        public List<string> VendorEmails { get; set; }
+
+        [BindProperty]
+        public List<string> StaffEmails { get; set; }
+
+        public List<VendorUser> VendorList { get; set; }
+
+        public List<DcProcurement.Staff> StaffList { get; set; }
+
         public string Message { get; set; }
         public string Error { get; set; }
 
         public async Task OnGetAsync(int? reqId)
         {
+            VendorList = new List<VendorUser>();
+
             if (reqId == null)
             {
                 Error = "No Requisition was Selected.";
@@ -60,6 +72,9 @@ namespace BsslProcurement.Pages.Staff.ItemRequisition.BidPreparation
                 Error = "No Requisition was Selected.";
                 return;
             }
+
+            VendorList = _context.Vendors.Include(m => m.CompanyInfo).ToList();
+            StaffList = _context.Staffs.ToList();
 
             ERFXViewModel = new ErfxViewModel();
             ERFXViewModel.ReqId = reqId.Value;

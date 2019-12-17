@@ -1,0 +1,77 @@
+﻿@using DcProcurement
+@model List<VendorUser>
+
+
+@section Styles{
+}
+
+
+<div class="modal" id="vendorWithEmailModal">
+    <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title">Vendor Details</h4>
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+            </div>
+            <div class="modal-body">
+                <div id="Vendorgrid">
+                    <table id="vendorTable" class="table table-striped">
+                        <thead>
+                            <tr>
+                                <th>Vendor No.</th>
+                                <th>Vendor Name</th>
+                                <th>Email</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (var vendor in Model)
+                            {
+                                <tr>
+                                    <td>
+                                        <button class="btn btn-link btnVendorWithEmailId" vendorEmail="@vendor.Email" value="@vendor.CompanyInfo.CompanyName">@vendor.CompanyInfo.CompanyRegNo</button>
+                                    </td>
+                                    <td>@vendor.CompanyInfo.CompanyName</td>
+                                    <td>@vendor.Email</td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+        //loads vendor modal
+        function loadVendorWithEmailModal(vendorIdTextboxId, vendorNameTextboxId, vendorEmailTextboxId) {
+            $('#vendorWithEmailModal').modal("show");
+
+            $('.btnVendorWithEmailId').on('click', function () {
+
+                var txtVendorId = $('#' + vendorIdTextboxId);
+                var txtVendorName = $('#' + vendorNameTextboxId);
+                var txtVendorEmail = $('#' + vendorEmailTextboxId);
+
+                //assign Values
+                txtVendorName.val($(this).val());
+                txtVendorId.val($(this).text());
+                txtVendorEmail.val($(this).attr('vendorEmail'));
+
+
+                $('#vendorWithEmailModal').modal("hide");
+                return false;
+            });
+
+            return false;
+
+        }
+
+    $(document).ready(function () {
+        $('#vendorTable').dataTable();
+
+    });
+</script>

@@ -3,7 +3,9 @@
 @{
     ViewData["Title"] = "ERFX";
 }
+<link href="~/css/jquery.dataTables.min.css" rel="stylesheet" />
 
+<script src="~/js/jquery.dataTables.min.js"></script>
 <script>
     $(document).ready(function () {
         showBidDateBox();
@@ -40,7 +42,7 @@
                 }
             }
         });
-        
+
         $('.endDates').on('change', function () {
             if ($('#sameDateCheck').prop('checked')) {
                 if ($(this).attr('dateType') === 'fin') {
@@ -50,7 +52,39 @@
                 }
             }
         });
+
+        $('#vendorTBody').on('click', '.btnGetVendor', function (event) {
+            event.preventDefault();
+            var index = $(this).val();
+            loadVendorWithEmailModal('txtId' + index, 'txtName' + index, 'txtEmail' + index);
+        });
+
+        $('#getStaffTBody').on('click', '.btnGetStaff', function (event) {
+            event.preventDefault();
+            var index = $(this).val();
+            loadStaffWithEmailModal('txtStaffId' + index, 'txtStaffName' + index, 'txtStaffEmail' + index);
+        });
+
+        $('#btnAddVendor').on('click', function (event) {
+            event.preventDefault();
+            AddNewVendor();
+        });
+
+        function AddNewVendor() {
+            var index = Number($('#vendorIndex').val()) + 1;
+            $('#vendorIndex').val(index);
+
+            var html = '<tr> <td> <div class="form-group form-inline mb-0"> <input id="txtId' + index +
+                '" class="form-control" /> <button class="btnGetVendor" index="' + index +
+                '"> <i class="fas fa-search"></i></button> </div> </td> <td><div class="form-group form-inline mb-0">' +
+                '<input id="txtName' + index + '"class="form-control" /> </div> </td> <td>' +
+                '<div class="form-group form-inline mb-0"> <input id="txtEmail' + index +
+                '" class="form-control" name="VendorEmails[' + index + ']" /> </div> </td> </tr>';
+
+            $('#vendorTBody').append(html);
+        }
     });
+
 
 </script>
 
@@ -267,35 +301,37 @@
                                 <th>Vendor Email</th>
                             </tr>
                         </thead>
-                        <tbody>
+                        <tbody id="vendorTBody">
                             <tr>
                                 <td>
-                                    <div class="form-group form-inline">
-                                        <input id="" class="form-control" />
-                                        <button><i class="fas fa-search"></i></button>
+                                    <div class="form-group form-inline mb-0">
+                                        <input id="txtId0" class="form-control" />
+                                        <button class="btnGetVendor" index="0"><i class="fas fa-search"></i></button>
                                     </div>
                                 </td>
                                 <td>
-                                    <div class="form-group form-inline">
-                                        <input id="" class="form-control" />
+                                    <div class="form-group form-inline mb-0">
+                                        <input id="txtName0" class="form-control" />
                                     </div>
                                 </td>
                                 <td>
-                                    <div class="form-group form-inline">
-                                        <input id="" class="form-control" />
+                                    <div class="form-group form-inline mb-0">
+                                        <input id="txtEmail0" class="form-control" asp-for="VendorEmails[0]" />
                                     </div>
                                 </td>
                             </tr>
                         </tbody>
                     </table>
+                    <button id="btnAddVendor" class="btn btn-outline-dark btn-block">Add Vendors</button>
+                    <input id="vendorIndex" type="hidden" value="0" />
                 </div>
             </div>
 
-            <div class="row">
+            <div class="row mt-3">
                 <div class="col-sm-12">
                     <div class="row">
                         <div class="col-sm-2 text-sm-right">
-                            <label>Subject : </label>
+                            <label class="mt-1">Subject : </label>
                         </div>
                         <div class="col-sm-9">
                             <div class="form-group">
@@ -317,31 +353,32 @@
                                 <td>Staff Email</td>
                             </tr>
                         </thead>
-                        <tbody>
+                        <tbody id="getStaffTBody">
                             <tr>
                                 <td>
-                                    <div class="form-group form-inline">
-                                        <input id="" class="form-control" />
-                                        <button><i class="fas fa-search"></i></button>
+                                    <div class="form-group form-inline mb-0">
+                                        <input id="txtStaffId0" class="form-control" />
+                                        <button class="btnGetStaff" index="0"><i class="fas fa-search"></i></button>
                                     </div>
                                 </td>
                                 <td>
-                                    <div class="form-group form-inline">
-                                        <input id="" class="form-control" />
+                                    <div class="form-group form-inline mb-0">
+                                        <input id="txtStaffName0" class="form-control" />
                                     </div>
                                 </td>
                                 <td>
-                                    <div class="form-group form-inline">
-                                        <input id="" class="form-control" />
+                                    <div class="form-group form-inline mb-0">
+                                        <input id="txtStaffEmail0" class="form-control" asp-for="StaffEmails[0]" />
                                     </div>
                                 </td>
                             </tr>
                         </tbody>
                     </table>
+                    <button class="btn btn-outline-dark btn-block">Add Staffs</button>
                 </div>
             </div>
 
-            <div class="d-flex justify-content-around no-print">
+            <div class="d-flex justify-content-around no-print mt-3">
                 <input id="btnSave" class="btn btn-lg btn-outline-info float-left" asp-page-handler="Save" value="Save For Later" type="submit" />
 
                 <input class="btn btn-lg btn-primary" asp-page-handler="Submit" value="Submit" type="submit" />
@@ -352,3 +389,7 @@
         </form>
     </div>
 </div>
+
+<partial name="~/Pages/Shared/Modals/_VendorWithEmailPartial.cshtml" model="Model.VendorList" />
+
+<partial name="~/Pages/Shared/Modals/_StaffWithEmailPartial.cshtml" model="Model.StaffList" />

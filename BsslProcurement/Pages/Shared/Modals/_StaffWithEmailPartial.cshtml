@@ -1,0 +1,75 @@
+﻿@using DcProcurement
+@model List<Staff>
+
+
+@section Styles{
+}
+
+
+<div class="modal" id="staffWithEmailModal">
+    <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title">Staff Details</h4>
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+            </div>
+            <div class="modal-body">
+                <table id="staffTable" class="table table-striped">
+                    <thead>
+                        <tr>
+                            <th>Staff No.</th>
+                            <th>Staff Name</th>
+                            <th>Email</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var staff in Model)
+                        {
+                            <tr>
+                                <td>
+                                    <button class="btn btn-link btnStaffCode" staffEmail="@staff.Email" value="@staff.Name">@staff.StaffCode</button>
+                                </td>
+                                <td>@staff.Name</td>
+                                <td>@staff.Email</td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+        //loads staff modal
+        function loadStaffWithEmailModal(staffCodeTextboxId, staffNameTextboxId, staffEmailTextboxId) {
+            $('#staffWithEmailModal').modal("show");
+
+            $('.btnStaffCode').on('click', function () {
+
+                var txtStaffId = $('#' + staffCodeTextboxId);
+                var txtStaffName = $('#' + staffNameTextboxId);
+                var txtStaffEmail = $('#' + staffEmailTextboxId);
+
+                //assign Values
+                txtStaffName.val($(this).val());
+                txtStaffId.val($(this).text());
+                txtStaffEmail.val($(this).attr('staffEmail'));
+
+
+                $('#staffWithEmailModal').modal("hide");
+                return false;
+            });
+
+            return false;
+
+        }
+
+    $(document).ready(function () {
+        $('#staffTable').dataTable();
+
+    });
+</script>
