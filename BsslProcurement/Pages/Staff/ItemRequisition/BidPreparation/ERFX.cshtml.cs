@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using BsslProcurement.ViewModels;
 using DcProcurement;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -42,21 +43,18 @@ namespace BsslProcurement.Pages.Staff.ItemRequisition.BidPreparation
         public ErfxViewModel ERFXViewModel { get; set; }
 
         [BindProperty]
-        public List<string> VendorEmails { get; set; }
+        public VendorWithEmailViewModel VendorEmailListObj { get; set; }
 
         [BindProperty]
-        public List<string> StaffEmails { get; set; }
-
-        public List<VendorUser> VendorList { get; set; }
-
-        public List<DcProcurement.Staff> StaffList { get; set; }
+        public StaffWithEmailViewModel StaffEmailListObj { get; set; }
 
         public string Message { get; set; }
         public string Error { get; set; }
 
         public async Task OnGetAsync(int? reqId)
         {
-            VendorList = new List<VendorUser>();
+            VendorEmailListObj = new VendorWithEmailViewModel();
+            StaffEmailListObj = new StaffWithEmailViewModel();
 
             if (reqId == null)
             {
@@ -73,8 +71,8 @@ namespace BsslProcurement.Pages.Staff.ItemRequisition.BidPreparation
                 return;
             }
 
-            VendorList = _context.Vendors.Include(m => m.CompanyInfo).ToList();
-            StaffList = _context.Staffs.ToList();
+            VendorEmailListObj.VendorWithEmailList = VendorEmailListObj.GetVendorWithEmailList(_context.Vendors.Include(m => m.CompanyInfo).ToList());
+            StaffEmailListObj.StaffWithEmailList = StaffEmailListObj.GetStaffWithEmailList(_context.Staffs.ToList());
 
             ERFXViewModel = new ErfxViewModel();
             ERFXViewModel.ReqId = reqId.Value;

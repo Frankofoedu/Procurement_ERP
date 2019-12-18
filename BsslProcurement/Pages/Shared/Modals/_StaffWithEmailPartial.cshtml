@@ -1,5 +1,5 @@
 ﻿@using DcProcurement
-@model List<Staff>
+@model BsslProcurement.ViewModels.StaffWithEmailViewModel
 
 
 @section Styles{
@@ -17,20 +17,29 @@
                 <table id="staffTable" class="table table-striped">
                     <thead>
                         <tr>
+                            <th>Select</th>
                             <th>Staff No.</th>
                             <th>Staff Name</th>
                             <th>Email</th>
                         </tr>
                     </thead>
                     <tbody>
-                        @foreach (var staff in Model)
+                        @for (int i = 0; i < Model.StaffWithEmailList.Count; i++)
                         {
                             <tr>
                                 <td>
-                                    <button class="btn btn-link btnStaffCode" staffEmail="@staff.Email" value="@staff.Name">@staff.StaffCode</button>
+                                    <input type="hidden" asp-for="StaffWithEmailList[i].Id" />
+                                    <input asp-for="StaffWithEmailList[i].isSelected" />
                                 </td>
-                                <td>@staff.Name</td>
-                                <td>@staff.Email</td>
+                                <td>
+                                    <input asp-for="StaffWithEmailList[i].Number" readonly />
+                                </td>
+                                <td>
+                                    <input asp-for="StaffWithEmailList[i].Name" readonly />
+                                </td>
+                                <td>
+                                    <input asp-for="StaffWithEmailList[i].Email" readonly />
+                                </td>
                             </tr>
                         }
                     </tbody>
@@ -45,27 +54,9 @@
 
 <script>
         //loads staff modal
-        function loadStaffWithEmailModal(staffCodeTextboxId, staffNameTextboxId, staffEmailTextboxId) {
+        function loadStaffWithEmailModal() {
             $('#staffWithEmailModal').modal("show");
-
-            $('.btnStaffCode').on('click', function () {
-
-                var txtStaffId = $('#' + staffCodeTextboxId);
-                var txtStaffName = $('#' + staffNameTextboxId);
-                var txtStaffEmail = $('#' + staffEmailTextboxId);
-
-                //assign Values
-                txtStaffName.val($(this).val());
-                txtStaffId.val($(this).text());
-                txtStaffEmail.val($(this).attr('staffEmail'));
-
-
-                $('#staffWithEmailModal').modal("hide");
-                return false;
-            });
-
             return false;
-
         }
 
     $(document).ready(function () {

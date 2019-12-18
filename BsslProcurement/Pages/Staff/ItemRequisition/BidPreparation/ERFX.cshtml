@@ -53,36 +53,16 @@
             }
         });
 
-        $('#vendorTBody').on('click', '.btnGetVendor', function (event) {
-            event.preventDefault();
-            var index = $(this).val();
-            loadVendorWithEmailModal('txtId' + index, 'txtName' + index, 'txtEmail' + index);
-        });
-
-        $('#getStaffTBody').on('click', '.btnGetStaff', function (event) {
-            event.preventDefault();
-            var index = $(this).val();
-            loadStaffWithEmailModal('txtStaffId' + index, 'txtStaffName' + index, 'txtStaffEmail' + index);
-        });
-
         $('#btnAddVendor').on('click', function (event) {
             event.preventDefault();
-            AddNewVendor();
+            loadVendorWithEmailModal();
         });
 
-        function AddNewVendor() {
-            var index = Number($('#vendorIndex').val()) + 1;
-            $('#vendorIndex').val(index);
+        $('#btnAddStaff').on('click', function (event) {
+            event.preventDefault();
+            loadStaffWithEmailModal();
+        });
 
-            var html = '<tr> <td> <div class="form-group form-inline mb-0"> <input id="txtId' + index +
-                '" class="form-control" /> <button class="btnGetVendor" index="' + index +
-                '"> <i class="fas fa-search"></i></button> </div> </td> <td><div class="form-group form-inline mb-0">' +
-                '<input id="txtName' + index + '"class="form-control" /> </div> </td> <td>' +
-                '<div class="form-group form-inline mb-0"> <input id="txtEmail' + index +
-                '" class="form-control" name="VendorEmails[' + index + ']" /> </div> </td> </tr>';
-
-            $('#vendorTBody').append(html);
-        }
     });
 
 
@@ -292,38 +272,7 @@
 
             <div class="row">
                 <div class="col-12">
-                    <label>Item Category : </label>
-                    <table class="table table-bordered">
-                        <thead>
-                            <tr>
-                                <th>Vendor ID</th>
-                                <th>Vendor Names</th>
-                                <th>Vendor Email</th>
-                            </tr>
-                        </thead>
-                        <tbody id="vendorTBody">
-                            <tr>
-                                <td>
-                                    <div class="form-group form-inline mb-0">
-                                        <input id="txtId0" class="form-control" />
-                                        <button class="btnGetVendor" index="0"><i class="fas fa-search"></i></button>
-                                    </div>
-                                </td>
-                                <td>
-                                    <div class="form-group form-inline mb-0">
-                                        <input id="txtName0" class="form-control" />
-                                    </div>
-                                </td>
-                                <td>
-                                    <div class="form-group form-inline mb-0">
-                                        <input id="txtEmail0" class="form-control" asp-for="VendorEmails[0]" />
-                                    </div>
-                                </td>
-                            </tr>
-                        </tbody>
-                    </table>
-                    <button id="btnAddVendor" class="btn btn-outline-dark btn-block">Add Vendors</button>
-                    <input id="vendorIndex" type="hidden" value="0" />
+                    <button id="btnAddVendor" class="btn btn-outline-dark btn-block">Select Vendors</button>
                 </div>
             </div>
 
@@ -344,37 +293,7 @@
 
             <div class="row">
                 <div class="col-12">
-                    <label>CC : </label>
-                    <table class="table table-bordered">
-                        <thead>
-                            <tr>
-                                <td>Staff ID</td>
-                                <td>Staff Names</td>
-                                <td>Staff Email</td>
-                            </tr>
-                        </thead>
-                        <tbody id="getStaffTBody">
-                            <tr>
-                                <td>
-                                    <div class="form-group form-inline mb-0">
-                                        <input id="txtStaffId0" class="form-control" />
-                                        <button class="btnGetStaff" index="0"><i class="fas fa-search"></i></button>
-                                    </div>
-                                </td>
-                                <td>
-                                    <div class="form-group form-inline mb-0">
-                                        <input id="txtStaffName0" class="form-control" />
-                                    </div>
-                                </td>
-                                <td>
-                                    <div class="form-group form-inline mb-0">
-                                        <input id="txtStaffEmail0" class="form-control" asp-for="StaffEmails[0]" />
-                                    </div>
-                                </td>
-                            </tr>
-                        </tbody>
-                    </table>
-                    <button class="btn btn-outline-dark btn-block">Add Staffs</button>
+                    <button id="btnAddStaff" class="btn btn-outline-dark btn-block">Select Staffs</button>
                 </div>
             </div>
 
@@ -386,10 +305,9 @@
                 <button id="printBtn" class="btn btn-lg btn-info">Cancel</button>
             </div>
 
+            <partial name="~/Pages/Shared/Modals/_VendorWithEmailPartial.cshtml" model="Model.VendorEmailListObj" />
+
+            <partial name="~/Pages/Shared/Modals/_StaffWithEmailPartial.cshtml" model="Model.StaffEmailListObj" />
         </form>
     </div>
 </div>
-
-<partial name="~/Pages/Shared/Modals/_VendorWithEmailPartial.cshtml" model="Model.VendorList" />
-
-<partial name="~/Pages/Shared/Modals/_StaffWithEmailPartial.cshtml" model="Model.StaffList" />

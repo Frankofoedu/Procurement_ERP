@@ -1,5 +1,5 @@
 ﻿@using DcProcurement
-@model List<VendorUser>
+@model BsslProcurement.ViewModels.VendorWithEmailViewModel
 
 
 @section Styles{
@@ -18,20 +18,29 @@
                     <table id="vendorTable" class="table table-striped">
                         <thead>
                             <tr>
+                                <th>Select</th>
                                 <th>Vendor No.</th>
                                 <th>Vendor Name</th>
                                 <th>Email</th>
                             </tr>
                         </thead>
                         <tbody>
-                            @foreach (var vendor in Model)
+                            @for (int i = 0; i < Model.VendorWithEmailList.Count; i++)
                             {
                                 <tr>
                                     <td>
-                                        <button class="btn btn-link btnVendorWithEmailId" vendorEmail="@vendor.Email" value="@vendor.CompanyInfo.CompanyName">@vendor.CompanyInfo.CompanyRegNo</button>
+                                        <input type="hidden" asp-for="VendorWithEmailList[i].Id" />
+                                        <input asp-for="VendorWithEmailList[i].isSelected" />
                                     </td>
-                                    <td>@vendor.CompanyInfo.CompanyName</td>
-                                    <td>@vendor.Email</td>
+                                    <td>
+                                        <input asp-for="VendorWithEmailList[i].Number" readonly />
+                                    </td>
+                                    <td>
+                                        <input asp-for="VendorWithEmailList[i].Name" readonly />
+                                    </td>
+                                    <td>
+                                        <input asp-for="VendorWithEmailList[i].Email" readonly />
+                                    </td>
                                 </tr>
                             }
                         </tbody>
@@ -47,31 +56,12 @@
 
 <script>
         //loads vendor modal
-        function loadVendorWithEmailModal(vendorIdTextboxId, vendorNameTextboxId, vendorEmailTextboxId) {
+        function loadVendorWithEmailModal() {
             $('#vendorWithEmailModal').modal("show");
-
-            $('.btnVendorWithEmailId').on('click', function () {
-
-                var txtVendorId = $('#' + vendorIdTextboxId);
-                var txtVendorName = $('#' + vendorNameTextboxId);
-                var txtVendorEmail = $('#' + vendorEmailTextboxId);
-
-                //assign Values
-                txtVendorName.val($(this).val());
-                txtVendorId.val($(this).text());
-                txtVendorEmail.val($(this).attr('vendorEmail'));
-
-
-                $('#vendorWithEmailModal').modal("hide");
-                return false;
-            });
-
             return false;
-
         }
 
     $(document).ready(function () {
         $('#vendorTable').dataTable();
-
     });
 </script>
