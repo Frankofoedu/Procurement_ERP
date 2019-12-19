@@ -76,7 +76,7 @@ namespace BsslProcurement.Pages.Staff.JobViews
                 //get all the workflow steps
                 var allWorkflow = _context.Workflows.Where(m=>m.WorkflowType.Name == "procurement").OrderBy(n=>n.Step).ToList();
                 //get all prequalification jobs pending for user or all users
-                var allJobs = await _context.PrequalificationJobs.Where(x => x.Done == false).Where(x => x.StaffId == user.Id || x.StaffId == null)
+                var allJobs = await _context.PrequalificationJobs.Where(x => x.JobStatus == Enums.JobState.NotDone).Where(x => x.StaffId == user.Id || x.StaffId == null)
                     .Include(p => p.CompanyInfo)
                     .Include(p => p.Staff).ToListAsync();
 
@@ -207,7 +207,7 @@ namespace BsslProcurement.Pages.Staff.JobViews
             var user = await GetCurrentUserAsync();
 
             //get all prequalification jobs pending for user or all users
-            var allJobs = await _context.PrequalificationJobs.Where(x => x.Done == false).Where(x => x.StaffId == user.Id || x.StaffId == null)
+            var allJobs = await _context.PrequalificationJobs.Where(x => x.JobStatus == Enums.JobState.NotDone).Where(x => x.StaffId == user.Id || x.StaffId == null)
                 .Include(p => p.CompanyInfo).ToListAsync();
 
             //get all the workflow steps

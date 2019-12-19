@@ -83,7 +83,7 @@ namespace BsslProcurement.Pages.Staff.Review
             if (Job == null)
             { return LocalRedirect("~/Staff/JobViews/PreqJobs"); }
 
-            if (Job.Done)
+            if (Job.JobStatus == Enums.JobState.Done)
             { return LocalRedirect("~/Staff/JobViews/PreqJobs"); }
 
             JobId = Job.Id;

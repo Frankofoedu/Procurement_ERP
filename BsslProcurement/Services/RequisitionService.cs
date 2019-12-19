@@ -30,7 +30,7 @@ namespace BsslProcurement.Services
             //mark old job as done
 
             //get job
-            var oldReqJobs = await _procurementDBContext.RequisitionJobs.Where(req => req.RequisitionId == requisition.Id && req.Done != true).FirstOrDefaultAsync();
+            var oldReqJobs = await _procurementDBContext.RequisitionJobs.Where(req => req.RequisitionId == requisition.Id && req.JobStatus == Enums.JobState.NotDone).FirstOrDefaultAsync();
 
             if (oldReqJobs != null)
             {
