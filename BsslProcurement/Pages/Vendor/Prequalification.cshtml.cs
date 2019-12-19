@@ -363,8 +363,8 @@ namespace BsslProcurement.Pages.Vendor
                 _context.PrequalificationJobs.Add(new PrequalificationJob
                 {
                     CompanyInfoId = companyID,
-                    CreationDate = DateTime.Now,
-                    WorkFlowStep = 1,
+                   // CreationDate = DateTime.Now,
+                   // WorkFlowStep = 1,
                 });
             }
             else
@@ -372,8 +372,8 @@ namespace BsslProcurement.Pages.Vendor
                 _context.PrequalificationJobs.Add(new PrequalificationJob
                 {
                     CompanyInfoId = companyID,
-                    CreationDate = DateTime.Now,
-                    WorkFlowStep = 0,
+                    //CreationDate = DateTime.Now,
+                    //WorkFlowStep = 0,
                 });
             }
         }
