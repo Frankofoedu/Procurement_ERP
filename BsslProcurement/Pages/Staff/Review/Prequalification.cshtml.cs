@@ -202,8 +202,8 @@ namespace BsslProcurement.Pages.Staff.Review
                 {
                     CompanyInfo.Approved = CompanyApproved;
 
-                    Job.Done = true;
-                    Job.DoneDate = DateTime.UtcNow;
+                    //Job.Done = true;
+                    //Job.DoneDate = DateTime.UtcNow;
                 }
 
                 //if (nextStep.ToPersonOrAssign)
@@ -223,7 +223,7 @@ namespace BsslProcurement.Pages.Staff.Review
                 //    _context.PrequalificationJobs.Add(nextJob);
                 //}
 
-                Job.Remark = Remark;
+                //Job.Remark = Remark;
 
                 _context.SaveChanges();
 
