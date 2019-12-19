@@ -43,5 +43,19 @@ namespace BsslProcurement.Services
 
         }
 
+        public async Task<string> GetStaffRank(string staffCode)
+        {
+            var staffDetails = await _bsslContext.Stafftab.Where(x => x.Staffid == staffCode).FirstOrDefaultAsync();
+
+            if (staffDetails != null)
+            {
+                return _bsslContext.Codestab.FirstOrDefault(m => m.Option1 == "f4" && m.Code == staffDetails.Positionid).Desc1;
+                
+            }
+            else
+            {
+                return null;
+            }
+        }
     }
 }

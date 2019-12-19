@@ -12,6 +12,7 @@ namespace BsslProcurement.Interfaces
         Task<List<StaffLayoutModel>> GetAllStaffWithRank();
         Task<List<StaffLayoutModel>> GetAllStaffNoRank();
         Task<List<StaffLayoutModel>> GetAllStaffInWorkFlow(int workFlowId);
+        Task<string> GetStaffRank(string staffCode);
 
     }
 }
