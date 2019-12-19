@@ -1,4 +1,5 @@
-﻿@page "{id:int?}"
+﻿@page
+
 @model BsslProcurement.Pages.Staff.ItemRequisition.NewRequisitionModel
 @{
     ViewData["Title"] = "New Requisition";
@@ -107,7 +108,7 @@
                             <div class="form-group">
                                 <label>PR No : </label>
                                 <input class="form-control" readonly asp-for="Requisition.PRNumber" value="@Model.PrNo" placeholder="" />
-                                <input type="hidden" asp-for="serialNo" />
+
                             </div>
                         </div>
                         <div class="col-sm-4">
@@ -358,15 +359,19 @@
                         </div>
                     </div>
 
-                    <div class="d-flex justify-content-around no-print">
-                        @*  <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>*@
-                        <input id="btnSave" class="btn btn-lg btn-outline-info float-left" asp-page-handler="Save" value="Save For Later" type="submit" placeholder="" />
+                    @if (Model.WfVm != null)
+                    {
 
-                        <input class="btn btn-lg btn-primary" asp-page-handler="Submit" value="Send for Approval" type="submit" placeholder="" />
+                        <div class="d-flex justify-content-around no-print">
+                            @*  <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>*@
+                            <input id="btnSave" class="btn btn-lg btn-outline-info float-left" asp-page-handler="Save" value="Save For Later" type="submit" placeholder="" />
 
-                        <button id="printBtn" class="btn btn-lg btn-info" onclick="print(); return false;">Print/Preview</button>
-                    </div>
+                            <input class="btn btn-lg btn-primary" asp-page-handler="Submit" value="Send for Approval" type="submit" placeholder="" />
 
+                            <button id="printBtn" class="btn btn-lg btn-info" onclick="print(); return false;">Print/Preview</button>
+                        </div>
+
+                    }
                 </div>
             </div>
         </form>
@@ -509,6 +514,7 @@
 <input type="hidden" id="hiddenURLRank" value="@Url.Action("GetStaffWithRank", "Staff")" />
 <input type="hidden" id="hiddenURLNoRank" value="@Url.Action("GetStaffNoRank", "Staff")" />
 <input type="hidden" id="uomHiddenURL" value="@Url.Action("GetUOM", "UnitsOfM")" />
+<input type="hidden" id="rankHiddenURL" value="@Url.Action("GetRankOfStaff", "Staff")" />
 <!--Modal: Name-->
 
 
@@ -562,28 +568,7 @@
 
 
 
-        ////loads approver modal
-        //$(function () {
-        //    $('#loadApproverModal').on('click', function () {
-        //        $('#approverModal').modal("show");
 
-        //        $('#ApproverBody').load(this.baseURI + '?handler=ApproverPartial', function () {
-        //            $('#Approverspinner').removeClass('d-flex');
-        //            $('#Approverspinner').hide();
-
-        //            $('#btnSubmitApprover').on('click', function () {
-
-
-
-        //                $('#approverModal').modal("hide");
-        //                return false;
-        //            });
-        //        });
-
-        //        return false;
-
-        //    });
-        //});
 
 
 
@@ -663,9 +648,16 @@
                     $('#staffTable').on('click', '.btnStaffName', function () {
                         //assign staff name textbox
                         txtToAssign.val($(this).val());
+                        var staffCode = $(this).text();
+                        var rankURL = window.location.origin +"/api/Users/GetStaffRank/" + staffCode;
 
-                        //assign staff rank textbox
-                        txtRankToAssign.val($(this).attr('staffrank'));
+                        $.ajax({
+                            url: rankURL,
+                            
+                        }).done(function (data) {
+                            //assign rank to rank textbox
+                            txtRankToAssign.val(data);
+                        });                       
 
                         //$('#forStaffText').val();
                         $('#staffModal').modal("hide");
@@ -750,12 +742,12 @@
         function newStepRow(index) {
 
             var html = `<tr>
-                                        <td><input type="text" required="" id="gridVm_${index}__RequisitionItem_Description" name="gridVm[${index}].RequisitionItem.Description" value=""></td>
-                                        <td><input type="number" required="" oninput="this.value=this.value.replace(/[^0-9]/g,' + ');" data-val="true" data-val-required="The Quantity field is required." id="gridVm_${index}__RequisitionItem_Quantity" name="gridVm[${index}].RequisitionItem.Quantity" value=""></td>
-                                        <td><div class="d-flex flex-row"><input type="text" readonly required="" data-value="forUOM ${index}" id="gridVm_${index}__RequisitionItem_UnitOfMeasurement" name="gridVm[${index}].RequisitionItem.UnitOfMeasurement" value=""><button class="btn loadUOMModal ml-1" value="forUOM ${index}" data-toggle="modal" data-target="#uomModal"><i class="fa fa-search"></i></button> </div></td>
-                                        <td> <div class="d-flex flex-row"><input data-attachment="${index}" accept=".pdf" class="fileItem" type="file" id="gridVm_${index}__Attachment" name="gridVm[${index}].Attachment"><button data-preview="${index}" class="btnPreviewItemAttachment">Preview</button>  </div></td>
-                                        <td><label class="del" onclick="deleteItem();"><i class="fa fa-trash-alt"></i></label></td>
-                                        </tr>`;
+                                            <td><input type="text" required="" id="gridVm_${index}__RequisitionItem_Description" name="gridVm[${index}].RequisitionItem.Description" value=""></td>
+                                            <td><input type="number" required="" oninput="this.value=this.value.replace(/[^0-9]/g,' + ');" data-val="true" data-val-required="The Quantity field is required." id="gridVm_${index}__RequisitionItem_Quantity" name="gridVm[${index}].RequisitionItem.Quantity" value=""></td>
+                                            <td><div class="d-flex flex-row"><input type="text" readonly required="" data-value="forUOM ${index}" id="gridVm_${index}__RequisitionItem_UnitOfMeasurement" name="gridVm[${index}].RequisitionItem.UnitOfMeasurement" value=""><button class="btn loadUOMModal ml-1" value="forUOM ${index}" data-toggle="modal" data-target="#uomModal"><i class="fa fa-search"></i></button> </div></td>
+                                            <td> <div class="d-flex flex-row"><input data-attachment="${index}" accept=".pdf" class="fileItem" type="file" id="gridVm_${index}__Attachment" name="gridVm[${index}].Attachment"><button data-preview="${index}" class="btnPreviewItemAttachment">Preview</button>  </div></td>
+                                            <td><label class="del" onclick="deleteItem();"><i class="fa fa-trash-alt"></i></label></td>
+                                            </tr>`;
             $('#requisitionBody').append(html);
         }
     </script>

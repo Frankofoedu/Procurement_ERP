@@ -31,9 +31,6 @@ namespace BsslProcurement.Pages.Staff.ItemRequisition
         private readonly IWebHostEnvironment _environment;
 
 
-        [BindProperty]
-        public string serialNo { get; set; }
-
         public string Message { get; set; }
         public string Error { get; set; }
         [BindProperty]
@@ -68,24 +65,18 @@ namespace BsslProcurement.Pages.Staff.ItemRequisition
 
         }
 
-        public async Task OnGetAsync(int? id)
+        public async Task OnGetAsync()
         {
             try
             {
 
-                if (id != null)
-                {
-                    Requisition = _procContext.Requisitions.Find(id);
-                    gridVm = Requisition.RequisitionItems.Select(x => new ItemGridViewModel { RequisitionItem = x}).ToList();
-                }
+                //if (id != null)
+                //{
+                //    Requisition = _procContext.Requisitions.Find(id);
+                //    gridVm = Requisition.RequisitionItems.Select(x => new ItemGridViewModel { RequisitionItem = x}).ToList();
+                //}
 
-                //load requisition workflow
-                var workflow = _procContext.WorkflowTypes.FirstOrDefault(x => x.Name == "Requisition");
-
-                if (workflow != null)
-                {
-                    WfVm = new WorkFlowApproverViewModel { WorkFlowTypeId = workflow.Id };
-                }
+               
                 await LoadData();
             }
             catch (Exception ex)
@@ -138,8 +129,15 @@ namespace BsslProcurement.Pages.Staff.ItemRequisition
         private async Task LoadData()
         {
 
+            //load requisition workflow
+            var workflow = _procContext.WorkflowTypes.FirstOrDefault(x => x.Name == DcProcurement.Constants.RequisitionWorkflow);
+
+            if (workflow != null)
+            {
+                WfVm = new WorkFlowApproverViewModel { WorkFlowTypeId = workflow.Id };
+            }
             //get current logged in user
-          var loggedInUserCode = (await GetCurrentUserAsync()).Id;
+            var loggedInUserCode = (await GetCurrentUserAsync()).Id;
             (PrNo, RequestingDeptCode, RequestingDept, Departments) = await GeneratePRNo(loggedInUserCode);
         }
 
@@ -149,10 +147,13 @@ namespace BsslProcurement.Pages.Staff.ItemRequisition
             Requisition.RequisitionItems = await GetRequisitionItemsFromViewModel(gridVm);   
                        
             Requisition.isSubmitted = isSubmitted;
+
+            Requisition.Status = isSubmitted ? "Sent For Processing" : "Saved";
+
             Requisition.LoggedInUserId = (await GetCurrentUserAsync()).Id;
 
             _procContext.Requisitions.Add(Requisition);
-            _procContext.PRNos.Add(new PRNo { RequisitionCode = Requisition.PRNumber, LastUsedSerialNo = serialNo });
+            //_procContext.PRNos.Add(new PRNo { RequisitionCode = Requisition.PRNumber, LastUsedSerialNo = serialNo });
 
             _procContext.SaveChanges();
         }
@@ -178,21 +179,7 @@ namespace BsslProcurement.Pages.Staff.ItemRequisition
             return reList;
         }
 
-        //public PartialViewResult OnGetStaffPartial()
-        //{
-
-        //    //get all staff and thier ranks
-        //    var staffs = _bsslContext.Stafftab.Select(x => new StaffLayoutModel { StaffName = x.Othernames,StaffCode = x.Staffid, Rank = _bsslContext.Codestab.FirstOrDefault(m => m.Option1 == "f4" && m.Code == x.Positionid).Desc1 }).ToList();
-
-
-        //    //var  = _bsslContext.Stafftab.ToList();
-        //    return new PartialViewResult
-        //    {
-        //        ViewName = "Modals/_StaffLayout",
-        //        ViewData = new ViewDataDictionary<List<StaffLayoutModel>>(ViewData, staffs)
-        //    };
-        //}
-
+        
         public PartialViewResult OnGetVendorPartial()
         {
 
@@ -295,10 +282,21 @@ namespace BsslProcurement.Pages.Staff.ItemRequisition
             var year = DateTime.Now.Year.ToString();
 
             //implement serial no
-            var PrNo = _procContext.PRNos.OrderByDescending(t => t.LastUsedSerialNo).FirstOrDefault();
+            var lastRequisition = _procContext.Requisitions.OrderByDescending(t => t.PRNumber).FirstOrDefault();
 
-            serialNo = "";
-            serialNo = PrNo == null ? "00001" : (Convert.ToInt32(PrNo.LastUsedSerialNo) + 1).ToString("00000");
+            var serialNo = "";
+
+            if (lastRequisition == null)
+            {
+                serialNo = "00001";
+            }
+            else
+            {
+                var num = (Convert.ToInt32(lastRequisition.PRNumber.Split('/').Last()) + 1);
+                serialNo = num.ToString("00000");
+            }
+
+           // serialNo = PrNo == null ? "00001" : (Convert.ToInt32(lastRequisition.PRNumber) + 1).ToString("00000");
 
             //itf/deptcode/deptprefix/year/serial no
 
