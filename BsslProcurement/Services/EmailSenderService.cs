@@ -41,12 +41,9 @@ namespace BsslProcurement.Services
                     Text = message
                 };
 
-                using var client = new SmtpClient
-                {
-                    // For demo-purposes, accept all SSL certificates (in case the server supports STARTTLS)
-                    ServerCertificateValidationCallback = (s, c, h, e) => true
-                };
-
+                var client = new SmtpClient();
+                // For demo-purposes, accept all SSL certificates (in case the server supports STARTTLS)
+                client.ServerCertificateValidationCallback = (s, c, h, e) => true;
                 if (_env.IsDevelopment())
                 {
                     // The third parameter is useSSL (true if the client should make an SSL-wrapped
@@ -90,9 +87,9 @@ namespace BsslProcurement.Services
                     "Best Regards," + Environment.NewLine +
                     $"{assignedStaffName}" + Environment.NewLine +
                     $"{assignedStaffDesignation}";
-                
-                
-                
+
+
+
                 var mimeMessage = new MimeMessage();
 
                 mimeMessage.From.Add(new MailboxAddress(_emailSettings.SenderName, _emailSettings.Sender));
@@ -115,30 +112,31 @@ namespace BsslProcurement.Services
                     Text = message
                 };
 
-                using var client = new SmtpClient
+
+                using (var client = new SmtpClient())
                 {
                     // For demo-purposes, accept all SSL certificates (in case the server supports STARTTLS)
-                    ServerCertificateValidationCallback = (s, c, h, e) => true
-                };
+                    client.ServerCertificateValidationCallback = (s, c, h, e) => true;
 
-                if (_env.IsDevelopment())
-                {
-                    // The third parameter is useSSL (true if the client should make an SSL-wrapped
-                    // connection to the server; otherwise, false).
-                    await client.ConnectAsync(_emailSettings.MailServer, _emailSettings.MailPort, false);
+
+                    if (_env.IsDevelopment())
+                    {
+                        // The third parameter is useSSL (true if the client should make an SSL-wrapped
+                        // connection to the server; otherwise, false).
+                        await client.ConnectAsync(_emailSettings.MailServer, _emailSettings.MailPort, false);
+                    }
+                    else
+                    {
+                        await client.ConnectAsync(_emailSettings.MailServer);
+                    }
+
+                    // Note: only needed if the SMTP server requires authentication
+                    await client.AuthenticateAsync(_emailSettings.Sender, _emailSettings.Password);
+
+                    await client.SendAsync(mimeMessage);
+
+                    await client.DisconnectAsync(true);
                 }
-                else
-                {
-                    await client.ConnectAsync(_emailSettings.MailServer);
-                }
-
-                // Note: only needed if the SMTP server requires authentication
-                await client.AuthenticateAsync(_emailSettings.Sender, _emailSettings.Password);
-
-                await client.SendAsync(mimeMessage);
-
-                await client.DisconnectAsync(true);
-
             }
             catch (Exception ex)
             {
