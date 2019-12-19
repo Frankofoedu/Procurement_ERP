@@ -4,14 +4,16 @@ using DcProcurement;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace BsslProcurement.Migrations
 {
     [DbContext(typeof(ProcurementDBContext))]
-    partial class ProcurementDBContextModelSnapshot : ModelSnapshot
+    [Migration("20191213170443_erfxupadate")]
+    partial class erfxupadate
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -628,9 +630,9 @@ namespace BsslProcurement.Migrations
                         new
                         {
                             Id = 22,
-                            Date = new DateTime(2019, 12, 16, 18, 40, 20, 378, DateTimeKind.Local).AddTicks(5968),
+                            Date = new DateTime(2019, 12, 13, 18, 4, 42, 475, DateTimeKind.Local).AddTicks(6236),
                             DateCreated = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            DeliveryDate = new DateTime(2019, 12, 16, 18, 40, 20, 378, DateTimeKind.Local).AddTicks(7176),
+                            DeliveryDate = new DateTime(2019, 12, 13, 18, 4, 42, 475, DateTimeKind.Local).AddTicks(7603),
                             Description = "sample requisition",
                             PRNumber = "000222",
                             PreparedBy = "John O",
@@ -965,26 +967,6 @@ namespace BsslProcurement.Migrations
                         .HasFilter("[NormalizedName] IS NOT NULL");
 
                     b.ToTable("AspNetRoles");
-
-                    b.HasData(
-                        new
-                        {
-                            Id = "f71e2b41-37cb-448e-94cf-164c311d0320",
-                            ConcurrencyStamp = "68ed45c2-0a3b-4586-ae73-5c02d1dcd38c",
-                            Name = "Admin"
-                        },
-                        new
-                        {
-                            Id = "e50f214c-7959-495c-a5b4-5657350a1bc8",
-                            ConcurrencyStamp = "fbec9841-1ace-4bd4-9f01-96b88f59af34",
-                            Name = "Staff"
-                        },
-                        new
-                        {
-                            Id = "d660824e-d429-484b-b46d-0615059b26f6",
-                            ConcurrencyStamp = "8b979bfa-9ebc-4bb7-b727-d0268e491afc",
-                            Name = "Vendor"
-                        });
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>

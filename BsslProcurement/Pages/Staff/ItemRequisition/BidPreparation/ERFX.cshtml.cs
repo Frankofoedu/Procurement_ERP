@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using BsslProcurement.ViewModels;
 using DcProcurement;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -12,17 +13,21 @@ namespace BsslProcurement.Pages.Staff.ItemRequisition.BidPreparation
 {
     public class ErfxViewModel
     {
-        public string BidType { get; set; }
-        public DateTime? BidStartDate { get; set; }
-        public DateTime? BidEndDate { get; set; }
+        public int ReqId { get; set; }
+        public Enums.BidTypes BidType { get; set; }
         public DateTime? TechnicalBidStartDate { get; set; }
         public DateTime? TechnicalBidEndDate { get; set; }
         public DateTime? FinancialBidStartDate { get; set; }
         public DateTime? FinancialBidEndDate { get; set; }
+        public bool SameDate { get; set; }
 
         public DateTime? ErfxDate { get; set; }
         public string ProjectTitle { get; set; }
         public string ERFXNum { get; set; }
+        public string PRQNum { get; set; }
+        public DateTime? PRQDate { get; set; }
+        public int ItemNum { get; set; }
+        public string CategoryItem { get; set; }
     }
 
     [Authorize]
@@ -36,20 +41,29 @@ namespace BsslProcurement.Pages.Staff.ItemRequisition.BidPreparation
 
         [BindProperty]
         public ErfxViewModel ERFXViewModel { get; set; }
-        public Requisition requisition { get; set; }
+
+        [BindProperty]
+        public VendorWithEmailViewModel VendorEmailListObj { get; set; }
+
+        [BindProperty]
+        public StaffWithEmailViewModel StaffEmailListObj { get; set; }
 
         public string Message { get; set; }
         public string Error { get; set; }
 
         public async Task OnGetAsync(int? reqId)
         {
+            VendorEmailListObj = new VendorWithEmailViewModel();
+            StaffEmailListObj = new StaffWithEmailViewModel();
+
             if (reqId == null)
             {
                 Error = "No Requisition was Selected.";
                 return;
             }
 
-            requisition = await _context.Requisitions.Include(m => m.ERFXSetup).FirstOrDefaultAsync(n => n.Id == reqId.Value);
+            var requisition = await _context.Requisitions.Include(m => m.ERFXSetup).ThenInclude(m=> m.FinancialERFXSetup).Include(m=>m.ERFXSetup)
+                .ThenInclude(m => m.TechnicalERFXSetup).Include(m=>m.RequisitionItems).FirstOrDefaultAsync(n => n.Id == reqId.Value);
 
             if (requisition == null)
             {
@@ -57,13 +71,19 @@ namespace BsslProcurement.Pages.Staff.ItemRequisition.BidPreparation
                 return;
             }
 
-                ERFXViewModel = new ErfxViewModel();
+            VendorEmailListObj.VendorWithEmailList = VendorEmailListObj.GetVendorWithEmailList(_context.Vendors.Include(m => m.CompanyInfo).ToList());
+            StaffEmailListObj.StaffWithEmailList = StaffEmailListObj.GetStaffWithEmailList(_context.Staffs.ToList());
+
+            ERFXViewModel = new ErfxViewModel();
+            ERFXViewModel.ReqId = reqId.Value;
 
             if (requisition.ERFXSetup == null)
             {
                 ERFXViewModel.ERFXNum = reqId.Value.ToString("0000");
                 ERFXViewModel.ErfxDate = DateTime.Now;
                 ERFXViewModel.ProjectTitle = requisition.Description;
+                ERFXViewModel.BidType = Enums.BidTypes.Both;
+                ERFXViewModel.SameDate = true;
             }
             else
             {
@@ -72,11 +92,124 @@ namespace BsslProcurement.Pages.Staff.ItemRequisition.BidPreparation
                 ERFXViewModel.ERFXNum = erfx.ErfxNum;
                 ERFXViewModel.ErfxDate = erfx.ErfxDate;
                 ERFXViewModel.ProjectTitle = erfx.ProjectTitle;
+                ERFXViewModel.BidType = erfx.BidType;
+
+                
+                if (erfx.BidType == Enums.BidTypes.Both)
+                {
+                    ERFXViewModel.TechnicalBidEndDate = erfx.TechnicalERFXSetup.BidEndDate;
+                    ERFXViewModel.TechnicalBidStartDate = erfx.TechnicalERFXSetup.BidStartDate;
+                    ERFXViewModel.FinancialBidEndDate = erfx.FinancialERFXSetup.BidEndDate;
+                    ERFXViewModel.FinancialBidStartDate = erfx.FinancialERFXSetup.BidStartDate;
+
+                    if ((erfx.FinancialERFXSetup.BidStartDate == erfx.TechnicalERFXSetup.BidStartDate) &&
+                        (erfx.FinancialERFXSetup.BidEndDate == erfx.TechnicalERFXSetup.BidEndDate))
+                    {
+                        ERFXViewModel.SameDate = true;
+                    }
+                }
+                else if (erfx.BidType == Enums.BidTypes.Technical)
+                {
+                    ERFXViewModel.TechnicalBidEndDate = erfx.TechnicalERFXSetup.BidEndDate;
+                    ERFXViewModel.TechnicalBidStartDate = erfx.TechnicalERFXSetup.BidStartDate;
+                }
+                else if (erfx.BidType == Enums.BidTypes.Financial)
+                {
+                    ERFXViewModel.FinancialBidEndDate = erfx.FinancialERFXSetup.BidEndDate;
+                    ERFXViewModel.FinancialBidStartDate = erfx.FinancialERFXSetup.BidStartDate;
+                }
+
             }
+
+            ERFXViewModel.PRQDate = requisition.Date;
+            ERFXViewModel.PRQNum = requisition.PRNumber;
+            ERFXViewModel.ItemNum = requisition.RequisitionItems.Count;
+
+
         }
-        public void OnPostAsync(int? reqId)
+
+        public async Task OnPostSaveAsync()
         {
-            var er = ERFXViewModel;
+            var requisition = await _context.Requisitions.Include(m => m.ERFXSetup).ThenInclude(m => m.FinancialERFXSetup).Include(m => m.ERFXSetup)
+                .ThenInclude(m => m.TechnicalERFXSetup).Include(m => m.RequisitionItems).FirstOrDefaultAsync(n => n.Id == ERFXViewModel.ReqId);
+
+            var erfxsetup = getErfxSetup(ERFXViewModel.ReqId, ERFXViewModel, false);
+
+            if (requisition.ERFXSetup == null) { requisition.ERFXSetup = erfxsetup; }
+            else {
+                _context.Entry(requisition.ERFXSetup).CurrentValues.SetValues(erfxsetup);
+                _context.Entry(requisition.ERFXSetup.FinancialERFXSetup).CurrentValues.SetValues(erfxsetup.FinancialERFXSetup);
+                _context.Entry(requisition.ERFXSetup.TechnicalERFXSetup).CurrentValues.SetValues(erfxsetup.TechnicalERFXSetup);
+            }
+
+            await _context.SaveChangesAsync();
+
+            Message = "Saved Successfully";
+        }
+
+        public async Task OnPostSubmitAsync()
+        {
+            var requisition = await _context.Requisitions.Include(m => m.ERFXSetup).ThenInclude(m => m.FinancialERFXSetup).Include(m => m.ERFXSetup)
+                .ThenInclude(m => m.TechnicalERFXSetup).Include(m => m.RequisitionItems).FirstOrDefaultAsync(n => n.Id == ERFXViewModel.ReqId);
+
+            var oldERFX = requisition.ERFXSetup;
+
+            var erfxsetup = getErfxSetup(ERFXViewModel.ReqId, ERFXViewModel, true);
+
+            if (oldERFX == null) { requisition.ERFXSetup = erfxsetup; }
+            else {
+                _context.Entry(requisition.ERFXSetup).CurrentValues.SetValues(erfxsetup);
+                _context.Entry(requisition.ERFXSetup.FinancialERFXSetup).CurrentValues.SetValues(erfxsetup.FinancialERFXSetup);
+                _context.Entry(requisition.ERFXSetup.TechnicalERFXSetup).CurrentValues.SetValues(erfxsetup.TechnicalERFXSetup);
+            }
+
+            await _context.SaveChangesAsync();
+
+            Message = "Submitted Successfully";
+        }
+
+        public ERFXSetup getErfxSetup(int reqId, ErfxViewModel model, bool submit)
+        {
+            var erfx = new ERFXSetup(reqId);
+
+            erfx.BidType = model.BidType;
+            erfx.ErfxDate = model.ErfxDate;
+            erfx.ProjectTitle = model.ProjectTitle;
+            erfx.Submitted = submit;
+
+            if (model.BidType == Enums.BidTypes.Technical) {
+                getTechSetup(erfx, model);
+            } 
+            else if (model.BidType == Enums.BidTypes.Financial) {
+                getFinSetup(erfx, model);
+            } else {
+                getTechSetup(erfx, model);
+                getFinSetup(erfx, model);
+            }
+
+            return erfx;
+        }
+
+        public ERFXSetup getTechSetup(ERFXSetup setup, ErfxViewModel model)
+        {
+            var tech = new TechnicalERFXSetup();
+            tech.BidEndDate = model.TechnicalBidEndDate;
+            tech.BidStartDate = model.TechnicalBidStartDate;
+
+            setup.TechnicalERFXSetup = tech;
+
+            return setup;
+        }
+
+        public ERFXSetup getFinSetup(ERFXSetup setup, ErfxViewModel model)
+        {
+            var fin = new FinancialERFXSetup();
+            fin.BidEndDate = model.FinancialBidEndDate;
+            fin.BidStartDate = model.FinancialBidStartDate;
+
+            setup.FinancialERFXSetup = fin;
+
+            return setup;
         }
     }
 }

@@ -1,0 +1,67 @@
+﻿@using DcProcurement
+@model BsslProcurement.ViewModels.VendorWithEmailViewModel
+
+
+@section Styles{
+}
+
+
+<div class="modal" id="vendorWithEmailModal">
+    <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title">Vendor Details</h4>
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+            </div>
+            <div class="modal-body">
+                <div id="Vendorgrid">
+                    <table id="vendorTable" class="table table-striped">
+                        <thead>
+                            <tr>
+                                <th>Select</th>
+                                <th>Vendor No.</th>
+                                <th>Vendor Name</th>
+                                <th>Email</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @for (int i = 0; i < Model.VendorWithEmailList.Count; i++)
+                            {
+                                <tr>
+                                    <td>
+                                        <input type="hidden" asp-for="VendorWithEmailList[i].Id" />
+                                        <input asp-for="VendorWithEmailList[i].isSelected" />
+                                    </td>
+                                    <td>
+                                        <input asp-for="VendorWithEmailList[i].Number" readonly />
+                                    </td>
+                                    <td>
+                                        <input asp-for="VendorWithEmailList[i].Name" readonly />
+                                    </td>
+                                    <td>
+                                        <input asp-for="VendorWithEmailList[i].Email" readonly />
+                                    </td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+        //loads vendor modal
+        function loadVendorWithEmailModal() {
+            $('#vendorWithEmailModal').modal("show");
+            return false;
+        }
+
+    $(document).ready(function () {
+        $('#vendorTable').dataTable();
+    });
+</script>

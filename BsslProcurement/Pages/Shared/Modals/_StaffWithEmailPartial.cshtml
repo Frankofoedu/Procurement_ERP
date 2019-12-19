@@ -1,0 +1,66 @@
+﻿@using DcProcurement
+@model BsslProcurement.ViewModels.StaffWithEmailViewModel
+
+
+@section Styles{
+}
+
+
+<div class="modal" id="staffWithEmailModal">
+    <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title">Staff Details</h4>
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+            </div>
+            <div class="modal-body">
+                <table id="staffTable" class="table table-striped">
+                    <thead>
+                        <tr>
+                            <th>Select</th>
+                            <th>Staff No.</th>
+                            <th>Staff Name</th>
+                            <th>Email</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @for (int i = 0; i < Model.StaffWithEmailList.Count; i++)
+                        {
+                            <tr>
+                                <td>
+                                    <input type="hidden" asp-for="StaffWithEmailList[i].Id" />
+                                    <input asp-for="StaffWithEmailList[i].isSelected" />
+                                </td>
+                                <td>
+                                    <input asp-for="StaffWithEmailList[i].Number" readonly />
+                                </td>
+                                <td>
+                                    <input asp-for="StaffWithEmailList[i].Name" readonly />
+                                </td>
+                                <td>
+                                    <input asp-for="StaffWithEmailList[i].Email" readonly />
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+        //loads staff modal
+        function loadStaffWithEmailModal() {
+            $('#staffWithEmailModal').modal("show");
+            return false;
+        }
+
+    $(document).ready(function () {
+        $('#staffTable').dataTable();
+
+    });
+</script>

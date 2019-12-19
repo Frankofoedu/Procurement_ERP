@@ -23,6 +23,8 @@
     <Compile Remove="Migrations\20191216173456_user_roles.Designer.cs" />
     <Compile Remove="Migrations\20191218163604_requisition_job_update.cs" />
     <Compile Remove="Migrations\20191218163604_requisition_job_update.Designer.cs" />
+        <Compile Remove="Migrations\20191213164504_erfxupadate.cs" />
+    <Compile Remove="Migrations\20191213164504_erfxupadate.Designer.cs" />
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="MailKit" Version="2.4.1" />
