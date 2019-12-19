@@ -1,7 +1,7 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk.Web">
 
   <PropertyGroup>
-    <TargetFramework>netcoreapp3.0</TargetFramework>
+    <TargetFramework>netcoreapp3.1</TargetFramework>
 
     <OpenApiGenerateDocuments>false</OpenApiGenerateDocuments>
   </PropertyGroup>
@@ -19,6 +19,10 @@
     <Compile Remove="Migrations\20190806111213_workflowCategory.Designer.cs" />
     <Compile Remove="Migrations\20190909152540_requisition_update.cs" />
     <Compile Remove="Migrations\20190909152540_requisition_update.Designer.cs" />
+    <Compile Remove="Migrations\20191216173456_user_roles.cs" />
+    <Compile Remove="Migrations\20191216173456_user_roles.Designer.cs" />
+    <Compile Remove="Migrations\20191218163604_requisition_job_update.cs" />
+    <Compile Remove="Migrations\20191218163604_requisition_job_update.Designer.cs" />
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="MailKit" Version="2.4.1" />
