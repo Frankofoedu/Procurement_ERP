@@ -1,5 +1,6 @@
 ﻿using BsslProcurement.Interfaces;
 using DcProcurement;
+using DcProcurement.Jobs;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
@@ -23,5 +24,38 @@ namespace BsslProcurement.Services
         {
             return _procurementDBContext.Requisitions.Include(x => x.RequisitionItems).Where(p => p.isBudgetCleared==true).ToListAsync();
         }
+
+        public async Task SendRequisitionToNextStageAsync(Requisition requisition,string staffId, int newStage, string remark)
+        {
+            //mark old job as done
+
+            //get job
+            var oldReqJobs = await _procurementDBContext.RequisitionJobs.Where(req => req.RequisitionId == requisition.Id && req.Done != true).FirstOrDefaultAsync();
+
+            if (oldReqJobs != null)
+            {
+                //update old requisitions to done
+                oldReqJobs.SetAsDone(DateTime.Now);
+            }
+
+            //create new job for next stage
+            var newReqJob = new RequisitionJob(requisition.Id, staffId, newStage, remark);
+
+            _procurementDBContext.Add(newReqJob);
+
+            _procurementDBContext.SaveChanges();
+
+        }
+
+        public Task SendRequisitionToPreviousStage()
+        {
+            throw new NotImplementedException();
+        }
+
+        public Task ReAssignRequisition()
+        {
+            throw new NotImplementedException();
+        }
+
     }
 }

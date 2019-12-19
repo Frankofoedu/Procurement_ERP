@@ -11,5 +11,9 @@ namespace BsslProcurement.Interfaces
         Task<List<Requisition>> GetRequisitionsForLoggedInUser(string userId);
 
         Task<List<Requisition>> GetBudgetClearedRequisitions();
+
+        Task SendRequisitionToNextStageAsync(Requisition requisition, string staffId, int currStage, string remark);
+        Task SendRequisitionToPreviousStage();
+        Task ReAssignRequisition();
     }
 }
