@@ -2,6 +2,8 @@
 using System;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using System.Collections.Generic;
+using Microsoft.AspNetCore.Identity;
+using DcProcurement.Jobs;
 
 namespace DcProcurement
 {
@@ -57,6 +59,7 @@ namespace DcProcurement
         #region Jobs Tables
         public DbSet<Job> Jobs { get; set; }
         public DbSet<PrequalificationJob> PrequalificationJobs { get; set; }
+        public DbSet<RequisitionJob> RequisitionJobs { get; set; }
         #endregion
 
         #region Requisition Tables
@@ -134,6 +137,14 @@ namespace DcProcurement
                 
 
             modelBuilder.Entity<WorkflowType>().HasData(ListWorkflowTypes);
+
+            //seed roles
+            var roles = new List<IdentityRole> {
+                new IdentityRole { Id = Guid.NewGuid().ToString(), Name = Constants.Role.Admin },
+                new IdentityRole { Id = Guid.NewGuid().ToString(), Name = Constants.Role.Staff },
+                new IdentityRole { Id = Guid.NewGuid().ToString(), Name = Constants.Role.Vendor }
+            };
+            modelBuilder.Entity<IdentityRole>().HasData(roles);
             #endregion
 
             base.OnModelCreating(modelBuilder);
