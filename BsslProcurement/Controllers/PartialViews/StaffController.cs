@@ -52,5 +52,16 @@ namespace BsslProcurement.Controllers.PartialViews
                 ViewData = new ViewDataDictionary<List<StaffLayoutModel>>(ViewData, staffs)
             };
         }
+        public async Task<string> GetRankOfStaff(string staffCode )
+        {
+            var rank = await staffLayoutViewModelService.GetStaffRank(staffCode);
+
+            return rank;
+            //return new PartialViewResult
+            //{
+            //    ViewName = "Modals/_StaffLayout",
+            //    ViewData = new ViewDataDictionary<List<StaffLayoutModel>>(ViewData, staffs)
+            //};
+        }
     }
 }
