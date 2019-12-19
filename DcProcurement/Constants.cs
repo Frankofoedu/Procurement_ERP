@@ -11,5 +11,12 @@ namespace DcProcurement
         public const string ItemPricingWorkflow = "Procurement";
 
 
+        public static class Role
+        {
+            public const string Admin = "Admin";
+            public const string Staff = "Staff";
+            public const string Vendor = "Vendor";
+        }
     }
+
 }
