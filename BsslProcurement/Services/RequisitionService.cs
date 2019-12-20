@@ -31,7 +31,7 @@ namespace BsslProcurement.Services
         }
 
        
-        public async Task SendRequisitionToNextStageAsync(Requisition requisition,string staffCode, int newStage, string remark)
+        public async Task SendRequisitionToNextStageAsync(Requisition requisition,string staffCode, int newWorkflowId, string remark)
         {
             //get staff identity id
             var staffId = await GetStaffIdFromCodeAsync(staffCode);
@@ -46,9 +46,9 @@ namespace BsslProcurement.Services
 
             }
             //create new job for next stage
-            var newReqJob = new RequisitionJob(requisition.Id, staffId, newStage, remark);
+            var newReqJob = new RequisitionJob(requisition.Id, staffId, newWorkflowId, remark);
 
-            _procurementDBContext.Add(newReqJob);
+            _procurementDBContext.RequisitionJobs.Add(newReqJob);
 
            await _procurementDBContext.SaveChangesAsync();
 
@@ -103,7 +103,7 @@ namespace BsslProcurement.Services
         {
             var job = await _procurementDBContext.RequisitionJobs.FirstOrDefaultAsync(x => x.RequisitionId == requisition.Id && x.JobStatus == Enums.JobState.NotDone);
 
-            return new WorkFlowApproverViewModel { Remark = job.Remark, WorkFlowTypeId = DcProcurement.Constants.RequisitionWorkflowId, WorkflowStep = job.WorkFlowStep };
+            return new WorkFlowApproverViewModel { Remark = job.Remark, WorkFlowTypeId = DcProcurement.Constants.RequisitionWorkflowId, WorkFlowId  = job.WorkFlowId };
         }
         private async Task<string> GetStaffIdFromCodeAsync(string staffCode) => (await _procurementDBContext.Staffs.FirstOrDefaultAsync(x => x.StaffCode == staffCode)).Id;
     }

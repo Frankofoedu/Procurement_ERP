@@ -3,7 +3,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace BsslProcurement.Migrations
 {
-    public partial class initial_data : Migration
+    public partial class workflowUpdate : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -495,52 +495,6 @@ namespace BsslProcurement.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "Jobs",
-                columns: table => new
-                {
-                    Id = table.Column<int>(nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    WorkFlowStep = table.Column<int>(nullable: false),
-                    CreationDate = table.Column<DateTime>(nullable: false),
-                    DoneDate = table.Column<DateTime>(nullable: true),
-                    JobStatus = table.Column<int>(nullable: false),
-                    Remark = table.Column<string>(nullable: true),
-                    StaffId = table.Column<string>(nullable: true),
-                    Discriminator = table.Column<string>(nullable: false),
-                    RequisitionId = table.Column<int>(nullable: true),
-                    CompanyInfoId = table.Column<int>(nullable: true),
-                    StaffId1 = table.Column<string>(nullable: true)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_Jobs", x => x.Id);
-                    table.ForeignKey(
-                        name: "FK_Jobs_AspNetUsers_StaffId",
-                        column: x => x.StaffId,
-                        principalTable: "AspNetUsers",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Restrict);
-                    table.ForeignKey(
-                        name: "FK_Jobs_Requisitions_RequisitionId",
-                        column: x => x.RequisitionId,
-                        principalTable: "Requisitions",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
-                    table.ForeignKey(
-                        name: "FK_Jobs_CompanyInfo_CompanyInfoId",
-                        column: x => x.CompanyInfoId,
-                        principalTable: "CompanyInfo",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
-                    table.ForeignKey(
-                        name: "FK_Jobs_AspNetUsers_StaffId1",
-                        column: x => x.StaffId1,
-                        principalTable: "AspNetUsers",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Restrict);
-                });
-
-            migrationBuilder.CreateTable(
                 name: "RequisitionItems",
                 columns: table => new
                 {
@@ -661,6 +615,58 @@ namespace BsslProcurement.Migrations
                         principalTable: "ERFXSetups",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Jobs",
+                columns: table => new
+                {
+                    Id = table.Column<int>(nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    WorkFlowId = table.Column<int>(nullable: false),
+                    CreationDate = table.Column<DateTime>(nullable: false),
+                    DoneDate = table.Column<DateTime>(nullable: true),
+                    JobStatus = table.Column<int>(nullable: false),
+                    Remark = table.Column<string>(nullable: true),
+                    StaffId = table.Column<string>(nullable: true),
+                    Discriminator = table.Column<string>(nullable: false),
+                    RequisitionId = table.Column<int>(nullable: true),
+                    CompanyInfoId = table.Column<int>(nullable: true),
+                    StaffId1 = table.Column<string>(nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Jobs", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_Jobs_AspNetUsers_StaffId",
+                        column: x => x.StaffId,
+                        principalTable: "AspNetUsers",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
+                    table.ForeignKey(
+                        name: "FK_Jobs_Workflows_WorkFlowId",
+                        column: x => x.WorkFlowId,
+                        principalTable: "Workflows",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_Jobs_Requisitions_RequisitionId",
+                        column: x => x.RequisitionId,
+                        principalTable: "Requisitions",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_Jobs_CompanyInfo_CompanyInfoId",
+                        column: x => x.CompanyInfoId,
+                        principalTable: "CompanyInfo",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_Jobs_AspNetUsers_StaffId1",
+                        column: x => x.StaffId1,
+                        principalTable: "AspNetUsers",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
                 });
 
             migrationBuilder.CreateTable(
@@ -795,15 +801,15 @@ namespace BsslProcurement.Migrations
                 columns: new[] { "Id", "ConcurrencyStamp", "Name", "NormalizedName" },
                 values: new object[,]
                 {
-                    { "75eb136f-02e0-44a0-adf4-768d4f5e94b9", "c6b5caa0-eea6-45d2-8b42-980df2e33fea", "Admin", null },
-                    { "3e34bbc9-7d75-4fdf-ba9c-58c3a9df2767", "3f4736ac-4a7b-466b-8656-96febdfa8006", "Staff", null },
-                    { "7654e572-6e1c-4c6b-8d0c-7366cee70dda", "90b40fd6-fa4f-4e2a-9507-ccf4ec830e02", "Vendor", null }
+                    { "9f2f1b6e-cba1-4050-894f-9151b3e51ec2", "93bd72de-2e08-49bd-b25b-b22ea714043b", "Admin", null },
+                    { "4829cea6-27d5-495e-9cf9-84c7f7fe30dd", "706c7fcc-8715-4bbc-b852-0fb938f5faa0", "Staff", null },
+                    { "d6cfc094-fd62-43cd-abe6-137f0369ccc5", "f5edd029-2a13-45eb-b956-d165590ee9d6", "Vendor", null }
                 });
 
             migrationBuilder.InsertData(
                 table: "Requisitions",
                 columns: new[] { "Id", "Date", "DeliveryDate", "Description", "ERFx", "LoggedInUserId", "PRNumber", "PreparedBy", "PreparedByRank", "PreparedFor", "PreparedForRank", "ProcessType", "ProcurementMethod", "ProcurementType", "Purpose", "RequesterType", "RequesterValue", "RequiredAtDepartment", "Status", "isBudgetCleared", "isPriced", "isSubmitted" },
-                values: new object[] { 22, new DateTime(2019, 12, 20, 11, 55, 22, 20, DateTimeKind.Local).AddTicks(7882), new DateTime(2019, 12, 20, 11, 55, 22, 20, DateTimeKind.Local).AddTicks(9010), "sample requisition", null, null, "000222", "John O", "HOD", "Abbah", "Hod", null, null, null, "For general stores", "Division", "kkkkkd", "head office", null, null, false, true });
+                values: new object[] { 22, new DateTime(2019, 12, 20, 13, 7, 48, 369, DateTimeKind.Local).AddTicks(2219), new DateTime(2019, 12, 20, 13, 7, 48, 369, DateTimeKind.Local).AddTicks(3914), "sample requisition", null, null, "000222", "John O", "HOD", "Abbah", "Hod", null, null, null, "For general stores", "Division", "kkkkkd", "head office", null, null, false, true });
 
             migrationBuilder.InsertData(
                 table: "WorkflowTypes",
@@ -905,6 +911,11 @@ namespace BsslProcurement.Migrations
                 name: "IX_Jobs_StaffId",
                 table: "Jobs",
                 column: "StaffId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Jobs_WorkFlowId",
+                table: "Jobs",
+                column: "WorkFlowId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Jobs_RequisitionId",

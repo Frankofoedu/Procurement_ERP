@@ -91,7 +91,7 @@ namespace BsslProcurement.Pages.Staff.ItemRequisition
                     await SaveOrSubmitRequisition(true);
 
                     //create and assign requisition job
-                   await _requisitionService.SendRequisitionToNextStageAsync(Requisition, WfVm.AssignedStaffCode, WfVm.WorkflowStep, WfVm.Remark);
+                   await _requisitionService.SendRequisitionToNextStageAsync(Requisition, WfVm.AssignedStaffCode, WfVm.WorkFlowId, WfVm.Remark);
                     
 
                     Message = "Requisition Added successfully";
@@ -133,7 +133,7 @@ namespace BsslProcurement.Pages.Staff.ItemRequisition
             //load requisition workflow
             var workflow = _procContext.WorkflowTypes.Include(c=> c.Workflows).FirstOrDefault(x => x.Name == DcProcurement.Constants.RequisitionWorkflow);
 
-            if (workflow.Workflows != null)
+            if (workflow.Workflows.Count() > 0)
             {
                 WfVm = new WorkFlowApproverViewModel { WorkFlowTypeId = workflow.Id };
             }

@@ -99,35 +99,35 @@ namespace BsslProcurement.Pages.Staff.JobViews
                     { todo = "approve"; }
 
 
-                    var stepJobs = allJobs.Where(m => m.WorkFlowStep == curWorkFlowStep.Step).ToList();
+                    //var stepJobs = allJobs.Where(m => m.WorkFlowStep == curWorkFlowStep.Step).ToList();
 
-                    if (stepJobs.Count > 0)
-                    {
-                        var jg = new JobGroup()
-                        {
-                            Jobs = stepJobs,
-                            WorkflowStep = curWorkFlowStep,
-                            todo = todo,
-                        };
-                        JobGroups.Add(jg);
-                    }
+                    //if (stepJobs.Count > 0)
+                    //{
+                    //    var jg = new JobGroup()
+                    //    {
+                    //        Jobs = stepJobs,
+                    //        WorkflowStep = curWorkFlowStep,
+                    //        todo = todo,
+                    //    };
+                    //    JobGroups.Add(jg);
+                    //}
                 }
 
-                var step0jobs = allJobs.Where(m => m.WorkFlowStep == 0).ToList();
+                //var step0jobs = allJobs.Where(m => m.WorkFlowStep == 0).ToList();
 
-                if (step0jobs.Count > 0)
-                {
-                    var jg = new JobGroup()
-                    {
-                        Jobs = step0jobs,
-                        WorkflowStep = new DcProcurement.Workflow()
-                        {
-                            Step = 0,
-                        },
-                        todo = "approve",
-                    };
-                    JobGroups.Add(jg);
-                }
+                //if (step0jobs.Count > 0)
+                //{
+                //    var jg = new JobGroup()
+                //    {
+                //        Jobs = step0jobs,
+                //        WorkflowStep = new DcProcurement.Workflow()
+                //        {
+                //            Step = 0,
+                //        },
+                //        todo = "approve",
+                //    };
+                //    JobGroups.Add(jg);
+                //}
             }
           
            
@@ -222,29 +222,29 @@ namespace BsslProcurement.Pages.Staff.JobViews
 
                 if (job != null)
                 {
-                    var nextStep = allWorkflow.FirstOrDefault(m => m.Step == job.WorkFlowStep + 1);
+                    //var nextStep = allWorkflow.FirstOrDefault(m => m.Step == job.WorkFlowStep + 1);
 
-                    if (nextStep != null)
-                    {
-                        //if (!nextStep.ToPersonOrAssign)
-                        //{
-                        //    if (staffId != null)
-                        //    {
-                        //        job.Done = true;
-                        //        job.DoneDate = DateTime.UtcNow;
+                    //if (nextStep != null)
+                    //{
+                    //    //if (!nextStep.ToPersonOrAssign)
+                    //    //{
+                    //    //    if (staffId != null)
+                    //    //    {
+                    //    //        job.Done = true;
+                    //    //        job.DoneDate = DateTime.UtcNow;
 
-                        //        var newJob = new PrequalificationJob()
-                        //        {
-                        //            CompanyInfoId = job.CompanyInfoId,
-                        //            CreationDate = DateTime.UtcNow,
-                        //            StaffId = staffId,
-                        //            WorkFlowStep = job.WorkFlowStep+1,
-                        //        };
+                    //    //        var newJob = new PrequalificationJob()
+                    //    //        {
+                    //    //            CompanyInfoId = job.CompanyInfoId,
+                    //    //            CreationDate = DateTime.UtcNow,
+                    //    //            StaffId = staffId,
+                    //    //            WorkFlowStep = job.WorkFlowStep+1,
+                    //    //        };
 
-                        //        _context.PrequalificationJobs.Add(newJob);
-                        //    }
-                        //}
-                    }
+                    //    //        _context.PrequalificationJobs.Add(newJob);
+                    //    //    }
+                    //    //}
+                    //}
                 }
             }
 

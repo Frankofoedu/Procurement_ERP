@@ -32,7 +32,7 @@ namespace BsslProcurement.Pages.Staff.ItemRequisition
         public void LoadData(int id)
         {
 
-            Requisition = context.Requisitions.Include(y => y.RequisitionItems).Where(k => k.Id == id).FirstOrDefault();
+            Requisition = context.Requisitions.Include(y => y.RequisitionItems).FirstOrDefault(k => k.Id == id);
 
         }
         public void OnGet(int id)
@@ -45,7 +45,6 @@ namespace BsslProcurement.Pages.Staff.ItemRequisition
         {
             if (ModelState.IsValid)
             {
-
 
             }
             LoadData(id);

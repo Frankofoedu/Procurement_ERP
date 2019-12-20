@@ -13,7 +13,7 @@ namespace DcProcurement
         /// check if there is any workflow in the db before setting. 
         /// if no workflow in the db, set to 0 else set to 1
         /// </summary>
-        public int WorkFlowStep { get; protected set; } //current workflow step
+        public int WorkFlowId { get; protected set; } 
 
         [DataType(DataType.Date)]
         public DateTime CreationDate { get; protected set; }
@@ -25,7 +25,12 @@ namespace DcProcurement
         public string StaffId { get; protected set; } // if staff field is null then any staff can see the job.
 
         [ForeignKey("StaffId")]
-        public Staff Staff { get; set; }
+        public Staff Staff { get; private set; }
+
+        public Workflow Workflow { get; private set; }
+
+
+
 
         public void SetAsDone(DateTime doneDate)
         {

@@ -10,6 +10,8 @@
     <link href="~/lib/font-awesome/css/all.css" rel="stylesheet">
     <link href="~/lib/jquery/dist/jquery.mCustomScrollbar.min.css" rel="stylesheet" />
     <link href="~/lib/jqueryui/themes/ui-lightness/jquery-ui.css" rel="stylesheet" />
+
+    <link href="~/css/jquery.dataTables.min.css" rel="stylesheet" />
     <style>
         @@media print {
             .no-print, .no-print * {
@@ -99,9 +101,9 @@
                         <i class="fas fa-user-alt mr-1"></i> Manage Workflow
                     </a>
                     <ul class="collapse list-unstyled" id="workflowSubmenu">
-                        <li>
-                            <a asp-page="/Staff/Workflow/Prequalification"><i class="fas fa-file-archive mr-1"></i> Prequalification</a>
-                        </li>
+                        @*<li>
+                                <a asp-page="/Staff/Workflow/Prequalification"><i class="fas fa-file-archive mr-1"></i> Prequalification</a>
+                            </li>*@
                         <li>
                             <a asp-page="/Staff/Workflow/WorkflowSetup"><i class="fas fa-file-archive mr-1"></i> Workflow Setup</a>
                         </li>
@@ -144,8 +146,8 @@
                             <a asp-page="/Staff/Items"><i class="fas fa-file-archive mr-1"></i> Items</a>
                         </li>
                         @*<li>
-                    <a asp-page="/Staff/ProPolicy"><i class="fas fa-file-invoice mr-1"></i> Publish Procurement</a>
-                </li>*@
+                                <a asp-page="/Staff/ProPolicy"><i class="fas fa-file-invoice mr-1"></i> Publish Procurement</a>
+                            </li>*@
                         <li>
                             <a asp-page="/Staff/PreQSetup"><i class="fas fa-file-invoice mr-1"></i> Prequalification Setup</a>
                         </li>
@@ -203,7 +205,8 @@
     <script src="~/lib/jquery/dist/jquery.mCustomScrollbar.concat.min.js"></script>
     <script src="~/lib/jqueryui/jquery-ui.min.js"></script>
     <script src="~/lib/bootstrap/dist/js/print.js"></script>
-    <script src="~/js/date.js"></script>
+
+    <script src="~/js/jquery.dataTables.min.js"></script>
     <script>
         // Use datepicker on the date inputs
         $("input[data-date=date]").datepicker({
@@ -214,7 +217,7 @@
 
                 var id = $(this).data('id');
                 var hidDateField = $('input:hidden[data-id=' + id + ']').first();
-                
+
                 //get the datepicker date in default format
                 var d = $(this).datepicker('getDate');
 
@@ -228,7 +231,7 @@
         //$(".datepicker").datepicker({
         //    dateFormat: "dd/mm/yy",
         //    onSelect: function (dateText, inst) {
-        //        //alert(dateText);                
+        //        //alert(dateText);
         //        var d = $(this).datepicker('getDate');
 
         //        var e = $.datepicker.formatDate("mm/dd/yy", d);
@@ -242,6 +245,8 @@
         $("input[data-date=date]").on('click', function () {
             return false;
         });
+
+        $('table').dataTable();
 
     </script>
     @RenderSection("Scripts", required: false)
