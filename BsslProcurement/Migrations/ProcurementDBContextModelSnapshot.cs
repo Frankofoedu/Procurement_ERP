@@ -308,11 +308,11 @@ namespace BsslProcurement.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<bool>("Done")
-                        .HasColumnType("bit");
-
                     b.Property<DateTime?>("DoneDate")
                         .HasColumnType("datetime2");
+
+                    b.Property<int>("JobStatus")
+                        .HasColumnType("int");
 
                     b.Property<string>("Remark")
                         .HasColumnType("nvarchar(max)");
@@ -628,9 +628,9 @@ namespace BsslProcurement.Migrations
                         new
                         {
                             Id = 22,
-                            Date = new DateTime(2019, 12, 16, 18, 40, 20, 378, DateTimeKind.Local).AddTicks(5968),
+                            Date = new DateTime(2019, 12, 20, 11, 55, 22, 20, DateTimeKind.Local).AddTicks(7882),
                             DateCreated = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            DeliveryDate = new DateTime(2019, 12, 16, 18, 40, 20, 378, DateTimeKind.Local).AddTicks(7176),
+                            DeliveryDate = new DateTime(2019, 12, 20, 11, 55, 22, 20, DateTimeKind.Local).AddTicks(9010),
                             Description = "sample requisition",
                             PRNumber = "000222",
                             PreparedBy = "John O",
@@ -824,12 +824,6 @@ namespace BsslProcurement.Migrations
                         .HasColumnType("int")
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-                    b.Property<string>("StaffId")
-                        .HasColumnType("nvarchar(450)");
-
-                    b.Property<string>("StaffId1")
-                        .HasColumnType("nvarchar(450)");
-
                     b.Property<int>("Step")
                         .HasColumnType("int");
 
@@ -840,10 +834,6 @@ namespace BsslProcurement.Migrations
                         .HasColumnType("int");
 
                     b.HasKey("Id");
-
-                    b.HasIndex("StaffId");
-
-                    b.HasIndex("StaffId1");
 
                     b.HasIndex("WorkflowActionId");
 
@@ -922,7 +912,7 @@ namespace BsslProcurement.Migrations
                     b.HasData(
                         new
                         {
-                            Id = 1,
+                            Id = 3,
                             Code = "0001",
                             Name = "Procurement"
                         },
@@ -934,7 +924,7 @@ namespace BsslProcurement.Migrations
                         },
                         new
                         {
-                            Id = 3,
+                            Id = 1,
                             Code = "0003",
                             Name = "Requisition"
                         });
@@ -969,20 +959,20 @@ namespace BsslProcurement.Migrations
                     b.HasData(
                         new
                         {
-                            Id = "f71e2b41-37cb-448e-94cf-164c311d0320",
-                            ConcurrencyStamp = "68ed45c2-0a3b-4586-ae73-5c02d1dcd38c",
+                            Id = "75eb136f-02e0-44a0-adf4-768d4f5e94b9",
+                            ConcurrencyStamp = "c6b5caa0-eea6-45d2-8b42-980df2e33fea",
                             Name = "Admin"
                         },
                         new
                         {
-                            Id = "e50f214c-7959-495c-a5b4-5657350a1bc8",
-                            ConcurrencyStamp = "fbec9841-1ace-4bd4-9f01-96b88f59af34",
+                            Id = "3e34bbc9-7d75-4fdf-ba9c-58c3a9df2767",
+                            ConcurrencyStamp = "3f4736ac-4a7b-466b-8656-96febdfa8006",
                             Name = "Staff"
                         },
                         new
                         {
-                            Id = "d660824e-d429-484b-b46d-0615059b26f6",
-                            ConcurrencyStamp = "8b979bfa-9ebc-4bb7-b727-d0268e491afc",
+                            Id = "7654e572-6e1c-4c6b-8d0c-7366cee70dda",
+                            ConcurrencyStamp = "90b40fd6-fa4f-4e2a-9507-ccf4ec830e02",
                             Name = "Vendor"
                         });
                 });
@@ -1327,14 +1317,6 @@ namespace BsslProcurement.Migrations
 
             modelBuilder.Entity("DcProcurement.Workflow", b =>
                 {
-                    b.HasOne("DcProcurement.Staff", null)
-                        .WithMany("AdditionalStaffWorkflows")
-                        .HasForeignKey("StaffId");
-
-                    b.HasOne("DcProcurement.Staff", null)
-                        .WithMany("StaffWorkflows")
-                        .HasForeignKey("StaffId1");
-
                     b.HasOne("DcProcurement.WorkflowAction", "WorkflowAction")
                         .WithMany("Workflows")
                         .HasForeignKey("WorkflowActionId");

@@ -10,8 +10,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace BsslProcurement.Migrations
 {
     [DbContext(typeof(ProcurementDBContext))]
-    [Migration("20191213170443_erfxupadate")]
-    partial class erfxupadate
+    [Migration("20191220105523_initial_data")]
+    partial class initial_data
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -310,11 +310,11 @@ namespace BsslProcurement.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<bool>("Done")
-                        .HasColumnType("bit");
-
                     b.Property<DateTime?>("DoneDate")
                         .HasColumnType("datetime2");
+
+                    b.Property<int>("JobStatus")
+                        .HasColumnType("int");
 
                     b.Property<string>("Remark")
                         .HasColumnType("nvarchar(max)");
@@ -630,9 +630,9 @@ namespace BsslProcurement.Migrations
                         new
                         {
                             Id = 22,
-                            Date = new DateTime(2019, 12, 13, 18, 4, 42, 475, DateTimeKind.Local).AddTicks(6236),
+                            Date = new DateTime(2019, 12, 20, 11, 55, 22, 20, DateTimeKind.Local).AddTicks(7882),
                             DateCreated = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            DeliveryDate = new DateTime(2019, 12, 13, 18, 4, 42, 475, DateTimeKind.Local).AddTicks(7603),
+                            DeliveryDate = new DateTime(2019, 12, 20, 11, 55, 22, 20, DateTimeKind.Local).AddTicks(9010),
                             Description = "sample requisition",
                             PRNumber = "000222",
                             PreparedBy = "John O",
@@ -826,12 +826,6 @@ namespace BsslProcurement.Migrations
                         .HasColumnType("int")
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-                    b.Property<string>("StaffId")
-                        .HasColumnType("nvarchar(450)");
-
-                    b.Property<string>("StaffId1")
-                        .HasColumnType("nvarchar(450)");
-
                     b.Property<int>("Step")
                         .HasColumnType("int");
 
@@ -842,10 +836,6 @@ namespace BsslProcurement.Migrations
                         .HasColumnType("int");
 
                     b.HasKey("Id");
-
-                    b.HasIndex("StaffId");
-
-                    b.HasIndex("StaffId1");
 
                     b.HasIndex("WorkflowActionId");
 
@@ -924,7 +914,7 @@ namespace BsslProcurement.Migrations
                     b.HasData(
                         new
                         {
-                            Id = 1,
+                            Id = 3,
                             Code = "0001",
                             Name = "Procurement"
                         },
@@ -936,7 +926,7 @@ namespace BsslProcurement.Migrations
                         },
                         new
                         {
-                            Id = 3,
+                            Id = 1,
                             Code = "0003",
                             Name = "Requisition"
                         });
@@ -967,6 +957,26 @@ namespace BsslProcurement.Migrations
                         .HasFilter("[NormalizedName] IS NOT NULL");
 
                     b.ToTable("AspNetRoles");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = "75eb136f-02e0-44a0-adf4-768d4f5e94b9",
+                            ConcurrencyStamp = "c6b5caa0-eea6-45d2-8b42-980df2e33fea",
+                            Name = "Admin"
+                        },
+                        new
+                        {
+                            Id = "3e34bbc9-7d75-4fdf-ba9c-58c3a9df2767",
+                            ConcurrencyStamp = "3f4736ac-4a7b-466b-8656-96febdfa8006",
+                            Name = "Staff"
+                        },
+                        new
+                        {
+                            Id = "7654e572-6e1c-4c6b-8d0c-7366cee70dda",
+                            ConcurrencyStamp = "90b40fd6-fa4f-4e2a-9507-ccf4ec830e02",
+                            Name = "Vendor"
+                        });
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
@@ -1309,14 +1319,6 @@ namespace BsslProcurement.Migrations
 
             modelBuilder.Entity("DcProcurement.Workflow", b =>
                 {
-                    b.HasOne("DcProcurement.Staff", null)
-                        .WithMany("AdditionalStaffWorkflows")
-                        .HasForeignKey("StaffId");
-
-                    b.HasOne("DcProcurement.Staff", null)
-                        .WithMany("StaffWorkflows")
-                        .HasForeignKey("StaffId1");
-
                     b.HasOne("DcProcurement.WorkflowAction", "WorkflowAction")
                         .WithMany("Workflows")
                         .HasForeignKey("WorkflowActionId");
