@@ -7,7 +7,6 @@
 
 @section Styles{
 
-    <link href="~/css/jquery.dataTables.min.css" rel="stylesheet" />
     <link href="~/css/fileupload.css" rel="stylesheet" />
     <link href="~/css/site.css" rel="stylesheet" />
     <link href="~/css/quill.snow.css" rel="stylesheet" />
@@ -366,7 +365,7 @@
                             @*  <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>*@
                             <input id="btnSave" class="btn btn-lg btn-outline-info float-left" asp-page-handler="Save" value="Save For Later" type="submit" placeholder="" />
 
-                            <input class="btn btn-lg btn-primary" asp-page-handler="Submit" value="Send for Approval" type="submit" placeholder="" />
+                            <input id="btnSubmit" class="btn btn-lg btn-primary" asp-page-handler="Submit" value="Submit" type="submit" placeholder="" />
 
                             <button id="printBtn" class="btn btn-lg btn-info" onclick="print(); return false;">Print/Preview</button>
                         </div>
@@ -521,7 +520,6 @@
 @section Scripts{
     <script src="~/js/fileUpload.js"></script>
     <script src="~/js/quill.js"></script>
-    <script src="~/js/jquery.dataTables.min.js"></script>
 
     <script>
 
@@ -611,7 +609,7 @@
                     $('#Requesterspinner').hide();
                     $('#RequesterTable').dataTable();
 
-                    $('.btnRequesterName').on('click', function () {
+                    $('#RequesterTable').on('click','.btnRequesterName', function () {
 
                         $('.requesterCode').val($(this).val());
                         $('.requesterValue').val($(this).attr("rname"));
@@ -709,7 +707,7 @@
         $(function () {
             $('#btnSubmit').on('click', function () {
                 var purpose = $('#Requisition_Purpose');
-                purpose.val(quill.root.innerHTML);
+                purpose.val(quill.getText());
             })
         })
 

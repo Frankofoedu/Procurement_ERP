@@ -115,32 +115,32 @@ namespace BsslProcurement.Pages.Staff.Review
                 personnelFilesApproveds.Add(FA);
             }
 
-            var curStep = _context.Workflows.FirstOrDefault(m => m.WorkflowType.Name=="procurement" && m.Step == Job.WorkFlowStep);
+         //   var curStep = _context.Workflows.FirstOrDefault(m => m.WorkflowType.Name=="procurement" && m.Step == Job.WorkFlowStep);
 
-            if (curStep == null) // if there is no workflow in the db
-            {
-                Description = "Validate Files and Approve Company";
-                todo = "approve";
-            }
-            else {
-                Description = curStep.WorkflowAction.Description;
+            //if (curStep == null) // if there is no workflow in the db
+            //{
+            //    Description = "Validate Files and Approve Company";
+            //    todo = "approve";
+            //}
+            //else {
+            //    Description = curStep.WorkflowAction.Description;
 
-                var nextStep = _context.Workflows
-                    .FirstOrDefault(m => m.WorkflowType.Name=="procurement" && m.Step == Job.WorkFlowStep + 1);
+            //    var nextStep = _context.Workflows
+            //        .FirstOrDefault(m => m.WorkflowType.Name=="procurement" && m.Step == Job.WorkFlowStep + 1);
 
-                //if (nextStep == null)
-                //{ todo = "approve"; }
-                //else if (nextStep.ToPersonOrAssign)
-                //{ todo = "saventoperson";
-                //    Staffs = new List<DcProcurement.Staff>();
-                //    Staffs.Add(nextStep.StaffToAssign);
-                //    Staffs.Add(nextStep.AlternativeStaffToAssign);
-                //}
-                //else {
-                //    todo = "saventoassign";
-                //}
+            //    //if (nextStep == null)
+            //    //{ todo = "approve"; }
+            //    //else if (nextStep.ToPersonOrAssign)
+            //    //{ todo = "saventoperson";
+            //    //    Staffs = new List<DcProcurement.Staff>();
+            //    //    Staffs.Add(nextStep.StaffToAssign);
+            //    //    Staffs.Add(nextStep.AlternativeStaffToAssign);
+            //    //}
+            //    //else {
+            //    //    todo = "saventoassign";
+            //    //}
                 
-            }
+            //}
 
             baseURL = GetBaseUrl();
 
@@ -196,15 +196,15 @@ namespace BsslProcurement.Pages.Staff.Review
                     }
                 }
 
-                var nextStep = _context.Workflows.FirstOrDefault(m => m.WorkflowType.Name == "procurement" && m.Step == Job.WorkFlowStep + 1);
+                //var nextStep = _context.Workflows.FirstOrDefault(m => m.WorkflowType.Name == "procurement" && m.Step == Job.WorkFlowStep + 1);
 
-                if (nextStep == null)
-                {
-                    CompanyInfo.Approved = CompanyApproved;
+                //if (nextStep == null)
+                //{
+                //    CompanyInfo.Approved = CompanyApproved;
 
-                    //Job.Done = true;
-                    //Job.DoneDate = DateTime.UtcNow;
-                }
+                //    //Job.Done = true;
+                //    //Job.DoneDate = DateTime.UtcNow;
+                //}
 
                 //if (nextStep.ToPersonOrAssign)
                 //{

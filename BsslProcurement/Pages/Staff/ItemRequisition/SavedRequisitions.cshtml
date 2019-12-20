@@ -1,8 +1,10 @@
 ﻿@page
-@model ProcCommencement.AllRequisitionModel
+@model BsslProcurement.SavedRequisitionsModel
 @{
-    ViewData["Title"] = "All Requisition";
+    ViewData["Title"] = "Saved Requisitions";
+    Layout = "~/Pages/Shared/_Layout.cshtml";
 }
+
 
 <div class="row mt-5">
     <div class="col-md-1"></div>
@@ -35,7 +37,10 @@
             @*<button class="btn btn-primary pt-2" asp-page="NewRequisition">Add New</button>*@
 
             <a asp-page="NewRequisition" role="button" class="btn btn-primary">New Requisition</a>
+            @if (Model.Requisitions.Any())
+            {
 
+            }
             <div class="row pt-3 " style="">
                 <div class="col-12 table-responsive table-responsive-sm">
                     <table class="table  table-striped">
@@ -59,6 +64,7 @@
 
                             @if (Model.Requisitions.Any())
                             {
+
                                 @for (int i = 0; i < Model.Requisitions.Count; i++)
                                 {
                                     var item = Model.Requisitions[i];
@@ -75,16 +81,13 @@
                                         <td><a asp-page="./DetailRequisition" asp-route-id="@item.Id" style="color: #007bff">View</a></td>
                                     </tr>
                                 }
-
                             }
-
-
                         </tbody>
                         <tfoot>
                             @*<tr class="font-weight-bold">
-                <td class="text-right" style="text-align: right;" colspan="8">Total :</td>
-                <td>@Model.Requisitions.Sum(x => x.)</td>
-            </tr>*@
+                                    <td class="text-right" style="text-align: right;" colspan="8">Total :</td>
+                                    <td>@Model.Requisitions.Sum(x => x.)</td>
+                                </tr>*@
                         </tfoot>
                     </table>
                 </div>
@@ -96,3 +99,4 @@
         </form>
     </div>
 </div>
+

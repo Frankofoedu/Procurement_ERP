@@ -7,10 +7,12 @@ namespace BsslProcurement.ViewModels
 {
     public class WorkFlowApproverViewModel
     {
+        public int WorkFlowId { get; set; }
         public string WorkFlowActionId { get; set; }
         public string AssignedStaffCode { get; set; }
         public string AssignedStaffName { get; set; }
         public int? WorkFlowTypeId { get; set; }
         public int WorkflowStep { get; set; }
+        public string Remark { get; set; }
     }
 }

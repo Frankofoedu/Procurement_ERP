@@ -8,13 +8,14 @@ namespace DcProcurement.Jobs
     {
         private RequisitionJob() { }
 
-        public RequisitionJob(int reqId, string staffId,int wrkflwStep, string remark) 
+        public RequisitionJob(int reqId, string staffId,int workflowId, string remark) 
         {
             RequisitionId = reqId;
             CreationDate = DateTime.Now;
             StaffId = staffId;
             Remark = remark;
-            WorkFlowStep = wrkflwStep;
+            WorkFlowId = workflowId;
+            JobStatus = Enums.JobState.NotDone;
         }
         public int RequisitionId { get; private set; }
         public Requisition Requisition { get; private set; }

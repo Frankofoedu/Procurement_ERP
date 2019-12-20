@@ -16,66 +16,70 @@
 
 </div>
 
-<div class="row mt-5">
-    <div class="col-md-1 col-lg-3"></div>
-    <div class="col-md-10 col-lg-6 my-5">
-        <form method="post" class="panel panel-login">
-            <div class="panel-heading">
-                <div class="row">
-                    <p class="header-text">Work Flow Category Setup</p>
-                </div>
-                <hr>
-            </div>
-            <div asp-validation-summary="All" class="text-danger"></div>
+@if (Model.workflowType != null)
+{
 
-            <input type="hidden" asp-for="workflowType.Id" />
+    <div class="row mt-5">
+        <div class="col-md-1 col-lg-3"></div>
+        <div class="col-md-10 col-lg-6 my-5">
+            <form method="post" class="panel panel-login">
+                <div class="panel-heading">
+                    <div class="row">
+                        <p class="header-text">Work Flow Category Setup</p>
+                    </div>
+                    <hr>
+                </div>
+                <div asp-validation-summary="All" class="text-danger"></div>
 
-            <div class="form-group">
-                <div class="row">
-                    <div class="col-sm-3 text-right">
-                        <label>Category Code</label>
-                    </div>
-                    <div class="col-sm-9">
-                        <input class="form-control-sm" asp-for="workflowType.Code" />
-                        <button class="btn btn-outline-primary btn-sm"><i class="fas fa-search"></i></button>
-                        <span asp-validation-for="workflowType.Code" class="text-danger"></span>
-                    </div>
-                </div>
-            </div>
-            <div class="form-group">
-                <div class="row">
-                    <div class="col-sm-3 text-right">
-                        <label>Category Name</label>
-                    </div>
-                    <div class="col-sm-9">
-                        <input class="form-control" asp-for="workflowType.Name" />
-                        <span asp-validation-for="workflowType.Name" class="text-danger"></span>
+                <input type="hidden" asp-for="workflowType.Id" />
+
+                <div class="form-group">
+                    <div class="row">
+                        <div class="col-sm-3 text-right">
+                            <label>Category Code</label>
+                        </div>
+                        <div class="col-sm-9">
+                            <input class="form-control-sm" asp-for="workflowType.Code" />
+                            <button class="btn btn-outline-primary btn-sm"><i class="fas fa-search"></i></button>
+                            <span asp-validation-for="workflowType.Code" class="text-danger"></span>
+                        </div>
                     </div>
                 </div>
-            </div>
-            <div class="form-group">
-                <div class="row">
-                    <div class="col-sm-3 text-right">
-                        <label>Description</label>
-                    </div>
-                    <div class="col-sm-9">
-                        <textarea class="form-control" asp-for="workflowType.Description"></textarea>
-                    </div>
-                </div>
-            </div>
-            <div class="form-group">
-                <div class="row">
-                    <div class="col-sm-6 col-sm-offset-3">
-                        <button type="submit" class="btn form-btn">Save</button>
-                    </div>
-                    <div class="col-sm-6 text-center">
-                        <a asp-page="./WorkflowCategory" class="btn btn-outline-dark">Reset</a>
+                <div class="form-group">
+                    <div class="row">
+                        <div class="col-sm-3 text-right">
+                            <label>Category Name</label>
+                        </div>
+                        <div class="col-sm-9">
+                            <input class="form-control" asp-for="workflowType.Name" />
+                            <span asp-validation-for="workflowType.Name" class="text-danger"></span>
+                        </div>
                     </div>
                 </div>
-            </div>
-        </form>
+                <div class="form-group">
+                    <div class="row">
+                        <div class="col-sm-3 text-right">
+                            <label>Description</label>
+                        </div>
+                        <div class="col-sm-9">
+                            <textarea class="form-control" asp-for="workflowType.Description"></textarea>
+                        </div>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="row">
+                        <div class="col-sm-6 col-sm-offset-3">
+                            <button type="submit" class="btn form-btn">Save</button>
+                        </div>
+                        <div class="col-sm-6 text-center">
+                            <a asp-page="./WorkflowCategory" class="btn btn-outline-dark">Reset</a>
+                        </div>
+                    </div>
+                </div>
+            </form>
+        </div>
     </div>
-</div>
+}
 
 
 <div class="row my-3">

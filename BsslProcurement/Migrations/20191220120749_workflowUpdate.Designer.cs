@@ -10,8 +10,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace BsslProcurement.Migrations
 {
     [DbContext(typeof(ProcurementDBContext))]
-    [Migration("20191213170443_erfxupadate")]
-    partial class erfxupadate
+    [Migration("20191220120749_workflowUpdate")]
+    partial class workflowUpdate
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -310,11 +310,11 @@ namespace BsslProcurement.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<bool>("Done")
-                        .HasColumnType("bit");
-
                     b.Property<DateTime?>("DoneDate")
                         .HasColumnType("datetime2");
+
+                    b.Property<int>("JobStatus")
+                        .HasColumnType("int");
 
                     b.Property<string>("Remark")
                         .HasColumnType("nvarchar(max)");
@@ -322,12 +322,14 @@ namespace BsslProcurement.Migrations
                     b.Property<string>("StaffId")
                         .HasColumnType("nvarchar(450)");
 
-                    b.Property<int>("WorkFlowStep")
+                    b.Property<int>("WorkFlowId")
                         .HasColumnType("int");
 
                     b.HasKey("Id");
 
                     b.HasIndex("StaffId");
+
+                    b.HasIndex("WorkFlowId");
 
                     b.ToTable("Jobs");
 
@@ -630,9 +632,9 @@ namespace BsslProcurement.Migrations
                         new
                         {
                             Id = 22,
-                            Date = new DateTime(2019, 12, 13, 18, 4, 42, 475, DateTimeKind.Local).AddTicks(6236),
+                            Date = new DateTime(2019, 12, 20, 13, 7, 48, 369, DateTimeKind.Local).AddTicks(2219),
                             DateCreated = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            DeliveryDate = new DateTime(2019, 12, 13, 18, 4, 42, 475, DateTimeKind.Local).AddTicks(7603),
+                            DeliveryDate = new DateTime(2019, 12, 20, 13, 7, 48, 369, DateTimeKind.Local).AddTicks(3914),
                             Description = "sample requisition",
                             PRNumber = "000222",
                             PreparedBy = "John O",
@@ -826,12 +828,6 @@ namespace BsslProcurement.Migrations
                         .HasColumnType("int")
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-                    b.Property<string>("StaffId")
-                        .HasColumnType("nvarchar(450)");
-
-                    b.Property<string>("StaffId1")
-                        .HasColumnType("nvarchar(450)");
-
                     b.Property<int>("Step")
                         .HasColumnType("int");
 
@@ -842,10 +838,6 @@ namespace BsslProcurement.Migrations
                         .HasColumnType("int");
 
                     b.HasKey("Id");
-
-                    b.HasIndex("StaffId");
-
-                    b.HasIndex("StaffId1");
 
                     b.HasIndex("WorkflowActionId");
 
@@ -924,7 +916,7 @@ namespace BsslProcurement.Migrations
                     b.HasData(
                         new
                         {
-                            Id = 1,
+                            Id = 3,
                             Code = "0001",
                             Name = "Procurement"
                         },
@@ -936,7 +928,7 @@ namespace BsslProcurement.Migrations
                         },
                         new
                         {
-                            Id = 3,
+                            Id = 1,
                             Code = "0003",
                             Name = "Requisition"
                         });
@@ -967,6 +959,26 @@ namespace BsslProcurement.Migrations
                         .HasFilter("[NormalizedName] IS NOT NULL");
 
                     b.ToTable("AspNetRoles");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = "9f2f1b6e-cba1-4050-894f-9151b3e51ec2",
+                            ConcurrencyStamp = "93bd72de-2e08-49bd-b25b-b22ea714043b",
+                            Name = "Admin"
+                        },
+                        new
+                        {
+                            Id = "4829cea6-27d5-495e-9cf9-84c7f7fe30dd",
+                            ConcurrencyStamp = "706c7fcc-8715-4bbc-b852-0fb938f5faa0",
+                            Name = "Staff"
+                        },
+                        new
+                        {
+                            Id = "d6cfc094-fd62-43cd-abe6-137f0369ccc5",
+                            ConcurrencyStamp = "f5edd029-2a13-45eb-b956-d165590ee9d6",
+                            Name = "Vendor"
+                        });
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
@@ -1237,6 +1249,12 @@ namespace BsslProcurement.Migrations
                     b.HasOne("DcProcurement.Staff", "Staff")
                         .WithMany()
                         .HasForeignKey("StaffId");
+
+                    b.HasOne("DcProcurement.Workflow", "Workflow")
+                        .WithMany()
+                        .HasForeignKey("WorkFlowId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
                 });
 
             modelBuilder.Entity("DcProcurement.PersonnelDetails", b =>
@@ -1309,14 +1327,6 @@ namespace BsslProcurement.Migrations
 
             modelBuilder.Entity("DcProcurement.Workflow", b =>
                 {
-                    b.HasOne("DcProcurement.Staff", null)
-                        .WithMany("AdditionalStaffWorkflows")
-                        .HasForeignKey("StaffId");
-
-                    b.HasOne("DcProcurement.Staff", null)
-                        .WithMany("StaffWorkflows")
-                        .HasForeignKey("StaffId1");
-
                     b.HasOne("DcProcurement.WorkflowAction", "WorkflowAction")
                         .WithMany("Workflows")
                         .HasForeignKey("WorkflowActionId");

@@ -39,7 +39,7 @@
         <div class="col-12">
             <div class="form-group">
                 <label>Next Authority : </label>
-                <select class="form-control" id="selectAction" asp-items="ActionTypeItems" asp-for="WorkFlowActionId">
+                <select class="form-control" id="selectAction" asp-items="ActionTypeItems" asp-for="WorkFlowId">
                     <option value="">--Select--</option>
                 </select>
             </div>
@@ -61,6 +61,13 @@
             <label>Designation : </label>
             <span class="d-flex flex-row">
                 <input class="form-control" readonly Id="txtWorkflowStaffDesignation" />
+            </span>
+        </div>
+        <div class="col-sm-12">
+            <label>Remark : </label>
+            <span class="d-flex flex-row">
+                <textarea class="form-control" rows="5" asp-for="Remark"></textarea>
+                
             </span>
         </div>
     </div>
@@ -86,7 +93,7 @@
             </div>
         </div>
     </div>
-    <input type="hidden" id="hiddenURL" value="@Url.Action("GetStaffWorkflowPartial", "Staff",  new { id = "*id*" })")" />
+    <input type="hidden" id="hiddenURL" value="@Url.Action("GetStaffWorkflowPartial", "Staff",  new { id = "*id*" })" )" />
 }
 else
 {
@@ -124,12 +131,21 @@ else
                 $('.btnStaffName').on('click', function () {
                     //assign staff name textbox
                     $('#txtWorkflowStaffName').val($(this).val());
-
+                    var staffCode = $(this).text();
                     //assign staff code textbox
-                    $('#txtWorkflowStaffCode').val($(this).text());
+                    $('#txtWorkflowStaffCode').val(staffCode);
 
-                    //assign staff rank textbox
-                    $('#txtWorkflowStaffDesignation').val($(this).attr('staffrank'));
+                    
+                    var rankURL = window.location.origin + "/api/Users/GetStaffRank/" + staffCode;
+
+                    $.ajax({
+                        url: rankURL,
+
+                    }).done(function (data) {
+                        //assign rank to rank textbox
+                        $('#txtWorkflowStaffDesignation').val(data);
+                    });               
+
 
                     //$('#forStaffText').val();
                     $('#staffWorkflowModal').modal("hide");

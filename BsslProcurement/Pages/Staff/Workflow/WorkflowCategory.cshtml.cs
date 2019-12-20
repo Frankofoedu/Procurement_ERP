@@ -32,7 +32,7 @@ namespace BsslProcurement.Pages.Staff.Workflow
             {
                 workflowType = _context.WorkflowTypes.Find(id.Value);
             }
-            else workflowType = new WorkflowType();
+           // else workflowType = new WorkflowType();
 
             workflowTypes = _context.WorkflowTypes.ToList();
         }

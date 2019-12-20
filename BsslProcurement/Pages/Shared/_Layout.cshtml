@@ -10,6 +10,8 @@
     <link href="~/lib/font-awesome/css/all.css" rel="stylesheet">
     <link href="~/lib/jquery/dist/jquery.mCustomScrollbar.min.css" rel="stylesheet" />
     <link href="~/lib/jqueryui/themes/ui-lightness/jquery-ui.css" rel="stylesheet" />
+
+    <link href="~/css/jquery.dataTables.min.css" rel="stylesheet" />
     <style>
         @@media print {
             .no-print, .no-print * {
@@ -33,38 +35,32 @@
 
             <ul class="list-unstyled components">
 
-                <li class="active mt-5">
-                    <a href="#projectSubmenu" data-toggle="collapse" aria-expanded="true" class="dropdown-toggle">
-                        <i class="fas fa-cog mr-1"></i> Setting
-                    </a>
-                    <ul class="collapse list-unstyled" id="projectSubmenu">
-                        <li>
-                            <a href="#"><i class="fas fa-file-contract mr-1"></i> Upload and Download T/C</a>
-                        </li>
-                        <li>
-                            <a href="#"><i class="fas fa-list-alt mr-1"></i> Purchase Category Setup</a>
-                        </li>
-                        <li>
-                            <a href="#"><i class="fas fa-list-alt mr-1"></i> Source of Order</a>
-                        </li>
-                        <li>
-                            <a href="#"><i class="fas fa-sort-numeric-up mr-1"></i> Setup LPO Numbering</a>
-                        </li>
-                        <li>
-                            <a href="#"><i class="fas fa-file mr-1"></i> Tutorial Form</a>
-                        </li>
-                    </ul>
-                </li>
-                <li>
-                    <a href="" data-toggle="modal" data-target="#AnalysisList"> <i class="fas fa-chart-pie mr-1"></i>Orders</a>
-                </li>
+
                 <li>
                     <a href="#transactionSubMenu" data-toggle="collapse" aria-expanded="true" class="dropdown-toggle"> <i class="fas fa-comment mr-1"></i>Purchase Requisition</a>
                     <ul class="collapse list-unstyled" id="transactionSubMenu">
                         <li>
-                            <a asp-page="/Staff/ItemRequisition/NewRequisition"><i class="fas fa-shopping-cart"></i>New Requisition</a>
-                            <a asp-page="/Staff/ItemRequisition/ProcCommencement/AllRequisition"><i class="fas fa-shopping-cart"></i> All Requisition</a>
-                            <a asp-page="/Staff/ItemRequisition/BidPreparation/ClearedRequisitions"><i class="fas fa-shopping-cart"></i>Cleared Requisition</a>
+                            <a asp-page="/Staff/ItemRequisition/NewRequisition"><i class="fas fa-shopping-cart"></i>Create Purchase Requisition</a>
+                            <a asp-page="/Staff/ItemRequisition/SavedRequisitions"><i class="fas fa-shopping-cart"></i> View Saved Requisition</a>
+                            <a asp-page="/Staff/ItemRequisition/AllRequisition"><i class="fas fa-shopping-cart"></i> View Approved Requisition</a>
+                            <a><i class="fas fa-shopping-cart"></i>Import Requisition</a>
+                        </li>
+                    </ul>
+                </li>
+                <li>
+                    <a href="#ProcurementSubMenu" data-toggle="collapse" aria-expanded="true" class="dropdown-toggle"> <i class="fas fa-comment mr-1"></i>Procurement Process</a>
+                    <ul class="collapse list-unstyled" id="ProcurementSubMenu">
+                        <li>
+                            <a asp-page="/Staff/ItemRequisition/ProcCommencement/AllRequisition"><i class="fas fa-shopping-cart"></i>Approved Purchase Requisitions</a>
+                            <a asp-page="/Staff/ItemRequisition/ItemPricing/AllRequisitionItemPricing"><i class="fas fa-shopping-cart"></i>Procurement Costing</a>
+                        </li>
+                    </ul>
+                </li>
+                <li>
+                    <a href="#bidSubMenu" data-toggle="collapse" aria-expanded="true" class="dropdown-toggle"> <i class="fas fa-comment mr-1"></i>Bid Preparation</a>
+                    <ul class="collapse list-unstyled" id="bidSubMenu">
+                        <li>
+                            <a asp-page="/Staff/ItemRequisition/BidPreparation/ClearedRequisitions"><i class="fas fa-shopping-cart"></i>Cleared Requisitions</a>
                         </li>
                     </ul>
                 </li>
@@ -105,9 +101,9 @@
                         <i class="fas fa-user-alt mr-1"></i> Manage Workflow
                     </a>
                     <ul class="collapse list-unstyled" id="workflowSubmenu">
-                        <li>
-                            <a asp-page="/Staff/Workflow/Prequalification"><i class="fas fa-file-archive mr-1"></i> Prequalification</a>
-                        </li>
+                        @*<li>
+                                <a asp-page="/Staff/Workflow/Prequalification"><i class="fas fa-file-archive mr-1"></i> Prequalification</a>
+                            </li>*@
                         <li>
                             <a asp-page="/Staff/Workflow/WorkflowSetup"><i class="fas fa-file-archive mr-1"></i> Workflow Setup</a>
                         </li>
@@ -116,9 +112,6 @@
                         </li>
                         <li>
                             <a asp-page="/Staff/Workflow/WorkflowCategory"><i class="fas fa-file-archive mr-1"></i> Workflow Categories</a>
-                        </li>
-                        <li>
-                            <a asp-page="/Staff/Workflow/WorkflowStaff"><i class="fas fa-file-archive mr-1"></i> Workflow Staff</a>
                         </li>
                     </ul>
                 </li>
@@ -153,8 +146,8 @@
                             <a asp-page="/Staff/Items"><i class="fas fa-file-archive mr-1"></i> Items</a>
                         </li>
                         @*<li>
-                    <a asp-page="/Staff/ProPolicy"><i class="fas fa-file-invoice mr-1"></i> Publish Procurement</a>
-                </li>*@
+                                <a asp-page="/Staff/ProPolicy"><i class="fas fa-file-invoice mr-1"></i> Publish Procurement</a>
+                            </li>*@
                         <li>
                             <a asp-page="/Staff/PreQSetup"><i class="fas fa-file-invoice mr-1"></i> Prequalification Setup</a>
                         </li>
@@ -212,7 +205,8 @@
     <script src="~/lib/jquery/dist/jquery.mCustomScrollbar.concat.min.js"></script>
     <script src="~/lib/jqueryui/jquery-ui.min.js"></script>
     <script src="~/lib/bootstrap/dist/js/print.js"></script>
-    <script src="~/js/date.js"></script>
+
+    <script src="~/js/jquery.dataTables.min.js"></script>
     <script>
         // Use datepicker on the date inputs
         $("input[data-date=date]").datepicker({
@@ -223,7 +217,7 @@
 
                 var id = $(this).data('id');
                 var hidDateField = $('input:hidden[data-id=' + id + ']').first();
-                
+
                 //get the datepicker date in default format
                 var d = $(this).datepicker('getDate');
 
@@ -237,7 +231,7 @@
         //$(".datepicker").datepicker({
         //    dateFormat: "dd/mm/yy",
         //    onSelect: function (dateText, inst) {
-        //        //alert(dateText);                
+        //        //alert(dateText);
         //        var d = $(this).datepicker('getDate');
 
         //        var e = $.datepicker.formatDate("mm/dd/yy", d);
@@ -251,6 +245,8 @@
         $("input[data-date=date]").on('click', function () {
             return false;
         });
+
+        $('table').dataTable();
 
     </script>
     @RenderSection("Scripts", required: false)
