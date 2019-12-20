@@ -130,9 +130,9 @@ namespace DcProcurement
 
             List<WorkflowType> ListWorkflowTypes = new List<WorkflowType> 
             { 
-                new WorkflowType { Id = Constants.ItemPricingWorkflowId, Name = Constants.ItemPricingWorkflow, Code = "0001" }, 
-                new WorkflowType{Id = Constants.PrequalificationWorkFlowId, Name = Constants.PrequalificationWorkFlow, Code = "0002"},
-                new WorkflowType{Id = Constants.RequisitionWorkflowId, Name = Constants.RequisitionWorkflow, Code = "0003"}
+                new WorkflowType { Id = 1, Name = Constants.ItemPricingWorkflow, Code = "0001" }, 
+                new WorkflowType{Id = 2, Name = Constants.PrequalificationWorkFlow, Code = "0002"},
+                new WorkflowType{Id = 3, Name = Constants.RequisitionWorkflow, Code = "0003"}
             };
                 
 

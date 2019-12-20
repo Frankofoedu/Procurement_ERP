@@ -5,6 +5,27 @@
 
     <OpenApiGenerateDocuments>false</OpenApiGenerateDocuments>
   </PropertyGroup>
+
+  <ItemGroup>
+    <Compile Remove="Migrations\20190618113628_many2ManyComp_Procurement.cs" />
+    <Compile Remove="Migrations\20190618113628_many2ManyComp_Procurement.Designer.cs" />
+    <Compile Remove="Migrations\20190618114143_many2ManyComp_Procurement.cs" />
+    <Compile Remove="Migrations\20190618114143_many2ManyComp_Procurement.Designer.cs" />
+    <Compile Remove="Migrations\20190626095754_selectedProcurement.cs" />
+    <Compile Remove="Migrations\20190626095754_selectedProcurement.Designer.cs" />
+    <Compile Remove="Migrations\20190806110652_workflowCategory.cs" />
+    <Compile Remove="Migrations\20190806110652_workflowCategory.Designer.cs" />
+    <Compile Remove="Migrations\20190806111213_workflowCategory.cs" />
+    <Compile Remove="Migrations\20190806111213_workflowCategory.Designer.cs" />
+    <Compile Remove="Migrations\20190909152540_requisition_update.cs" />
+    <Compile Remove="Migrations\20190909152540_requisition_update.Designer.cs" />
+    <Compile Remove="Migrations\20191216173456_user_roles.cs" />
+    <Compile Remove="Migrations\20191216173456_user_roles.Designer.cs" />
+    <Compile Remove="Migrations\20191218163604_requisition_job_update.cs" />
+    <Compile Remove="Migrations\20191218163604_requisition_job_update.Designer.cs" />
+        <Compile Remove="Migrations\20191213164504_erfxupadate.cs" />
+    <Compile Remove="Migrations\20191213164504_erfxupadate.Designer.cs" />
+  </ItemGroup>
   <ItemGroup>
     <PackageReference Include="MailKit" Version="2.4.1" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="3.0.0" />
@@ -16,7 +37,7 @@
     <PackageReference Include="Microsoft.AspNetCore.Identity.EntityFrameworkCore" Version="3.0.0" />
     <PackageReference Include="Microsoft.AspNetCore.Mvc.Razor.RuntimeCompilation" Version="3.0.0" />
     <PackageReference Include="Microsoft.Extensions.Logging.Debug" Version="3.0.0" />
-    <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="3.1.0" />
+    <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="3.0.0" />
     <PackageReference Include="morelinq" Version="3.1.1" />
     <PackageReference Include="Swashbuckle.AspNetCore" Version="5.0.0-rc2" />
   </ItemGroup>

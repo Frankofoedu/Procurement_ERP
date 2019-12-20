@@ -17,7 +17,7 @@
         return;
     }
 
-    var notificationNum = await _context.PrequalificationJobs.Where(x => x.JobStatus == Enums.JobState.NotDone).CountAsync(m => m.StaffId == curUser.Id || m.StaffId == null);
+    var notificationNum = await _context.PrequalificationJobs.Where(x => x.Done == false).CountAsync(m => m.StaffId == curUser.Id || m.StaffId == null);
 
     <form asp-area="Identity" asp-page="/Account/Logout" asp-route-returnUrl="@Url.Page("/Index", new { area = "" })" method="post" id="logoutForm" class="w-100">
 

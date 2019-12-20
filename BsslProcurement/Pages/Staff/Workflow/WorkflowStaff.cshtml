@@ -238,7 +238,7 @@
                     $('#spinner').hide();
                     $('#staffTable').dataTable();
 
-                    $('#staffTable').on('click','.btnStaffName',function () {
+                    $('.btnStaffName').on('click', function () {
                         //assign staff Id textbox
                         var code = $(this).text();
                         $('.staffCodeInput').val(code);
