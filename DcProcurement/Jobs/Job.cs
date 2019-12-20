@@ -32,5 +32,16 @@ namespace DcProcurement
             JobStatus = Enums.JobState.Done;
             DoneDate = doneDate;
         }
+
+        public void SetAsCancelled(DateTime doneDate)
+        {
+            JobStatus = Enums.JobState.Cancelled;
+            DoneDate = doneDate;
+        }
+
+        public void ReAssignJob(string newStaffId)
+        {
+            StaffId = newStaffId;
+        }
     }
 }

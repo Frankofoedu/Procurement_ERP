@@ -19,8 +19,6 @@ namespace DcProcurement
 
         public ICollection<PrequalificationJob> AssignedPrequalificationJobs { get; set; }
 
-        public ICollection<Workflow>  StaffWorkflows { get; set; }
-        public ICollection<Workflow> AdditionalStaffWorkflows { get; set; }
 
     }
 }
