@@ -51,7 +51,7 @@ namespace BsslProcurement
             string conn;
             if (Env.IsDevelopment())
             {
-                connection = @"Server=.\SQLEXPRESS;Database=DcProcurement;Trusted_Connection=True;ConnectRetryCount=0";
+                connection = @"Server=.\SQLEXPRESS;Database=DcProcurementTest;Trusted_Connection=True;ConnectRetryCount=0";
                 conn = @"Server =.\SQLEXPRESS; Database=BSSLSYS_ITF;Trusted_Connection=True;";
             }
             else
