@@ -1,10 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net.Http;
 using System.Threading.Tasks;
+using BsslProcurement.Interfaces;
 using BsslProcurement.ViewModels;
 using DcProcurement;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.EntityFrameworkCore;
@@ -34,9 +37,14 @@ namespace BsslProcurement.Pages.Staff.ItemRequisition.BidPreparation
     public class ERFXModel : PageModel
     {
         private readonly ProcurementDBContext _context;
-        public ERFXModel(ProcurementDBContext context)
+        private readonly IEmailSenderService _emailSender;
+        private readonly UserManager<DcProcurement.Staff> _userManager;
+
+        public ERFXModel(ProcurementDBContext context, IEmailSenderService emailSender, UserManager<DcProcurement.Staff> userManager)
         {
             _context = context;
+            _emailSender = emailSender;
+            _userManager = userManager;
         }
 
         [BindProperty]
@@ -149,23 +157,49 @@ namespace BsslProcurement.Pages.Staff.ItemRequisition.BidPreparation
 
         public async Task OnPostSubmitAsync()
         {
-            var requisition = await _context.Requisitions.Include(m => m.ERFXSetup).ThenInclude(m => m.FinancialERFXSetup).Include(m => m.ERFXSetup)
-                .ThenInclude(m => m.TechnicalERFXSetup).Include(m => m.RequisitionItems).FirstOrDefaultAsync(n => n.Id == ERFXViewModel.ReqId);
+            var loggedInStaff = await GetCurrentUserAsync();
 
-            var oldERFX = requisition.ERFXSetup;
+            using (var hc = new HttpClient())
+            {
+                var getStaffRankTask = hc.GetAsync("~/Api/User/GetStaffRank/" + loggedInStaff.StaffCode);
 
-            var erfxsetup = getErfxSetup(ERFXViewModel.ReqId, ERFXViewModel, true);
+                var requisition = await _context.Requisitions.Include(m => m.ERFXSetup).ThenInclude(m => m.FinancialERFXSetup).Include(m => m.ERFXSetup)
+                    .ThenInclude(m => m.TechnicalERFXSetup).Include(m => m.RequisitionItems).FirstOrDefaultAsync(n => n.Id == ERFXViewModel.ReqId);
 
-            if (oldERFX == null) { requisition.ERFXSetup = erfxsetup; }
-            else {
-                _context.Entry(requisition.ERFXSetup).CurrentValues.SetValues(erfxsetup);
-                _context.Entry(requisition.ERFXSetup.FinancialERFXSetup).CurrentValues.SetValues(erfxsetup.FinancialERFXSetup);
-                _context.Entry(requisition.ERFXSetup.TechnicalERFXSetup).CurrentValues.SetValues(erfxsetup.TechnicalERFXSetup);
+                var oldERFX = requisition.ERFXSetup;
+
+                var erfxsetup = getErfxSetup(ERFXViewModel.ReqId, ERFXViewModel, true);
+
+                if (oldERFX == null) { requisition.ERFXSetup = erfxsetup; }
+                else {
+                    _context.Entry(requisition.ERFXSetup).CurrentValues.SetValues(erfxsetup);
+                    _context.Entry(requisition.ERFXSetup.FinancialERFXSetup).CurrentValues.SetValues(erfxsetup.FinancialERFXSetup);
+                    _context.Entry(requisition.ERFXSetup.TechnicalERFXSetup).CurrentValues.SetValues(erfxsetup.TechnicalERFXSetup);
+                }
+
+                var savecontextTask = _context.SaveChangesAsync();
+
+                var result = await getStaffRankTask;
+
+                if (result.IsSuccessStatusCode)
+                {
+                    var emailList = StaffEmailListObj.StaffWithEmailList.Where(m => m.isSelected).Select(n => n.Email).ToList();
+
+                    if (VendorEmailListObj.VendorWithEmailList !=null)
+                    { emailList.AddRange(VendorEmailListObj.VendorWithEmailList.Where(m => m.isSelected).Select(n => n.Email).ToList()); }
+
+                    await _emailSender.SendInvitationEmailToListAsync(emailList, "Invitation to Bid", "ITF", erfxsetup.ErfxNum, erfxsetup.ProjectTitle,
+                        ERFXViewModel.FinancialBidEndDate.Value, loggedInStaff.Name, await result.Content.ReadAsStringAsync());
+
+
+                    Message = "Submitted Successfully and Emails were Sent.";
+                    await savecontextTask;
+                }
+
+
             }
 
-            await _context.SaveChangesAsync();
 
-            Message = "Submitted Successfully";
         }
 
         public ERFXSetup getErfxSetup(int reqId, ErfxViewModel model, bool submit)
@@ -211,5 +245,7 @@ namespace BsslProcurement.Pages.Staff.ItemRequisition.BidPreparation
 
             return setup;
         }
+
+        private Task<DcProcurement.Staff> GetCurrentUserAsync() => _userManager.GetUserAsync(HttpContext.User);
     }
 }
