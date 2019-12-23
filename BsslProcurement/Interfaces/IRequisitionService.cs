@@ -9,6 +9,7 @@ namespace BsslProcurement.Interfaces
 {
     public interface IRequisitionService
     {
+        Task<List<Requisition>> GetRequisitionsAssignedToLoggedInUser(string userId);
         Task<List<Requisition>> GetRequisitionsForLoggedInUser(string userId);
         Task<List<Requisition>> GetSavedRequisitionsForLoggedInUser(string userId);
         Task<List<Requisition>> GetBudgetClearedRequisitions();

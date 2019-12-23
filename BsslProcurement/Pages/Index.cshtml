@@ -35,6 +35,7 @@
         
         //get number of prequalification jobs
         var PreQnotificationNum = await _context.PrequalificationJobs.Where(x => x.JobStatus == Enums.JobState.NotDone).CountAsync(m => m.StaffId == curUser.Id || m.StaffId == null);
+        var reqNotificationNum = await _context.RequisitionJobs.Where(x => x.JobStatus == Enums.JobState.NotDone && x.StaffId == curUser.Id).CountAsync();
 
         <div class="row">
 
@@ -63,8 +64,8 @@
                             </div>
                         </div>
                         <div class="col-8 text-black-50 text-right">
-                            <p class="h3 mb-0">0</p>
-                            <p class="mb-0 font-italic" style="line-height:20px; font-size:16px;">Organisation information</p>
+                            <p class="h3 mb-0">@reqNotificationNum</p>
+                            <a asp-page="/Staff/JobViews/RequisitionJobs"><p class="mb-0 font-italic" style="line-height:20px; font-size:16px;">Requisition Tasks</p></a>
                         </div>
                     </div>
                 </div>

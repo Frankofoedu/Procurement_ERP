@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security.Claims;
 using System.Threading.Tasks;
 using BsslProcurement.Interfaces;
 using BsslProcurement.Services;
@@ -54,12 +55,28 @@ namespace BsslProcurement.Pages.Staff.ItemRequisition
             }
             ItemGridViewModels = await _itemGridViewModelService.GetItemsInRequisition(id.Value);
 
+            
             WfVm = await requisitionService.GetCurrentWorkFlowOFRequisition(Requisition);
+
+            //checks if current logged in user is assigned staff. if not assigned, dont show workflow partial view
+            var userId = User.FindFirst(ClaimTypes.NameIdentifier).Value;
+
+           
+            
+
+            if (userId != WfVm.AssignedStaffCode)
+            {
+                WfVm = null;
+
+                return Page();
+            }
+
+            WfVm.AssignedStaffCode = null;
 
             return Page();
         }
 
 
-      
+
     }
 }

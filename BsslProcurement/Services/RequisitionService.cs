@@ -29,7 +29,6 @@ namespace BsslProcurement.Services
         {
             return await _procurementDBContext.Requisitions.Include(x => x.RequisitionItems).Where(p => p.isBudgetCleared==true).ToListAsync();
         }
-
        
         public async Task SendRequisitionToNextStageAsync(Requisition requisition,string staffCode, int newWorkflowId, string remark)
         {
@@ -45,6 +44,10 @@ namespace BsslProcurement.Services
                 oldReqJobs.SetAsDone(DateTime.Now);
 
             }
+
+            //get next workflow stage
+            var nextWorkFlow = _procurementDBContext.Workflows.Where(x => x)
+
             //create new job for next stage
             var newReqJob = new RequisitionJob(requisition.Id, staffId, newWorkflowId, remark);
 
@@ -103,8 +106,28 @@ namespace BsslProcurement.Services
         {
             var job = await _procurementDBContext.RequisitionJobs.FirstOrDefaultAsync(x => x.RequisitionId == requisition.Id && x.JobStatus == Enums.JobState.NotDone);
 
-            return new WorkFlowApproverViewModel { Remark = job.Remark, WorkFlowTypeId = DcProcurement.Constants.RequisitionWorkflowId, WorkFlowId  = job.WorkFlowId };
+            var staffCode = await GetStaffCodeFromIdAsync(job.StaffId);
+
+            return new WorkFlowApproverViewModel { Remark = job.Remark, AssignedStaffCode = staffCode, WorkFlowTypeId = DcProcurement.Constants.RequisitionWorkflowId, WorkFlowId  = job.WorkFlowId };
         }
         private async Task<string> GetStaffIdFromCodeAsync(string staffCode) => (await _procurementDBContext.Staffs.FirstOrDefaultAsync(x => x.StaffCode == staffCode)).Id;
+
+
+        private async Task<string> GetStaffCodeFromIdAsync(string staffId) => (await _procurementDBContext.Staffs.FindAsync(staffId)).Id;
+
+        public async Task<List<Requisition>> GetRequisitionsAssignedToLoggedInUser(string userId)
+        {
+            var jobs = _procurementDBContext.RequisitionJobs.Include(reqJob => reqJob.Requisition).ThenInclude(req=> req.RequisitionItems).Where(x => x.StaffId == userId && x.JobStatus == Enums.JobState.NotDone);
+
+            if (jobs != null)
+            {
+                var reqList = new List<Requisition>();
+
+                reqList = await jobs.Select(x => x.Requisition).ToListAsync();
+                return reqList;
+            }
+
+            return null;
+        }
     }
 }

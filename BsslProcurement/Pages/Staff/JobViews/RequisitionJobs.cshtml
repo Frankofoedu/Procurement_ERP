@@ -1,0 +1,89 @@
+﻿@page
+@model BsslProcurement.RequisitionJobsModel
+@{
+    ViewData["Title"] = "RequisitionJobs";
+    Layout = "~/Pages/Shared/_Layout.cshtml";
+}
+
+<div class="row mt-5">
+    <div class="col-md-1"></div>
+    <div class="col-md-11">
+        <form method="post" class="panel panel-login">
+            <div class="panel-heading">
+                <div class="row">
+                    <p class="header-text">Requisition Tasks</p>
+                </div>
+                <hr>
+            </div>
+            <div asp-validation-summary="All" class="text-danger"></div>
+
+            @if (!string.IsNullOrWhiteSpace(Model.Message))
+            {
+                <div class="alert alert-success alert-dismissable fade show">
+                    <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                    @Model.Message
+                </div>
+            }
+            @if (!string.IsNullOrWhiteSpace(Model.Error))
+            {
+                <div class="alert alert-danger alert-dismissable fade show">
+                    <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                    @Model.Error
+                </div>
+            }
+
+
+            @*<button class="btn btn-primary pt-2" asp-page="NewRequisition">Add New</button>*@
+
+            @*<a asp-page="NewRequisition" role="button" class="btn btn-primary">New Requisition</a>*@
+
+            <div class="row pt-3 " style="">
+                <div class="col-12 table-responsive table-responsive-sm">
+                    <table class="table  table-striped">
+                        <thead>
+                            <tr class="table-primary">
+                                <th>S/N</th>
+                                <th>PR Number</th>
+                                <th>Description</th>
+                                <th>Delivery Date</th>
+                                <th>No Of Items</th>
+                                <th>Required At</th>
+                                <th>Prepared By</th>
+                                <th>Total Amount</th>
+                                <th>Action</th>
+                            </tr>
+                        </thead>
+
+
+                        <tbody>
+
+                            @if (Model.Requisitions.Any())
+                            {
+                                @for (int i = 0; i < Model.Requisitions.Count; i++)
+                                {
+                                    var item = Model.Requisitions[i];
+                                    <tr>
+                                        <td>@(i + 1)</td>
+                                        <td>@item.PRNumber</td>
+                                        <td>@item.Description</td>
+                                        <td>@(((DateTime)item.DeliveryDate).ToShortDateString())</td>
+                                        <td>@item.RequisitionItems.Count</td>
+                                        <td>@item.RequiredAtDepartment</td>
+                                        <td>@item.PreparedBy</td>
+                                        <td>@item.RequisitionItems.Sum(x => x.UnitPrice * x.Quantity)</td>
+                                        <td><a asp-page="../Itemrequisition/DetailRequisition" asp-route-id="@item.Id" style="color: #007bff">View</a></td>
+                                    </tr>
+                                }
+
+                            }
+
+
+                        </tbody>
+                        <tfoot>
+                        </tfoot>
+                    </table>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
