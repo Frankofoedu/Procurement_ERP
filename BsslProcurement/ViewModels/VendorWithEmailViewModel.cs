@@ -1,4 +1,5 @@
 ﻿using DcProcurement;
+using DcProcurement.Contexts;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -10,18 +11,18 @@ namespace BsslProcurement.ViewModels
     {
         public List<VendorWithEmailObject> VendorWithEmailList { get; set; }
 
-        public List<VendorWithEmailObject> GetVendorWithEmailList(List<VendorUser> vendorUsers )
+        public List<VendorWithEmailObject> GetVendorWithEmailList(List<Accust> vendors )
         {
             var vendorList = new List<VendorWithEmailObject>();
 
-            foreach (var item in vendorUsers)
+            foreach (var item in vendors)
             {
                 var vObj = new VendorWithEmailObject() {
-                    Email = item.Email,
-                    Id = item.Id,
+                    Email = item.Memail,
+                    Id = item.Keyid.ToString(),
                     isSelected = false,
-                    Name=item.CompanyInfo.CompanyName,
-                    Number = item.CompanyInfo.CompanyRegNo
+                    Name=item.Accname,
+                    Number = item.Custcode
                 };
 
                 vendorList.Add(vObj);

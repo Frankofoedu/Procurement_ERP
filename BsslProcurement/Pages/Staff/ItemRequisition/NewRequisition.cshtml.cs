@@ -102,6 +102,7 @@ namespace BsslProcurement.Pages.Staff.ItemRequisition
                     Error = "An error has occurred." + Environment.NewLine + ex.Message;
                 }
             }
+
             await LoadData();
             return Page();
         }

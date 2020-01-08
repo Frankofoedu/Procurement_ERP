@@ -46,7 +46,7 @@ namespace BsslProcurement.Services
             }
 
             //get next workflow stage
-            var nextWorkFlow = _procurementDBContext.Workflows.Where(x => x)
+            //var nextWorkFlow = _procurementDBContext.Workflows.Where(x => x)
 
             //create new job for next stage
             var newReqJob = new RequisitionJob(requisition.Id, staffId, newWorkflowId, remark);
