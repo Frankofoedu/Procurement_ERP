@@ -1,0 +1,77 @@
+﻿@page
+@model BsslProcurement.EditModel
+
+@{
+    ViewData["Title"] = "Edit Unit of Measurement";
+}
+
+<div class="row mt-5">
+    <div class="col-md-3"></div>
+    <div class="col-md-6">
+        <form method="post" class="panel panel-login">
+            <div class="panel-heading">
+                <div class="row">
+                    <p class="header-text">@ViewData["Title"]</p>
+                </div>
+                <hr>
+            </div>
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+
+            @if (!string.IsNullOrWhiteSpace(Model.Message))
+            {
+                <div class="alert alert-success alert-dismissable fade show">
+                    <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                    @Model.Message
+                </div>
+            }
+            @if (!string.IsNullOrWhiteSpace(Model.Error))
+            {
+                <div class="alert alert-danger alert-dismissable fade show">
+                    <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                    @Model.Error
+                </div>
+            }
+            <div class="form-group">
+                <label class="control-label">Item Code</label>
+                <input asp-for="UnitOfMeasurement.Ucode" class="form-control" />
+                <span asp-validation-for="UnitOfMeasurement.Ucode" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label class="control-label">Unit Name</label>
+                <input asp-for="UnitOfMeasurement.Uname" class="form-control" />
+                <span asp-validation-for="UnitOfMeasurement.Uname" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label class="control-label">Company Code</label>
+                <input asp-for="UnitOfMeasurement.Copny" class="form-control" />
+                <span asp-validation-for="UnitOfMeasurement.Copny" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label class="control-label">Zone Code</label>
+                <input asp-for="UnitOfMeasurement.Zcopny" class="form-control" />
+                <span asp-validation-for="UnitOfMeasurement.Zcopny" class="text-danger"></span>
+            </div>
+
+            <div class="form-group">
+                <div class="row">
+                    <div class="col-sm-3"> </div>
+                    <div class="col-sm-6">
+                        <input type="submit" value="Create" class="btn form-btn" />
+                    </div>
+                </div>
+            </div>
+
+            <input type="hidden" asp-for="UnitOfMeasurement.Id" />
+
+            <div class="row">
+                <div class="col-12 text-center">
+                    <a asp-page="Index" class="btn btn-outline-dark">Back to List</a>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}

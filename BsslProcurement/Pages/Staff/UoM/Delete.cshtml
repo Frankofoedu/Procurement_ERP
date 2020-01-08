@@ -1,0 +1,46 @@
+﻿@page
+@model BsslProcurement.DeleteModel
+
+@{
+    ViewData["Title"] = "Delete";
+}
+
+<h2>Delete</h2>
+
+<h3>Are you sure you want to delete this?</h3>
+<div>
+    <h4>UnitOfMeasurement</h4>
+    <hr />
+    <dl class="dl-horizontal">
+        <dt>
+            @Html.DisplayNameFor(model => model.UnitOfMeasurement.Ucode)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.UnitOfMeasurement.Ucode)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.UnitOfMeasurement.Uname)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.UnitOfMeasurement.Uname)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.UnitOfMeasurement.Copny)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.UnitOfMeasurement.Copny)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.UnitOfMeasurement.Zcopny)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.UnitOfMeasurement.Zcopny)
+        </dd>
+    </dl>
+    
+    <form method="post">
+        <input type="hidden" asp-for="UnitOfMeasurement.Id" />
+        <input type="submit" value="Delete" class="btn btn-default" /> |
+        <a asp-page="./Index">Back to List</a>
+    </form>
+</div>
