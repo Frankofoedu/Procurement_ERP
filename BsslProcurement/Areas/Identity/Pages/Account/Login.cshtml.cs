@@ -88,11 +88,11 @@ namespace BsslProcurement.Areas.Identity.Pages.Account
                     return Page();
                 }
 
-                if(!(bool)staff.Procurement)
-                {
-                    ModelState.AddModelError(string.Empty, "You are not authorized to view procurement");
-                    return Page();
-                }
+                //if(!(bool)staff.Procurement)
+                //{
+                //    ModelState.AddModelError(string.Empty, "You are not authorized to view procurement");
+                //    return Page();
+                //}
 
                 var result = await _signInManager.PasswordSignInAsync(Input.StaffCode, Input.Password, Input.RememberMe, lockoutOnFailure: true);
                 if (result.Succeeded)
