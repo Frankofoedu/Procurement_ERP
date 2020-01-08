@@ -30,34 +30,64 @@ namespace BsslProcurement.Services
             return await _procurementDBContext.Requisitions.Include(x => x.RequisitionItems).Where(p => p.isBudgetCleared==true).ToListAsync();
         }
        
-        public async Task SendRequisitionToNextStageAsync(Requisition requisition,string staffCode, int newWorkflowId, string remark)
+        public async Task SendRequisitionToNextStageAsync(int requisitionId,string staffCode, int newWorkflowId, string remark)
         {
             //get staff identity id
-            var staffId = await GetStaffIdFromCodeAsync(staffCode);
+            string staffId = "";
+            if (staffCode != null)
+            {
+
+                staffId = await GetStaffIdFromCodeAsync(staffCode);
+            }
             
             //get old job
-            var oldReqJobs = await _procurementDBContext.RequisitionJobs.Where(req => req.RequisitionId == requisition.Id && req.JobStatus == Enums.JobState.NotDone).FirstOrDefaultAsync();
+            var oldReqJob = await _procurementDBContext.RequisitionJobs.Where(req => req.RequisitionId == requisitionId && req.JobStatus == Enums.JobState.NotDone).FirstOrDefaultAsync();
 
-            if (oldReqJobs != null)
+            //get requisition workflow stages
+            var reqWorkFlow = _procurementDBContext.Workflows.Where(x => x.WorkflowTypeId == DcProcurement.Constants.RequisitionWorkflowId).OrderBy(x => x.Step);
+
+            
+            if (oldReqJob != null)
             {
-                //update old requisitions to done
-                oldReqJobs.SetAsDone(DateTime.Now);
+                //update old requisitions jobs to done
+                oldReqJob.SetAsDone(DateTime.Now);
+
+                //checks if job is at final stage for that requistion
+                var maxWorkFlow = reqWorkFlow.Last();
+                if (oldReqJob.WorkFlowId == maxWorkFlow.Id)
+                {
+                    //if at final stage, set requisition as approved
+
+                    var requisition = _procurementDBContext.Requisitions.Find(requisitionId);
+
+                    if (requisition != null)
+                    {
+                        requisition.isApproved = true;
+                    }
+                    
+                }
+                else
+                {
+                    //send to next step
+                    //create new job for next stage
+                    var newReqJob = new RequisitionJob(requisitionId, staffId, newWorkflowId, remark);
+                    _procurementDBContext.RequisitionJobs.Add(newReqJob);
+                }
 
             }
+            else
+            {
 
-            //get next workflow stage
-            var nextWorkFlow = _procurementDBContext.Workflows.Where(x => x)
+                //create new job for next stage
+                var newReqJob = new RequisitionJob(requisitionId, staffId, newWorkflowId, remark);
+                _procurementDBContext.RequisitionJobs.Add(newReqJob);
+            }
 
-            //create new job for next stage
-            var newReqJob = new RequisitionJob(requisition.Id, staffId, newWorkflowId, remark);
-
-            _procurementDBContext.RequisitionJobs.Add(newReqJob);
-
-           await _procurementDBContext.SaveChangesAsync();
+            await _procurementDBContext.SaveChangesAsync();
 
         }
 
-        public async Task SendRequisitionToPreviousStage(Requisition requisition, string currStaffCode, string newStaffCode, int newStage, string remark)
+        public async Task SendRequisitionToPreviousStage(int requisitionId, string currStaffCode, string newStaffCode, int newStage, string remark)
         {
             //get  staff identity id
             var currStaffId = await GetStaffIdFromCodeAsync(currStaffCode);
@@ -65,7 +95,7 @@ namespace BsslProcurement.Services
 
 
             //get current job
-            var currJob = await _procurementDBContext.RequisitionJobs.FirstOrDefaultAsync(x => x.JobStatus == Enums.JobState.NotDone && x.RequisitionId == requisition.Id && x.StaffId == currStaffId);
+            var currJob = await _procurementDBContext.RequisitionJobs.FirstOrDefaultAsync(x => x.JobStatus == Enums.JobState.NotDone && x.RequisitionId == requisitionId && x.StaffId == currStaffId);
 
             if (currJob == null)
             {
@@ -76,7 +106,7 @@ namespace BsslProcurement.Services
 
 
             //create new job for previous stage
-            var newReqJob = new RequisitionJob(requisition.Id, newStaffId, newStage, remark);
+            var newReqJob = new RequisitionJob(requisitionId, newStaffId, newStage, remark);
 
             _procurementDBContext.Add(newReqJob);
 

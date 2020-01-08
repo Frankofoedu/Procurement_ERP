@@ -89,7 +89,6 @@ else
                     <hr>
                 </div>
 
-                <div asp-validation-summary="All" class="text-danger"></div>
 
                 <div>
                     <div class="">
@@ -112,6 +111,7 @@ else
                                 <div class="form-group">
                                     <label>Delivery Date : </label>
                                     <input class="form-control" readonly value="@Model.Requisition.DeliveryDate.Value.ToString("dd/MM/yyyy")" placeholder="Pick Delivery Date" />
+                                    <input asp-for="Requisition.DeliveryDate" type="hidden" />
                                 </div>
                             </div>
 

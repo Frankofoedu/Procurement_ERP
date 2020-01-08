@@ -21,13 +21,13 @@ namespace BsslProcurement.Pages.Staff.ItemRequisition
         private readonly ProcurementDBContext _context;
         private readonly BSSLSYS_ITF_DEMOContext _bsslContext;
         private readonly IItemGridViewModelService _itemGridViewModelService;
-        private readonly IRequisitionService requisitionService;
-        public DetailRequisitionModel(ProcurementDBContext context, BSSLSYS_ITF_DEMOContext bsslContext, IItemGridViewModelService itemGridViewModelService, IRequisitionService _requisitionService)
+        private readonly IRequisitionService _requisitionService;
+        public DetailRequisitionModel(ProcurementDBContext context, BSSLSYS_ITF_DEMOContext bsslContext, IItemGridViewModelService itemGridViewModelService, IRequisitionService requisitionService)
         {
             _context = context;
             _bsslContext = bsslContext;
             _itemGridViewModelService = itemGridViewModelService;
-            requisitionService = _requisitionService;
+            _requisitionService = requisitionService;
         }
         public string Message { get; set; }
         public string Error { get; set; }
@@ -37,46 +37,61 @@ namespace BsslProcurement.Pages.Staff.ItemRequisition
         public List<ItemGridViewModel> ItemGridViewModels { get; set; }
         [BindProperty]
         public WorkFlowApproverViewModel WfVm { get; set; }
-        public async Task<IActionResult> OnGetAsync(int? id)
+
+        [BindProperty(SupportsGet = true)]
+        public int Id { get; set; }
+        public async Task<IActionResult> OnGetAsync()
         {
-            if (id == null)
-            {
-                return NotFound();
-            }
 
-            Requisition = await _context.Requisitions.FirstOrDefaultAsync(x=> x.Id == id);
-            
-         //   ItemGridViewModels = Requisition.RequisitionItems.Select(x=> new ItemGridViewModel { Attachment = x.Attachment, RequisitionItem = x });
-
-            if (Requisition == null)
-            {
-                Error = "No requisition Found";
-                return Page();
-            }
-            ItemGridViewModels = await _itemGridViewModelService.GetItemsInRequisition(id.Value);
-
-            
-            WfVm = await requisitionService.GetCurrentWorkFlowOFRequisition(Requisition);
-
-            //checks if current logged in user is assigned staff. if not assigned, dont show workflow partial view
-            var userId = User.FindFirst(ClaimTypes.NameIdentifier).Value;
-
-           
-            
-
-            if (userId != WfVm.AssignedStaffCode)
-            {
-                WfVm = null;
-
-                return Page();
-            }
-
-            WfVm.AssignedStaffCode = null;
+           await LoadData();
+ 
 
             return Page();
         }
 
 
+        async Task LoadData()
+        {
+            Requisition = await _context.Requisitions.FirstOrDefaultAsync(x => x.Id == Id);
+
+            //   ItemGridViewModels = Requisition.RequisitionItems.Select(x=> new ItemGridViewModel { Attachment = x.Attachment, RequisitionItem = x });
+
+            if (Requisition == null)
+            {
+                Error = "No requisition Found";
+                return;
+            }
+            ItemGridViewModels = await _itemGridViewModelService.GetItemsInRequisition(Id);
+
+
+            WfVm = await _requisitionService.GetCurrentWorkFlowOFRequisition(Requisition);
+
+            //checks if current logged in user is assigned staff. if not assigned, dont show workflow partial view
+            var userId = User.FindFirst(ClaimTypes.NameIdentifier).Value;
+
+
+
+            if (userId != WfVm.AssignedStaffCode)
+            {
+                WfVm = null;
+
+                return;
+            }
+
+            WfVm.AssignedStaffCode = null;
+        }
+        public async Task<IActionResult> OnPostAsync()
+        {
+            var staffCode = WfVm.AssignedStaffCode;
+            var newStage = WfVm.WorkFlowId;
+            var remark = WfVm.Remark;
+
+           await _requisitionService.SendRequisitionToNextStageAsync(Id, staffCode, newStage, remark);
+            //Message = "Requisition Sent!";
+
+
+            return RedirectToPage("Allrequisition");
+        }
 
     }
 }

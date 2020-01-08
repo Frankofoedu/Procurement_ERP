@@ -31,7 +31,6 @@ namespace DcProcurement
 
 
 
-
         public void SetAsDone(DateTime doneDate)
         {
             JobStatus = Enums.JobState.Done;

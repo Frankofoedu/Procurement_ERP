@@ -15,8 +15,8 @@ namespace BsslProcurement.Interfaces
         Task<List<Requisition>> GetBudgetClearedRequisitions();
         Task<WorkFlowApproverViewModel> GetCurrentWorkFlowOFRequisition(Requisition requisition);
 
-        Task SendRequisitionToNextStageAsync(Requisition requisition, string staffCode, int newStage, string remark);
-        Task SendRequisitionToPreviousStage(Requisition requisition, string currStaffCode, string newStaffCode, int newStage, string remark);
+        Task SendRequisitionToNextStageAsync(int requisitionId, string staffCode, int newStage, string remark);
+        Task SendRequisitionToPreviousStage(int requisitionId, string currStaffCode, string newStaffCode, int newStage, string remark);
         Task ReAssignRequisition(Requisition requisition, string currStaffCode, string newStaffCode);
        
     }

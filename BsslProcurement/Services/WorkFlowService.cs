@@ -24,9 +24,51 @@ namespace BsslProcurement.Services
         /// </summary>
         /// <param name="id">current step of job. default is 0 for new jobs</param>
         /// <returns></returns>
-        public Task<List<WorkFlowTypesViewModel>> GetNextWorkActionflowSteps(int workFlowTypeId, int currentStepId = 0) =>
-            //gets all workflow actions for the current job stage
-            _procurementDBContext.Workflows.Include(y=> y.WorkflowAction).Where(x => x.WorkflowTypeId == workFlowTypeId && x.Step > currentStepId).Take(2).Select(x => new WorkFlowTypesViewModel { Name = x.WorkflowAction.Name, Id = x.Id }).ToListAsync();
+        public Task<List<WorkFlowTypesViewModel>> GetNextWorkActionflowSteps(int workFlowId, int workflowTypeId) {
+
+            //get current workflow
+            var currWorkflow = _procurementDBContext.Workflows.Find(workFlowId);
+
+            if (currWorkflow != null)
+            {
+                //get current workflow type Id
+                var wfId = currWorkflow.WorkflowTypeId;
+                //get current workflow step
+                var step = currWorkflow.Step;
+
+                var workflows = _procurementDBContext.Workflows.Include(y => y.WorkflowAction).Where(x => x.WorkflowTypeId == wfId && x.Step > step);
+
+                var nextTwoWorkflows = workflows.Take(2);
+
+                var data = nextTwoWorkflows.Select(x => new WorkFlowTypesViewModel
+                {
+                    Name = x.WorkflowAction.Name,
+                    Id = x.Id
+                }).ToListAsync();
+
+
+                return data;
+                    
+            }
+            else
+            {
+                //new jobs e.g new requisition tasks not yet assigned a task
+                var workflows = _procurementDBContext.Workflows.Include(y => y.WorkflowAction).Where(x => x.WorkflowTypeId == workflowTypeId);
+
+                var nextTwoWorkflows = workflows.Take(2);
+
+                var data = nextTwoWorkflows.Select(x => new WorkFlowTypesViewModel
+                {
+                    Name = x.WorkflowAction.Name,
+                    Id = x.Id
+                }).ToListAsync();
+
+                return data;
+            }
+
+           
+        }
+            
 
 
         /// <summary>

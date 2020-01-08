@@ -91,7 +91,7 @@ namespace BsslProcurement.Pages.Staff.ItemRequisition
                     await SaveOrSubmitRequisition(true);
 
                     //create and assign requisition job
-                   await _requisitionService.SendRequisitionToNextStageAsync(Requisition, WfVm.AssignedStaffCode, WfVm.WorkFlowId, WfVm.Remark);
+                   await _requisitionService.SendRequisitionToNextStageAsync(Requisition.Id, WfVm.AssignedStaffCode, WfVm.WorkFlowId, WfVm.Remark);
                     
 
                     Message = "Requisition Added successfully";
@@ -135,7 +135,7 @@ namespace BsslProcurement.Pages.Staff.ItemRequisition
 
             if (workflow.Workflows.Count() > 0)
             {
-                WfVm = new WorkFlowApproverViewModel { WorkFlowTypeId = workflow.Id };
+                WfVm = new WorkFlowApproverViewModel { WorkFlowTypeId = workflow.Id};
             }
             //get current logged in user
             var loggedInUserCode = (await GetCurrentUserAsync()).Id;
