@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using BsslProcurement.Interfaces;
 using BsslProcurement.ViewModels;
 using DcProcurement;
+using DcProcurement.Contexts;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
@@ -37,12 +38,15 @@ namespace BsslProcurement.Pages.Staff.ItemRequisition.BidPreparation
     public class ERFXModel : PageModel
     {
         private readonly ProcurementDBContext _context;
+        private readonly BSSLSYS_ITF_DEMOContext _ITFcontext;
         private readonly IEmailSenderService _emailSender;
-        private readonly UserManager<DcProcurement.Staff> _userManager;
+        private readonly UserManager<User> _userManager;
 
-        public ERFXModel(ProcurementDBContext context, IEmailSenderService emailSender, UserManager<DcProcurement.Staff> userManager)
+        public ERFXModel(ProcurementDBContext context, BSSLSYS_ITF_DEMOContext ITFcontext, IEmailSenderService emailSender,
+            UserManager<User> userManager)
         {
             _context = context;
+            _ITFcontext = ITFcontext;
             _emailSender = emailSender;
             _userManager = userManager;
         }
@@ -70,8 +74,8 @@ namespace BsslProcurement.Pages.Staff.ItemRequisition.BidPreparation
                 return;
             }
 
-            var requisition = await _context.Requisitions.Include(m => m.ERFXSetup).ThenInclude(m=> m.FinancialERFXSetup).Include(m=>m.ERFXSetup)
-                .ThenInclude(m => m.TechnicalERFXSetup).Include(m=>m.RequisitionItems).FirstOrDefaultAsync(n => n.Id == reqId.Value);
+            var requisition = await _context.Requisitions.Include(m => m.ERFXSetup).ThenInclude(m => m.FinancialERFXSetup).Include(m => m.ERFXSetup)
+                .ThenInclude(m => m.TechnicalERFXSetup).Include(m => m.RequisitionItems).FirstOrDefaultAsync(n => n.Id == reqId.Value);
 
             if (requisition == null)
             {
@@ -79,7 +83,7 @@ namespace BsslProcurement.Pages.Staff.ItemRequisition.BidPreparation
                 return;
             }
 
-            VendorEmailListObj.VendorWithEmailList = VendorEmailListObj.GetVendorWithEmailList(_context.Vendors.Include(m => m.CompanyInfo).ToList());
+            VendorEmailListObj.VendorWithEmailList = VendorEmailListObj.GetVendorWithEmailList(_ITFcontext.Accusts.ToList());
             StaffEmailListObj.StaffWithEmailList = StaffEmailListObj.GetStaffWithEmailList(_context.Staffs.ToList());
 
             ERFXViewModel = new ErfxViewModel();
@@ -102,7 +106,7 @@ namespace BsslProcurement.Pages.Staff.ItemRequisition.BidPreparation
                 ERFXViewModel.ProjectTitle = erfx.ProjectTitle;
                 ERFXViewModel.BidType = erfx.BidType;
 
-                
+
                 if (erfx.BidType == Enums.BidTypes.Both)
                 {
                     ERFXViewModel.TechnicalBidEndDate = erfx.TechnicalERFXSetup.BidEndDate;
@@ -185,7 +189,7 @@ namespace BsslProcurement.Pages.Staff.ItemRequisition.BidPreparation
                 {
                     var emailList = StaffEmailListObj.StaffWithEmailList.Where(m => m.isSelected).Select(n => n.Email).ToList();
 
-                    if (VendorEmailListObj.VendorWithEmailList !=null)
+                    if (VendorEmailListObj.VendorWithEmailList != null)
                     { emailList.AddRange(VendorEmailListObj.VendorWithEmailList.Where(m => m.isSelected).Select(n => n.Email).ToList()); }
 
                     await _emailSender.SendInvitationEmailToListAsync(emailList, "Invitation to Bid", "ITF", erfxsetup.ErfxNum, erfxsetup.ProjectTitle,
@@ -213,7 +217,7 @@ namespace BsslProcurement.Pages.Staff.ItemRequisition.BidPreparation
 
             if (model.BidType == Enums.BidTypes.Technical) {
                 getTechSetup(erfx, model);
-            } 
+            }
             else if (model.BidType == Enums.BidTypes.Financial) {
                 getFinSetup(erfx, model);
             } else {
@@ -246,6 +250,10 @@ namespace BsslProcurement.Pages.Staff.ItemRequisition.BidPreparation
             return setup;
         }
 
-        private Task<DcProcurement.Staff> GetCurrentUserAsync() => _userManager.GetUserAsync(HttpContext.User);
+        private async Task<DcProcurement.Staff> GetCurrentUserAsync() 
+        {
+            var u = await _userManager.GetUserAsync(HttpContext.User);
+            return await _context.Staffs.FirstAsync(m => m.Id == u.Id);
+        }
     }
 }

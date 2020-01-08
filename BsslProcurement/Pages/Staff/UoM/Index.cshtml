@@ -1,0 +1,67 @@
+﻿@page
+@model BsslProcurement.IndexModel
+
+@{
+    ViewData["Title"] = "Units of Measurement";
+}
+<div class="row mt-3">
+    <div class="col-md-2"></div>
+    <div class="col-md-8">
+        <div class="panel panel-login">
+            <div class="panel-heading">
+                <div class="row">
+                    <p class="header-text">@ViewData["Title"]</p>
+                </div>
+                <hr>
+            </div>
+
+            <div class="mt-1">
+                <p>
+                    <a asp-page="Create" class="btn btn-outline-primary" >Create New</a>
+                </p>
+                <table class="table table-responsive-sm table-striped table-bordered">
+                    <thead>
+                        <tr>
+                            <th>
+                                @Html.DisplayNameFor(model => model.UnitOfMeasurement[0].Ucode)
+                            </th>
+                            <th>
+                                @Html.DisplayNameFor(model => model.UnitOfMeasurement[0].Uname)
+                            </th>
+                            <th>
+                                @Html.DisplayNameFor(model => model.UnitOfMeasurement[0].Copny)
+                            </th>
+                            <th>
+                                @Html.DisplayNameFor(model => model.UnitOfMeasurement[0].Zcopny)
+                            </th>
+                            <th></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var item in Model.UnitOfMeasurement)
+                        {
+                            <tr>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.Ucode)
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.Uname)
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.Copny)
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.Zcopny)
+                                </td>
+                                <td>
+                                    <a asp-page="./Edit" asp-route-id="@item.Id">Edit</a> |
+                                    <a asp-page="./Delete" asp-route-id="@item.Id">Delete</a>
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
