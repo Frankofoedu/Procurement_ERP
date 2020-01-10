@@ -9,6 +9,10 @@
     {
       "library": "bootstrap-combobox@1.1.8",
       "destination": "wwwroot/lib/bootstrap-combobox/"
+    },
+    {
+      "library": "jquery-easing@1.4.1",
+      "destination": "wwwroot/lib/jquery-easing/"
     }
   ]
 }
