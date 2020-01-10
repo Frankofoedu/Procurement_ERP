@@ -1,0 +1,246 @@
+﻿@page
+@using Microsoft.AspNetCore.Identity
+@using Microsoft.EntityFrameworkCore
+@using DcProcurement
+
+@inject SignInManager<User> SignInManager
+@inject UserManager<User> UserManager
+@inject ProcurementDBContext _context
+@model IndexModel
+@{
+    ViewData["Title"] = "Home page";
+}
+<style>
+    .v-center {
+        display: flex;
+        align-items: center;
+    }
+
+    .border-width-2 {
+        border-width: 2px !important;
+    }
+</style>
+
+<div class="container bg-white shadow my-4">
+    @if (SignInManager.IsSignedIn(User))
+    {
+        var aspUser = await UserManager.GetUserAsync(User);
+        var curUser = await _context.Staffs.FindAsync(aspUser.Id);
+
+        if (curUser == null)
+        {
+            await SignInManager.SignOutAsync();
+            return;
+        }
+        
+        //get number of prequalification jobs
+        var PreQnotificationNum = await _context.PrequalificationJobs.Where(x => x.JobStatus == Enums.JobState.NotDone).CountAsync(m => m.StaffId == curUser.Id || m.StaffId == null);
+        var reqNotificationNum = await _context.RequisitionJobs.Where(x => x.JobStatus == Enums.JobState.NotDone && x.StaffId == curUser.Id).CountAsync();
+
+        <div class="row">
+
+            <div class="col-xl-3 col-md-4 col-sm-6 my-3">
+                <div class="container-fluid">
+                    <div class="row p-2 border rounded border-width-2 border-danger">
+                        <div class="col-4 v-center">
+                            <div class="bg-danger rounded-circle text-center" style="height:50px; width:50px;">
+                                <i class="fas fa-info text-white mt-3"></i>
+                            </div>
+                        </div>
+                        <div class="col-8 text-black-50 text-right">
+                            <p class="h3 mb-0">@PreQnotificationNum</p>
+                            <a asp-page="Staff/JobViews/PreqJobs"><p class="mb-0 font-italic" style="line-height:20px; font-size:16px;">Prequalification Tasks</p></a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-xl-3 col-md-4 col-sm-6 my-3">
+                <div class="container-fluid">
+                    <div class="row p-2 border rounded border-width-2 border-success">
+                        <div class="col-4 v-center">
+                            <div class="bg-success rounded-circle text-center" style="height:50px; width:50px;">
+                                <i class="fas fa-info text-white mt-3"></i>
+                            </div>
+                        </div>
+                        <div class="col-8 text-black-50 text-right">
+                            <p class="h3 mb-0">@reqNotificationNum</p>
+                            <a asp-page="/Staff/JobViews/RequisitionJobs"><p class="mb-0 font-italic" style="line-height:20px; font-size:16px;">Requisition Tasks</p></a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-xl-3 col-md-4 col-sm-6 my-3">
+                <div class="container-fluid">
+                    <div class="row p-2 border rounded border-width-2 border-warning">
+                        <div class="col-4 v-center">
+                            <div class="bg-warning rounded-circle text-center" style="height:50px; width:50px;">
+                                <i class="fas fa-info text-white mt-3"></i>
+                            </div>
+                        </div>
+                        <div class="col-8 text-black-50 text-right">
+                            <p class="h3 mb-0">0</p>
+                            <p class="mb-0 font-italic" style="line-height:20px; font-size:16px;">Organisation information</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-xl-3 col-md-4 col-sm-6 my-3">
+                <div class="container-fluid">
+                    <div class="row p-2 border rounded border-width-2 border-dark">
+                        <div class="col-4 v-center">
+                            <div class="bg-dark rounded-circle text-center" style="height:50px; width:50px;">
+                                <i class="fas fa-info text-white mt-3"></i>
+                            </div>
+                        </div>
+                        <div class="col-8 text-black-50 text-right">
+                            <p class="h3 mb-0">0</p>
+                            <p class="mb-0 font-italic" style="line-height:20px; font-size:16px;">Organisation information</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-xl-3 col-md-4 col-sm-6 my-3">
+                <div class="container-fluid">
+                    <div class="row p-2 border rounded border-width-2 border-info">
+                        <div class="col-4 v-center">
+                            <div class="bg-info rounded-circle text-center" style="height:50px; width:50px;">
+                                <i class="fas fa-info text-white mt-3"></i>
+                            </div>
+                        </div>
+                        <div class="col-8 text-black-50 text-right">
+                            <p class="h3 mb-0">0</p>
+                            <p class="mb-0 font-italic" style="line-height:20px; font-size:16px;">Organisation information</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-xl-3 col-md-4 col-sm-6 my-3">
+                <div class="container-fluid">
+                    <div class="row p-2 border rounded border-width-2 border-light">
+                        <div class="col-4 v-center">
+                            <div class="bg-light rounded-circle text-center" style="height:50px; width:50px;">
+                                <i class="fas fa-info text-white mt-3"></i>
+                            </div>
+                        </div>
+                        <div class="col-8 text-black-50 text-right">
+                            <p class="h3 mb-0">0</p>
+                            <p class="mb-0 font-italic" style="line-height:20px; font-size:16px;">Organisation information</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-xl-3 col-md-4 col-sm-6 my-3">
+                <div class="container-fluid">
+                    <div class="row p-2 border rounded border-width-2 border-success">
+                        <div class="col-4 v-center">
+                            <div class="bg-success rounded-circle text-center" style="height:50px; width:50px;">
+                                <i class="fas fa-info text-white mt-3"></i>
+                            </div>
+                        </div>
+                        <div class="col-8 text-black-50 text-right">
+                            <p class="h3 mb-0">0</p>
+                            <p class="mb-0 font-italic" style="line-height:20px; font-size:16px;">Organisation information</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    }
+</div>
+<!-- what we do section -->
+<div class="what bg-li py-5" id="what">
+    <div class="container py-xl-5 py-lg-3">
+        <div class="row about-bottom-w3l text-center mt-4">
+            <div class="col-lg-4 about-grid card-padding-top">
+                <div class="about-grid-main">
+                    <i class="fas fa-cogs fa-4x text-primary"></i>
+                    <h4 class="my-4">Setting</h4>
+
+                    <p><a href="#" class="card-link">Upload and Download T/C</a></p>
+                    <p><a href="#" class="card-link">Purchase Category Setup</a></p>
+                    <p><a href="#" class="card-link">Source of Order</a></p>
+                    <p>
+                        <a href="#" class="card-link">
+                            Setup LPO Numbering
+                        </a>
+                    </p>
+                    <p><a href="#" class="card-link">Tutorial Form</a></p>
+
+                </div>
+            </div>
+            <div class="col-lg-4 about-grid card-padding-top">
+                <div class="about-grid-main">
+                    <i class="fas fa-cogs fa-4x text-primary"></i>
+                    <h4 class="my-4">Purchase Requisition</h4>
+
+                    <p><a href="#" class="card-link">Purchase Requisition Request</a></p>
+                    <p><a href="#" class="card-link">PR Item Costing</a></p>
+                    <p><a href="#" class="card-link">PR Authorization/Approval</a></p>
+                    <p><a href="#" class="card-link">PR Budgetary Control</a></p>
+                    <p><a href="#" class="card-link">PR Budgetary Approval</a></p>
+
+                </div>
+            </div>
+            <div class="col-lg-4 about-grid card-padding-top">
+                <div class="about-grid-main">
+                    <i class="fas fa-cogs fa-4x text-primary"></i>
+                    <h4 class="my-4">Purchase Order</h4>
+
+                    <p><a href="#" class="card-link">Request For Quotation</a></p>
+                    <p><a href="#" class="card-link">Quotation Analysis</a></p>
+                    <p><a href="#" class="card-link">Quotation Approval</a></p>
+                    <p><a href="#" class="card-link">Purchase Order</a></p>
+                </div>
+            </div>
+            <div class="col-lg-4 about-grid card-padding-top">
+                <div class="about-grid-main">
+                    <i class="fas fa-cogs fa-4x text-primary"></i>
+                    <h4 class="my-4">Reports/Inquiry</h4>
+
+                    <p><a href="#" class="card-link">Procurement Report</a></p>
+                    <p><a href="#" class="card-link">PR Inquiry Form</a></p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- //what we do section -->
+<!-- middle -->
+<!-- //middle -->
+<!-- services -->
+<!-- //services -->
+<!-- stats -->
+<!-- //stats -->
+<!-- partners -->
+<!-- //partners -->
+<!-- footer -->
+<!-- //footer -->
+<!-- copyright bottom -->
+<div class="copy-bottom bg-li py-4 border-top">
+    <div class="container-fluid">
+        <div class="d-md-flex px-md-3 position-relative text-center">
+
+            <!-- copyright -->
+            <div class="copy_right mx-md-auto mb-md-0 mb-3">
+                <p class="text-bl let">
+                    © 2019 BSSL Technologies Limited System. All rights reserved | Design by
+                    <a href="#" target="_blank">BSSL</a>
+                </p>
+            </div>
+            <!-- //copyright -->
+            <!-- move top icon -->
+            <a href="#home" class="move-top text-center">
+                <span class="fa fa-level-up" aria-hidden="true"></span>
+            </a>
+            <!-- //move top icon -->
+        </div>
+    </div>
+</div>
+<!-- //copyright bottom -->
