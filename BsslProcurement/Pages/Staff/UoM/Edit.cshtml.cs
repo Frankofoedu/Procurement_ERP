@@ -8,7 +8,7 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using DcProcurement.Contexts;
 
-namespace BsslProcurement
+namespace BsslProcurement.Pages.Staff.UoM
 {
     public class EditModel : PageModel
     {

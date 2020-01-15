@@ -1,246 +1,241 @@
 ﻿@page
-@using Microsoft.AspNetCore.Identity
-@using Microsoft.EntityFrameworkCore
-@using DcProcurement
-
-@inject SignInManager<User> SignInManager
-@inject UserManager<User> UserManager
-@inject ProcurementDBContext _context
-@model IndexModel
+@model BsslProcurement.Pages.IndexModel
 @{
-    ViewData["Title"] = "Home page";
+    Layout = null;
 }
-<style>
-    .v-center {
-        display: flex;
-        align-items: center;
-    }
 
-    .border-width-2 {
-        border-width: 2px !important;
-    }
-</style>
+<!DOCTYPE html>
 
-<div class="container bg-white shadow my-4">
-    @if (SignInManager.IsSignedIn(User))
-    {
-        var aspUser = await UserManager.GetUserAsync(User);
-        var curUser = await _context.Staffs.FindAsync(aspUser.Id);
+<html lang="en">
 
-        if (curUser == null)
-        {
-            await SignInManager.SignOutAsync();
-            return;
-        }
-        
-        //get number of prequalification jobs
-        var PreQnotificationNum = await _context.PrequalificationJobs.Where(x => x.JobStatus == Enums.JobState.NotDone).CountAsync(m => m.StaffId == curUser.Id || m.StaffId == null);
-        var reqNotificationNum = await _context.RequisitionJobs.Where(x => x.JobStatus == Enums.JobState.NotDone && x.StaffId == curUser.Id).CountAsync();
+<head>
 
-        <div class="row">
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="description" content="">
+    <meta name="author" content="">
 
-            <div class="col-xl-3 col-md-4 col-sm-6 my-3">
-                <div class="container-fluid">
-                    <div class="row p-2 border rounded border-width-2 border-danger">
-                        <div class="col-4 v-center">
-                            <div class="bg-danger rounded-circle text-center" style="height:50px; width:50px;">
-                                <i class="fas fa-info text-white mt-3"></i>
-                            </div>
-                        </div>
-                        <div class="col-8 text-black-50 text-right">
-                            <p class="h3 mb-0">@PreQnotificationNum</p>
-                            <a asp-page="Staff/JobViews/PreqJobs"><p class="mb-0 font-italic" style="line-height:20px; font-size:16px;">Prequalification Tasks</p></a>
-                        </div>
-                    </div>
-                </div>
+    <title>BSSL Procurement Portal - Home</title>
+
+    <!-- Bootstrap core CSS -->
+    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.css" />
+
+    <!-- Custom fonts for this template -->
+    <link href="~/lib/font-awesome/css/all.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css?family=Varela+Round" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css?family=Nunito:200,200i,300,300i,400,400i,600,600i,700,700i,800,800i,900,900i" rel="stylesheet">
+
+    <!-- Custom styles for this template -->
+    <link href="css/homepage.min.css" rel="stylesheet">
+
+</head>
+
+<body id="page-top">
+
+    <!-- Navigation -->
+    <nav class="navbar navbar-expand-lg navbar-light fixed-top" id="mainNav">
+        <div class="container">
+            <a class="navbar-brand js-scroll-trigger" href="#page-top">BSSL Limited</a>
+            <button class="navbar-toggler navbar-toggler-right" type="button" data-toggle="collapse" data-target="#navbarResponsive" aria-controls="navbarResponsive" aria-expanded="false" aria-label="Toggle navigation">
+                Menu
+                <i class="fas fa-bars"></i>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarResponsive">
+                <ul class="navbar-nav ml-auto">
+                    <li class="nav-item">
+                        <a class="nav-link js-scroll-trigger" href="#about">About</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link js-scroll-trigger" href="#projects">Projects</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link js-scroll-trigger" href="#signup">Contact</a>
+                    </li>
+                </ul>
             </div>
-
-            <div class="col-xl-3 col-md-4 col-sm-6 my-3">
-                <div class="container-fluid">
-                    <div class="row p-2 border rounded border-width-2 border-success">
-                        <div class="col-4 v-center">
-                            <div class="bg-success rounded-circle text-center" style="height:50px; width:50px;">
-                                <i class="fas fa-info text-white mt-3"></i>
-                            </div>
-                        </div>
-                        <div class="col-8 text-black-50 text-right">
-                            <p class="h3 mb-0">@reqNotificationNum</p>
-                            <a asp-page="/Staff/JobViews/RequisitionJobs"><p class="mb-0 font-italic" style="line-height:20px; font-size:16px;">Requisition Tasks</p></a>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <div class="col-xl-3 col-md-4 col-sm-6 my-3">
-                <div class="container-fluid">
-                    <div class="row p-2 border rounded border-width-2 border-warning">
-                        <div class="col-4 v-center">
-                            <div class="bg-warning rounded-circle text-center" style="height:50px; width:50px;">
-                                <i class="fas fa-info text-white mt-3"></i>
-                            </div>
-                        </div>
-                        <div class="col-8 text-black-50 text-right">
-                            <p class="h3 mb-0">0</p>
-                            <p class="mb-0 font-italic" style="line-height:20px; font-size:16px;">Organisation information</p>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <div class="col-xl-3 col-md-4 col-sm-6 my-3">
-                <div class="container-fluid">
-                    <div class="row p-2 border rounded border-width-2 border-dark">
-                        <div class="col-4 v-center">
-                            <div class="bg-dark rounded-circle text-center" style="height:50px; width:50px;">
-                                <i class="fas fa-info text-white mt-3"></i>
-                            </div>
-                        </div>
-                        <div class="col-8 text-black-50 text-right">
-                            <p class="h3 mb-0">0</p>
-                            <p class="mb-0 font-italic" style="line-height:20px; font-size:16px;">Organisation information</p>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <div class="col-xl-3 col-md-4 col-sm-6 my-3">
-                <div class="container-fluid">
-                    <div class="row p-2 border rounded border-width-2 border-info">
-                        <div class="col-4 v-center">
-                            <div class="bg-info rounded-circle text-center" style="height:50px; width:50px;">
-                                <i class="fas fa-info text-white mt-3"></i>
-                            </div>
-                        </div>
-                        <div class="col-8 text-black-50 text-right">
-                            <p class="h3 mb-0">0</p>
-                            <p class="mb-0 font-italic" style="line-height:20px; font-size:16px;">Organisation information</p>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <div class="col-xl-3 col-md-4 col-sm-6 my-3">
-                <div class="container-fluid">
-                    <div class="row p-2 border rounded border-width-2 border-light">
-                        <div class="col-4 v-center">
-                            <div class="bg-light rounded-circle text-center" style="height:50px; width:50px;">
-                                <i class="fas fa-info text-white mt-3"></i>
-                            </div>
-                        </div>
-                        <div class="col-8 text-black-50 text-right">
-                            <p class="h3 mb-0">0</p>
-                            <p class="mb-0 font-italic" style="line-height:20px; font-size:16px;">Organisation information</p>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <div class="col-xl-3 col-md-4 col-sm-6 my-3">
-                <div class="container-fluid">
-                    <div class="row p-2 border rounded border-width-2 border-success">
-                        <div class="col-4 v-center">
-                            <div class="bg-success rounded-circle text-center" style="height:50px; width:50px;">
-                                <i class="fas fa-info text-white mt-3"></i>
-                            </div>
-                        </div>
-                        <div class="col-8 text-black-50 text-right">
-                            <p class="h3 mb-0">0</p>
-                            <p class="mb-0 font-italic" style="line-height:20px; font-size:16px;">Organisation information</p>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
         </div>
-    }
-</div>
-<!-- what we do section -->
-<div class="what bg-li py-5" id="what">
-    <div class="container py-xl-5 py-lg-3">
-        <div class="row about-bottom-w3l text-center mt-4">
-            <div class="col-lg-4 about-grid card-padding-top">
-                <div class="about-grid-main">
-                    <i class="fas fa-cogs fa-4x text-primary"></i>
-                    <h4 class="my-4">Setting</h4>
+    </nav>
 
-                    <p><a href="#" class="card-link">Upload and Download T/C</a></p>
-                    <p><a href="#" class="card-link">Purchase Category Setup</a></p>
-                    <p><a href="#" class="card-link">Source of Order</a></p>
-                    <p>
-                        <a href="#" class="card-link">
-                            Setup LPO Numbering
-                        </a>
+    <!-- Header -->
+    <header class="masthead">
+        <div class="container d-flex h-100 align-items-center">
+            <div class="mx-auto text-center">
+                <h1 class="mx-auto my-0 text-uppercase">DC-Procurement</h1>
+                <h2 class="text-white-50 mx-auto mt-2 mb-5">Efficent digital procurement software for businesses</h2>
+                <a asp-page="/Staff/Index" class="btn btn-primary js-scroll-trigger">Get Started</a>
+                <a asp-page="/Vendor/Bid/VendorAccessPoint" class="btn btn-primary js-scroll-trigger">Vendor Access Point</a>
+            </div>
+        </div>
+    </header>
+
+    <!-- About Section -->
+    <section id="about" class="about-section text-center">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-8 mx-auto">
+                    <h2 class="text-white mb-4">Built for Efficiency</h2>
+                    <p class="text-white-50">
+                        We are globally recognized as a <a href="http://bssl.com.ng">Enterprise Resource Planning  {ERP} Solution Provider</a> of note in Nigeria. 
+                        Our long range vision is to be the Leader in the provision of home grown state-of-the-art business 
+                        application software in the West African sub-region. We built our products with our clients in mind 
+                        and this singular reason has been responsible for the speed and accuracy with which we have been able 
+                        to respond and deplore our arrays of solutions to meet the varying needs of our clients.
                     </p>
-                    <p><a href="#" class="card-link">Tutorial Form</a></p>
-
                 </div>
             </div>
-            <div class="col-lg-4 about-grid card-padding-top">
-                <div class="about-grid-main">
-                    <i class="fas fa-cogs fa-4x text-primary"></i>
-                    <h4 class="my-4">Purchase Requisition</h4>
+            <img src="img/ipad.png" class="img-fluid" alt="">
+        </div>
+    </section>
 
-                    <p><a href="#" class="card-link">Purchase Requisition Request</a></p>
-                    <p><a href="#" class="card-link">PR Item Costing</a></p>
-                    <p><a href="#" class="card-link">PR Authorization/Approval</a></p>
-                    <p><a href="#" class="card-link">PR Budgetary Control</a></p>
-                    <p><a href="#" class="card-link">PR Budgetary Approval</a></p>
+    <!-- Projects Section -->
+    <section id="projects" class="projects-section bg-light">
+        <div class="container">
 
+            <!-- Featured Project Row -->
+            <div class="row align-items-center no-gutters mb-4 mb-lg-5">
+                <div class="col-xl-8 col-lg-7">
+                    <img class="img-fluid mb-3 mb-lg-0" src="img/bg-masthead.jpg" alt="">
+                </div>
+                <div class="col-xl-4 col-lg-5">
+                    <div class="featured-text text-center text-lg-left">
+                        <h4>Shoreline</h4>
+                        <p class="text-black-50 mb-0">Grayscale is open source and MIT licensed. This means you can use it for any project - even commercial projects! Download it, customize it, and publish your website!</p>
+                    </div>
                 </div>
             </div>
-            <div class="col-lg-4 about-grid card-padding-top">
-                <div class="about-grid-main">
-                    <i class="fas fa-cogs fa-4x text-primary"></i>
-                    <h4 class="my-4">Purchase Order</h4>
 
-                    <p><a href="#" class="card-link">Request For Quotation</a></p>
-                    <p><a href="#" class="card-link">Quotation Analysis</a></p>
-                    <p><a href="#" class="card-link">Quotation Approval</a></p>
-                    <p><a href="#" class="card-link">Purchase Order</a></p>
+            <!-- Project One Row -->
+            <div class="row justify-content-center no-gutters mb-5 mb-lg-0">
+                <div class="col-lg-6">
+                    <img class="img-fluid" src="img/demo-image-01.jpg" alt="">
+                </div>
+                <div class="col-lg-6">
+                    <div class="bg-black text-center h-100 project">
+                        <div class="d-flex h-100">
+                            <div class="project-text w-100 my-auto text-center text-lg-left">
+                                <h4 class="text-white">Misty</h4>
+                                <p class="mb-0 text-white-50">An example of where you can put an image of a project, or anything else, along with a description.</p>
+                                <hr class="d-none d-lg-block mb-0 ml-0">
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </div>
-            <div class="col-lg-4 about-grid card-padding-top">
-                <div class="about-grid-main">
-                    <i class="fas fa-cogs fa-4x text-primary"></i>
-                    <h4 class="my-4">Reports/Inquiry</h4>
 
-                    <p><a href="#" class="card-link">Procurement Report</a></p>
-                    <p><a href="#" class="card-link">PR Inquiry Form</a></p>
+            <!-- Project Two Row -->
+            <div class="row justify-content-center no-gutters">
+                <div class="col-lg-6">
+                    <img class="img-fluid" src="img/demo-image-02.jpg" alt="">
+                </div>
+                <div class="col-lg-6 order-lg-first">
+                    <div class="bg-black text-center h-100 project">
+                        <div class="d-flex h-100">
+                            <div class="project-text w-100 my-auto text-center text-lg-right">
+                                <h4 class="text-white">Mountains</h4>
+                                <p class="mb-0 text-white-50">Another example of a project with its respective description. These sections work well responsively as well, try this theme on a small screen!</p>
+                                <hr class="d-none d-lg-block mb-0 mr-0">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </section>
+
+    <!-- Signup Section -->
+    <section id="signup" class="signup-section">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-10 col-lg-8 mx-auto text-center">
+
+                    <i class="far fa-paper-plane fa-2x mb-2 text-white"></i>
+                    <h2 class="text-white mb-5">Subscribe to receive updates!</h2>
+
+                    <form class="form-inline d-flex">
+                        <input type="email" class="form-control flex-fill mr-0 mr-sm-2 mb-3 mb-sm-0" id="inputEmail" placeholder="Enter email address...">
+                        <button type="submit" class="btn btn-primary mx-auto">Subscribe</button>
+                    </form>
+
                 </div>
             </div>
         </div>
-    </div>
-</div>
-<!-- //what we do section -->
-<!-- middle -->
-<!-- //middle -->
-<!-- services -->
-<!-- //services -->
-<!-- stats -->
-<!-- //stats -->
-<!-- partners -->
-<!-- //partners -->
-<!-- footer -->
-<!-- //footer -->
-<!-- copyright bottom -->
-<div class="copy-bottom bg-li py-4 border-top">
-    <div class="container-fluid">
-        <div class="d-md-flex px-md-3 position-relative text-center">
+    </section>
 
-            <!-- copyright -->
-            <div class="copy_right mx-md-auto mb-md-0 mb-3">
-                <p class="text-bl let">
-                    © 2019 BSSL Technologies Limited System. All rights reserved | Design by
-                    <a href="#" target="_blank">BSSL</a>
-                </p>
+    <!-- Contact Section -->
+    <section class="contact-section bg-black">
+        <div class="container">
+
+            <div class="row">
+
+                <div class="col-md-4 mb-3 mb-md-0">
+                    <div class="card py-4 h-100">
+                        <div class="card-body text-center">
+                            <i class="fas fa-map-marked-alt text-primary mb-2"></i>
+                            <h4 class="text-uppercase m-0">Address</h4>
+                            <hr class="my-4">
+                            <div class="small text-black-50">6, Johnson st, Ilupeju, Lagos</div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-md-4 mb-3 mb-md-0">
+                    <div class="card py-4 h-100">
+                        <div class="card-body text-center">
+                            <i class="fas fa-envelope text-primary mb-2"></i>
+                            <h4 class="text-uppercase m-0">Email</h4>
+                            <hr class="my-4">
+                            <div class="small text-black-50">
+                                <a href="#">hello@bssl.com</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-md-4 mb-3 mb-md-0">
+                    <div class="card py-4 h-100">
+                        <div class="card-body text-center">
+                            <i class="fas fa-mobile-alt text-primary mb-2"></i>
+                            <h4 class="text-uppercase m-0">Phone</h4>
+                            <hr class="my-4">
+                            <div class="small text-black-50">+234 902 000 0000</div>
+                        </div>
+                    </div>
+                </div>
             </div>
-            <!-- //copyright -->
-            <!-- move top icon -->
-            <a href="#home" class="move-top text-center">
-                <span class="fa fa-level-up" aria-hidden="true"></span>
-            </a>
-            <!-- //move top icon -->
+
+            <div class="social d-flex justify-content-center">
+                <a href="#" class="mx-2">
+                    <i class="fab fa-twitter"></i>
+                </a>
+                <a href="#" class="mx-2">
+                    <i class="fab fa-facebook-f"></i>
+                </a>
+                <a href="#" class="mx-2">
+                    <i class="fab fa-github"></i>
+                </a>
+            </div>
+
         </div>
-    </div>
-</div>
-<!-- //copyright bottom -->
+    </section>
+
+    <!-- Footer -->
+    <footer class="bg-black small text-center text-white-50">
+        <div class="container">
+            Copyright &copy; Your Website 2019
+        </div>
+    </footer>
+
+    <!-- Bootstrap core JavaScript -->
+    <script src="~/lib/jquery/dist/jquery.min.js"></script>
+    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+
+    <!-- Plugin JavaScript -->
+    <script src="~/lib/jquery-easing/jquery.easing.min.js"></script>
+
+    <!-- Custom scripts for this template -->
+    <script src="~/js/homepage.min.js"></script>
+
+</body>
+
+</html>
