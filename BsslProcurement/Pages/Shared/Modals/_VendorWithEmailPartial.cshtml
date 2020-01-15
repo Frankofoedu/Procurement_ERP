@@ -22,6 +22,7 @@
                                 <th>Vendor No.</th>
                                 <th>Vendor Name</th>
                                 <th>Email</th>
+                                <th>Action</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -40,6 +41,9 @@
                                     </td>
                                     <td>
                                         <input asp-for="VendorWithEmailList[i].Email" readonly />
+                                    </td>
+                                    <td>
+                                        <button class="btn btn-link" >Select</button>
                                     </td>
                                 </tr>
                             }
@@ -64,4 +68,6 @@
     $(document).ready(function () {
         $('#vendorTable').dataTable();
     });
+
+
 </script>
