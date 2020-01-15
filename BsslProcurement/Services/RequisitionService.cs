@@ -17,6 +17,20 @@ namespace BsslProcurement.Services
         {
             _procurementDBContext = procurementDBContext;
         }
+        public async Task<List<Requisition>> GetRequisitionsJobsAssignedToLoggedInUser(string userId)
+        {
+            var jobs = _procurementDBContext.RequisitionJobs.Include(reqJob => reqJob.Requisition).ThenInclude(req=> req.RequisitionItems).Where(x => x.StaffId == userId && x.JobStatus == Enums.JobState.NotDone);
+
+            if (jobs != null)
+            {
+                var reqList = new List<Requisition>();
+
+                reqList = await jobs.Select(x => x.Requisition).ToListAsync();
+                return reqList;
+            }
+
+            return null;
+        }
         public async Task<List<Requisition>> GetRequisitionsForLoggedInUser(string userId)
         {
             return await _procurementDBContext.Requisitions.Include(x => x.RequisitionItems).Where(p => p.LoggedInUserId == userId && p.isSubmitted == true).ToListAsync();
@@ -29,7 +43,16 @@ namespace BsslProcurement.Services
         {
             return await _procurementDBContext.Requisitions.Include(x => x.RequisitionItems).Where(p => p.isBudgetCleared==true).ToListAsync();
         }
-       
+        public async Task<List<Requisition>> GetRequisitionsForPricing()
+        {
+            return await _procurementDBContext.Requisitions.Include(x => x.RequisitionItems).Where(p => p.isPriced == false && p.isApproved == true).ToListAsync();
+        }
+
+        public async Task<List<Requisition>> GetApprovedRequisitions()
+        {
+            return await _procurementDBContext.Requisitions.Include(x => x.RequisitionItems).Where(p => p.isApproved == true).ToListAsync();
+        }
+
         public async Task SendRequisitionToNextStageAsync(int requisitionId,string staffCode, int newWorkflowId, string remark)
         {
             //get staff identity id
@@ -87,6 +110,7 @@ namespace BsslProcurement.Services
 
         }
 
+        //TODO: Update this method in line with the nextstage method
         public async Task SendRequisitionToPreviousStage(int requisitionId, string currStaffCode, string newStaffCode, int newStage, string remark)
         {
             //get  staff identity id
@@ -145,19 +169,5 @@ namespace BsslProcurement.Services
 
         private async Task<string> GetStaffCodeFromIdAsync(string staffId) => (await _procurementDBContext.Staffs.FindAsync(staffId)).Id;
 
-        public async Task<List<Requisition>> GetRequisitionsAssignedToLoggedInUser(string userId)
-        {
-            var jobs = _procurementDBContext.RequisitionJobs.Include(reqJob => reqJob.Requisition).ThenInclude(req=> req.RequisitionItems).Where(x => x.StaffId == userId && x.JobStatus == Enums.JobState.NotDone);
-
-            if (jobs != null)
-            {
-                var reqList = new List<Requisition>();
-
-                reqList = await jobs.Select(x => x.Requisition).ToListAsync();
-                return reqList;
-            }
-
-            return null;
-        }
     }
 }
