@@ -38,7 +38,7 @@ namespace BsslProcurement.Services
 
                 var workflows = _procurementDBContext.Workflows.Include(y => y.WorkflowAction).Where(x => x.WorkflowTypeId == wfId && x.Step > step);
 
-                var nextTwoWorkflows = workflows.Take(2);
+                var nextTwoWorkflows = workflows.Take(1);
 
                 var data = nextTwoWorkflows.Select(x => new WorkFlowTypesViewModel
                 {
