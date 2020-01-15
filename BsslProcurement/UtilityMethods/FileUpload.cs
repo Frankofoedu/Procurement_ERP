@@ -60,7 +60,7 @@ namespace BsslProcurement.UtilityMethods
             }
 
             
-            return new Attachment { FilePath = Path.Combine(folder, file.FileName) };
+            return new Attachment { FilePath = Path.Combine(folder, file.FileName) ,DateCreated = DateTime.Now};
         }
     }
 }
