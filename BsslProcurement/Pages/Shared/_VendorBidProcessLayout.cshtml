@@ -1,0 +1,48 @@
+﻿@{
+    Layout = "~/Pages/Shared/_VendorLayout.cshtml";
+}
+
+@RenderSection("Styles", required: false)
+
+
+<div class="row mt-5">
+    <div class="col-md-12">
+        <div class="panel panel-login">
+            <div class="panel-heading">
+                <div class="row">
+                    <p class="header-text">Vendor Bids</p>
+                </div>
+                <hr>
+            </div>
+
+            <nav id="processNav" class="navbar navbar-expand-lg navbar-light bg-white shadow-sm">
+                <div class="container-fluid">
+                    <button class="btn btn-dark d-inline-block d-lg-none ml-auto" type="button" data-toggle="collapse" data-target="#processNavbar" aria-controls="processNavbar" aria-expanded="false" aria-label="Toggle navigation">
+                        <i class="fas fa-bars"></i>
+                    </button>
+                    <div class="collapse navbar-collapse w-100" id="processNavbar">
+                        <ul class="nav navbar-nav justify-content-between">
+                            <li class="nav-item mr-2 my-1"><a asp-page="/Vendor/Bid/VendorAccessPoint" class="btn btn-outline-dark">Invitation to Participate</a></li>
+                            <li class="nav-item mr-2 my-1"><a asp-page="/Vendor/Bid/VendorAccessPoint" class="btn btn-outline-dark">Terms and Conditions</a></li>
+                            <li class="nav-item mr-2 my-1"><a asp-page="/Vendor/Bid/VendorAccessPoint" class="btn btn-outline-dark">Technical BID</a></li>
+                            <li class="nav-item mr-2 my-1"><a asp-page="/Vendor/Bid/VendorAccessPoint" class="btn btn-outline-dark">Financial BID</a></li>
+                            <li class="nav-item mr-2 my-1"><a asp-page="/Vendor/Bid/VendorAccessPoint" class="btn btn-outline-dark">General Information</a></li>
+                            <li class="nav-item mr-2 my-1"><a asp-page="/Vendor/Bid/VendorAccessPoint" class="btn btn-outline-dark">Declaration Statement</a></li>
+                            <li class="nav-item mr-2 my-1"><a asp-page="/Vendor/Bid/VendorAccessPoint" class="btn btn-outline-dark">Confirm Participation</a></li>
+                            <li class="nav-item mr-2 my-1"><a asp-page="/Vendor/Bid/VendorAccessPoint" class="btn btn-outline-dark">Submit/Un-submit </a></li>
+                            <li class="nav-item mr-2 my-1"><a asp-page="/Vendor/Bid/VendorAccessPoint" class="btn btn-outline-dark">Inquiry</a></li>
+                            <li class="nav-item mr-2 my-1"><a asp-page="/Vendor/Bid/VendorAccessPoint" class="btn btn-outline-dark">Help</a></li>
+                            <li class="nav-item mr-2 my-1"><a asp-page="/Vendor/Bid/VendorAccessPoint" class="btn btn-outline-dark">Log Out</a></li>
+                        </ul>
+                    </div>
+                </div>
+            </nav>
+
+            <div class="container-fluid">
+                @RenderBody()
+            </div>
+        </div>
+    </div>
+</div>
+
+@RenderSection("Scripts", required: false)
