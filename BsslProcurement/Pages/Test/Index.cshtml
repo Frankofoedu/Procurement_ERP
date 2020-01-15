@@ -6,10 +6,12 @@
 
 <h2>Index</h2>
 
-<label>@Model.SuccessCount Staff added out of @Model.StaffCount</label>
+@*<label>@Model.SuccessCount Staff added out of @Model.StaffCount</label>*@
 <form method="post">
-    <input class="datepicker" />
-    <input type="hidden" asp-for="date" class="dateee" />
 
-    <input type="submit" />
+    <input type="submit" value="Add Users" asp-action="AddUsers" />
+
+    <button data-preview="0" class="btnPreviewItemAttachment">Preview</button>
+
 </form>
+<partial name="~/Pages/Shared/Modals/_AttachmentViewPartial.cshtml" model="Model.files" />

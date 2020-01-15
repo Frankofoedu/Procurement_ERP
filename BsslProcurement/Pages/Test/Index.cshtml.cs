@@ -1,10 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 using BsslProcurement.Interfaces;
 using DcProcurement;
+using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
@@ -23,6 +26,11 @@ namespace BsslProcurement.Pages.Test
         private readonly ILogger<IndexModel> _logger;
         private readonly IEmailSenderService _emailSender;
 
+        private readonly IWebHostEnvironment _Env;
+
+        [BindProperty]
+        public List<string> files { get; set; }
+
         public int StaffCount { get; set; }
         public int SuccessCount { get; set; }
 
@@ -39,7 +47,7 @@ namespace BsslProcurement.Pages.Test
             UserManager<User> userManager,
             ILogger<IndexModel> logger,
             SignInManager<User> signInManager,
-            IEmailSenderService emailSender)
+            IEmailSenderService emailSender, IWebHostEnvironment Env)
         {
             _procContext = procContext;
             _bsslContext = bsslContext;
@@ -47,17 +55,34 @@ namespace BsslProcurement.Pages.Test
             _logger = logger;
             _signInManager = signInManager;
             _emailSender = emailSender;
+            _Env = Env;
         }
         public async Task OnGetAsync()
         {
-   await MigrateStaffFromUserAcctToIdentity();
-          //  await SendEmailAsync();
+            files =  Directory.EnumerateFiles(Path.Combine(_Env.WebRootPath, "Attachment")).Select(x => Path.GetFileName(x)).ToList();
+
+            //var s = Url.Content("~/");
+            //using (var stream = System.IO.File.OpenRead(t.ElementAt(1)))
+            //{
+            //    files.Add( new FormFile(stream, 0, stream.Length, null, Path.GetFileName(stream.Name))
+            //    {
+            //        Headers = new HeaderDictionary(),
+            //        ContentType = "application/pdf"
+            //    });
+            //}
+
         }
 
-        public void OnPost()
+        public async Task OnPost()
         {
-
+            
         }
+
+        public async Task OnPostAddUsers()
+        {
+             await MigrateStaffFromUserAcctToIdentity();
+        }
+
         private async Task SendEmailAsync()
         {
             var email = "Frankofoedu@gmail.com";
