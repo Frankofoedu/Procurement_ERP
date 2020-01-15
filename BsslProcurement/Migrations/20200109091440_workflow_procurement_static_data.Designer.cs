@@ -4,14 +4,16 @@ using DcProcurement;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace BsslProcurement.Migrations
 {
     [DbContext(typeof(ProcurementDBContext))]
-    partial class ProcurementDBContextModelSnapshot : ModelSnapshot
+    [Migration("20200109091440_workflow_procurement_static_data")]
+    partial class workflow_procurement_static_data
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -633,9 +635,9 @@ namespace BsslProcurement.Migrations
                         new
                         {
                             Id = 22,
-                            Date = new DateTime(2020, 1, 15, 12, 3, 56, 787, DateTimeKind.Local).AddTicks(2560),
+                            Date = new DateTime(2020, 1, 9, 10, 14, 39, 237, DateTimeKind.Local).AddTicks(3488),
                             DateCreated = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            DeliveryDate = new DateTime(2020, 1, 15, 12, 3, 56, 787, DateTimeKind.Local).AddTicks(3905),
+                            DeliveryDate = new DateTime(2020, 1, 9, 10, 14, 39, 237, DateTimeKind.Local).AddTicks(5149),
                             Description = "sample requisition",
                             PRNumber = "000222",
                             PreparedBy = "John O",
@@ -846,50 +848,6 @@ namespace BsslProcurement.Migrations
                     b.HasIndex("WorkflowTypeId");
 
                     b.ToTable("Workflows");
-
-                    b.HasData(
-                        new
-                        {
-                            Id = 100,
-                            Step = 1,
-                            WorkflowActionId = 100,
-                            WorkflowTypeId = 3
-                        },
-                        new
-                        {
-                            Id = 200,
-                            Step = 2,
-                            WorkflowActionId = 200,
-                            WorkflowTypeId = 3
-                        },
-                        new
-                        {
-                            Id = 300,
-                            Step = 3,
-                            WorkflowActionId = 300,
-                            WorkflowTypeId = 3
-                        },
-                        new
-                        {
-                            Id = 400,
-                            Step = 4,
-                            WorkflowActionId = 400,
-                            WorkflowTypeId = 3
-                        },
-                        new
-                        {
-                            Id = 500,
-                            Step = 5,
-                            WorkflowActionId = 500,
-                            WorkflowTypeId = 3
-                        },
-                        new
-                        {
-                            Id = 600,
-                            Step = 6,
-                            WorkflowActionId = 600,
-                            WorkflowTypeId = 3
-                        });
                 });
 
             modelBuilder.Entity("DcProcurement.WorkflowAction", b =>
@@ -913,44 +871,6 @@ namespace BsslProcurement.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("WorkflowActions");
-
-                    b.HasData(
-                        new
-                        {
-                            Id = 100,
-                            Description = "For Procurement Costing",
-                            Name = "Procurement Costing"
-                        },
-                        new
-                        {
-                            Id = 200,
-                            Description = "For Budgetary Control",
-                            Name = "Budgetary Control"
-                        },
-                        new
-                        {
-                            Id = 300,
-                            Description = "For Approval",
-                            Name = "Procurement Approval"
-                        },
-                        new
-                        {
-                            Id = 400,
-                            Description = "For Authorization",
-                            Name = "Procurement Authorization"
-                        },
-                        new
-                        {
-                            Id = 500,
-                            Description = "For Approval To Raising Erfx",
-                            Name = "Approval to Raise eRFx"
-                        },
-                        new
-                        {
-                            Id = 600,
-                            Description = "For Raising Erfx",
-                            Name = "Raise eRFx"
-                        });
                 });
 
             modelBuilder.Entity("DcProcurement.WorkflowStaff", b =>
@@ -1000,6 +920,12 @@ namespace BsslProcurement.Migrations
                     b.HasData(
                         new
                         {
+                            Id = 4,
+                            Code = "0001",
+                            Name = "ItemPricing"
+                        },
+                        new
+                        {
                             Id = 2,
                             Code = "0002",
                             Name = "Prequalification"
@@ -1047,20 +973,20 @@ namespace BsslProcurement.Migrations
                     b.HasData(
                         new
                         {
-                            Id = "5404845e-ce0e-42a7-8abf-eecef93bffaf",
-                            ConcurrencyStamp = "355be413-5b8b-49d4-a042-d99815dff19a",
+                            Id = "79846dd3-bde5-4067-aff2-5fb6f1b7671c",
+                            ConcurrencyStamp = "d846bf02-27ee-4b5a-b56a-b7c61f7e38bf",
                             Name = "Admin"
                         },
                         new
                         {
-                            Id = "c197e12b-fba6-41c6-aa80-0e3aff5aa4f4",
-                            ConcurrencyStamp = "98afc93b-585c-4b67-a3fc-fb24d54172e2",
+                            Id = "823c1e3a-3629-405f-92aa-0b841b70888c",
+                            ConcurrencyStamp = "b6da5e4a-7a15-4a75-80d0-eaaa2aa37b03",
                             Name = "Staff"
                         },
                         new
                         {
-                            Id = "08604223-9063-4608-a0be-31a823ac6472",
-                            ConcurrencyStamp = "1fe2e332-8293-4f0f-bef5-76c4e1b250b8",
+                            Id = "71d76096-03a7-454c-9a6d-226c2823080d",
+                            ConcurrencyStamp = "0983d3c8-9025-4ad4-9778-8ca0423f0811",
                             Name = "Vendor"
                         });
                 });

@@ -4,14 +4,16 @@ using DcProcurement;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace BsslProcurement.Migrations
 {
     [DbContext(typeof(ProcurementDBContext))]
-    partial class ProcurementDBContextModelSnapshot : ModelSnapshot
+    [Migration("20200115105639_proc_seed_workflow_up")]
+    partial class proc_seed_workflow_up
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -633,9 +635,9 @@ namespace BsslProcurement.Migrations
                         new
                         {
                             Id = 22,
-                            Date = new DateTime(2020, 1, 15, 12, 3, 56, 787, DateTimeKind.Local).AddTicks(2560),
+                            Date = new DateTime(2020, 1, 15, 11, 56, 37, 457, DateTimeKind.Local).AddTicks(3043),
                             DateCreated = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            DeliveryDate = new DateTime(2020, 1, 15, 12, 3, 56, 787, DateTimeKind.Local).AddTicks(3905),
+                            DeliveryDate = new DateTime(2020, 1, 15, 11, 56, 37, 457, DateTimeKind.Local).AddTicks(4714),
                             Description = "sample requisition",
                             PRNumber = "000222",
                             PreparedBy = "John O",
@@ -846,50 +848,6 @@ namespace BsslProcurement.Migrations
                     b.HasIndex("WorkflowTypeId");
 
                     b.ToTable("Workflows");
-
-                    b.HasData(
-                        new
-                        {
-                            Id = 100,
-                            Step = 1,
-                            WorkflowActionId = 100,
-                            WorkflowTypeId = 3
-                        },
-                        new
-                        {
-                            Id = 200,
-                            Step = 2,
-                            WorkflowActionId = 200,
-                            WorkflowTypeId = 3
-                        },
-                        new
-                        {
-                            Id = 300,
-                            Step = 3,
-                            WorkflowActionId = 300,
-                            WorkflowTypeId = 3
-                        },
-                        new
-                        {
-                            Id = 400,
-                            Step = 4,
-                            WorkflowActionId = 400,
-                            WorkflowTypeId = 3
-                        },
-                        new
-                        {
-                            Id = 500,
-                            Step = 5,
-                            WorkflowActionId = 500,
-                            WorkflowTypeId = 3
-                        },
-                        new
-                        {
-                            Id = 600,
-                            Step = 6,
-                            WorkflowActionId = 600,
-                            WorkflowTypeId = 3
-                        });
                 });
 
             modelBuilder.Entity("DcProcurement.WorkflowAction", b =>
@@ -1047,20 +1005,20 @@ namespace BsslProcurement.Migrations
                     b.HasData(
                         new
                         {
-                            Id = "5404845e-ce0e-42a7-8abf-eecef93bffaf",
-                            ConcurrencyStamp = "355be413-5b8b-49d4-a042-d99815dff19a",
+                            Id = "b1749784-db28-4a84-a959-7edeee1f8eed",
+                            ConcurrencyStamp = "cc8bbd0a-3a87-4393-852f-6c6f04c3b118",
                             Name = "Admin"
                         },
                         new
                         {
-                            Id = "c197e12b-fba6-41c6-aa80-0e3aff5aa4f4",
-                            ConcurrencyStamp = "98afc93b-585c-4b67-a3fc-fb24d54172e2",
+                            Id = "cb71e2e0-99ac-4986-9442-7442d40cbacb",
+                            ConcurrencyStamp = "fc5aacf7-291b-474f-a25b-ce015e9c06a0",
                             Name = "Staff"
                         },
                         new
                         {
-                            Id = "08604223-9063-4608-a0be-31a823ac6472",
-                            ConcurrencyStamp = "1fe2e332-8293-4f0f-bef5-76c4e1b250b8",
+                            Id = "57f2df19-a765-46b1-bcde-231bd2b66766",
+                            ConcurrencyStamp = "b60878d1-e777-4463-8022-420c16b9d572",
                             Name = "Vendor"
                         });
                 });
