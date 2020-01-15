@@ -1,0 +1,44 @@
+﻿@using Microsoft.AspNetCore.Http;
+@model List<string>
+
+<div class="modal fade" id="modItemPreview" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg" role="document">
+        <!--Content-->
+        <div class="modal-content">
+            <!--Body-->
+            <div class="modal-body mb-0 p-0">
+
+                <div class="embed-responsive embed-responsive-4by3">
+                    <iframe id="iframeItem" class="embed-responsive-item" src="" allowfullscreen></iframe>
+                </div>
+            </div>
+            <!--Footer-->
+        </div>
+        <!--/.Content-->
+    </div>
+</div>
+
+
+<script>
+    function getFileUrl(fileName) {
+
+         return window.location.origin + "/Attachment/" + fileName;
+    }
+    $(document).ready(function () {
+        //attachment preview button
+        $('.btnPreviewItemAttachment').on('click', function (e) {
+
+             var fileNamesArray = @Html.Raw( @Json.Serialize(Model));
+           
+            var index = $(this).data('preview');
+            var url = getFileUrl(fileNamesArray[index]);
+            displayPhotos(url);
+            e.preventDefault();
+        });
+    });
+    function displayPhotos(url) {
+
+        $('#iframeItem').attr('src', url);
+        $('#modItemPreview').modal();
+    }
+</script>
