@@ -8,6 +8,9 @@ using Microsoft.AspNetCore.Mvc.RazorPages;
 using DcProcurement;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.AspNetCore.Mvc.ViewFeatures;
+using BsslProcurement.ViewModels;
+using DcProcurement.Contexts;
+using BsslProcurement.Interfaces;
 
 namespace BsslProcurement.Pages.Staff.ItemRequisition
 {
@@ -15,29 +18,42 @@ namespace BsslProcurement.Pages.Staff.ItemRequisition
     public class RequisitionItemPricingModel : PageModel
     {
         public readonly ProcurementDBContext context;
-
+        private readonly IRequisitionService _requisitionService;
 
         public string Message { get; set; }
         public string Error { get; set; }
         [BindProperty]
         public DcProcurement.Requisition Requisition { get; set; }
 
+        [BindProperty]
+        public VendorWithEmailViewModel VendorEmailListObj { get; set; }
+        [BindProperty]
+        public WorkFlowApproverViewModel WfVm { get; set; }
+
         private readonly DcProcurement.Contexts.BSSLSYS_ITF_DEMOContext bsslContext;
-        public RequisitionItemPricingModel(ProcurementDBContext _context, DcProcurement.Contexts.BSSLSYS_ITF_DEMOContext _bsslContext)
+        public RequisitionItemPricingModel(ProcurementDBContext _context, DcProcurement.Contexts.BSSLSYS_ITF_DEMOContext _bsslContext, IRequisitionService requisitionService)
         {
             bsslContext = _bsslContext;
             context = _context;
+            _requisitionService = requisitionService;
         }
 
-        public void LoadData(int id)
+        public async Task LoadDataAsync(int id)
         {
 
-            Requisition = context.Requisitions.Include(y => y.RequisitionItems).FirstOrDefault(k => k.Id == id);
+            //load workflow of requisition
+            WfVm = await _requisitionService.GetCurrentWorkFlowOFRequisition(Requisition);
 
+
+
+            VendorEmailListObj = new VendorWithEmailViewModel();
+
+            Requisition = context.Requisitions.Include(y => y.RequisitionItems).FirstOrDefault(k => k.Id == id);
+            VendorEmailListObj.VendorWithEmailList = VendorEmailListObj.GetVendorWithEmailList(bsslContext.Accusts.ToList());
         }
         public void OnGet(int id)
         {
-            LoadData(id);
+            LoadDataAsync(id);
         }
 
 
@@ -47,7 +63,7 @@ namespace BsslProcurement.Pages.Staff.ItemRequisition
             {
 
             }
-            LoadData(id);
+            LoadDataAsync(id);
         }
 
         public PartialViewResult OnGetItemPartial()
@@ -63,18 +79,6 @@ namespace BsslProcurement.Pages.Staff.ItemRequisition
             };
         }
 
-        public PartialViewResult OnGetVendorPartial()
-        {
-
-            //get all vendor 
-            var vendors = context.Vendors.ToList();
-
-
-            return new PartialViewResult
-            {
-                ViewName = "_VendorLayoutModal",
-                ViewData = new ViewDataDictionary<List<VendorUser>>(ViewData, vendors)
-            };
-        }
+       
     }
 }

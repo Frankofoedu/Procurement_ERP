@@ -76,7 +76,7 @@ namespace DcProcurement
 
         public DbSet<PrequalificationPolicy> PrequalificationPolicies { get; set; }
 
-        public DbSet<CompanyInfoProcurementSubCategory>  CompanyInfoProcurementSubCategory { get; set; }
+        public DbSet<CompanyInfoProcurementSubCategory> CompanyInfoProcurementSubCategory { get; set; }
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             #region Many to many configuration for company to procurementsubcategory
@@ -99,14 +99,14 @@ namespace DcProcurement
 
             modelBuilder.Entity<RequisitionItem>().HasData(
                 new RequisitionItem
-                    {
-                        Description = "biro",
-                        Quantity = 22,
-                        RequisitionId = 22,
-                        StoreItemCode = "22",
-                        Id = 12
-                        
-                    }
+                {
+                    Description = "biro",
+                    Quantity = 22,
+                    RequisitionId = 22,
+                    StoreItemCode = "22",
+                    Id = 12
+
+                }
                 );
             modelBuilder.Entity<Requisition>().HasData(new Requisition
             {
@@ -123,20 +123,48 @@ namespace DcProcurement
                 RequiredAtDepartment = "head office",
                 RequesterValue = "kkkkkd",
                 PreparedFor = "Abbah",
-                RequesterType = "Division"            
+                RequesterType = "Division"
 
 
             });
 
-            List<WorkflowType> ListWorkflowTypes = new List<WorkflowType> 
-            { 
-                new WorkflowType { Id = Constants.ItemPricingWorkflowId, Name = Constants.ItemPricingWorkflow, Code = "0001" }, 
+            //workflow types
+            List<WorkflowType> ListWorkflowTypes = new List<WorkflowType>
+            {
                 new WorkflowType {Id = Constants.PrequalificationWorkFlowId, Name = Constants.PrequalificationWorkFlow, Code = "0002"},
-                new WorkflowType {Id = Constants.RequisitionWorkflowId, Name = Constants.RequisitionWorkflow, Code = "0003"}
+                new WorkflowType {Id = Constants.RequisitionWorkflowId, Name = Constants.RequisitionWorkflow, Code = "0003"},
+                new WorkflowType { Id = Constants.ProcurementWorkflowId, Name = Constants.ProcurementWorkflow, Code = "0004" },
             };
-                
-
+            //seed workflow types
             modelBuilder.Entity<WorkflowType>().HasData(ListWorkflowTypes);
+
+
+            //procurement actions
+            List<WorkflowAction> listProcActions = new List<WorkflowAction>
+            {
+                new WorkflowAction{ Id = Constants.ProcurementCostingId, Name = Constants.ProcurementCosting, Description = "For Procurement Costing"},
+
+                new WorkflowAction{ Id = Constants.BudgetaryControlId, Name = Constants.BudgetaryControl, Description = "For Budgetary Control"},
+                new WorkflowAction{ Id = Constants.ApproverId, Name = Constants.Approver, Description = "For Approval"},
+                new WorkflowAction{ Id = Constants.AuthorizerId, Name = Constants.Authorizer, Description = "For Authorization"},
+                new WorkflowAction{ Id = Constants.ApproveRaiseERFxId, Name = Constants.ApproveRaiseERFx, Description = "For Approval To Raising Erfx"},
+                new WorkflowAction{ Id = Constants.RaiseERFxId, Name = Constants.RaiseERFx, Description = "For Raising Erfx"},
+            };
+            //seed workflow for procurement
+            modelBuilder.Entity<WorkflowAction>().HasData(listProcActions);
+            var lisProcurementWorkflow = new List<Workflow>()
+            {
+                new Workflow { Id = 100, WorkflowTypeId = Constants.ProcurementWorkflowId, WorkflowActionId = Constants.ProcurementCostingId, Step= 1},
+                new Workflow { Id = 200, WorkflowTypeId = Constants.ProcurementWorkflowId, WorkflowActionId = Constants.BudgetaryControlId , Step= 2},
+                new Workflow { Id = 300, WorkflowTypeId = Constants.ProcurementWorkflowId, WorkflowActionId = Constants.ApproverId, Step= 3},
+                new Workflow { Id = 400, WorkflowTypeId = Constants.ProcurementWorkflowId, WorkflowActionId = Constants.AuthorizerId, Step= 4},
+                new Workflow { Id = 500, WorkflowTypeId = Constants.ProcurementWorkflowId, WorkflowActionId = Constants.ApproveRaiseERFxId, Step= 5},
+                new Workflow { Id = 600, WorkflowTypeId = Constants.ProcurementWorkflowId, WorkflowActionId = Constants.RaiseERFxId, Step= 6},
+
+            };
+
+            modelBuilder.Entity<Workflow>().HasData(lisProcurementWorkflow);
+
 
             //seed roles
             var roles = new List<IdentityRole> {

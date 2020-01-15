@@ -8,6 +8,7 @@ using BsslProcurement.Services;
 using BsslProcurement.ViewModels;
 using DcProcurement;
 using DcProcurement.Contexts;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.AspNetCore.Mvc.ViewFeatures;
@@ -15,6 +16,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace BsslProcurement.Pages.Staff.ItemRequisition
 {
+    [Authorize]
     public class DetailRequisitionModel : PageModel
     {
 

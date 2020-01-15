@@ -162,10 +162,20 @@ else
                                                     <label class="font-weight-bold">@item.UnitOfMeasurement</label>
 
                                                 </td>
+                                                @if (item.Attachment != null)
+                                                {
 
-                                                <td>
-                                                    <input type="file" value="@item.Attachment" />
-                                                </td>
+                                                    <td>
+                                                        <button data-preview="@i" class="btnPreviewItemAttachment">View Attachment</button>
+                                                    </td>
+                                                }
+
+                                                else
+                                                {
+                                                    <td>
+                                                        <label>No Attachment</label>
+                                                    </td>
+                                                }
 
 
                                             </tr>
@@ -265,8 +275,11 @@ else
             </form>
         </div>
     </div>
-
-
+    @if (Model.ItemGridViewModels.Count > 0)
+    {
+        var fileNames = Model.ItemGridViewModels.Where(x => x.Attachment != null).Select(x => x.Attachment.FileName).ToList();
+        <partial name="~/Pages/Shared/Modals/_AttachmentViewPartial.cshtml" model="fileNames" />
+    }
 }
 
 @section Scripts{

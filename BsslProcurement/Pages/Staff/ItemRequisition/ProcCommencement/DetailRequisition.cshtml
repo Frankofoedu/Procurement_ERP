@@ -122,19 +122,19 @@ else
                             <div class="col-sm-4">
                                 <div class="form-group">
                                     <label>PR No :</label>
-                                    <input class="form-control" readonly  value="@Model.Requisition.PRNumber" placeholder="" />
+                                    <input class="form-control" readonly value="@Model.Requisition.PRNumber" placeholder="" />
                                 </div>
                             </div>
                             <div class="col-sm-4">
                                 <div class="form-group">
                                     <label>Date : </label>
-                                    <input class="form-control" readonly  value="@Model.Requisition.Date.Value.ToString("dd/MM/yyyy")" placeholder="Pick Date" />
+                                    <input class="form-control" readonly value="@Model.Requisition.Date.Value.ToString("dd/MM/yyyy")" placeholder="Pick Date" />
                                 </div>
                             </div>
                             <div class="col-sm-4">
                                 <div class="form-group">
                                     <label>Delivery Date : </label>
-                                    <input class="form-control"  readonly value="@Model.Requisition.DeliveryDate.Value.ToString("dd/MM/yyyy")" placeholder="Pick Delivery Date" />
+                                    <input class="form-control" readonly value="@Model.Requisition.DeliveryDate.Value.ToString("dd/MM/yyyy")" placeholder="Pick Delivery Date" />
                                 </div>
                             </div>
 
@@ -201,38 +201,47 @@ else
                                         {
                                             var item = Model.ItemGridViewModels[i].RequisitionItem;
 
-                                            <tr class="">
+                                        <tr class="">
 
-                                                <td class="">
-                                                    <label>@(i + 1)</label>
-                                                </td>
+                                            <td class="">
+                                                <label>@(i + 1)</label>
+                                            </td>
+                                            <td>
+                                                <label class="font-weight-bold">@item.Description</label>
+                                            </td>
+                                            <td>
+                                                <label class="font-weight-bold">@item.Quantity</label>
+                                            </td>
+                                            <td>
+                                                <label class="font-weight-bold">@item.UnitOfMeasurement</label>
+
+                                            </td>
+                                            @if (item.Attachment != null)
+                                            {
+
                                                 <td>
-                                                    <label  class="font-weight-bold">@item.Description</label>
+                                                    <button data-preview="@i" class="btnPreviewItemAttachment">View Attachment</button>
                                                 </td>
+                                            }
+                                            else
+                                            {
                                                 <td>
-                                                    <label class="font-weight-bold">@item.Quantity</label>
+                                                    <label>No Attachment</label>
                                                 </td>
-                                                <td>
-                                                    <label  class="font-weight-bold">@item.UnitOfMeasurement</label>
-
-                                                </td>
-
-                                                <td>
-                                                    <input type="file" value="@item.Attachment"  />
-                                                </td>
+                                            }
 
 
-                                            </tr>
+                                        </tr>
 
                                         }
-                                    @*<tfoot>
-                                        <tr>
-                                            <td></td>
-                                            <td class="font-weight-bold text-right">Total Amount : </td>
-                                            <td class="font-weight-bold text-lg-center">@NairaFormat.GetNairaValue(Model.Requisition.RequisitionItems.Sum(x => Convert.ToInt32(x.Amount)))</td>
-                                            <td></td>
-                                        </tr>
-                                    </tfoot>*@
+                                        @*<tfoot>
+                                                <tr>
+                                                    <td></td>
+                                                    <td class="font-weight-bold text-right">Total Amount : </td>
+                                                    <td class="font-weight-bold text-lg-center">@NairaFormat.GetNairaValue(Model.Requisition.RequisitionItems.Sum(x => Convert.ToInt32(x.Amount)))</td>
+                                                    <td></td>
+                                                </tr>
+                                            </tfoot>*@
                                 </table>
                                 <input type="hidden" id="lastIndex" value="0" />
                                 @*<div class="form-group">
@@ -325,13 +334,30 @@ else
                                     </div>
                                 </div>
                             </div>
-
-                            @*<div class="col-sm-4">
-                                    <div class="form-group">
-                                        <input class="btn btn-block btn-danger fa-print" value="Print" type="button" placeholder="Enter Resgistration Number" />
+                            <div class="col-sm-12">
+                                <div class="form-group">
+                                    <label>Send to Next Staff :</label>
+                                    <div class="panel border border-dark rounded p-2">
+                                        <partial name="~/Pages/Shared/Modals/_SelectApproverPartial.cshtml" model="Model.WfVm" />
                                     </div>
-                                </div>*@
+                                </div>
+
+
+                            </div>
                         </div>
+                        @if (Model.WfVm != null)
+                        {
+
+                            <div class="d-flex justify-content-around no-print">
+                                @*  <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>*@
+                                @* <input id="btnSave" class="btn btn-lg btn-outline-info float-left" asp-page-handler="Save" value="Save For Later" type="submit" placeholder="" />*@
+
+                                <input id="btnSubmit" class="btn btn-lg btn-primary" asp-page-handler="Submit" value="Submit" type="submit" placeholder="" />
+
+                                <button id="printBtn" class="btn btn-lg btn-info" onclick="print(); return false;">Print/Preview</button>
+                            </div>
+
+                        }
                     </div>
                 </div>
             </form>
@@ -359,6 +385,11 @@ else
             </div>
         </div>
     </div>
+    @if (Model.ItemGridViewModels.Count > 0)
+    {
+        var fileNames = Model.ItemGridViewModels.Where(x=> x.Attachment != null).Select(x => x.Attachment.FileName).ToList();
+        <partial name="~/Pages/Shared/Modals/_AttachmentViewPartial.cshtml" model="fileNames" />
+    }
 }
 
 @section Scripts{

@@ -38,7 +38,7 @@ namespace BsslProcurement
             {
                 var user = await GetCurrentUserAsync();
 
-                Requisitions = await requisitionService.GetRequisitionsAssignedToLoggedInUser(user.Id);
+                Requisitions = await requisitionService.GetRequisitionsJobsAssignedToLoggedInUser(user.Id);
             }
             catch (Exception ex)
             {

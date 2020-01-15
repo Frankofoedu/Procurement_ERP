@@ -34,11 +34,10 @@ namespace BsslProcurement.Pages.Staff.ItemRequisition.ProcCommencement
 
         public async Task OnGetAsync()
         {
-            var user = await GetCurrentUserAsync();
 
-            Requisitions = await requisitionService.GetRequisitionsForLoggedInUser(user.Id);
+            Requisitions = await requisitionService.GetApprovedRequisitions();
         }
 
-        private Task<User> GetCurrentUserAsync() => _userManager.GetUserAsync(HttpContext.User);
+        //private Task<User> GetCurrentUserAsync() => _userManager.GetUserAsync(HttpContext.User);
     }
 }

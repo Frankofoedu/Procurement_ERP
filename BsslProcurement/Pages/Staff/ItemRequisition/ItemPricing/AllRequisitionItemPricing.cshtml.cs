@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using BsslProcurement.Interfaces;
 using DcProcurement;
 using DcProcurement.Contexts;
 using Microsoft.AspNetCore.Mvc;
@@ -13,9 +14,11 @@ namespace BsslProcurement.Pages.Staff.ItemRequisition.ItemPricing
     public class AllRequisitionItemPricingModel : PageModel
     {
         private readonly ProcurementDBContext _context;
-        public AllRequisitionItemPricingModel(ProcurementDBContext context)
+        private readonly IRequisitionService _requisitionService; 
+        public AllRequisitionItemPricingModel(ProcurementDBContext context, IRequisitionService requisitionService)
         {
             _context = context;
+            _requisitionService = requisitionService;
             
         }
 
@@ -30,7 +33,7 @@ namespace BsslProcurement.Pages.Staff.ItemRequisition.ItemPricing
         public async Task OnGetAsync()
         {
             //get all requisitions that havent been priced
-            Requisitions = await _context.Requisitions.Where(r => r.isPriced == false).Include(x => x.RequisitionItems).ToListAsync();
+            Requisitions = await _requisitionService.GetRequisitionsForPricing();
             
         }
     }

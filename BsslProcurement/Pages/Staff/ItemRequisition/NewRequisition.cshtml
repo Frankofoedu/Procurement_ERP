@@ -138,8 +138,6 @@
                                                 <label class="btn btn-outline-dark"><input type="radio" asp-for="Requisition.RequesterType" value="Division" /> Division</label>
                                                 <label class="btn btn-outline-dark"><input type="radio" asp-for="Requisition.RequesterType" value="Section" /> Section</label>
                                                 <label class="btn btn-outline-dark"><input type="radio" asp-for="Requisition.RequesterType" value="Unit" /> Unit</label>
-                                                <label class="btn btn-outline-dark"><input type="radio" asp-for="Requisition.RequesterType" value="Staff" /> Staff</label>
-                                                <label class="btn btn-outline-dark"><input type="radio" asp-for="Requisition.RequesterType" value="Project" /> Project</label>
                                             </div>
                                         </div>
                                         <div class="col-sm-6">
@@ -190,24 +188,24 @@
 
                                             <tr>
                                                 <td>
-                                                    <input type="text" required asp-for="gridVm[0].RequisitionItem.Description" />
+                                                    <input type="text" required asp-for="gridVm[i].RequisitionItem.Description" />
                                                 </td>
                                                 <td>
-                                                    <input type="number" required oninput="this.value=this.value.replace(/[^0-9]/g,'');" asp-for="gridVm[0].RequisitionItem.Quantity" />
+                                                    <input type="number" required oninput="this.value=this.value.replace(/[^0-9]/g,'');" asp-for="gridVm[i].RequisitionItem.Quantity" />
 
                                                 </td>
                                                 <td>
                                                     <div class="d-flex flex-row">
-                                                        <input type="text" readonly required data-value="forUOM 0" asp-for="gridVm[0].RequisitionItem.UnitOfMeasurement" />
+                                                        <input type="text" readonly required data-value="forUOM @i" asp-for="gridVm[i].RequisitionItem.UnitOfMeasurement" />
 
-                                                        <button class="btn loadUOMModal ml-1" value="forUOM 0" data-toggle="modal" data-target="#uomModal"><i class="fa fa-search"></i></button>
+                                                        <button class="btn loadUOMModal ml-1" value="forUOM @i" data-toggle="modal" data-target="#uomModal"><i class="fa fa-search"></i></button>
                                                     </div>
                                                 </td>
 
                                                 <td>
                                                     <div class="d-flex flex-row">
-                                                        <input asp-for="gridVm[0].Attachment" data-attachment="0" accept=".pdf" class="fileItem" />
-                                                        <button data-preview="0" class="btnPreviewItemAttachment">Preview</button>
+                                                        <input asp-for="gridVm[i].Attachment" data-attachment="@i" accept=".pdf" class="fileItem" />
+                                                        <button data-preview="@i" class="btnPreviewItemAttachment">Preview</button>
                                                     </div>
                                                 </td>
                                                 <td>
