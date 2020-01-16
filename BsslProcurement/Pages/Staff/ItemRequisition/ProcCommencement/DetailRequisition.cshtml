@@ -77,10 +77,10 @@
 else
 {
 
-
     <div class="row mt-5">
         <div class="col-md-12">
             <form id="reqForm" class="panel panel-login" method="post" enctype="multipart/form-data">
+                <input type="hidden" asp-for="ReqId" />
                 <div class="panel-heading">
                     <div class="row">
                         <p class="header-text">Purchase Requisition For @Model.Requisition.PRNumber</p>
@@ -141,7 +141,7 @@ else
                             <div class="col-sm-6">
                                 <div class="form-group">
                                     <label>Requesting Dept/Section : </label>
-                                    <input class="form-control" readonly asp-for="Requisition.RequesterValue" placeholder="Enter Department" />
+                                    <input class="form-control" readonly value="@Model.Requisition.RequesterValue" placeholder="Enter Department" />
                                 </div>
                             </div>
                             <div class="col-sm-6">
@@ -154,7 +154,7 @@ else
                             <div class="col-sm-4">
                                 <div class="form-group">
                                     <label>Procurement Method : </label>
-                                    <select class="form-control" asp-items="Constants.Constants.ProcurementMethod" required asp-for="Requisition.ProcurementMethod">
+                                    <select class="form-control" asp-items="Constants.Constants.ProcurementMethod" required asp-for="Vm.ProcMethod">
                                         <option value="">Select Procurement Type</option>
                                     </select>
                                 </div>
@@ -162,7 +162,7 @@ else
                             <div class="col-sm-4">
                                 <div class="form-group">
                                     <label>Process Type : </label>
-                                    <select class="form-control" required onchange="getERFx(this.value);" asp-for="Requisition.ProcessType">
+                                    <select class="form-control" required onchange="getERFx(this.value);" asp-for="Vm.ProcType">
                                         <option value="">Select Process Type</option>
                                         <option value="Internal">Internal</option>
                                         <option value="External">External</option>
@@ -172,11 +172,11 @@ else
                             <div class="col-sm-4">
                                 <div class="form-group">
                                     <label>eRFx Type : </label>
-                                    <select class="form-control" required asp-for="Requisition.ERFx">
+                                    <select class="form-control" required asp-for="Vm.Erfx">
                                         <option value="">Select eRFx</option>
                                     </select>
                                     <div id="staffErfx" hidden style="display:flex">
-                                        <input class="form-control" asp-for="Requisition.ERFx" readonly id="forStaffText" rows="6" placeholder="Pick Staff" />
+                                        <input class="form-control" asp-for="Vm.Erfx" readonly id="forStaffText" rows="6" placeholder="Pick Staff" />
                                         <button class="btn loadStaffModal ml-1" value="forStaffText" data-toggle="modal" data-target="#staffModal"><i class="fa fa-search"></i></button>
                                     </div>
 
@@ -201,57 +201,57 @@ else
                                         {
                                             var item = Model.ItemGridViewModels[i].RequisitionItem;
 
-                                        <tr class="">
+                                            <tr class="">
 
-                                            <td class="">
-                                                <label>@(i + 1)</label>
-                                            </td>
-                                            <td>
-                                                <label class="font-weight-bold">@item.Description</label>
-                                            </td>
-                                            <td>
-                                                <label class="font-weight-bold">@item.Quantity</label>
-                                            </td>
-                                            <td>
-                                                <label class="font-weight-bold">@item.UnitOfMeasurement</label>
-
-                                            </td>
-                                            @if (item.Attachment != null)
-                                            {
-
-                                                <td>
-                                                    <button data-preview="@i" class="btnPreviewItemAttachment">View Attachment</button>
+                                                <td class="">
+                                                    <label>@(i + 1)</label>
                                                 </td>
-                                            }
-                                            else
-                                            {
                                                 <td>
-                                                    <label>No Attachment</label>
+                                                    <label class="font-weight-bold">@item.Description</label>
                                                 </td>
-                                            }
+                                                <td>
+                                                    <label class="font-weight-bold">@item.Quantity</label>
+                                                </td>
+                                                <td>
+                                                    <label class="font-weight-bold">@item.UnitOfMeasurement</label>
+
+                                                </td>
+                                                @if (item.Attachment != null)
+                                                {
+
+                                                    <td>
+                                                        <button data-preview="@i" class="btnPreviewItemAttachment">View Attachment</button>
+                                                    </td>
+                                                }
+                                                else
+                                                {
+                                                    <td>
+                                                        <label>No Attachment</label>
+                                                    </td>
+                                                }
 
 
-                                        </tr>
+                                            </tr>
 
                                         }
                                         @*<tfoot>
-                                                <tr>
-                                                    <td></td>
-                                                    <td class="font-weight-bold text-right">Total Amount : </td>
-                                                    <td class="font-weight-bold text-lg-center">@NairaFormat.GetNairaValue(Model.Requisition.RequisitionItems.Sum(x => Convert.ToInt32(x.Amount)))</td>
-                                                    <td></td>
-                                                </tr>
-                                            </tfoot>*@
+                                    <tr>
+                                        <td></td>
+                                        <td class="font-weight-bold text-right">Total Amount : </td>
+                                        <td class="font-weight-bold text-lg-center">@NairaFormat.GetNairaValue(Model.Requisition.RequisitionItems.Sum(x => Convert.ToInt32(x.Amount)))</td>
+                                        <td></td>
+                                    </tr>
+                                </tfoot>*@
                                 </table>
                                 <input type="hidden" id="lastIndex" value="0" />
                                 @*<div class="form-group">
-                                        <div class="row">
-                                            <div class="col-sm-3"> </div>
-                                            <div class="col-sm-6 text-center">
-                                                <button id="btnMore" class="btn btn-outline-primary">New Item</button>
-                                            </div>
-                                        </div>
-                                    </div>*@
+                            <div class="row">
+                                <div class="col-sm-3"> </div>
+                                <div class="col-sm-6 text-center">
+                                    <button id="btnMore" class="btn btn-outline-primary">New Item</button>
+                                </div>
+                            </div>
+                        </div>*@
                             </div>
 
 
@@ -261,7 +261,7 @@ else
                                         <div class="col-sm-12">
                                             <label>Prepared By : </label>
                                             <span class="d-flex flex-row">
-                                                <input id="txtprepared" asp-for="Requisition.PreparedBy" class="form-control" readonly rows="6" placeholder="" />
+                                                <input id="txtprepared" value="@Model.Requisition.PreparedBy" class="form-control" readonly rows="6" placeholder="" />
                                                 @*<button class="btn loadStaffModal" value="txtprepared" data-toggle="modal" data-target="#staffModal"><i class="fa fa-search"></i></button>*@
 
                                             </span>
@@ -271,7 +271,7 @@ else
                                         <div class="col-sm-12 mt-2">
                                             <label>Rank : </label>
                                             <span class="d-flex flex-row">
-                                                <input class="form-control" asp-for="Requisition.PreparedByRank" readonly id="txtpreparedRank" rows="6" placeholder="" />
+                                                <input class="form-control" value="@Model.Requisition.PreparedByRank" readonly id="txtpreparedRank" rows="6" placeholder="" />
                                             </span>
 
                                         </div>
@@ -280,7 +280,7 @@ else
                                         <div class="col-sm-12">
                                             <label>For : </label>
                                             <span class="d-flex flex-row">
-                                                <input class="form-control" asp-for="Requisition.PreparedFor" readonly id="forStaffText" rows="6" placeholder="" />
+                                                <input class="form-control" value="@Model.Requisition.PreparedFor" readonly id="forStaffText" rows="6" placeholder="" />
                                                 @*<button class="btn loadStaffModal" value="forStaffText" data-toggle="modal" data-target="#staffModal"><i class="fa fa-search"></i></button>*@
 
                                             </span>
@@ -289,7 +289,7 @@ else
                                         <div class="col-sm-12 mt-2">
                                             <label>Rank : </label>
                                             <span class="d-flex flex-row">
-                                                <input class="form-control" asp-for="Requisition.PreparedForRank" readonly id="forStaffTextRank" rows="6" placeholder="" />
+                                                <input class="form-control" value="@Model.Requisition.PreparedForRank" readonly id="forStaffTextRank" rows="6" placeholder="" />
                                             </span>
 
                                         </div>
@@ -299,28 +299,28 @@ else
                             </div>
                             <div class="col-sm-12 m-4 ">
                                 @*@if (Model.Requisition.Attachments.Count > 0)
+                        {
+                            <h5 class="font-weight-bold">Attachments</h5>
+                            <br>
+                            <div class="d-flex flex-column">
+                                <p>
+                                    @foreach (var file in Model.Requisition.Attachments)
                                     {
-                                        <h5 class="font-weight-bold">Attachments</h5>
-                                        <br>
-                                        <div class="d-flex flex-column">
-                                            <p>
-                                                @foreach (var file in Model.Requisition.Attachments)
-                                                {
-                                                    if (file.FilePath.EndsWith("pdf"))
-                                                    {
-                                                        <a class="fancybox m-5 btn btn-link fas fa-file-pdf" data-fancybox-type="iframe" href="@Url.Content("~/Attachments/" + file.FilePath)">Open PDf Attachment</a>
-                                                    }
-                                                    else
-                                                    {
-                                                        <a class="fancybox m-5" href="@Url.Content("~/Attachments/" + file.FilePath)"><img src="@Url.Content("~/Attachments/" + file.FilePath)" class="img-thumbnail" style="max-width : 10% !important" asp-append-version="true" /></a>
+                                        if (file.FilePath.EndsWith("pdf"))
+                                        {
+                                            <a class="fancybox m-5 btn btn-link fas fa-file-pdf" data-fancybox-type="iframe" href="@Url.Content("~/Attachments/" + file.FilePath)">Open PDf Attachment</a>
+                                        }
+                                        else
+                                        {
+                                            <a class="fancybox m-5" href="@Url.Content("~/Attachments/" + file.FilePath)"><img src="@Url.Content("~/Attachments/" + file.FilePath)" class="img-thumbnail" style="max-width : 10% !important" asp-append-version="true" /></a>
 
-                                                    }
+                                        }
 
-                                                }
-                                            </p>
+                                    }
+                                </p>
 
-                                        </div>
-                                    }*@
+                            </div>
+                        }*@
 
                             </div>
 
@@ -457,14 +457,14 @@ else
 
         function getERFx(processType) {
             if (processType == "Internal") {
-                $('#Requisition_ERFx').attr('hidden', true);
+                $('#Vm_Erfx').attr('hidden', true);
                 $('#staffErfx').attr('hidden', false);
 
             } else if (processType == "External") {
 
-                $('#Requisition_ERFx').attr('hidden', false);
+                $('#Vm_Erfx').attr('hidden', false);
                 $('#staffErfx').attr('hidden', true);
-                $('#Requisition_ERFx').append(
+                $('#Vm_Erfx').append(
                     $('<option>', { value: 'RFQ ID', text: 'RFQ ID – Request for Quotation' }),
                     $('<option>', { value: 'RFP ID', text: 'RFP ID – Request for Proposal ' }),
                     $('<option>', { value: 'RFI ID', text: 'RFI ID – Request for Information' }),

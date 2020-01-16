@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Threading.Tasks;
 using BsslProcurement.Interfaces;
@@ -14,6 +15,16 @@ using Microsoft.EntityFrameworkCore;
 
 namespace BsslProcurement.Pages.Staff.ItemRequisition.ProcCommencement
 {
+    public class ProcCommencementViewModel
+    {
+        [Required( ErrorMessage = "Please select Procurement Method")]
+        public string ProcMethod { get; set; }
+        [Required(ErrorMessage = "Please select Procurement Type")]
+        public string ProcType { get; set; }
+        [Required(ErrorMessage = "Please select Erfx Type")]
+        public string Erfx { get; set; }
+
+    }
     public class DetailRequisitionModel : PageModel
     {
 
@@ -22,9 +33,12 @@ namespace BsslProcurement.Pages.Staff.ItemRequisition.ProcCommencement
         private readonly IItemGridViewModelService _itemGridViewModelService;
         private readonly IProcurementService _procurementService;
 
-
+        [BindProperty]
+        public int ReqId { get; set; }
         [BindProperty]
         public WorkFlowApproverViewModel WfVm { get; set; }
+        [BindProperty]
+        public ProcCommencementViewModel Vm { get; set; }
         public DetailRequisitionModel(ProcurementDBContext context, BSSLSYS_ITF_DEMOContext bsslContext, IItemGridViewModelService itemGridViewModelService, IProcurementService procurementService)
         {
             _context = context;
@@ -34,7 +48,6 @@ namespace BsslProcurement.Pages.Staff.ItemRequisition.ProcCommencement
         }
         public string Message { get; set; }
         public string Error { get; set; }
-        [BindProperty]
         public Requisition Requisition { get; set; }
         public List<ItemGridViewModel> ItemGridViewModels { get; set; }
 
@@ -46,22 +59,27 @@ namespace BsslProcurement.Pages.Staff.ItemRequisition.ProcCommencement
                 return NotFound();
             }
 
-
            await LoadData(id);
 
             return Page();
         }
-        public async Task<ActionResult> OnPostSubmitAsync()
+        public async Task<IActionResult> OnPostSubmitAsync()
         {
             if (ModelState.IsValid)
             {
                 try
                 {
                     //update requisition
+                    //get requisition
+                    var req = _context.Requisitions.Find(ReqId);
+                    req.ProcessType = Vm.ProcType;
+                    req.ProcurementMethod = Vm.ProcMethod;
+                    req.ERFx = Vm.Erfx;
 
+                    await _context.SaveChangesAsync();
 
                     //create and assign requisition job
-                    await _procurementService.SendRequisitionToNextStageAsync(Requisition.Id, WfVm.AssignedStaffCode, WfVm.WorkFlowId, WfVm.Remark);
+                    await _procurementService.SendRequisitionToNextStageAsync(ReqId, WfVm.AssignedStaffCode, WfVm.WorkFlowId, WfVm.Remark);
 
 
                     return RedirectToPage("AllRequisition");
@@ -70,16 +88,18 @@ namespace BsslProcurement.Pages.Staff.ItemRequisition.ProcCommencement
                 {
                     Error = "An error has occurred." + Environment.NewLine + ex.Message;
                 }
+
             }
 
-           // await LoadData();
+            // await LoadData();
             return Page();
         }
 
         private async Task LoadData(int? id)
         {
 
-            Requisition = await _context.Requisitions.FirstOrDefaultAsync(x => x.Id == id);
+            ReqId = id.Value;
+            Requisition = await _context.Requisitions.AsNoTracking().FirstOrDefaultAsync(x => x.Id == id);
             ItemGridViewModels = await _itemGridViewModelService.GetItemsInRequisition(id.Value);
             //   ItemGridViewModels = Requisition.RequisitionItems.Select(x=> new ItemGridViewModel { Attachment = x.Attachment, RequisitionItem = x });
 

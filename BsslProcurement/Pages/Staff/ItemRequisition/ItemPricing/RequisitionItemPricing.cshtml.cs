@@ -40,6 +40,7 @@ namespace BsslProcurement.Pages.Staff.ItemRequisition
 
         public async Task LoadDataAsync(int id)
         {
+            Requisition = context.Requisitions.Include(y => y.RequisitionItems).FirstOrDefault(k => k.Id == id);
 
             //load workflow of requisition
             WfVm = await _requisitionService.GetCurrentWorkFlowOFRequisition(Requisition);
@@ -48,7 +49,6 @@ namespace BsslProcurement.Pages.Staff.ItemRequisition
 
             VendorEmailListObj = new VendorWithEmailViewModel();
 
-            Requisition = context.Requisitions.Include(y => y.RequisitionItems).FirstOrDefault(k => k.Id == id);
             VendorEmailListObj.VendorWithEmailList = VendorEmailListObj.GetVendorWithEmailList(bsslContext.Accusts.ToList());
         }
         public void OnGet(int id)

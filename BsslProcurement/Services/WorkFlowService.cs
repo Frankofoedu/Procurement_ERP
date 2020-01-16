@@ -55,7 +55,7 @@ namespace BsslProcurement.Services
                 //new jobs e.g new requisition tasks not yet assigned a task
                 var workflows = _procurementDBContext.Workflows.Include(y => y.WorkflowAction).Where(x => x.WorkflowTypeId == workflowTypeId);
 
-                var nextTwoWorkflows = workflows.Take(2);
+                var nextTwoWorkflows = workflows.Take(1);
 
                 var data = nextTwoWorkflows.Select(x => new WorkFlowTypesViewModel
                 {
