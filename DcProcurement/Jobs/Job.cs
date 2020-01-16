@@ -6,7 +6,7 @@ using System.Text;
 
 namespace DcProcurement
 {
-    public class Job
+    public abstract class Job
     {
         public int Id { get; private set; }
         /// <summary>

@@ -3,7 +3,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace BsslProcurement.Migrations
 {
-    public partial class workflowUpdate : Migration
+    public partial class new_migration : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -150,7 +150,6 @@ namespace BsslProcurement.Migrations
                 {
                     Id = table.Column<int>(nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    isSubmitted = table.Column<bool>(nullable: false),
                     Description = table.Column<string>(nullable: false),
                     PRNumber = table.Column<string>(nullable: false),
                     ProcurementType = table.Column<string>(nullable: true),
@@ -167,6 +166,8 @@ namespace BsslProcurement.Migrations
                     ProcurementMethod = table.Column<string>(nullable: true),
                     ProcessType = table.Column<string>(nullable: true),
                     ERFx = table.Column<string>(nullable: true),
+                    isSubmitted = table.Column<bool>(nullable: false),
+                    isApproved = table.Column<bool>(nullable: false),
                     isPriced = table.Column<bool>(nullable: false),
                     isBudgetCleared = table.Column<bool>(nullable: true),
                     Status = table.Column<string>(nullable: true),
@@ -630,7 +631,8 @@ namespace BsslProcurement.Migrations
                     Remark = table.Column<string>(nullable: true),
                     StaffId = table.Column<string>(nullable: true),
                     Discriminator = table.Column<string>(nullable: false),
-                    RequisitionId = table.Column<int>(nullable: true),
+                    FK_Proc_Job = table.Column<int>(nullable: true),
+                    FK_Req_Job = table.Column<int>(nullable: true),
                     CompanyInfoId = table.Column<int>(nullable: true),
                     StaffId1 = table.Column<string>(nullable: true)
                 },
@@ -650,11 +652,17 @@ namespace BsslProcurement.Migrations
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
-                        name: "FK_Jobs_Requisitions_RequisitionId",
-                        column: x => x.RequisitionId,
+                        name: "FK_Jobs_Requisitions_FK_Proc_Job",
+                        column: x => x.FK_Proc_Job,
                         principalTable: "Requisitions",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
+                        onDelete: ReferentialAction.NoAction);
+                    table.ForeignKey(
+                        name: "FK_Jobs_Requisitions_FK_Req_Job",
+                        column: x => x.FK_Req_Job,
+                        principalTable: "Requisitions",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.NoAction);
                     table.ForeignKey(
                         name: "FK_Jobs_CompanyInfo_CompanyInfoId",
                         column: x => x.CompanyInfoId,
@@ -801,30 +809,46 @@ namespace BsslProcurement.Migrations
                 columns: new[] { "Id", "ConcurrencyStamp", "Name", "NormalizedName" },
                 values: new object[,]
                 {
-                    { "9f2f1b6e-cba1-4050-894f-9151b3e51ec2", "93bd72de-2e08-49bd-b25b-b22ea714043b", "Admin", null },
-                    { "4829cea6-27d5-495e-9cf9-84c7f7fe30dd", "706c7fcc-8715-4bbc-b852-0fb938f5faa0", "Staff", null },
-                    { "d6cfc094-fd62-43cd-abe6-137f0369ccc5", "f5edd029-2a13-45eb-b956-d165590ee9d6", "Vendor", null }
+                    { "2ecc0b0b-df62-4b33-9b9f-a7bd119a3702", "eaa918fc-8aa1-4978-9741-c9ca69b99394", "Admin", null },
+                    { "ce4d1de1-f617-4de7-9c68-303b263f7575", "e7561fae-0c54-43f5-9658-ae93c9efb53c", "Staff", null },
+                    { "d76dda33-6a13-4619-b229-fd1d0cae5090", "154482fe-35a9-4d55-b056-2bb0039b4447", "Vendor", null }
                 });
 
             migrationBuilder.InsertData(
-                table: "Requisitions",
-                columns: new[] { "Id", "Date", "DeliveryDate", "Description", "ERFx", "LoggedInUserId", "PRNumber", "PreparedBy", "PreparedByRank", "PreparedFor", "PreparedForRank", "ProcessType", "ProcurementMethod", "ProcurementType", "Purpose", "RequesterType", "RequesterValue", "RequiredAtDepartment", "Status", "isBudgetCleared", "isPriced", "isSubmitted" },
-                values: new object[] { 22, new DateTime(2019, 12, 20, 13, 7, 48, 369, DateTimeKind.Local).AddTicks(2219), new DateTime(2019, 12, 20, 13, 7, 48, 369, DateTimeKind.Local).AddTicks(3914), "sample requisition", null, null, "000222", "John O", "HOD", "Abbah", "Hod", null, null, null, "For general stores", "Division", "kkkkkd", "head office", null, null, false, true });
+                table: "WorkflowActions",
+                columns: new[] { "Id", "DateAdded", "Description", "Name" },
+                values: new object[,]
+                {
+                    { 100, null, "For Procurement Costing", "Procurement Costing" },
+                    { 200, null, "For Budgetary Control", "Budgetary Control" },
+                    { 300, null, "For Approval", "Procurement Approval" },
+                    { 400, null, "For Authorization", "Procurement Authorization" },
+                    { 500, null, "For Approval To Raising Erfx", "Approval to Raise eRFx" },
+                    { 600, null, "For Raising Erfx", "Raise eRFx" }
+                });
 
             migrationBuilder.InsertData(
                 table: "WorkflowTypes",
                 columns: new[] { "Id", "Code", "Description", "Name" },
                 values: new object[,]
                 {
-                    { 3, "0001", null, "Procurement" },
                     { 2, "0002", null, "Prequalification" },
-                    { 1, "0003", null, "Requisition" }
+                    { 1, "0003", null, "Requisition" },
+                    { 3, "0004", null, "Procurement" }
                 });
 
             migrationBuilder.InsertData(
-                table: "RequisitionItems",
-                columns: new[] { "Id", "AttachmentId", "Description", "Quantity", "RequisitionId", "StoreItemCode", "UnitOfMeasurement", "UnitPrice", "VendorId" },
-                values: new object[] { 12, null, "biro", 22, 22, "22", null, 0.0, null });
+                table: "Workflows",
+                columns: new[] { "Id", "Step", "WorkflowActionId", "WorkflowTypeId" },
+                values: new object[,]
+                {
+                    { 100, 1, 100, 3 },
+                    { 200, 2, 200, 3 },
+                    { 300, 3, 300, 3 },
+                    { 400, 4, 400, 3 },
+                    { 500, 5, 500, 3 },
+                    { 600, 6, 600, 3 }
+                });
 
             migrationBuilder.CreateIndex(
                 name: "IX_AspNetRoleClaims_RoleId",
@@ -918,9 +942,14 @@ namespace BsslProcurement.Migrations
                 column: "WorkFlowId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Jobs_RequisitionId",
+                name: "IX_Jobs_FK_Proc_Job",
                 table: "Jobs",
-                column: "RequisitionId");
+                column: "FK_Proc_Job");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Jobs_FK_Req_Job",
+                table: "Jobs",
+                column: "FK_Req_Job");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Jobs_CompanyInfoId",

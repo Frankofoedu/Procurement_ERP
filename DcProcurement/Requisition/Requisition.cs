@@ -51,7 +51,9 @@ namespace DcProcurement
         //default database creation date
         public DateTime DateCreated { get; set; }
         public List<RequisitionItem> RequisitionItems { get; set; }
-        public List<RequisitionJob> RequisitionJobs { get; set; }
+         public List<RequisitionJob> RequisitionJobs { get; set; }
+        public List<ProcurementJob> ProcurementJobs { get; set; }
+
 
         public virtual ERFXSetup ERFXSetup { get; set; }
     }

@@ -628,28 +628,6 @@ namespace BsslProcurement.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("Requisitions");
-
-                    b.HasData(
-                        new
-                        {
-                            Id = 22,
-                            Date = new DateTime(2020, 1, 15, 12, 3, 56, 787, DateTimeKind.Local).AddTicks(2560),
-                            DateCreated = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            DeliveryDate = new DateTime(2020, 1, 15, 12, 3, 56, 787, DateTimeKind.Local).AddTicks(3905),
-                            Description = "sample requisition",
-                            PRNumber = "000222",
-                            PreparedBy = "John O",
-                            PreparedByRank = "HOD",
-                            PreparedFor = "Abbah",
-                            PreparedForRank = "Hod",
-                            Purpose = "For general stores",
-                            RequesterType = "Division",
-                            RequesterValue = "kkkkkd",
-                            RequiredAtDepartment = "head office",
-                            isApproved = false,
-                            isPriced = false,
-                            isSubmitted = true
-                        });
                 });
 
             modelBuilder.Entity("DcProcurement.RequisitionItem", b =>
@@ -692,17 +670,6 @@ namespace BsslProcurement.Migrations
                     b.HasIndex("VendorId");
 
                     b.ToTable("RequisitionItems");
-
-                    b.HasData(
-                        new
-                        {
-                            Id = 12,
-                            Description = "biro",
-                            Quantity = 22,
-                            RequisitionId = 22,
-                            StoreItemCode = "22",
-                            UnitPrice = 0.0
-                        });
                 });
 
             modelBuilder.Entity("DcProcurement.SubmittedCriteria", b =>
@@ -1047,20 +1014,20 @@ namespace BsslProcurement.Migrations
                     b.HasData(
                         new
                         {
-                            Id = "5404845e-ce0e-42a7-8abf-eecef93bffaf",
-                            ConcurrencyStamp = "355be413-5b8b-49d4-a042-d99815dff19a",
+                            Id = "2ecc0b0b-df62-4b33-9b9f-a7bd119a3702",
+                            ConcurrencyStamp = "eaa918fc-8aa1-4978-9741-c9ca69b99394",
                             Name = "Admin"
                         },
                         new
                         {
-                            Id = "c197e12b-fba6-41c6-aa80-0e3aff5aa4f4",
-                            ConcurrencyStamp = "98afc93b-585c-4b67-a3fc-fb24d54172e2",
+                            Id = "ce4d1de1-f617-4de7-9c68-303b263f7575",
+                            ConcurrencyStamp = "e7561fae-0c54-43f5-9658-ae93c9efb53c",
                             Name = "Staff"
                         },
                         new
                         {
-                            Id = "08604223-9063-4608-a0be-31a823ac6472",
-                            ConcurrencyStamp = "1fe2e332-8293-4f0f-bef5-76c4e1b250b8",
+                            Id = "d76dda33-6a13-4619-b229-fd1d0cae5090",
+                            ConcurrencyStamp = "154482fe-35a9-4d55-b056-2bb0039b4447",
                             Name = "Vendor"
                         });
                 });
@@ -1205,11 +1172,25 @@ namespace BsslProcurement.Migrations
                     b.HasDiscriminator().HasValue("SubCategoryCriteria");
                 });
 
+            modelBuilder.Entity("DcProcurement.Jobs.ProcurementJob", b =>
+                {
+                    b.HasBaseType("DcProcurement.Job");
+
+                    b.Property<int?>("RequisitionId")
+                        .HasColumnName("FK_Proc_Job")
+                        .HasColumnType("int");
+
+                    b.HasIndex("RequisitionId");
+
+                    b.HasDiscriminator().HasValue("ProcurementJob");
+                });
+
             modelBuilder.Entity("DcProcurement.Jobs.RequisitionJob", b =>
                 {
                     b.HasBaseType("DcProcurement.Job");
 
                     b.Property<int>("RequisitionId")
+                        .HasColumnName("FK_Req_Job")
                         .HasColumnType("int");
 
                     b.HasIndex("RequisitionId");
@@ -1222,6 +1203,7 @@ namespace BsslProcurement.Migrations
                     b.HasBaseType("DcProcurement.Job");
 
                     b.Property<int>("CompanyInfoId")
+                        .HasColumnName("CompanyInfoId")
                         .HasColumnType("int");
 
                     b.Property<string>("StaffId1")
@@ -1503,6 +1485,14 @@ namespace BsslProcurement.Migrations
                     b.HasOne("DcProcurement.ProcurementSubcategory", "ProcurementSubcategory")
                         .WithMany("SubCategoryCriterias")
                         .HasForeignKey("ProcurementSubcategoryId");
+                });
+
+            modelBuilder.Entity("DcProcurement.Jobs.ProcurementJob", b =>
+                {
+                    b.HasOne("DcProcurement.Requisition", "Requisition")
+                        .WithMany("ProcurementJobs")
+                        .HasForeignKey("RequisitionId")
+                        .OnDelete(DeleteBehavior.Cascade);
                 });
 
             modelBuilder.Entity("DcProcurement.Jobs.RequisitionJob", b =>
