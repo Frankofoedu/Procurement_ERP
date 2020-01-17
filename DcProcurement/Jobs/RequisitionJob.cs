@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations.Schema;
 using System.Text;
 
 namespace DcProcurement.Jobs
@@ -17,6 +18,7 @@ namespace DcProcurement.Jobs
             WorkFlowId = workflowId;
             JobStatus = Enums.JobState.NotDone;
         }
+        [ForeignKey("FK_Req_Job")]
         public int RequisitionId { get; private set; }
         public Requisition Requisition { get; private set; }
 

@@ -1,4 +1,5 @@
-﻿using System;
+﻿using DcProcurement;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -9,5 +10,6 @@ namespace BsslProcurement.Interfaces
     {
         Task SendRequisitionToNextStageAsync(int requisitionId, string staffCode, int newStage, string remark);
         Task SendRequisitionToPreviousStage(int requisitionId, string currStaffCode, string newStaffCode, int newStage, string remark);
+        Task<List<Requisition>> GetProcurementRequisitionsJobsAssignedToLoggedInUser(string id);
     }
 }

@@ -30,7 +30,7 @@ namespace BsslProcurement.Services
             }
 
             //get old job
-            var oldReqJob = await _procurementDBContext.RequisitionJobs.Where(req => req.RequisitionId == requisitionId && req.JobStatus == Enums.JobState.NotDone).FirstOrDefaultAsync();
+            var oldReqJob = await _procurementDBContext.ProcurementJobs.Where(req => req.RequisitionId == requisitionId && req.JobStatus == Enums.JobState.NotDone).FirstOrDefaultAsync();
 
             //get requisition workflow stages
             var reqWorkFlow = _procurementDBContext.Workflows.Where(x => x.WorkflowTypeId == DcProcurement.Constants.ProcurementWorkflowId).OrderBy(x => x.Step);
@@ -59,8 +59,8 @@ namespace BsslProcurement.Services
                 {
                     //send to next step
                     //create new job for next stage
-                    var newReqJob = new RequisitionJob(requisitionId, staffId, newWorkflowId, remark);
-                    _procurementDBContext.RequisitionJobs.Add(newReqJob);
+                    var newReqJob = new ProcurementJob(requisitionId, staffId, newWorkflowId, remark);
+                    _procurementDBContext.ProcurementJobs.Add(newReqJob);
                 }
 
             }
@@ -68,8 +68,8 @@ namespace BsslProcurement.Services
             {
 
                 //create new job for next stage
-                var newReqJob = new RequisitionJob(requisitionId, staffId, newWorkflowId, remark);
-                _procurementDBContext.RequisitionJobs.Add(newReqJob);
+                var newReqJob = new ProcurementJob(requisitionId, staffId, newWorkflowId, remark);
+                _procurementDBContext.ProcurementJobs.Add(newReqJob);
             }
 
             await _procurementDBContext.SaveChangesAsync();
@@ -78,6 +78,21 @@ namespace BsslProcurement.Services
         public Task SendRequisitionToPreviousStage(int requisitionId, string currStaffCode, string newStaffCode, int newStage, string remark)
         {
             throw new NotImplementedException();
+        }
+
+        public async Task<List<Requisition>> GetProcurementRequisitionsJobsAssignedToLoggedInUser(string userId)
+        {
+            var jobs = _procurementDBContext.ProcurementJobs.Include(reqJob => reqJob.Requisition).ThenInclude(req => req.RequisitionItems).Where(x => x.StaffId == userId && x.JobStatus == Enums.JobState.NotDone);
+
+            if (jobs != null)
+            {
+                var reqList = new List<Requisition>();
+
+                reqList = await jobs.Select(x => x.Requisition).ToListAsync();
+                return reqList;
+            }
+
+            return null;
         }
     }
 }

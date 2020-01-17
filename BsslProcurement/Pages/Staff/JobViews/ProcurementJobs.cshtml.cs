@@ -12,24 +12,24 @@ using Microsoft.AspNetCore.Mvc.RazorPages;
 namespace BsslProcurement
 {
     [Authorize]
-    public class RequisitionJobsModel : PageModel
+    public class ProcurementJobsModel : PageModel
     {
         private readonly ProcurementDBContext _context;
-        private readonly IRequisitionService requisitionService;
+        private readonly IProcurementService procurementService;
 
         private readonly UserManager<User> _userManager;
 
-        public RequisitionJobsModel(ProcurementDBContext context, IRequisitionService _requisitionService, UserManager<User> userManager)
+        public ProcurementJobsModel(ProcurementDBContext context, IProcurementService _procurementService, UserManager<User> userManager)
         {
             _context = context;
-            requisitionService = _requisitionService;
+            procurementService = _procurementService;
             _userManager = userManager;
         }
 
         public string Message { get; set; }
         public string Error { get; set; }
         [BindProperty]
-        public List<Requisition> Requisitions { get; set; } = new List<Requisition>();
+        public List<Requisition> Requisitions { get; set; }
 
 
         public async Task OnGetAsync()
@@ -38,7 +38,7 @@ namespace BsslProcurement
             {
                 var user = await GetCurrentUserAsync();
 
-                Requisitions = await requisitionService.GetRequisitionsJobsAssignedToLoggedInUser(user.Id);
+               Requisitions = await procurementService.GetProcurementRequisitionsJobsAssignedToLoggedInUser(user.Id);
             }
             catch (Exception ex)
             {
