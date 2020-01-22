@@ -16,14 +16,12 @@ namespace BsslProcurement.Pages.Staff.ItemRequisition.ProcCommencement
     [Authorize]
     public class AllRequisitionModel : PageModel
     {
-        private readonly ProcurementDBContext _context;
-        private readonly IRequisitionService requisitionService;
+        private readonly IProcurementService _procurementService;
 
         private readonly UserManager<User> _userManager;
-        public AllRequisitionModel(ProcurementDBContext context, IRequisitionService _requisitionService, UserManager<User> userManager)
+        public AllRequisitionModel(IProcurementService procurementService, UserManager<User> userManager)
         {
-            _context = context;
-            requisitionService = _requisitionService;
+            _procurementService = procurementService;
             _userManager = userManager;
         }
         public string Message { get; set; }
@@ -35,7 +33,7 @@ namespace BsslProcurement.Pages.Staff.ItemRequisition.ProcCommencement
         public async Task OnGetAsync()
         {
 
-            Requisitions = await requisitionService.GetApprovedRequisitions();
+            Requisitions = await _procurementService.GetApprovedRequisitions();
         }
 
         //private Task<User> GetCurrentUserAsync() => _userManager.GetUserAsync(HttpContext.User);

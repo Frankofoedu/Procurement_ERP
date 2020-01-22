@@ -1,10 +1,32 @@
 ﻿@page
+@using DcProcurement
 @model BsslProcurement.ProcurementJobsModel
 @{
     ViewData["Title"] = "ProcurmentJobs";
     Layout = "~/Pages/Shared/_Layout.cshtml";
 }
 
+@functions{
+    private (string url, string actionName) GetTaskNameAndUrlFromAction(int? actionId)
+    {
+        switch (actionId)
+        {
+            case Constants.ProcurementCostingActionId:
+                return ("/staff/itemrequisition/itempricing/allrequisitionitempricing",Constants.ProcurementCostingAction);
+            case Constants.ApproverActionId:
+                return ("/staff/itemrequisition/itempricing/allrequisitionitempricing",Constants.ApproverAction);
+            case Constants.AuthorizerActionId:
+                return ("/staff/itemrequisition/itempricing/allrequisitionitempricing",Constants.AuthorizerAction);
+            case Constants.ApproveRaiseERFxActionId:
+                return ("/staff/itemrequisition/itempricing/allrequisitionitempricing", Constants.ApproveRaiseERFxAction);
+            case Constants.RaiseERFxActionId:
+                return ("/staff/itemrequisition/bidpreparation/clearedrequisitions",Constants.RaiseERFxAction);
+            default:
+                return (null, null);
+        }
+    }
+
+}
 
 <div class="row mt-5">
     <div class="col-md-1"></div>
@@ -32,123 +54,38 @@
                     @Model.Error
                 </div>
             }
-        <div class="container bg-white shadow my-4">
-            <div class="row">
 
-                <div class="col-xl-3 col-md-4 col-sm-6 my-3">
-                    <div class="container-fluid">
-                        <div class="row p-2 border rounded border-width-2 border-danger">
-                            <div class="col-4 v-center">
-                                <div class="bg-danger rounded-circle text-center" style="height:50px; width:50px;">
-                                    <i class="fas fa-info text-white mt-3"></i>
+            @if (Model.ProcurementJobsGroups.Count() > 0)
+            {
+
+                <div class="container bg-white shadow my-4">
+                    <div class="row">
+
+
+                        @foreach (var jobGroup in Model.ProcurementJobsGroups)
+                        {
+                            <div class="col-xl-3 col-md-4 col-sm-6 my-3">
+                                <div class="container-fluid">
+                                    <div class="row p-2 border rounded border-width-2 border-danger">
+                                        <div class="col-4 v-center">
+                                            <div class="bg-danger rounded-circle text-center" style="height:50px; width:50px;">
+                                                <i class="fas fa-info text-white mt-3"></i>
+                                            </div>
+                                        </div>
+                                        <div class="col-8 text-black-50 text-right">
+                                            <p class="h3 mb-0">@jobGroup.Count()</p>
+                                            <a asp-page=@GetTaskNameAndUrlFromAction(jobGroup.Key).url><p class="mb-0 font-italic" style="line-height:20px; font-size:16px;"> @GetTaskNameAndUrlFromAction(jobGroup.Key).actionName</p></a>
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
-                            <div class="col-8 text-black-50 text-right">
-                                <p class="h3 mb-0">0</p>
-                                <a href=""><p class="mb-0 font-italic" style="line-height:20px; font-size:16px;">Prequalification Tasks</p></a>
-                            </div>
-                        </div>
+                        }
+
+
                     </div>
                 </div>
+            }
 
-                <div class="col-xl-3 col-md-4 col-sm-6 my-3">
-                    <div class="container-fluid">
-                        <div class="row p-2 border rounded border-width-2 border-success">
-                            <div class="col-4 v-center">
-                                <div class="bg-success rounded-circle text-center" style="height:50px; width:50px;">
-                                    <i class="fas fa-info text-white mt-3"></i>
-                                </div>
-                            </div>
-                            <div class="col-8 text-black-50 text-right">
-                                <p class="h3 mb-0">0</p>
-                                <a href="/Staff/JobViews/RequisitionJobs"><p class="mb-0 font-italic" style="line-height:20px; font-size:16px;">Requisition Tasks</p></a>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="col-xl-3 col-md-4 col-sm-6 my-3">
-                    <div class="container-fluid">
-                        <div class="row p-2 border rounded border-width-2 border-warning">
-                            <div class="col-4 v-center">
-                                <div class="bg-warning rounded-circle text-center" style="height:50px; width:50px;">
-                                    <i class="fas fa-info text-white mt-3"></i>
-                                </div>
-                            </div>
-                            <div class="col-8 text-black-50 text-right">
-                                <p class="h3 mb-0">0</p>
-                                <p class="mb-0 font-italic" style="line-height:20px; font-size:16px;">Organisation information</p>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="col-xl-3 col-md-4 col-sm-6 my-3">
-                    <div class="container-fluid">
-                        <div class="row p-2 border rounded border-width-2 border-dark">
-                            <div class="col-4 v-center">
-                                <div class="bg-dark rounded-circle text-center" style="height:50px; width:50px;">
-                                    <i class="fas fa-info text-white mt-3"></i>
-                                </div>
-                            </div>
-                            <div class="col-8 text-black-50 text-right">
-                                <p class="h3 mb-0">0</p>
-                                <p class="mb-0 font-italic" style="line-height:20px; font-size:16px;">Organisation information</p>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="col-xl-3 col-md-4 col-sm-6 my-3">
-                    <div class="container-fluid">
-                        <div class="row p-2 border rounded border-width-2 border-info">
-                            <div class="col-4 v-center">
-                                <div class="bg-info rounded-circle text-center" style="height:50px; width:50px;">
-                                    <i class="fas fa-info text-white mt-3"></i>
-                                </div>
-                            </div>
-                            <div class="col-8 text-black-50 text-right">
-                                <p class="h3 mb-0">0</p>
-                                <p class="mb-0 font-italic" style="line-height:20px; font-size:16px;">Organisation information</p>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="col-xl-3 col-md-4 col-sm-6 my-3">
-                    <div class="container-fluid">
-                        <div class="row p-2 border rounded border-width-2 border-light">
-                            <div class="col-4 v-center">
-                                <div class="bg-light rounded-circle text-center" style="height:50px; width:50px;">
-                                    <i class="fas fa-info text-white mt-3"></i>
-                                </div>
-                            </div>
-                            <div class="col-8 text-black-50 text-right">
-                                <p class="h3 mb-0">0</p>
-                                <p class="mb-0 font-italic" style="line-height:20px; font-size:16px;">Organisation information</p>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="col-xl-3 col-md-4 col-sm-6 my-3">
-                    <div class="container-fluid">
-                        <div class="row p-2 border rounded border-width-2 border-success">
-                            <div class="col-4 v-center">
-                                <div class="bg-success rounded-circle text-center" style="height:50px; width:50px;">
-                                    <i class="fas fa-info text-white mt-3"></i>
-                                </div>
-                            </div>
-                            <div class="col-8 text-black-50 text-right">
-                                <p class="h3 mb-0">0</p>
-                                <p class="mb-0 font-italic" style="line-height:20px; font-size:16px;">Organisation information</p>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-            </div>
-        </div>
         </form>
     </div>
 </div>

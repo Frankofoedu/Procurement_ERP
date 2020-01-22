@@ -17,18 +17,18 @@ namespace DcProcurement
 
 
         #region Constants for procurement workflow Actions
-        public const string ProcurementCosting = "Procurement Costing";
-        public const int ProcurementCostingId = 100;
-        public const string BudgetaryControl = "Budgetary Control";
-        public const int BudgetaryControlId = 200;
-        public const int ApproverId = 300;
-        public const string Approver = "Procurement Approval";
-        public const int AuthorizerId = 400;
-        public const string Authorizer = "Procurement Authorization";
-        public const int ApproveRaiseERFxId = 500;
-        public const string ApproveRaiseERFx = "Approval to Raise eRFx";
-        public const int RaiseERFxId	 = 600;
-        public const string RaiseERFx = "Raise eRFx";
+        public const string ProcurementCostingAction = "Procurement Costing";
+        public const int ProcurementCostingActionId = 100;
+        public const string BudgetaryControlAction = "Budgetary Control";
+        public const int BudgetaryControlActionId = 200;
+        public const int ApproverActionId = 300;
+        public const string ApproverAction = "Procurement Approval";
+        public const int AuthorizerActionId = 400;
+        public const string AuthorizerAction = "Procurement Authorization";
+        public const int ApproveRaiseERFxActionId = 500;
+        public const string ApproveRaiseERFxAction = "Approval to Raise eRFx";
+        public const int RaiseERFxActionId	 = 600;
+        public const string RaiseERFxAction = "Raise eRFx";
         #endregion
 
 

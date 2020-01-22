@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using BsslProcurement.Interfaces;
+using BsslProcurement.ViewModels;
 using DcProcurement;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
@@ -28,8 +29,7 @@ namespace BsslProcurement
 
         public string Message { get; set; }
         public string Error { get; set; }
-        [BindProperty]
-        public List<Requisition> Requisitions { get; set; }
+        public IEnumerable<IGrouping<int?, ProcurementJobViewModel>> ProcurementJobsGroups { get; set; } = new List<IGrouping<int?, ProcurementJobViewModel>>();
 
 
         public async Task OnGetAsync()
@@ -38,7 +38,14 @@ namespace BsslProcurement
             {
                 var user = await GetCurrentUserAsync();
 
-               Requisitions = await procurementService.GetProcurementRequisitionsJobsAssignedToLoggedInUser(user.Id);
+                var procJobs = await procurementService.GetProcurementRequisitionsJobsAssignedToLoggedInUser(user.Id);
+
+                if (procJobs.Count > 0 )
+                {
+                    ProcurementJobsGroups = procJobs.GroupBy(x => x.WorkflowAction);
+                }            
+
+
             }
             catch (Exception ex)
             {

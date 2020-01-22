@@ -130,27 +130,27 @@ namespace DcProcurement
             //procurement actions
             List<WorkflowAction> listProcActions = new List<WorkflowAction>
             {
-                new WorkflowAction{ Id = Constants.ProcurementCostingId, Name = Constants.ProcurementCosting, Description = "For Procurement Costing"},
+                new WorkflowAction{ Id = Constants.ProcurementCostingActionId, Name = Constants.ProcurementCostingAction, Description = "For Procurement Costing"},
 
-                new WorkflowAction{ Id = Constants.BudgetaryControlId, Name = Constants.BudgetaryControl, Description = "For Budgetary Control"},
-                new WorkflowAction{ Id = Constants.ApproverId, Name = Constants.Approver, Description = "For Approval"},
-                new WorkflowAction{ Id = Constants.AuthorizerId, Name = Constants.Authorizer, Description = "For Authorization"},
-                new WorkflowAction{ Id = Constants.ApproveRaiseERFxId, Name = Constants.ApproveRaiseERFx, Description = "For Approval To Raising Erfx"},
-                new WorkflowAction{ Id = Constants.RaiseERFxId, Name = Constants.RaiseERFx, Description = "For Raising Erfx"},
+                new WorkflowAction{ Id = Constants.BudgetaryControlActionId, Name = Constants.BudgetaryControlAction, Description = "For Budgetary Control"},
+                new WorkflowAction{ Id = Constants.ApproverActionId, Name = Constants.ApproverAction, Description = "For Approval"},
+                new WorkflowAction{ Id = Constants.AuthorizerActionId, Name = Constants.AuthorizerAction, Description = "For Authorization"},
+                new WorkflowAction{ Id = Constants.ApproveRaiseERFxActionId, Name = Constants.ApproveRaiseERFxAction, Description = "For Approval To Raising Erfx"},
+                new WorkflowAction{ Id = Constants.RaiseERFxActionId, Name = Constants.RaiseERFxAction, Description = "For Raising Erfx"},
             };
-            //seed workflow for procurement
+            //seed workflow actions for procurement
             modelBuilder.Entity<WorkflowAction>().HasData(listProcActions);
 
 
 
             var lisProcurementWorkflow = new List<Workflow>()
             {
-                new Workflow { Id = 100, WorkflowTypeId = Constants.ProcurementWorkflowId, WorkflowActionId = Constants.ProcurementCostingId, Step= 1},
-                new Workflow { Id = 200, WorkflowTypeId = Constants.ProcurementWorkflowId, WorkflowActionId = Constants.BudgetaryControlId , Step= 2},
-                new Workflow { Id = 300, WorkflowTypeId = Constants.ProcurementWorkflowId, WorkflowActionId = Constants.ApproverId, Step= 3},
-                new Workflow { Id = 400, WorkflowTypeId = Constants.ProcurementWorkflowId, WorkflowActionId = Constants.AuthorizerId, Step= 4},
-                new Workflow { Id = 500, WorkflowTypeId = Constants.ProcurementWorkflowId, WorkflowActionId = Constants.ApproveRaiseERFxId, Step= 5},
-                new Workflow { Id = 600, WorkflowTypeId = Constants.ProcurementWorkflowId, WorkflowActionId = Constants.RaiseERFxId, Step= 6},
+                new Workflow { Id = 100, WorkflowTypeId = Constants.ProcurementWorkflowId, WorkflowActionId = Constants.ProcurementCostingActionId, Step= 1},
+                new Workflow { Id = 200, WorkflowTypeId = Constants.ProcurementWorkflowId, WorkflowActionId = Constants.BudgetaryControlActionId , Step= 2},
+                new Workflow { Id = 300, WorkflowTypeId = Constants.ProcurementWorkflowId, WorkflowActionId = Constants.ApproverActionId, Step= 3},
+                new Workflow { Id = 400, WorkflowTypeId = Constants.ProcurementWorkflowId, WorkflowActionId = Constants.AuthorizerActionId, Step= 4},
+                new Workflow { Id = 500, WorkflowTypeId = Constants.ProcurementWorkflowId, WorkflowActionId = Constants.ApproveRaiseERFxActionId, Step= 5},
+                new Workflow { Id = 600, WorkflowTypeId = Constants.ProcurementWorkflowId, WorkflowActionId = Constants.RaiseERFxActionId, Step= 6},
 
             };
 

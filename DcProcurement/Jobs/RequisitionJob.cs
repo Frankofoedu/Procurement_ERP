@@ -19,6 +19,7 @@ namespace DcProcurement.Jobs
             JobStatus = Enums.JobState.NotDone;
         }
         [ForeignKey("FK_Req_Job")]
+        [Column("FK_Req_Job")]
         public int RequisitionId { get; private set; }
         public Requisition Requisition { get; private set; }
 
