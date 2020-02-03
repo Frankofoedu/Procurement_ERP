@@ -115,7 +115,7 @@ namespace BsslProcurement.Pages.Staff.ItemRequisition
                 {
                     await SaveOrSubmitRequisition(false);
                     
-                    return RedirectToPage("AllRequisition");
+                    return RedirectToPage("SavedRequisition");
                 }
                 catch (Exception ex)
                 {

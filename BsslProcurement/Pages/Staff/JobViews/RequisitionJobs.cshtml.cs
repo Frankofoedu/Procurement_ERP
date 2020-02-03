@@ -29,7 +29,7 @@ namespace BsslProcurement
         public string Message { get; set; }
         public string Error { get; set; }
         [BindProperty]
-        public List<Requisition> Requisitions { get; set; }
+        public List<Requisition> Requisitions { get; set; } = new List<Requisition>();
 
 
         public async Task OnGetAsync()
