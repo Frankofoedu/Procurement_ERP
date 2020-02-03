@@ -11,40 +11,42 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.EntityFrameworkCore;
 
-namespace BsslProcurement.Pages.Staff.ItemRequisition.ItemPricing
+namespace BsslProcurement.Pages.Staff.ItemRequisition.ProcApproval
 {
     [Authorize]
-    public class AllRequisitionItemPricingModel : PageModel
+    public class AllRequisitionModel : PageModel
     {
         private readonly ProcurementDBContext _context;
-        private readonly IProcurementService _procurementService;
+        private readonly IRequisitionService requisitionService;
+
         private readonly UserManager<User> _userManager;
-        public AllRequisitionItemPricingModel(ProcurementDBContext context, IProcurementService procurementService, UserManager<User> userManager)
+        public AllRequisitionModel(ProcurementDBContext context, IRequisitionService _requisitionService, UserManager<User> userManager)
         {
             _context = context;
-            _procurementService = procurementService;
+            requisitionService = _requisitionService;
             _userManager = userManager;
-            
         }
-
-
         public string Message { get; set; }
         public string Error { get; set; }
 
-
-
         [BindProperty]
-        public List<Requisition> Requisitions { get; set; } = new List<Requisition>();
+        public List<Requisition> Requisitions { get; set; }
+
         public async Task OnGetAsync()
         {
+            try
+            {
+                var user = await GetCurrentUserAsync();
 
-            var user = await GetCurrentUserAsync();
+                Requisitions = await requisitionService.GetRequisitionsForLoggedInUser(user.Id);
+            }
+            catch (Exception ex)
+            {
 
-            //get all requisitions that havent been priced
-            Requisitions = await _procurementService.GetRequisitionsForPricingAssignedToUser(user.Id);
-            
+                Error = "Error has occured. Please contact Admin." + Environment.NewLine + ex.Message;
+            }
+           
         }
-
 
         private Task<User> GetCurrentUserAsync() => _userManager.GetUserAsync(HttpContext.User);
     }

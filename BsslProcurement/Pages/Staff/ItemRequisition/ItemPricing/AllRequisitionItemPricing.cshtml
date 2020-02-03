@@ -46,7 +46,6 @@
                                 <th>PR Number</th>
                                 <th>Procurement Type</th>
                                 <th>Date</th>
-                                <th>Requisition Amount</th>
                                 <th>Action</th>
                             </tr>
                         </thead>
@@ -56,14 +55,14 @@
                             @for (int i = 0; i < Model.Requisitions.Count; i++)
                             {
                                 var item = Model.Requisitions[i];
-                            <tr>
-                                <td>@(i + 1)</td>
-                                <td>@item.PRNumber</td>
-                                <td>@item.ProcurementType</td>
-                                <td>@item.Date.Value.ToShortDateString()</td>
-                                <td class="text-center font-weight-bold"> @NairaFormat.GetNairaValue(item.RequisitionItems.Sum(c => (Convert.ToInt32( c.UnitPrice) * Convert.ToInt32( c.Quantity))))</td>
-                                <td><a asp-page="./RequisitionItemPricing" asp-route-id="@item.Id"><h6 class="text-primary">View Requisition</h6></a></td>
-                            </tr>
+                                <tr>
+                                    <td>@(i + 1)</td>
+                                    <td>@item.PRNumber</td>
+                                    <td>@item.ProcurementType</td>
+                                    <td>@item.Date.Value.ToShortDateString()</td>
+                                    @* <td class="text-center font-weight-bold"> @NairaFormat.GetNairaValue(item.RequisitionItems.Sum(c => (Convert.ToInt32( c.UnitPrice) * Convert.ToInt32( c.Quantity))))</td>*@
+                                    <td><a asp-page="./RequisitionItemPricing" asp-route-id="@item.Id"><h6 class="text-primary">Price Requisition</h6></a></td>
+                                </tr>
                             }
 
                         </tbody>

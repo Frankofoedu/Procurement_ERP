@@ -43,15 +43,7 @@ namespace BsslProcurement.Services
         {
             return await _procurementDBContext.Requisitions.Include(x => x.RequisitionItems).Where(p => p.isBudgetCleared==true).ToListAsync();
         }
-        public async Task<List<Requisition>> GetRequisitionsForPricing()
-        {
-            return await _procurementDBContext.Requisitions.Include(x => x.RequisitionItems).Where(p => p.isPriced == false && p.isApproved == true).ToListAsync();
-        }
 
-        public async Task<List<Requisition>> GetApprovedRequisitions()
-        {
-            return await _procurementDBContext.Requisitions.Include(x => x.RequisitionItems).Where(p => p.isApproved == true).ToListAsync();
-        }
 
         public async Task SendRequisitionToNextStageAsync(int requisitionId,string staffCode, int newWorkflowId, string remark)
         {
@@ -164,9 +156,10 @@ namespace BsslProcurement.Services
 
             return new WorkFlowApproverViewModel { Remark = job.Remark, AssignedStaffCode = staffCode, WorkFlowTypeId = DcProcurement.Constants.RequisitionWorkflowId, WorkFlowId  = job.WorkFlowId };
         }
+
+
+
         private async Task<string> GetStaffIdFromCodeAsync(string staffCode) => (await _procurementDBContext.Staffs.FirstOrDefaultAsync(x => x.StaffCode == staffCode)).Id;
-
-
         private async Task<string> GetStaffCodeFromIdAsync(string staffId) => (await _procurementDBContext.Staffs.FindAsync(staffId)).Id;
 
     }

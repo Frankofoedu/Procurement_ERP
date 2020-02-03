@@ -1,0 +1,281 @@
+﻿@page
+@model BsslProcurement.GeneralInfomationModel
+@{
+    ViewData["Title"] = "GeneralInfomation";
+    Layout = "~/Pages/Shared/_VendorBidProcessLayout.cshtml";
+}
+
+    <div class="row mt-5">
+        <div class="col-12 text-center">
+            <h2 style="text-decoration:underline">Invitation</h2>
+        </div>
+        <div class="col-12">
+            <div class="row">
+                <div class="col-12 text-center">
+                    <p class="h3">Mandatory Attachments</p>
+                </div>
+                <div class="col-12">
+                    <p class="h4">Organization Detail</p>
+                </div>
+
+                <div class="col-md-6">
+                    <div class="form-group">
+                        <label>Organization Name: </label>
+                        <input class="form-control" />
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="form-group">
+                        <label>Broker Name: </label>
+                        <input class="form-control" />
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="form-group">
+                        <label>Preferred Currency: </label>
+                        <input class="form-control" />
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="form-group">
+                        <label>Nature of Business: </label>
+                        <input class="form-control" />
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="form-group">
+                        <label>Logo: </label>
+                        <input class="form-control" />
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="form-group">
+                        <label>Banner: </label>
+                        <input class="form-control" />
+                    </div>
+                </div>
+
+
+                <div class="col-12">
+                    <p class="h4">Contact Person Detail</p>
+                </div>
+
+                <div class="col-12">
+                    <p class="h5">Personal Details</p>
+                </div>
+
+                <div class="col-md-6">
+                    <div class="form-group">
+                        <label>Title: </label>
+                        <input class="form-control" />
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="form-group">
+                        <label>Last Name: </label>
+                        <input class="form-control" />
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="form-group">
+                        <label>First Name: </label>
+                        <input class="form-control" />
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="form-group">
+                        <label>Other Name: </label>
+                        <input class="form-control" />
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="form-group">
+                        <label>Job Title: </label>
+                        <input class="form-control" />
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="form-group">
+                        <label>Department: </label>
+                        <input class="form-control" />
+                    </div>
+                </div>
+
+                <div class="col-12">
+                    <p class="h5">Address Details</p>
+                </div>
+
+                <div class="col-md-6">
+                    <div class="form-group">
+                        <label>Address Line 1: </label>
+                        <input class="form-control" />
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="form-group">
+                        <label>Address Line 2: </label>
+                        <input class="form-control" />
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="form-group">
+                        <label>City: </label>
+                        <input class="form-control" />
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="form-group">
+                        <label>State: </label>
+                        <input class="form-control" />
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="form-group">
+                        <label>Postal Code: </label>
+                        <input class="form-control" />
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="form-group">
+                        <label>Country: </label>
+                        <input class="form-control" />
+                    </div>
+                </div>
+
+                <div class="col-12">
+                    <p class="h5">Contact Details</p>
+                </div>
+
+                <div class="col-md-6">
+                    <div class="form-group">
+                        <label>Primary E-mail: </label>
+                        <input class="form-control" />
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="form-group">
+                        <label>Secondary E-mail: </label>
+                        <input class="form-control" />
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="form-group">
+                        <label>Phone Number 1: </label>
+                        <input class="form-control" />
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="form-group">
+                        <label>Phone Number 2: </label>
+                        <input class="form-control" />
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="form-group">
+                        <label>Access Level: </label>
+                        <input class="form-control" />
+                    </div>
+                </div>
+
+                <div class="col-12">
+                    <table class="table table-responsive-sm table-striped">
+                        <thead>
+                            <tr class="table-primary">
+                                <th>S/N</th>
+                                <th>File to Upload</th>
+                                <th></th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>1</td>
+                                <td>Detail Company Profile</td>
+                                <td>
+                                    <input type="file" />
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>2</td>
+                                <td>Certificate of Incorporation</td>
+                                <td>
+                                    <input type="file" />
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>2</td>
+                                <td>Tax Registration Certificate</td>
+                                <td>
+                                    <input type="file" />
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-12">
+            <p class="h3">Non-Mandatory Attachments</p>
+
+            <table class="table table-responsive-sm table-striped">
+                <thead>
+                    <tr class="table-primary">
+                        <th>S/N</th>
+                        <th>File to Upload</th>
+                        <th></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>1</td>
+                        <td>Evidence of Current Tax Certificate for Three Years</td>
+                        <td>
+                            <input type="file" />
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>2</td>
+                        <td>Evidence of Current Bureau of Public Procurement Registration Certificate</td>
+                        <td>
+                            <input type="file" />
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>3</td>
+                        <td>Evidence of Current  NSITF Compliance Certificate</td>
+                        <td>
+                            <input type="file" />
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>4</td>
+                        <td>Evidence of Current PENCOM Compliance Certificate</td>
+                        <td>
+                            <input type="file" />
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>5</td>
+                        <td>Evidence of Current ITF Compliance Certificate</td>
+                        <td>
+                            <input type="file" />
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>6</td>
+                        <td>Bank Guaranty/Bond</td>
+                        <td>
+                            <input type="file" />
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>7</td>
+                        <td>Three years Audited financial Statements</td>
+                        <td>
+                            <input type="file" />
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>

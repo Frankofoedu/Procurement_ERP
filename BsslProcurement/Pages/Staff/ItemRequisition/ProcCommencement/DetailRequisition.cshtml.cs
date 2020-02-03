@@ -91,7 +91,7 @@ namespace BsslProcurement.Pages.Staff.ItemRequisition.ProcCommencement
 
             }
 
-            // await LoadData();
+             await LoadData(ReqId);
             return Page();
         }
 
