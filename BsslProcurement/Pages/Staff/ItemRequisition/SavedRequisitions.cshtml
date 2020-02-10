@@ -78,7 +78,7 @@
                                         <td>@item.PreparedBy</td>
                                         <td>@item.RequisitionItems.Sum(x => x.UnitPrice * x.Quantity)</td>
                                         <td>@item.Status</td>
-                                        <td><a asp-page="./DetailRequisition" asp-route-id="@item.Id" style="color: #007bff">View</a></td>
+                                        <td><a asp-page="./NewRequisition" asp-route-id="@item.Id" style="color: #007bff">Continue Process</a></td>
                                     </tr>
                                 }
                             }

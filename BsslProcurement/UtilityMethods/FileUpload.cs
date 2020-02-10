@@ -54,9 +54,9 @@ namespace BsslProcurement.UtilityMethods
             {
                 throw new FileNotFoundException("File not found");
             }
-            catch (Exception)
+            catch (Exception ex)
             {
-                throw new Exception("An error occured");
+                throw new Exception("An error occured" + ex.Message);
             }
 
             

@@ -1,0 +1,33 @@
+﻿@page
+@model BsslProcurement.ConfirmModel
+@{
+    ViewData["Title"] = "Confirm";
+    Layout = "~/Pages/Shared/_VendorBidProcessLayout.cshtml";
+}
+
+<div class="row mt-5">
+    <div class="col-12 text-center">
+        <h2 style="text-decoration:underline">Confirm Participation</h2>
+    </div>
+    <div class="col-12 p-4">
+        <p class="font-weight-bold px-3 text-right">
+            <input type="date" class="form-control-sm"/>
+        </p>
+        <p class="px-3 py-1">
+            I <input type="text" class="form-control-sm" /> on behalf of <input type="text" class="form-control-sm" /> 
+            hereby confirms our interest to Participate in the ongoing Bid negotiation.
+        </p>
+        <div class="form-group form-inline">
+            <label>Name: </label>
+            <input class="form-control" type="text" />
+        </div>
+        <div class="form-group form-inline">
+            <label>Telephone: </label>
+            <input class="form-control" type="text" />
+        </div>
+        <div class="form-group justify-content-around">
+            <button class="btn btn-outline-primary">Confirm</button>
+            <button class="btn btn-outline-dark">Cancel</button>
+        </div>
+    </div>
+</div>
