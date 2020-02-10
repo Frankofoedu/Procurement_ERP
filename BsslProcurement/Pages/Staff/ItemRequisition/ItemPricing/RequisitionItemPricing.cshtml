@@ -146,7 +146,7 @@ else
                                             <tr class="">
 
                                                 <td class="">
-                                                    <label>1</label>
+                                                    <label>@(i + 1)</label>
                                                     <input type="hidden" />
                                                 </td>
 
@@ -154,7 +154,7 @@ else
                                                     <div class="flex-row d-flex">
                                                         <input type="text" codeID="@i" value=@item.StoreItemCode inputclass="code @i" />
                                                         <input type="hidden" codeID="@i" asp-for="Requisition.RequisitionItems[i].StoreItemCode" inputclass="hiddencode @i" />
-                                                        <button class="btn loadItemModal" inputclass="@i" data-toggle="modal" data-target="#itemModal"><i class="fa fa-search"></i></button>
+                                                        <button class="btn loadItemModal" inputclass="@i" @*data-toggle="modal" data-target="#itemModal"*@><i class="fa fa-search"></i></button>
                                                     </div>
                                                 </td>
                                                 <td>
@@ -171,21 +171,16 @@ else
                                                     <input type="text" required asp-for="Requisition.RequisitionItems[i].UnitOfMeasurement" value="@item.UnitOfMeasurement" />
                                                 </td>
                                                 <td>
-                                                    <input class="text-right" type="number" asp-for="Requisition.RequisitionItems[i].UnitPrice" value="@item.UnitPrice" />
+                                                    <input class="text-right" data-type="unitPrice @i" type="number" onkeyup="Sum(@i);" asp-for="Requisition.RequisitionItems[i].UnitPrice" value="@item.UnitPrice" />
 
                                                 </td>
                                                 <td>
-                                                    <input class="text-right" type="number" required asp-for="Requisition.RequisitionItems[i].Quantity" value="@item.Quantity" />
+                                                    <input class="text-right" data-type="quantity @i" type="number" onkeyup="Sum(@i);" required asp-for="Requisition.RequisitionItems[i].Quantity" value="@item.Quantity" />
                                                 </td>
 
                                                 <td>
-                                                    <input class="text-right" type="number" asp-for="Requisition.RequisitionItems[i].Amount" value="@(Convert.ToInt32(item.Quantity) * Convert.ToInt32(item.UnitPrice))" />
+                                                    <input class="text-right" data-type="amount @i" type="number" asp-for="Requisition.RequisitionItems[i].Amount" />
 
-                                                </td>
-                                                <td>
-                                                    @*<div class="d-flex flex-column">
-                                        <a class="fancybox m-5 btn btn-link fas fa-file-pdf" data-fancybox-type="iframe" href="@Url.Content("~/Attachments/" + @Model.Requisition.RequisitionItems[i].Attachment.FilePath)">Open PDf Attachment</a>
-                                    </div>*@
                                                 </td>
                                             </tr>
 
@@ -201,13 +196,13 @@ else
                                 </table>
                                 <input type="hidden" id="lastIndex" value="0" />
                                 @*<div class="form-group">
-                    <div class="row">
-                        <div class="col-sm-3"> </div>
-                        <div class="col-sm-6 text-center">
-                            <button id="btnMore" class="btn btn-outline-primary">New Item</button>
-                        </div>
-                    </div>
-                </div>*@
+                            <div class="row">
+                                <div class="col-sm-3"> </div>
+                                <div class="col-sm-6 text-center">
+                                    <button id="btnMore" class="btn btn-outline-primary">New Item</button>
+                                </div>
+                            </div>
+                        </div>*@
                             </div>
 
 
@@ -295,6 +290,7 @@ else
                         }
                     </div>
                 </div>
+                <partial name="~/Pages/Shared/Modals/_VendorWithEmailPartial.cshtml" model="Model.VendorEmailListObj" />
             </form>
         </div>
     </div>
@@ -321,18 +317,27 @@ else
         </div>
     </div>
 
-    <partial name="~/Pages/Shared/Modals/_VendorWithEmailPartial.cshtml" model="Model.VendorEmailListObj" />
+    <input type="hidden" id="itemHiddenURL" value="@Url.Action("GetItemPartial", "Items")" />
 }
 @section Scripts{
 
     <script src="~/js/jquery.fancybox.pack.js"></script>
     <script src="~/js/quill.js"></script>
-    <script src="~/js/jquery.dataTables.min.js"></script>
     <script>
 
+        //amount sum in textbox
+        function Sum(index) {
+            var unitPriceTextBoxValue = $('[data-type="unitPrice '+ index + '"]').first().val();
+            var quantitytextBoxValue = $('[data-type="quantity '+ index + '"]').first().val();
 
+            var amountTextBox = $('[data-type="amount '+ index + '"]').first();
+
+            amountTextBox.val(unitPriceTextBoxValue * quantitytextBoxValue);
+        }
 
         $(document).ready(function () {
+
+
             $(".fancybox").fancybox({
                 openEffect: 'none',
                 closeEffect: 'none',
@@ -363,7 +368,7 @@ else
             var purposeField = document.getElementById('editor');
             purposeField.innerHTML = purposeValue;
 
-        })
+        });
 
         //loads item modal
         $(function () {
@@ -373,11 +378,11 @@ else
                 //get item name textbox
                 var index = $(this).attr('inputclass');
                 var fieldToAssign = $('[inputclass="' + 'hiddencode ' + index + '"]');
-                var txtToAssign = $('[inputclass="' + 'code ' + index + '"]')
+                var txtToAssign = $('[inputclass="' + 'code ' + index + '"]');
                 //var txtToAssign = $('inputclass = '('.code.' + + ''))
                 //    ;
-                var baseUrl = [location.protocol, '//', location.host, location.pathname].join('');
-                $('#Itemgrid').load(baseUrl + '?handler=ItemPartial', function () {
+                var baseUrl = $('#hiddenURLRank').val();
+                $('#Itemgrid').load(baseUrl, function () {
                     $('#Itemspinner').removeClass('d-flex');
                     $('#Itemspinner').hide();
                     $('#itemTable').dataTable();
