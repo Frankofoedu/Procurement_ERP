@@ -4,14 +4,16 @@ using DcProcurement;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace BsslProcurement.Migrations
 {
     [DbContext(typeof(ProcurementDBContext))]
-    partial class ProcurementDBContextModelSnapshot : ModelSnapshot
+    [Migration("20200213133749_companyInfoNewUpdate")]
+    partial class companyInfoNewUpdate
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -85,9 +87,6 @@ namespace BsslProcurement.Migrations
                     b.Property<string>("City")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("CompanyEmail")
-                        .HasColumnType("nvarchar(max)");
-
                     b.Property<string>("CompanyName")
                         .HasColumnType("nvarchar(max)");
 
@@ -133,6 +132,9 @@ namespace BsslProcurement.Migrations
                     b.Property<bool>("Disqualified")
                         .HasColumnType("bit");
 
+                    b.Property<string>("Email")
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<string>("FaxNumber")
                         .HasColumnType("nvarchar(max)");
 
@@ -141,6 +143,9 @@ namespace BsslProcurement.Migrations
 
                     b.Property<bool>("HasNCEC")
                         .HasColumnType("bit");
+
+                    b.Property<string>("LoginEmail")
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("NatureOfBusiness")
                         .HasColumnType("nvarchar(max)");
@@ -152,6 +157,9 @@ namespace BsslProcurement.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("ParentCompanyName")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Password")
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("PhoneNumber")
@@ -1092,20 +1100,20 @@ namespace BsslProcurement.Migrations
                     b.HasData(
                         new
                         {
-                            Id = "a040c669-fd0c-4345-a773-9638fee6f0ae",
-                            ConcurrencyStamp = "57d27c1f-cb50-4096-9f81-bcb4fe808218",
+                            Id = "e64c769f-eb7a-4e9b-949d-a2a4e0360181",
+                            ConcurrencyStamp = "db02f698-9189-467d-8497-99d28318292b",
                             Name = "Admin"
                         },
                         new
                         {
-                            Id = "0ae17848-5155-40d3-9d14-d75b8da70e57",
-                            ConcurrencyStamp = "6dd5ce73-7014-4ccb-9e0d-edbf3aed6b21",
+                            Id = "ae749f49-41f2-43ce-a863-9952af9fcc1b",
+                            ConcurrencyStamp = "457b6934-6c0a-4d0f-858a-524d972d9675",
                             Name = "Staff"
                         },
                         new
                         {
-                            Id = "16f9b09b-6b5f-43b5-811d-d34da059b65f",
-                            ConcurrencyStamp = "284c3d94-5537-4e4d-be63-346429221dcf",
+                            Id = "8fb48a5c-c35d-4d2a-876e-69d1d0e4bd73",
+                            ConcurrencyStamp = "3c84e00a-4117-42f6-8de9-f2905aa7be13",
                             Name = "Vendor"
                         });
                 });

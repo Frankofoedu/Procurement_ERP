@@ -4,14 +4,16 @@ using DcProcurement;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace BsslProcurement.Migrations
 {
     [DbContext(typeof(ProcurementDBContext))]
-    partial class ProcurementDBContextModelSnapshot : ModelSnapshot
+    [Migration("20200213094001_companyinfoUpdate")]
+    partial class companyinfoUpdate
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -85,9 +87,6 @@ namespace BsslProcurement.Migrations
                     b.Property<string>("City")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("CompanyEmail")
-                        .HasColumnType("nvarchar(max)");
-
                     b.Property<string>("CompanyName")
                         .HasColumnType("nvarchar(max)");
 
@@ -133,6 +132,9 @@ namespace BsslProcurement.Migrations
                     b.Property<bool>("Disqualified")
                         .HasColumnType("bit");
 
+                    b.Property<string>("Email")
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<string>("FaxNumber")
                         .HasColumnType("nvarchar(max)");
 
@@ -141,6 +143,9 @@ namespace BsslProcurement.Migrations
 
                     b.Property<bool>("HasNCEC")
                         .HasColumnType("bit");
+
+                    b.Property<string>("LoginEmail")
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("NatureOfBusiness")
                         .HasColumnType("nvarchar(max)");
@@ -152,6 +157,9 @@ namespace BsslProcurement.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("ParentCompanyName")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Password")
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("PhoneNumber")
@@ -431,11 +439,11 @@ namespace BsslProcurement.Migrations
                         .HasColumnType("int")
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-                    b.Property<int?>("CVId")
-                        .HasColumnType("int");
+                    b.Property<string>("CV")
+                        .HasColumnType("nvarchar(max)");
 
-                    b.Property<int?>("CertificateId")
-                        .HasColumnType("int");
+                    b.Property<string>("Certificate")
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<int?>("CompanyInfoId")
                         .HasColumnType("int");
@@ -443,8 +451,8 @@ namespace BsslProcurement.Migrations
                     b.Property<string>("Name")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int?>("PassportId")
-                        .HasColumnType("int");
+                    b.Property<string>("Passport")
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Qualification")
                         .HasColumnType("nvarchar(max)");
@@ -454,13 +462,7 @@ namespace BsslProcurement.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("CVId");
-
-                    b.HasIndex("CertificateId");
-
                     b.HasIndex("CompanyInfoId");
-
-                    b.HasIndex("PassportId");
 
                     b.ToTable("PersonnelDetails");
                 });
@@ -1092,20 +1094,20 @@ namespace BsslProcurement.Migrations
                     b.HasData(
                         new
                         {
-                            Id = "a040c669-fd0c-4345-a773-9638fee6f0ae",
-                            ConcurrencyStamp = "57d27c1f-cb50-4096-9f81-bcb4fe808218",
+                            Id = "8e86f628-30b1-431f-b0d3-1f678f70181c",
+                            ConcurrencyStamp = "37eb03e1-8959-4853-9174-d5d03bfe7e1d",
                             Name = "Admin"
                         },
                         new
                         {
-                            Id = "0ae17848-5155-40d3-9d14-d75b8da70e57",
-                            ConcurrencyStamp = "6dd5ce73-7014-4ccb-9e0d-edbf3aed6b21",
+                            Id = "4c02a5d6-d171-4d1f-b56c-a5889601999a",
+                            ConcurrencyStamp = "bf4bd0fe-c8ce-492a-8691-dd4faa0cc086",
                             Name = "Staff"
                         },
                         new
                         {
-                            Id = "16f9b09b-6b5f-43b5-811d-d34da059b65f",
-                            ConcurrencyStamp = "284c3d94-5537-4e4d-be63-346429221dcf",
+                            Id = "95fa4d33-7066-4543-9620-ae7e92978cca",
+                            ConcurrencyStamp = "d8c49081-fabe-4657-b2e0-dbe1dd162f3b",
                             Name = "Vendor"
                         });
                 });
@@ -1280,7 +1282,7 @@ namespace BsslProcurement.Migrations
                 {
                     b.HasBaseType("DcProcurement.Job");
 
-                    b.Property<int?>("CompanyInfoId")
+                    b.Property<int>("CompanyInfoId")
                         .HasColumnName("CompanyInfoId")
                         .HasColumnType("int");
 
@@ -1418,21 +1420,9 @@ namespace BsslProcurement.Migrations
 
             modelBuilder.Entity("DcProcurement.PersonnelDetails", b =>
                 {
-                    b.HasOne("DcProcurement.Attachment", "CV")
-                        .WithMany()
-                        .HasForeignKey("CVId");
-
-                    b.HasOne("DcProcurement.Attachment", "Certificate")
-                        .WithMany()
-                        .HasForeignKey("CertificateId");
-
                     b.HasOne("DcProcurement.CompanyInfo", "CompanyInfo")
                         .WithMany("PersonnelDetails")
                         .HasForeignKey("CompanyInfoId");
-
-                    b.HasOne("DcProcurement.Attachment", "Passport")
-                        .WithMany()
-                        .HasForeignKey("PassportId");
                 });
 
             modelBuilder.Entity("DcProcurement.ProcurementItem", b =>
@@ -1614,7 +1604,8 @@ namespace BsslProcurement.Migrations
                     b.HasOne("DcProcurement.CompanyInfo", "CompanyInfo")
                         .WithMany("PrequalificationJobs")
                         .HasForeignKey("CompanyInfoId")
-                        .OnDelete(DeleteBehavior.Cascade);
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.HasOne("DcProcurement.Staff", null)
                         .WithMany("AssignedPrequalificationJobs")
