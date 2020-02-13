@@ -3,11 +3,25 @@
 @{
     ViewData["Title"] = "Prequalification";
 }
+
+@section Styles{
+
+    <link rel="stylesheet" href="~/css/thankyou.css" />
+}
 @if (!string.IsNullOrWhiteSpace(Model.Message))
 {
-    <div class="alert alert-success alert-dismissable fade show">
-        <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-        @Model.Message
+    @*<div class="alert alert-success alert-dismissable fade show">
+            <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+            @Model.Message
+        </div>*@
+
+    <div class="thank-you-pop">
+        <img src="~/images/Green-Round-Tick.png" alt="">
+        <h1>Thank You!</h1>
+        <p>Your submission has been received and we will contact you soon</p>
+        <h3 class="cupon-pop">Your Login Username: <span>@Model.LoginModel.Email</span></h3>
+        <h3 class="cupon-pop">Your Login Password: <span>@Model.LoginModel.Password</span></h3>
+
     </div>
 }
 @if (!string.IsNullOrWhiteSpace(Model.Error))
@@ -19,9 +33,14 @@
 }
 
 
+
 @*@if (Model.CategoryCount != null)
-    //checks if the number of category has ale=ready been setup
-{*@
+        //checks if the number of category has ale=ready been setup
+    {*@
+
+@if (string.IsNullOrWhiteSpace(Model.Message))
+{
+
     <div class="row mt-5">
         <div class="col-md-1"></div>
         <div class="col-md-10">
@@ -45,7 +64,7 @@
                     <div class="col-sm-6">
                         <div class="form-group">
                             <label>Registration No </label>
-                            <input class="form-control" asp-for="CompanyInfo.CompanyRegNo" placeholder="Enter Resgistration Number" />
+                            <input class="form-control" asp-for="CompanyInfo.CompanyRegNo" placeholder="Enter Company Registration Number" />
                         </div>
                     </div>
                     <div class="col-sm-6">
@@ -63,22 +82,10 @@
                     <div class="col-sm-6">
                         <div class="form-group">
                             <label>Email Address</label>
-                            <input class="form-control" asp-for="CompanyInfo.Email" placeholder="Enter ONE(1) Email Address" />
+                            <input class="form-control" asp-for="CompanyInfo.CompanyEmail" placeholder="Enter ONE(1) Email Address" />
                         </div>
                     </div>
-                    <div class="col-sm-6">
-                        <div class="form-group">
-                            <label>Password</label>
-                            @* TODO move password to identity *@
-                            <input class="form-control" passwordTxt="password" asp-for="CompanyInfo.Password" type="password" placeholder="Enter Password" />
-                        </div>
-                    </div>
-                    <div class="col-sm-6">
-                        <div class="form-group">
-                            <label>Confirm Password</label>
-                            <input class="form-control" passwordTxt="passwordConfirm" type="password" placeholder="Repeat Password" />
-                        </div>
-                    </div>
+
                     <div class="col-sm-12">
                         <div class="form-group">
                             <label>Company Address </label>
@@ -88,7 +95,7 @@
                     <div class="col-sm-12">
                         <div class="form-group">
                             <label>Country</label>
-                            <select id="country" asp-for="CompanyInfo.Country" name="country">
+                            <select id="country" class="form-control" asp-for="CompanyInfo.Country">
                                 <option value="Afganistan">Afghanistan</option>
                                 <option value="Albania">Albania</option>
                                 <option value="Algeria">Algeria</option>
@@ -359,13 +366,13 @@
                     <div class="col-sm-12">
                         <div class="form-group">
                             <label>Fax Number</label>
-                            <input class="form-control" asp-for="CompanyInfo.FaxNumber" placeholder="Enter Postal Address" />
+                            <input class="form-control" asp-for="CompanyInfo.FaxNumber" placeholder="Enter Fax Number" />
                         </div>
                     </div>
                     <div class="col-sm-12">
                         <div class="form-group">
                             <label>Company Website</label>
-                            <input class="form-control" asp-for="CompanyInfo.CompanyWebsite" placeholder="Enter Postal Address" />
+                            <input class="form-control" asp-for="CompanyInfo.CompanyWebsite" placeholder="Enter Company Website" />
                         </div>
                     </div>
                     <div class="col-sm-6">
@@ -389,32 +396,62 @@
                             <label>Ownership Structure</label>
                             <select id="ownershipSt" class="form-control" asp-for="CompanyInfo.OwnershipStructure">
                                 <option>--Select--</option>
-                                <option value="1">Corporation</option>
-                                <option value="2">Partnership</option>
-                                <option value="3">Individual</option>
-                                <option value="4">Subsidiary</option>
+                                <option value="Corporation">Corporation</option>
+                                <option value="Partnership">Partnership</option>
+                                <option value="Individual">Individual</option>
+                                <option value="Subsidiary">Subsidiary</option>
                             </select>
                         </div>
                     </div>
                     <div class="col-sm-6">
-                        <div class="form-group">
+                        <div id="parentCompany" style="display: none;" class="form-group">
                             <label>Name Of Parent Company</label>
                             <input class="form-control" asp-for="CompanyInfo.ParentCompanyName" />
                         </div>
                     </div>
-                        <div class="col-sm-6">
-                            <div class="form-group">
-                                <label>Date of Establishment</label>
-                                <input class="form-control" asp-for="CompanyInfo.DateEstablishment" />
-                            </div>
-                        </div>
-                        <div class="col-sm-6">
-                            <div class="form-group">
-                                <label>Tax Identification Number (TIN)</label>
-                                <input class="form-control" placeholder="Enter Tax Identification Number" asp-for="CompanyInfo.TIN" />
-                            </div>
+                    <div class="col-sm-6">
+                        <div class="form-group">
+                            <label>Date of Establishment</label>
+                            <input class="form-control" asp-for="CompanyInfo.DateEstablishment" />
                         </div>
                     </div>
+                    <div class="col-sm-6">
+                        <div class="form-group">
+                            <label>Tax Identification Number (TIN)</label>
+                            <input class="form-control" placeholder="Enter Tax Identification Number" asp-for="CompanyInfo.TIN" />
+                        </div>
+                    </div>
+                    <div class="col-sm-12">
+                        <label class="form-control-plaintext">Do you have a Quality Assurance/HSE System In Place</label>
+                        <div class="form-check-inline">
+                            <input type="radio" class="form-check-input" id="radHSENo" asp-for="CompanyInfo.HasHSE" value="false" checked />
+                            <label class="form-check-label" for="radHSENo">
+                                No
+                            </label>
+                        </div>
+                        <div class="form-check-inline">
+                            <input type="radio" class="form-check-input" id="radHSEYes" asp-for="CompanyInfo.HasHSE" value="true" />
+                            <label class="form-check-label" for="radHSEYes">
+                                Yes
+                            </label>
+                        </div>
+                    </div>
+                    <div class="col-sm-12">
+                        <label class="form-control-plaintext">Do you have the Nigeria Content Equipment Certificate (NCEC)</label>
+                        <div class="form-check-inline">
+                            <input type="radio" class="form-check-input" id="radNCECNo" asp-for="CompanyInfo.HasNCEC" value="false" checked />
+                            <label class="form-check-label" for="radNCECNo">
+                                No
+                            </label>
+                        </div>
+                        <div class="form-check-inline">
+                            <input type="radio" class="form-check-input" id="radNCECYes" asp-for="CompanyInfo.HasNCEC" value="true" />
+                            <label class="form-check-label" for="radNCECYes">
+                                Yes
+                            </label>
+                        </div>
+                    </div>
+                </div>
 
 
                 <div class="row">
@@ -451,11 +488,136 @@
                     </div>
                 </div>
 
+                <div class="row">
+                    <div class="col-12">
+                        <h3 class="h3 bg-primary text-white px-3 py-1 mt-2 rounded">
+                            Login details
+                        </h3>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-sm-6">
+                        <div class="form-group">
+                            <label>Login Username/Email</label>
+                            <input class="form-control" asp-for="LoginModel.Email" placeholder="Enter Email for login purposes" />
+                        </div>
+                    </div>
+                    <div class="col-sm-6">
+
+                    </div>
+                    <div class="col-sm-6">
+                        <div class="form-group">
+                            <label>Password</label>
+                            <input class="form-control" passwordTxt="password" asp-for="LoginModel.Password" type="password" placeholder="Enter Password" />
+                        </div>
+                    </div>
+                    <div class="col-sm-6">
+                        <div class="form-group">
+                            <label>Confirm Password</label>
+                            <input class="form-control" passwordTxt="passwordConfirm" type="password" placeholder="Repeat Password" />
+                        </div>
+                    </div>
+
+                </div>
+
+
 
                 <div class="row">
                     <div class="col-12">
                         <h3 class="h3 bg-primary text-white px-3 py-1 mt-2 rounded">
-                            Category of Contract for Prequalification
+                            Financial Information
+                        </h3>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-sm-6">
+                        <div class="form-group">
+                            <label>Current Turnover</label>
+                            <input class="form-control" asp-for="CompanyInfo.CurrentTurnover" type="number" />
+                        </div>
+                    </div>
+                    <div class="col-sm-6">
+                        <div class="form-group">
+                            <label>Current Net Profit</label>
+                            <input class="form-control" asp-for="CompanyInfo.CurrentNetProfit" type="number" />
+                        </div>
+                    </div>
+                    <div class="col-sm-6">
+                        <div class="form-group">
+                            <label>Current Net Asset</label>
+                            <input class="form-control" asp-for="CompanyInfo.CurrentNetAsset" type="number" />
+                        </div>
+                    </div>
+                    <div class="col-sm-6">
+                        <div class="form-group">
+                            <label>Number Of Employees</label>
+                            <input class="form-control" asp-for="CompanyInfo.NumberOfEmployees" type="number" />
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-12">
+                        <h3 class="h3 bg-primary text-white px-3 py-1 mt-2 rounded">
+                            Banking Information
+                        </h3>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-sm-6">
+                        <div class="form-group">
+                            <label>Bank Code</label>
+                            <input class="form-control" asp-for="CompanyInfo.BankCode" type="number" />
+                        </div>
+                    </div>
+                    <div class="col-sm-6">
+                        <div class="form-group">
+                            <label>Bank Code</label>
+                            <input class="form-control" asp-for="CompanyInfo.BankCode" type="number" />
+                        </div>
+                    </div>
+                    <div class="col-sm-6">
+                        <div class="form-group">
+                            <label>Branch Code</label>
+                            <input class="form-control" asp-for="CompanyInfo.BranchCode" type="number" />
+                        </div>
+                    </div>
+                    <div class="col-sm-6">
+                        <div class="form-group">
+                            <label>Branch Sort Code</label>
+                            <input class="form-control" asp-for="CompanyInfo.BankSortCode" type="number" />
+                        </div>
+                    </div>
+                    <div class="col-sm-6">
+                        <div class="form-group">
+                            <label>Account Type</label>
+                            <select class="form-control" asp-for="CompanyInfo.AccountType">
+                                <option>-- Select --</option>
+                                <option value="Savings">Savings</option>
+                                <option value="Current">Current</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="col-sm-6">
+                        <div class="form-group">
+                            <label>Account Number</label>
+                            <input class="form-control" asp-for="CompanyInfo.AccountNumber" type="number" />
+                        </div>
+                    </div>
+                    <div class="col-sm-6">
+                        <div class="form-group">
+                            <label>BVN</label>
+                            <input class="form-control" asp-for="CompanyInfo.BVN" type="number" />
+                        </div>
+                    </div>
+                </div>
+
+
+                <div class="row">
+                    <div class="col-12">
+                        <h3 class="h3 bg-primary text-white px-3 py-1 mt-2 rounded">
+                            Prequalification Criteria
                         </h3>
                     </div>
                 </div>
@@ -508,58 +670,27 @@
                             </thead>
                             <tbody id="table_docs">
 
-                                @*<tr>
-                                        <td>(1) <input type="hidden"  asp-for="DocImages[0].Id" value="1"/></td>
-                                        <td><input type="file" class="form-control-file" asp-for="DocImages[0].Image" /></td>
-                                    </tr>*@
-                            </tbody>
-                        </table>
-                    </div>
-                </div>
-
-                <div class="row">
-                    <div class="col-12">
-                        <h3 class="h3 bg-primary text-white px-3 py-1 mt-2 rounded">
-                            Experience Record
-                        </h3>
-                    </div>
-                </div>
-                <div class="row">
-                    <div class="col-12">
-                        <table class="table table-responsive table-striped">
-                            <thead>
-                                <tr class="table-primary">
-                                    <th>S/N</th>
-                                    <th>Client Name</th>
-                                    <th>Client Address</th>
-                                    <th>Project Description</th>
-                                    <th>Start Date</th>
-                                    <th>Completion Date</th>
-                                    <th>Contact Person</th>
-                                    <th>Phone Number</th>
+                                <tr>
+                                    <td>(1) </td>
+                                    <td>Company Profile </td>
+                                    <td><input type="file" class="form-control-file" asp-for="CompanyProfile" /></td>
                                 </tr>
-                            </thead>
-                            <tbody id="experienceTbody">
-                                @for (int i = 0; i < 1; i++)
-                                {
-                                    <tr>
-                                        <td>@(i + 1)</td>
-                                        <td><input type="text" class="form-control" asp-for="ExperienceRecords[i].Name" /></td>
-                                        <td><input type="text" class="form-control" asp-for="ExperienceRecords[i].Address" /></td>
-                                        <td><input type="text" class="form-control" asp-for="ExperienceRecords[i].ProjectDescription" /></td>
-                                        <td><input type="date" class="form-control" asp-for="ExperienceRecords[i].StartDate" /></td>
-                                        <td><input type="date" class="form-control" asp-for="ExperienceRecords[i].CompletionDate" /></td>
-                                        <td><input type="text" class="form-control" asp-for="ExperienceRecords[i].ContactPerson" /></td>
-                                        <td><input type="text" class="form-control" asp-for="ExperienceRecords[i].PhoneNumber" /></td>
-                                    </tr>
-                                }
+                                <tr>
+                                    <td>(2) </td>
+                                    <td>Certificate of Incorporation  </td>
+                                    <td><input type="file" class="form-control-file" asp-for="CertificateOfIncorporation" /></td>
+                                </tr>
+                                <tr>
+                                    <td>(3) </td>
+                                    <td>Tax Registration Certificate</td>
+                                    <td><input type="file" class="form-control-file" asp-for="TaxCertificate" /></td>
+                                </tr>
                             </tbody>
                         </table>
-
-                        <input id="experienceLastIndex" type="hidden" value="0">
-                        <button id="btnAddMoreExperience" class=""> Add More</button>
                     </div>
                 </div>
+
+
 
 
                 <div class="row">
@@ -641,11 +772,43 @@
                     </div>
                 </div>
 
+
+
+                <div class="row">
+                    <div class="col-12">
+                        <h3 class="h3 bg-primary text-white px-3 py-1 mt-2 rounded">
+                            Authorization And Signature
+                        </h3>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-6">
+                        <div class="form-group">
+                            <label>Authorized Name</label>
+                            <input asp-for="CompanyInfo.AuthorizedName" />
+                        </div>
+                    </div>
+                    <div class="col-6">
+                        <div class="form-group">
+                            <label>Authorized Designation</label>
+                            <input asp-for="CompanyInfo.AuthorizedDesignation" />
+                        </div>
+                    </div>
+                    <div class="col-6">
+                        <div class="form-group">
+                            <label>Authorized Date</label>
+                            <input asp-for="CompanyInfo.AuthorizedDate" />
+                        </div>
+                    </div>
+
+                </div>
+
                 <div class="col-12 mt-4">
                     <div class="form-group">
                         <div class="row">
                             <div class="col-sm-4 text-center">
-                                <button type="submit" id="save" class="btn btn-outline-primary">Save for Later</button>
+                               @* <button type="submit" id="save" class="btn btn-outline-primary">Save for Later</button>*@
                             </div>
                             <div class="col-sm-4">
                                 <button type="submit" id="submit" class="btn form-btn">Submit</button>
@@ -662,6 +825,7 @@
             <hr />
         </div>
     </div>
+}
 
 
 <script src="~/js/StatenLGA.js"></script>
@@ -671,9 +835,9 @@
     $(document).ready(function () {
 
         //confirm password
-        $('#submit').on('click', function () {          
-           
-            if (!($('[passwordTxt=passwordConfirm]').val() ==  $('[passwordTxt="password"]').val())) {
+        $('#submit').on('click', function () {
+
+            if (!($('[passwordTxt=passwordConfirm]').val() == $('[passwordTxt="password"]').val())) {
                 alert("Password is not the same");
                 return false;
             }
@@ -681,9 +845,13 @@
 
         //ownership select option
         $('#ownershipSt').on('change', function () {
+            var selectedValue = $("#ownershipSt").val();
 
-           // var cntrl = this.value;
-
+            if (selectedValue == "Subsidiary") {
+                $("#parentCompany").show(500);
+            } else {
+                $("#parentCompany").hide(500);
+            }
             return false;
         });
 
@@ -777,7 +945,7 @@
                     listCatsId.push(id);
                 }
 
-              }
+            }
         }
 
 
@@ -788,12 +956,12 @@
 
         //show docs div
         $('#ShowDocs').show(1000);
-       // console.log(listCatsId);
+        // console.log(listCatsId);
 
     }
 
     //
-    function addDocFields(counter,pscid, CriId, isDoc, mval,desc ) {
+    function addDocFields(counter, pscid, CriId, isDoc, mval, desc) {
         if (isDoc) {
             //requires a file
 
@@ -824,15 +992,15 @@
             var control = '<tr><td>' + counter + 1 + '</td><td>' + desc +
                 '</td><td><input id="SubmittedCriterias_' + counter +
                 '__Value" name="SubmittedCriterias[' + counter +
-                '].Value" type="text" class="form-control" value='+mVal+' /></td></tr>';
+                '].Value" type="text" class="form-control" value=' + mVal + ' /></td></tr>';
 
 
             //hidden field to store the id
             var hidControl = '<tr><td><input id="DocsList_' + counter +
                 '_Id" name="DocsList[' + counter +
-                '].Id" type="hidden" value='+CriId+' /></td></tr>';
+                '].Id" type="hidden" value=' + CriId + ' /></td></tr>';
 
-           $('#table_docs').append(control);
+            $('#table_docs').append(control);
             $('#table_docs').append(hidControl);
         }
     }
@@ -845,10 +1013,10 @@
         //var tes = [1, 2, 3];
         //console.log(tes);
         $.ajax({
-            contentType:'application/json; charset=utf-8',
-            url: baseUrl + '/api/SubCategoryCriterias/ListSubCategoryCriteria' ,
+            contentType: 'application/json; charset=utf-8',
+            url: baseUrl + '/api/SubCategoryCriterias/ListSubCategoryCriteria',
             data: { ids: listInt },
-           traditional:true,
+            traditional: true,
             type: 'get',
             xhrFields: {
                 withCredentials: true
@@ -895,7 +1063,7 @@
 
                         $('#ddlSelectCategory_' + counter).append($('<option>').text(obj.name).attr('value', obj.value));
                     });
-                   // console.log(result);
+                    // console.log(result);
 
                 } else {
 
@@ -907,7 +1075,7 @@
                 // alert('Done');
                 console.log(error);
             });
-        }
+    }
 
     function displayLGA() {
         var selVal = $('.states').val();
@@ -925,7 +1093,7 @@
 
             var o = new Option(locals[i].name, locals[i].name);
             $(o).html(locals[i].name);
-                $(".lgas").append(o);
+            $(".lgas").append(o);
 
         }
     }
