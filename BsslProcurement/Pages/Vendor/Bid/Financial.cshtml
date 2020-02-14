@@ -1,11 +1,11 @@
 ﻿@page
-@model BsslProcurement.TechnicalModel
+@model BsslProcurement.FinancialModel
 @{
-    ViewData["Title"] = "Technical";
+    ViewData["Title"] = "Financial";
     Layout = "~/Pages/Shared/_VendorBidProcessLayout.cshtml";
 }
 
-<h2>Technical Bid</h2>
+<h2>Financial</h2>
 <form>
     <div class="container-fluid">
         <div class="row">
@@ -78,7 +78,7 @@
                             <td></td>
                             <td></td>
                             <td>
-                                <a asp-page="/Vendor/Bid/TechnicalBidForm" class="btn btn-outline-primary">View Technical Bid</a>
+                                <a asp-page="/Vendor/Bid/FinancialBidForm" class="btn btn-outline-primary">View Financial Bid</a>
                             </td>
                         </tr>
                     </tbody>
@@ -92,3 +92,4 @@
         </div>
     </div>
 </form>
+

@@ -1,50 +1,42 @@
 ﻿@page
-@model BsslProcurement.TechnicalModel
+@model BsslProcurement.InquiryModel
 @{
-    ViewData["Title"] = "Technical";
+    ViewData["Title"] = "Inquiry";
     Layout = "~/Pages/Shared/_VendorBidProcessLayout.cshtml";
 }
 
-<h2>Technical Bid</h2>
+<h2>Inquiry</h2>
+
 <form>
     <div class="container-fluid">
         <div class="row">
 
             <div class="form-inline col-12 border rounded justify-content-around pt-2">
 
-                <div class="input-group input-group-sm mb-2 mr-sm-2">
+                <div class="input-group mb-2 mr-sm-2">
                     <div class="input-group-prepend">
-                        <label class="input-group-text">eFRx No</label>
+                        <label class="input-group-text">Select Inquiry</label>
                     </div>
-                    <input type="text" class="form-control" />
+                    <select class="form-control">
+                        <option>Open</option>
+                        <option>Closed</option>
+                        <option>All</option>
+                    </select>
                 </div>
 
-                <div class="input-group input-group-sm mb-2 mr-sm-2">
+                <div class="input-group mb-2 mr-sm-2">
                     <div class="input-group-prepend">
-                        <label class="input-group-text">Category</label>
+                        <label class="input-group-text">Sort by</label>
                     </div>
-                    <input type="text" class="form-control" />
+                    <select class="form-control">
+                        <option>Technical</option>
+                        <option>Financial</option>
+                        <option>Both</option>
+                    </select>
                 </div>
 
-                <div class="input-group input-group-sm mb-2 mr-sm-2">
-                    <div class="input-group-prepend">
-                        <label class="input-group-text">Status</label>
-                    </div>
-                    <input type="text" class="form-control" />
-                </div>
-
-                <div class="input-group input-group-lg mb-2 mr-sm-2">
-                    <div class="input-group-prepend">
-                        <label class="input-group-text">Project Title</label>
-                    </div>
-                    <input type="text" class="form-control" />
-                </div>
-
-                <div class="input-group input-group-sm mb-2 mr-sm-2">
-                    <div class="input-group-prepend">
-                        <label class="input-group-text">No of Line item</label>
-                    </div>
-                    <input type="text" class="form-control" />
+                <div class="input-group mb-2 mr-sm-2">
+                    <button class="btn btn-default">25</button>
                 </div>
             </div>
 
@@ -62,7 +54,8 @@
                             <th>Budget Year</th>
                             <th>Start Date</th>
                             <th>End Date</th>
-                            <th>Bid</th>
+                            <th>Technical Bid</th>
+                            <th>Financial Bid</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -78,7 +71,10 @@
                             <td></td>
                             <td></td>
                             <td>
-                                <a asp-page="/Vendor/Bid/TechnicalBidForm" class="btn btn-outline-primary">View Technical Bid</a>
+                                <a asp-page="/Vendor/Bid/TechnicalBidForm" class="btn btn-outline-primary">Open</a>
+                            </td>
+                            <td>
+                                <a asp-page="/Vendor/Bid/FinancialBidForm" class="btn btn-outline-primary">Open</a>
                             </td>
                         </tr>
                     </tbody>
