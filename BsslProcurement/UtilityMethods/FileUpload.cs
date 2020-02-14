@@ -18,37 +18,56 @@ namespace BsslProcurement.UtilityMethods
         /// <param name="_environment"></param>
         /// <param name="folder">storage folder</param>
         /// <returns></returns>
-        public static async Task<List<Attachment>> GetFilePathsFromMultipleFileListAsync(List<IFormFile> files, IHostingEnvironment _environment, string folder)
+        public static async Task<List<Attachment>> GetFilePathsFromMultipleFileListAsync(List<IFormFile> files, IWebHostEnvironment _environment, string folder)
         {
+            if (files == null)
+            {
+                return null;
+            }
             var filePaths = new List< Attachment>();
 
             var folderPath = Path.Combine(_environment.WebRootPath, folder);
             Directory.CreateDirectory(folderPath);
-            foreach (var file in files)
-            {               
-               
-                using (var fileStream = new FileStream(Path.Combine( folderPath,file.FileName), FileMode.Create))
+            try
+            {
+
+                foreach (var file in files)
                 {
-                    await file.CopyToAsync(fileStream);
+
+                    using (var fileStream = new FileStream(Path.Combine(folderPath, file.FileName), FileMode.Create))
+                    {
+                        await file.CopyToAsync(fileStream);
+                    }
+                    filePaths.Add(new Attachment { FilePath = file.FileName });
                 }
-                filePaths.Add(new Attachment { FilePath =  file.FileName});
-
             }
+            catch (FileNotFoundException)
+            {
+                throw new FileNotFoundException("File not found");
+            }
+            catch (Exception ex)
+            {
 
+                throw new Exception("An error ocurred.  " + ex.Message);
+            }
             return filePaths;
         }
         public static async Task<Attachment> GetFilePathsFromFileAsync(IFormFile file, IWebHostEnvironment _environment, string folder)
         {
+            if (file == null)
+            {
+                return null;
+            }
+
             var folderPath = Path.Combine(_environment.WebRootPath, folder);
             Directory.CreateDirectory(folderPath);
 
             try
             {
 
-                using (var fileStream = new FileStream(Path.Combine(folderPath, file.FileName), FileMode.Create))
-                {
-                    await file.CopyToAsync(fileStream);
-                }
+                using var fileStream = new FileStream(Path.Combine(folderPath, file.FileName), FileMode.Create);
+
+                await file.CopyToAsync(fileStream);
             }
             catch (FileNotFoundException)
             {

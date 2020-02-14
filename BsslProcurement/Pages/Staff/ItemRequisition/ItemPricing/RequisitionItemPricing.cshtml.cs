@@ -19,6 +19,7 @@ namespace BsslProcurement.Pages.Staff.ItemRequisition
     {
         public readonly ProcurementDBContext context;
         private readonly IRequisitionService _requisitionService;
+        private readonly IProcurementService _procurementService;
 
         public string Message { get; set; }
         public string Error { get; set; }
@@ -31,11 +32,12 @@ namespace BsslProcurement.Pages.Staff.ItemRequisition
         public WorkFlowApproverViewModel WfVm { get; set; }
 
         private readonly DcProcurement.Contexts.BSSLSYS_ITF_DEMOContext bsslContext;
-        public RequisitionItemPricingModel(ProcurementDBContext _context, DcProcurement.Contexts.BSSLSYS_ITF_DEMOContext _bsslContext, IRequisitionService requisitionService)
+        public RequisitionItemPricingModel(ProcurementDBContext _context, DcProcurement.Contexts.BSSLSYS_ITF_DEMOContext _bsslContext, IRequisitionService requisitionService, IProcurementService procurementService)
         {
             bsslContext = _bsslContext;
             context = _context;
             _requisitionService = requisitionService;
+            _procurementService = procurementService;
         }
 
         public async Task LoadDataAsync(int id)
@@ -43,7 +45,7 @@ namespace BsslProcurement.Pages.Staff.ItemRequisition
             Requisition = context.Requisitions.Include(y => y.RequisitionItems).FirstOrDefault(k => k.Id == id);
 
             //load workflow of requisition
-            WfVm = await _requisitionService.GetCurrentWorkFlowOFRequisition(Requisition);
+            WfVm = await _procurementService.GetCurrentWorkFlowOFRequisition(Requisition);
 
 
 
@@ -51,19 +53,19 @@ namespace BsslProcurement.Pages.Staff.ItemRequisition
 
             VendorEmailListObj.VendorWithEmailList = VendorEmailListObj.GetVendorWithEmailList(bsslContext.Accusts.ToList());
         }
-        public void OnGet(int id)
+        public async Task OnGet(int id)
         {
-            LoadDataAsync(id);
+           await  LoadDataAsync(id);
         }
 
 
-        public void OnPost(int id)
+        public async Task OnPost(int id)
         {
             if (ModelState.IsValid)
             {
 
             }
-            LoadDataAsync(id);
+            await LoadDataAsync(id);
         }
 
         public PartialViewResult OnGetItemPartial()

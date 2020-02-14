@@ -1,14 +1,18 @@
-﻿using DcProcurement;
+﻿using BsslProcurement.Const;
+using BsslProcurement.UtilityMethods;
+using DcProcurement;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.AspNetCore.Mvc.Rendering;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using MoreLinq;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
@@ -16,7 +20,14 @@ using System.Threading.Tasks;
 namespace BsslProcurement.Pages.Vendor
 {
     //TODO: Cheeck for errors if any returned entity doesnt and display error meesage
-
+    public class PersonnelDetailInput
+    {
+        public string Name { get; set; }
+        public string Qualification { get; set; }
+        public IFormFile CVFile { get; set; }
+        public IFormFile CertFile { get; set; }
+        public IFormFile PassportFile { get; set; }
+    }
     public class DocsModel
     {
         public int Id { get; set; }
@@ -25,7 +36,12 @@ namespace BsslProcurement.Pages.Vendor
         public string FileName { get; set; }
         public string Value { get; set; }
     }
-
+    public class LoginModel
+    {
+        public string Email { get; set; }
+        [Required]       
+        public string Password { get; set; }
+    }
     public class PrequalificationModel : PageModel
     {
         private readonly ProcurementDBContext _context;
@@ -34,13 +50,9 @@ namespace BsslProcurement.Pages.Vendor
         private readonly ILogger<PrequalificationModel> _logger;
         private readonly UserManager<User> _userManager;
 
-        public readonly IHostingEnvironment _hostingEnvironment;
+        private readonly IWebHostEnvironment _hostingEnvironment;
 
-        public PrequalificationModel(ProcurementDBContext context,
-                                    IHostingEnvironment hostingEnvironment,
-                                    UserManager<User> userManager,
-                                    SignInManager<User> signInManager,
-                                    ILogger<PrequalificationModel> logger)
+        public PrequalificationModel(ProcurementDBContext context, IWebHostEnvironment hostingEnvironment,                           UserManager<User> userManager, SignInManager<User> signInManager, ILogger<PrequalificationModel> logger)
         {
             _context = context;
             _hostingEnvironment = hostingEnvironment;
@@ -48,7 +60,14 @@ namespace BsslProcurement.Pages.Vendor
             _signInManager = signInManager;
             _logger = logger;
         }
-
+        [BindProperty]
+        public LoginModel LoginModel { get; set; }
+        [BindProperty]
+        public IFormFile CompanyProfile { get; set; }
+        [BindProperty]
+        public IFormFile CertificateOfIncorporation { get; set; }
+        [BindProperty]
+        public IFormFile TaxCertificate { get; set; }
         [BindProperty]
         public List<DocsModel> DocsList { get; set; }
 
@@ -70,35 +89,33 @@ namespace BsslProcurement.Pages.Vendor
         [BindProperty]
         public List<CompanyInfoProcurementSubCategory> SelectedSubcategories { get; set; }
 
-        public class PersonnelDetailInput
-        {
-            public string Name { get; set; }
-            public string Qualification { get; set; }
-            public IFormFile CVFile { get; set; }
-            public IFormFile CertFile { get; set; }
-            public IFormFile PassportFile { get; set; }
-        }
+        
 
         public string Message { get; set; }
         public string Error { get; set; }
         public int? CategoryCount { get; set; }
 
-        [BindProperty]
-        public List<int> subCatsId { get; set; }
+        //[BindProperty]
+        //public List<int> subCatsId { get; set; }
 
-        public void OnGet()
+        public IActionResult OnGet()
         {
             // gets the number of categories from the setup page
+            LoadData();
+            return Page();
+        }
+
+        private void LoadData()
+        {
             var setup = _context.PrequalificationPolicies.FirstOrDefault();
             if (setup == null)
             {
-                Error = "Prequalification has not yet started";
+                //Error = "Prequalification has not yet started";
                 return;
             }
             CategoryCount = setup.NoOfCategory;
 
             GetCategories();
-
         }
 
         public async Task<IActionResult> OnPostAsync()
@@ -107,14 +124,10 @@ namespace BsslProcurement.Pages.Vendor
 
             if (!ModelState.IsValid)
             {
-                Message = "No of personnel = " + PersonnelDetailIntputs.Count;
-                CategoryCount = _context.PrequalificationPolicies.FirstOrDefault().NoOfCategory;
-                GetCategories();
+                LoadData();
                 return Page();
             }
 
-            //sets date of creation
-            CompanyInfo.CreationDate = DateTime.Now;
 
             //saves company to db
             _context.CompanyInfo.Add(CompanyInfo);
@@ -132,25 +145,48 @@ namespace BsslProcurement.Pages.Vendor
 
             AddPersonnelDetailsToDB(PersonnelDetailIntputs, CompanyInfo.Id);
 
-            AddPrequalificationJob(CompanyInfo.Id);
-
-            AddCompanyToJobs(CompanyInfo.Id);
+           await AddPrequalificationJob(CompanyInfo.Id);
+            
+            //saves tax, incorporation cert docs
+            await SaveAttachements();
 
             await _context.SaveChangesAsync();
 
             var rtn = await SignUpUserAsync(CompanyInfo);
+
             if (rtn == "error")
             {
                 Error = "An Error occured!";
                 return Page();
             }
-            CompanyInfo.VendorId = rtn.Replace("userId=", "");
+
+
+            CompanyInfo.VendorId = rtn.Replace("userId=", "", StringComparison.Ordinal);
 
             await _context.SaveChangesAsync();
 
             Message = "Your Information has been successfully uploaded";
 
             return null; //change to redirect location
+        }
+
+        private async Task SaveAttachements()
+        {
+            //upload company profile
+            var compProfile = await FileUpload.GetFilePathsFromFileAsync(CompanyProfile, _hostingEnvironment, ConstantVals.AttachmentFolder);
+
+            //upload company inc
+            var compInc = await FileUpload.GetFilePathsFromFileAsync(CertificateOfIncorporation, _hostingEnvironment, ConstantVals.AttachmentFolder);
+
+
+            //upload company tax
+            var compTax = await FileUpload.GetFilePathsFromFileAsync(TaxCertificate, _hostingEnvironment, ConstantVals.AttachmentFolder);
+
+
+            //save in db
+            CompanyInfo.CompanyProfile = compProfile;
+            CompanyInfo.CertificateOfIncorp = compInc;
+            CompanyInfo.TaxRegistration = compTax;
         }
 
         /// <summary>
@@ -168,17 +204,17 @@ namespace BsslProcurement.Pages.Vendor
                .ToList();
         }
 
-        private List<ProcurementSubcategory> GetSubCategories(List<int> ids)
-        {
-            var subCats = _context.ProcurementSubcategories.Where(p => ids.Contains(p.Id)).ToList();
+        //private List<ProcurementSubcategory> GetSubCategories(List<int> ids)
+        //{
+        //    var subCats = _context.ProcurementSubcategories.Where(p => ids.Contains(p.Id)).ToList();
 
-            if (subCats.Any())
-            {
-                return subCats;
-            }
+        //    if (subCats.Any())
+        //    {
+        //        return subCats;
+        //    }
 
-            return null;
-        }
+        //    return null;
+        //}
 
         //update docs model filenames
         private void GetImageFileName(List<DocsModel> formFiles, int id)
@@ -288,39 +324,29 @@ namespace BsslProcurement.Pages.Vendor
         /// </summary>
         /// <param name="personnelDetailInputs">list of custom personnel detail model</param>
         /// <param name="id">id of the company</param>
-        private void AddPersonnelDetailsToDB(List<PersonnelDetailInput> personnelDetailInputs, int id)
+        private async Task AddPersonnelDetailsToDB(List<PersonnelDetailInput> personnelDetailInputs, int id)
         {
             // string companyCode = "_" + id + "_";
             var pd = new List<PersonnelDetails>();
 
             foreach (var pdInput in personnelDetailInputs)
             {
-                var CertFileName = pdInput.CertFile.FileName;
-                var CvFileName = pdInput.CVFile.FileName;
-                var PassPortFileName = pdInput.PassportFile.FileName;
+                var ctAttcTask =  FileUpload.GetFilePathsFromFileAsync(pdInput.CertFile, _hostingEnvironment, ConstantVals.AttachmentFolder);
 
-                //get path for storing files
-                var uploads = Path.Combine(_hostingEnvironment.WebRootPath, "Personneldocs", id.ToString());
+                var cvAttcTask =  FileUpload.GetFilePathsFromFileAsync(pdInput.CVFile, _hostingEnvironment, ConstantVals.AttachmentFolder);
 
-                //checks if path exists, if not create it.
-                Directory.CreateDirectory(uploads);
+                var passAttcTask =  FileUpload.GetFilePathsFromFileAsync(pdInput.PassportFile, _hostingEnvironment, ConstantVals.AttachmentFolder);
 
-                //create file paths for docs
-                var CertfilePath = Path.Combine(uploads, CertFileName);
-                var CvfilePath = Path.Combine(uploads, CvFileName);
-                var PassPortfilePath = Path.Combine(uploads, PassPortFileName);
+                //wait for all file upload task to be finished
+               await Task.WhenAll(ctAttcTask, cvAttcTask, passAttcTask);
 
-                //save files to folder
-                pdInput.CertFile.CopyTo(new FileStream(CertfilePath, FileMode.Create));
-                pdInput.CVFile.CopyTo(new FileStream(CvfilePath, FileMode.Create));
-                pdInput.PassportFile.CopyTo(new FileStream(PassPortfilePath, FileMode.Create));
 
                 pd.Add(new PersonnelDetails
                 {
-                    Certificate = CertFileName,
-                    CV = CvFileName,
+                    Certificate = ctAttcTask.Result,
+                    CV = cvAttcTask.Result,
                     Name = pdInput.Name,
-                    Passport = PassPortFileName,
+                    Passport = passAttcTask.Result,
                     Qualification = pdInput.Qualification,
                     CompanyInfoId = id
                 });
@@ -333,13 +359,13 @@ namespace BsslProcurement.Pages.Vendor
         {
             var user = new VendorUser
             {
-                UserName = cp.Email,
-                Email = cp.Email,
+                UserName = LoginModel.Email,
+                Email = LoginModel.Email,
                 CreationDate = DateTime.Now,
                 PhoneNumber = cp.PhoneNumber
             };
 
-            var result = await _userManager.CreateAsync(user, cp.Password);
+            var result = await _userManager.CreateAsync(user, LoginModel.Password);
             if (result.Succeeded)
             {
                 _logger.LogInformation("Company created a new account with password.");
@@ -354,62 +380,24 @@ namespace BsslProcurement.Pages.Vendor
             return "error";
         }
 
-        public void AddPrequalificationJob(int companyID)
+        public async Task AddPrequalificationJob(int companyID)
         {
-            if (_context.Workflows.Where(m => m.WorkflowType.Name == "procurement").Any())
-            {
-                var wkflw = _context.Workflows.Where(m => m.WorkflowType.Name == "procurement").OrderBy(x => x.Step).First();
+            //get first prequalification workflow
+            var wrkf = await _context.Workflows.Where(m => m.WorkflowTypeId == Constants.PrequalificationWorkFlowId).Include(m=> m.Staffs).OrderBy(m=> m.Step).FirstOrDefaultAsync();
 
-                _context.PrequalificationJobs.Add(new PrequalificationJob
-                {
-                    CompanyInfoId = companyID,
-                   // CreationDate = DateTime.Now,
-                   // WorkFlowStep = 1,
-                });
-            }
-            else
+            if (wrkf != null)
             {
-                _context.PrequalificationJobs.Add(new PrequalificationJob
+                var stf = wrkf.Staffs.FirstOrDefault();
+                if (stf != null)
                 {
-                    CompanyInfoId = companyID,
-                    //CreationDate = DateTime.Now,
-                    //WorkFlowStep = 0,
-                });
+                    var compJob = new PrequalificationJob(companyID, stf.StaffId, wrkf.Id, "Please review new company profile");
+
+                    _context.PrequalificationJobs.Add(compJob);                    
+                }
+                
             }
+           
         }
 
-        /// <summary>
-        /// save company profile to new jobs
-        /// </summary>
-        /// <param name="company"></param>
-        public void AddCompanyToJobs(int companyID)
-        {
-            //get first workflowstep
-
-            //set job workflow step to 0 if no workflow exists
-
-            var wrkFlow = _context.Workflows.Where(m => m.WorkflowType.Name == "procurement").MinBy(x => x.Step).FirstOrDefault();
-
-            //if (wrkFlow.ToPersonOrAssign)
-            //{
-            //    _context.PrequalificationJobs.Add(new PrequalificationJob
-            //    {
-            //        CompanyInfoId = companyID,
-            //        CreationDate = DateTime.Now,
-            //        StaffId = wrkFlow.StaffId,
-            //        WorkFlowStep = wrkFlow.Step,
-            //    });
-            //}
-            //else
-            //{
-            //    _context.PrequalificationJobs.Add(new PrequalificationJob
-            //    {
-            //        CompanyInfoId = companyID,
-            //        CreationDate = DateTime.Now,
-            //        StaffId = wrkFlow.StaffId,
-            //        WorkFlowStep = 0,
-            //    });
-            //}
-        }
     }
 }

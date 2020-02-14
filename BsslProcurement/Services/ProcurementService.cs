@@ -121,5 +121,14 @@ namespace BsslProcurement.Services
 
             return null;
         }
+
+        public async Task<WorkFlowApproverViewModel> GetCurrentWorkFlowOFRequisition(Requisition requisition)
+        {
+            var job = await _procurementDBContext.ProcurementJobs.FirstOrDefaultAsync(x => x.RequisitionId == requisition.Id && x.JobStatus == Enums.JobState.NotDone);
+
+            var staffCode = await GetStaffCodeFromIdAsync(job.StaffId);
+
+            return new WorkFlowApproverViewModel { Remark = job.Remark, AssignedStaffCode = staffCode, WorkFlowTypeId = DcProcurement.Constants.RequisitionWorkflowId, WorkFlowId = job.WorkFlowId };
+        }
     }
 }

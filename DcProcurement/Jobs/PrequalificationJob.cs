@@ -6,7 +6,18 @@ namespace DcProcurement
 {
     public class PrequalificationJob : Job
     {
-        public int CompanyInfoId { get; set; }
+        private PrequalificationJob(){}
+
+        public PrequalificationJob(int compId, string staffId, int workflowId, string remark)
+        {
+            CompanyInfoId = compId;
+            CreationDate = DateTime.Now;
+            StaffId = staffId;
+            Remark = remark;
+            WorkFlowId = workflowId;
+            JobStatus = Enums.JobState.NotDone;
+        }
+        public int? CompanyInfoId { get; set; }
 
 
         public CompanyInfo CompanyInfo { get; set; }

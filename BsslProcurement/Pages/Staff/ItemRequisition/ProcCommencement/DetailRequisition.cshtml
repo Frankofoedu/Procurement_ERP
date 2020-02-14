@@ -1,5 +1,6 @@
 ﻿@page "{id:int}"
 @using BsslProcurement.UtilityMethods
+@using BsslProcurement.Const
 @model BsslProcurement.Pages.Staff.ItemRequisition.ProcCommencement.DetailRequisitionModel
 @{
     ViewData["Title"] = "DetailRequisition";
@@ -154,7 +155,7 @@ else
                             <div class="col-sm-4">
                                 <div class="form-group">
                                     <label>Procurement Method : </label>
-                                    <select class="form-control" asp-items="Constants.Constants.ProcurementMethod" required asp-for="Vm.ProcMethod">
+                                    <select class="form-control" asp-items="ConstantVals.ProcurementMethod" required asp-for="Vm.ProcMethod">
                                         <option value="">Select Procurement Type</option>
                                     </select>
                                 </div>

@@ -5,6 +5,11 @@
 
     <OpenApiGenerateDocuments>false</OpenApiGenerateDocuments>
   </PropertyGroup>
+
+  <ItemGroup>
+    <Compile Remove="Migrations\20200213093448_companyinfoUpdate.cs" />
+    <Compile Remove="Migrations\20200213093448_companyinfoUpdate.Designer.cs" />
+  </ItemGroup>
   <ItemGroup>
     <PackageReference Include="MailKit" Version="2.4.1" />
     <PackageReference Include="Microsoft.CodeAnalysis.FxCopAnalyzers" Version="2.9.8">

@@ -85,12 +85,10 @@ namespace BsslProcurement.Areas.VendorIdentity.Pages.Account
             if (!ModelState.IsValid) return Page();
 
 
-            var user = new Staff { UserName = Input.Email,
+            var user = new VendorUser { UserName = Input.Email,
                 Email = Input.Email,
                 CreationDate =DateTime.Now,
-                Name = Input.Name,
-                StaffCode = Input.StaffCode
-
+                
             };
 
             //add staff in the user acct table first
