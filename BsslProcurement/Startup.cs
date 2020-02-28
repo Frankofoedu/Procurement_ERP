@@ -51,18 +51,16 @@ namespace BsslProcurement
             string conn;
             //if (Env.IsDevelopment())
             //{
-                connection = @"Server=.\SQLEXPRESS;Database=DcProcurementTester;Trusted_Connection=True;ConnectRetryCount=0";
-                conn = @"Server =.\SQLEXPRESS; Database=BSSLSYS_ITF;Trusted_Connection=True;";
+                connection = Configuration.GetValue<string>("LocalProcurementTestConnection");
+                conn = Configuration.GetValue<string>("LocalITFTestConnection");
             //}
             //else
             //{
-                //connection = @"Data Source=WIN2016\BSSLDATAENGIN;Initial Catalog=DcProcurement;User ID=sa;Password=Bssl2019**;Integrated Security=False;
-                //  Trusted_Connection=True;ConnectRetryCount=0;MultipleActiveResultSets=true";
+            //connection = Configuration.GetValue<string>("OnlineProcurementTestConnection");
 
             //TODO: update to server connection
-                //conn = @"Data Source=WIN2016\BSSLDATAENGIN;Initial Catalog=DcProcITFTest;User ID=sa;Password=Bssl2019**;Integrated Security=False;
-                //  Trusted_Connection=True;ConnectRetryCount=0;MultipleActiveResultSets=true";
-           // }
+            //conn = Configuration.GetValue<string>("OnlineITFTestConnection");
+            // }
 
             services.AddDbContext<ProcurementDBContext>(options => options.UseSqlServer(connection, b => b.MigrationsAssembly("BsslProcurement")));
 
