@@ -68,10 +68,22 @@ namespace BsslProcurement.Pages.Staff.ItemRequisition
             _requisitionService = requisitionService;
         }
 
-        public async Task OnGetAsync()
+        public async Task<ActionResult> OnGetAsync(int? id)
         {
             try
-            {               
+            {
+                if (id != null)
+                {
+                    Requisition = _procContext.Requisitions.Include(x => x.RequisitionItems).ThenInclude(c => c.Attachment).FirstOrDefault( c => c.Id == id);
+                    
+                    if (Requisition == null)
+                    {
+                        Error = "No requisition found";
+                        return Page();
+                    }
+
+                    gridVm = await LoadGridViewItemsFromRequisition(Requisition, _environment);
+                }
                 await LoadData();
             }
             catch (Exception ex)
@@ -79,6 +91,7 @@ namespace BsslProcurement.Pages.Staff.ItemRequisition
                 Error = $"An error occured. Please contact Support. {ex.Message}";
             }
 
+            return Page();
         }
 
         public async Task<ActionResult> OnPostSubmitAsync()
@@ -115,7 +128,7 @@ namespace BsslProcurement.Pages.Staff.ItemRequisition
                 {
                     await SaveOrSubmitRequisition(false);
                     
-                    return RedirectToPage("SavedRequisition");
+                    return RedirectToPage("SavedRequisitions");
                 }
                 catch (Exception ex)
                 {
@@ -143,6 +156,33 @@ namespace BsslProcurement.Pages.Staff.ItemRequisition
             (PrNo, RequestingDeptCode, RequestingDept, Departments) = await GeneratePRNo(loggedInUserCode);
         }
 
+        private async Task<List<ItemGridViewModel>> LoadGridViewItemsFromRequisition(Requisition requisition, IWebHostEnvironment env)
+        {
+             FormFile CreateFormFile(string filename)
+            {
+              var fn = System.IO.Path.Combine(env.WebRootPath,filename);
+              
+                using var stream = System.IO.File.OpenRead(fn);
+                var file = new FormFile(stream, 0, stream.Length, null, Path.GetFileName(stream.Name))
+                {
+                    Headers = new HeaderDictionary(),
+                    ContentType = "application/pdf"
+                };
+
+                return file;
+            }
+
+            try
+            {
+
+                return requisition.RequisitionItems.Select(x => new ItemGridViewModel { RequisitionItem = x, Attachment = CreateFormFile(x.Attachment.FilePath) }).ToList();
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.Message);
+                throw;
+            }
+        }
         private async Task SaveOrSubmitRequisition(bool isSubmitted)
         {
             //save requisition items
