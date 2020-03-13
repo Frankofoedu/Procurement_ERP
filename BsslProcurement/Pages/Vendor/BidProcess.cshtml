@@ -1,0 +1,91 @@
+﻿@page
+@model BsslProcurement.BidProcessModel
+@{
+    ViewData["Title"] = "BidProcess";
+    Layout = "~/Pages/Shared/_VendorLayout.cshtml";
+}
+
+<div class="row mt-5">
+    <div class="col-md-12">
+        <div class="panel panel-login">
+            <div class="panel-heading">
+                <div class="row">
+                    <p class="header-text">Vendor Bid Application</p>
+                </div>
+                <hr>
+            </div>
+
+            <div class="container-fluid">
+                <div class="row">
+                    <div class="col-12">
+                        <ul class="nav nav-tabs justify-content-between" id="tabButtons">
+                            <li class="nav-item">
+                                <a href="#invitation" class="nav-link" data-toggle="tab">Invitation to Participate</a>
+                            </li>
+                            <li class="nav-item">
+                                <a href="#tnc" class="nav-link" data-toggle="tab">Terms and Conditions</a>
+                            </li>
+                            <li class="nav-item">
+                                <a href="#tech" class="nav-link" data-toggle="tab">Technical BID</a>
+                            </li>
+                            <li class="nav-item">
+                                <a href="#fin" class="nav-link" data-toggle="tab">Financial BID</a>
+                            </li>
+                            <li class="nav-item">
+                                <a href="#genInfo" class="nav-link" data-toggle="tab">General Information</a>
+                            </li>
+                            <li class="nav-item">
+                                <a href="#declaration" class="nav-link" data-toggle="tab">Declaration Statement</a>
+                            </li>
+                            <li class="nav-item">
+                                <a href="#confirm" class="nav-link" data-toggle="tab">Confirm Participation</a>
+                            </li>
+                            <li class="nav-item">
+                                <a href="#submit" class="nav-link" data-toggle="tab">Submit/Un-submit</a>
+                            </li>
+                            <li class="nav-item">
+                                <a href="#inquiry" class="nav-link" data-toggle="tab">Inquiry</a>
+                            </li>
+                            <li class="nav-item">
+                                <a href="#help" class="nav-link" data-toggle="tab">Help</a>
+                            </li>
+                            <li class="nav-item">
+                                <a href="#logout" class="nav-link" data-toggle="tab">Log Out</a>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="row mt-5 tab-content">
+                    <partial name="bidPartials/_invitePartial" />
+
+                    <partial name="bidPartials/_tncPartial" />
+
+                    <partial name="bidPartials/_techPartial" />
+
+                    <partial name="bidPartials/_finPartial" />
+
+                    <partial name="bidPartials/_genInfoPartial" />
+
+                    <partial name="bidPartials/_declarationPartial" />
+
+                    <partial name="bidPartials/_confirmPartial" />
+
+                    <partial name="bidPartials/_submitPartial" />
+
+                    <partial name="bidPartials/_inquiryPartial" />
+
+                </div>
+
+
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<script>
+    $(document).ready(function(){
+        $("#tabButtons a:first").tab('show'); // show last tab on page load
+    });
+</script>
