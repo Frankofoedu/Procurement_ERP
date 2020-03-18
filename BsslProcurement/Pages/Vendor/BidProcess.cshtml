@@ -41,20 +41,21 @@
                     </div>
                 </div>
 
-                <div class="row mt-5 tab-content">
-                    <partial name="bidPartials/_invitePartial" />
+                <form class="row mt-5 tab-content">
 
-                    <partial name="bidPartials/_genInfoPartial" />
+                    <partial name="bidPartials/_invitePartial" model="Model.InviteInput" />
+
+                    <partial name="bidPartials/_genInfoPartial" model="Model.GeneralInput" />
 
                     <partial name="bidPartials/_bidPartial" />
 
-                    <partial name="bidPartials/_declarationPartial" />
+                    <partial name="bidPartials/_declarationPartial" model="Model.DeclarationInput" />
 
                     <partial name="bidPartials/_submitPartial" />
 
                     <partial name="bidPartials/_inquiryPartial" />
 
-                </div>
+                </form>
 
 
             </div>
