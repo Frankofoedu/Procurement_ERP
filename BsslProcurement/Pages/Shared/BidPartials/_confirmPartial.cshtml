@@ -1,4 +1,6 @@
-﻿<div class="col-12">
+﻿@model ViewModels.ConfirmPartialInputViewModel
+
+<div class="col-12">
     <div class="row p-2">
         <div class="col-12 panel border rounded shadow p-3">
             <div class="panel-heading font-weight-bold">
@@ -9,16 +11,16 @@
                     <input type="date" class="form-control-sm" />
                 </p>
                 <p class="px-3 py-1">
-                    I, <input type="text" class="form-control-sm" />, on behalf of <b>"Company Name"</b>
+                    I, <input asp-for="Name" type="text" class="form-control-sm" />, on behalf of <b>"Company Name"</b>
                     hereby confirms our interest to Participate in the ongoing Bid negotiation.
                 </p>
                 <div class="form-group form-inline">
                     <label>Email: </label>
-                    <input class="form-control" type="text" />
+                    <input asp-for="Email" class="form-control" type="text" />
                 </div>
                 <div class="form-group form-inline">
                     <label>Telephone: </label>
-                    <input class="form-control" type="text" />
+                    <input asp-for="Phone" class="form-control" type="text" />
                 </div>
                 <div class="form-group justify-content-around">
                     <button class="btn btn-outline-primary">Confirm</button>

@@ -1,4 +1,5 @@
-﻿
+﻿@model ViewModels.GeneralInformationPartialViewModel
+
 <div id="genInfo" class="tab-pane col-12">
     <div class="row">
         <div class="col-12 text-center">
@@ -13,37 +14,31 @@
         <div class="col-md-6">
             <div class="form-group">
                 <label>Organization Name: </label>
-                <input class="form-control" />
+                <input asp-for="OrganizationName" class="form-control" />
             </div>
         </div>
         <div class="col-md-6">
             <div class="form-group">
                 <label>Broker Name: </label>
-                <input class="form-control" />
+                <input asp-for="BrokerName" class="form-control" />
             </div>
         </div>
         <div class="col-md-6">
             <div class="form-group">
                 <label>Preferred Currency: </label>
-                <input class="form-control" />
+                <input asp-for="PreferredCurrency" class="form-control" />
             </div>
         </div>
         <div class="col-md-6">
             <div class="form-group">
                 <label>Nature of Business: </label>
-                <input class="form-control" />
+                <input asp-for="NatureOfBusiness" class="form-control" />
             </div>
         </div>
         <div class="col-md-6">
             <div class="form-group">
                 <label>Logo: </label>
-                <input class="form-control" />
-            </div>
-        </div>
-        <div class="col-md-6">
-            <div class="form-group">
-                <label>Banner: </label>
-                <input class="form-control" />
+                <input asp-for="LogoFile" class="form-control" />
             </div>
         </div>
 
@@ -59,37 +54,37 @@
         <div class="col-md-6">
             <div class="form-group">
                 <label>Title: </label>
-                <input class="form-control" />
+                <input asp-for="FillerTitle" class="form-control" />
             </div>
         </div>
         <div class="col-md-6">
             <div class="form-group">
                 <label>Last Name: </label>
-                <input class="form-control" />
+                <input asp-for="FillerLastName" class="form-control" />
             </div>
         </div>
         <div class="col-md-6">
             <div class="form-group">
                 <label>First Name: </label>
-                <input class="form-control" />
+                <input asp-for="FillerFirstName" class="form-control" />
             </div>
         </div>
         <div class="col-md-6">
             <div class="form-group">
                 <label>Other Name: </label>
-                <input class="form-control" />
+                <input asp-for="FillerOtherName" class="form-control" />
             </div>
         </div>
         <div class="col-md-6">
             <div class="form-group">
                 <label>Job Title: </label>
-                <input class="form-control" />
+                <input asp-for="FillerJobTitle" class="form-control" />
             </div>
         </div>
         <div class="col-md-6">
             <div class="form-group">
                 <label>Department: </label>
-                <input class="form-control" />
+                <input asp-for="FillerDepartment" class="form-control" />
             </div>
         </div>
 
@@ -100,37 +95,37 @@
         <div class="col-md-6">
             <div class="form-group">
                 <label>Address Line 1: </label>
-                <input class="form-control" />
+                <input asp-for="Address1" class="form-control" />
             </div>
         </div>
         <div class="col-md-6">
             <div class="form-group">
                 <label>Address Line 2: </label>
-                <input class="form-control" />
+                <input asp-for="Address2" class="form-control" />
             </div>
         </div>
         <div class="col-md-6">
             <div class="form-group">
                 <label>City: </label>
-                <input class="form-control" />
+                <input asp-for="City" class="form-control" />
             </div>
         </div>
         <div class="col-md-6">
             <div class="form-group">
                 <label>State: </label>
-                <input class="form-control" />
+                <input asp-for="State" class="form-control" />
             </div>
         </div>
         <div class="col-md-6">
             <div class="form-group">
                 <label>Postal Code: </label>
-                <input class="form-control" />
+                <input asp-for="PostalCode" class="form-control" />
             </div>
         </div>
         <div class="col-md-6">
             <div class="form-group">
                 <label>Country: </label>
-                <input class="form-control" />
+                <input asp-for="Country" class="form-control" />
             </div>
         </div>
 
@@ -141,31 +136,31 @@
         <div class="col-md-6">
             <div class="form-group">
                 <label>Primary E-mail: </label>
-                <input class="form-control" />
+                <input asp-for="Email1" class="form-control" />
             </div>
         </div>
         <div class="col-md-6">
             <div class="form-group">
                 <label>Secondary E-mail: </label>
-                <input class="form-control" />
+                <input asp-for="Email2" class="form-control" />
             </div>
         </div>
         <div class="col-md-6">
             <div class="form-group">
                 <label>Phone Number 1: </label>
-                <input class="form-control" />
+                <input asp-for="PhoneNumber1" class="form-control" />
             </div>
         </div>
         <div class="col-md-6">
             <div class="form-group">
                 <label>Phone Number 2: </label>
-                <input class="form-control" />
+                <input asp-for="PhoneNumber2" class="form-control" />
             </div>
         </div>
         <div class="col-md-6">
             <div class="form-group">
                 <label>Access Level: </label>
-                <input class="form-control" />
+                <input asp-for="AccessLevel" class="form-control" />
             </div>
         </div>
 
