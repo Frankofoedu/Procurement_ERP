@@ -29,5 +29,16 @@ namespace BsslProcurement.ViewModels
         public string PhoneNumber1 { get; set; }
         public string PhoneNumber2 { get; set; }
         public string AccessLevel { get; set; }
+
+        public IFormFile CompanyProfileFile { get; set; }
+        public IFormFile CertificateOfIncorporationFile { get; set; }
+        public IFormFile TaxRegistrationCertificateFile { get; set; }
+        public IFormFile CurrentTaxCertificateFile { get; set; }
+        public IFormFile ProcurementRegistrationFile { get; set; }
+        public IFormFile NSITFComplianceCertificateFile { get; set; }
+        public IFormFile PENCOMComplianceCertificateFile { get; set; }
+        public IFormFile ITFComplianceCertificateFile { get; set; }
+        public IFormFile BankGuarantyFile { get; set; }
+        public IFormFile AuditedFinancialStatementsFile { get; set; }
     }
 }
