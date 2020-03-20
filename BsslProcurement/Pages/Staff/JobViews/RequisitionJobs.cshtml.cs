@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using BsslProcurement.Interfaces;
 using DcProcurement;
+using DcProcurement.Jobs;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
@@ -29,7 +30,7 @@ namespace BsslProcurement
         public string Message { get; set; }
         public string Error { get; set; }
         [BindProperty]
-        public List<Requisition> Requisitions { get; set; } = new List<Requisition>();
+        public IEnumerable<IGrouping<int?,RequisitionJob>> RequisitionJobs { get; set; }
 
 
         public async Task OnGetAsync()
@@ -38,7 +39,12 @@ namespace BsslProcurement
             {
                 var user = await GetCurrentUserAsync();
 
-                Requisitions = await requisitionService.GetRequisitionsJobsAssignedToLoggedInUser(user.Id);
+                var t = await requisitionService.GetRequisitionsJobsAssignedToLoggedInUser(user.Id);
+                if (t.Count > 0)
+                {
+
+                    RequisitionJobs = t.GroupBy(x => x.Workflow.WorkflowTypeId);
+                }
             }
             catch (Exception ex)
             {
