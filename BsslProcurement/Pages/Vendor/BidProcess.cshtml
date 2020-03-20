@@ -20,28 +20,28 @@
                     <div class="col-12">
                         <ul class="nav nav-tabs justify-content-between" id="tabButtons">
                             <li class="nav-item">
-                                <a href="#invitation" class="nav-link" data-toggle="tab">Invitation to Participate</a>
+                                <a id="inviteTabButton" href="#invitation" class="nav-link" data-toggle="tab">Invitation to Participate</a>
                             </li>
                             <li class="nav-item">
-                                <a href="#genInfo" class="nav-link" data-toggle="tab">General Information</a>
+                                <a id="genInfoTabButton" href="#genInfo" class="nav-link" data-toggle="tab">General Information</a>
                             </li>
                             <li class="nav-item">
-                                <a href="#bid" class="nav-link" data-toggle="tab">Bidding</a>
+                                <a id="bidTabButton" href="#bid" class="nav-link" data-toggle="tab">Bidding</a>
                             </li>
                             <li class="nav-item">
-                                <a href="#declaration" class="nav-link" data-toggle="tab">Declaration Statement</a>
+                                <a id="declarationTabButton" href="#declaration" class="nav-link" data-toggle="tab">Declaration Statement</a>
                             </li>
                             <li class="nav-item">
-                                <a href="#submit" class="nav-link" data-toggle="tab">Submit/Un-submit</a>
+                                <a id="submitTabButton" href="#submit" class="nav-link" data-toggle="tab">Submit/Un-submit</a>
                             </li>
                             <li class="nav-item">
-                                <a href="#inquiry" class="nav-link" data-toggle="tab">Inquiry</a>
+                                <a id="inquiryTabButton" href="#inquiry" class="nav-link" data-toggle="tab">Inquiry</a>
                             </li>
                         </ul>
                     </div>
                 </div>
 
-                <form class="row mt-5 tab-content">
+                <form class="row mt-5 tab-content" method="post">
 
                     <partial name="bidPartials/_invitePartial" model="Model.InviteInput" />
 
@@ -63,9 +63,38 @@
     </div>
 </div>
 
-
 <script>
-    $(document).ready(function(){
+    $(document).ready(function () {
         $("#tabButtons a:first").tab('show'); // show last tab on page load
+
+        $(".btnToInvite").click(function (e) {
+            e.preventDefault();
+            $('#inviteTabButton').tab('show');
+        });
+
+        $(".btnToGenInfo").click(function (e) {
+            e.preventDefault();
+            $('#genInfoTabButton').tab('show');
+        });
+
+        $(".btnToBid").click(function (e) {
+            e.preventDefault();
+            $('#bidTabButton').tab('show');
+        });
+
+        $(".btnToDeclaration").click(function (e) {
+            e.preventDefault();
+            $('#declarationTabButton').tab('show');
+        });
+
+        $(".btnToSubmit").click(function (e) {
+            e.preventDefault();
+            $('#submitTabButton').tab('show');
+        });
+
+        $(".btnToInquiry").click(function (e) {
+            e.preventDefault();
+            $('#inquiryTabButton').tab('show');
+        });
     });
 </script>
