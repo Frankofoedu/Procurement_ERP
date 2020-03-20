@@ -180,21 +180,87 @@
                         <td>1</td>
                         <td>Detail Company Profile</td>
                         <td>
-                            <input type="file" />
+                            <input asp-for="CompanyProfileFile" type="file" />
                         </td>
                     </tr>
                     <tr>
                         <td>2</td>
                         <td>Certificate of Incorporation</td>
                         <td>
-                            <input type="file" />
+                            <input asp-for="CertificateOfIncorporationFile" type="file" />
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>3</td>
+                        <td>Tax Registration Certificate</td>
+                        <td>
+                            <input asp-for="TaxRegistrationCertificateFile" type="file" />
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-12">
+            <p class="h3">Non-Mandatory Attachments</p>
+
+            <table class="table table-responsive-sm table-striped">
+                <thead>
+                    <tr class="table-primary">
+                        <th>S/N</th>
+                        <th>File to Upload</th>
+                        <th></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>1</td>
+                        <td>Evidence of Current Tax Certificate for Three Years</td>
+                        <td>
+                            <input asp-for="CurrentTaxCertificateFile" type="file" />
                         </td>
                     </tr>
                     <tr>
                         <td>2</td>
-                        <td>Tax Registration Certificate</td>
+                        <td>Evidence of Current Bureau of Public Procurement Registration Certificate</td>
                         <td>
-                            <input type="file" />
+                            <input asp-for="ProcurementRegistrationFile" type="file" />
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>3</td>
+                        <td>Evidence of Current  NSITF Compliance Certificate</td>
+                        <td>
+                            <input asp-for="NSITFComplianceCertificateFile" type="file" />
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>4</td>
+                        <td>Evidence of Current PENCOM Compliance Certificate</td>
+                        <td>
+                            <input asp-for="PENCOMComplianceCertificateFile" type="file" />
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>5</td>
+                        <td>Evidence of Current ITF Compliance Certificate</td>
+                        <td>
+                            <input asp-for="ITFComplianceCertificateFile" type="file" />
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>6</td>
+                        <td>Bank Guaranty/Bond</td>
+                        <td>
+                            <input asp-for="BankGuarantyFile" type="file" />
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>7</td>
+                        <td>Three years Audited financial Statements</td>
+                        <td>
+                            <input asp-for="AuditedFinancialStatementsFile" type="file" />
                         </td>
                     </tr>
                 </tbody>
@@ -202,68 +268,14 @@
         </div>
     </div>
 
-    <div class="col-12">
-        <p class="h3">Non-Mandatory Attachments</p>
-
-        <table class="table table-responsive-sm table-striped">
-            <thead>
-                <tr class="table-primary">
-                    <th>S/N</th>
-                    <th>File to Upload</th>
-                    <th></th>
-                </tr>
-            </thead>
-            <tbody>
-                <tr>
-                    <td>1</td>
-                    <td>Evidence of Current Tax Certificate for Three Years</td>
-                    <td>
-                        <input type="file" />
-                    </td>
-                </tr>
-                <tr>
-                    <td>2</td>
-                    <td>Evidence of Current Bureau of Public Procurement Registration Certificate</td>
-                    <td>
-                        <input type="file" />
-                    </td>
-                </tr>
-                <tr>
-                    <td>3</td>
-                    <td>Evidence of Current  NSITF Compliance Certificate</td>
-                    <td>
-                        <input type="file" />
-                    </td>
-                </tr>
-                <tr>
-                    <td>4</td>
-                    <td>Evidence of Current PENCOM Compliance Certificate</td>
-                    <td>
-                        <input type="file" />
-                    </td>
-                </tr>
-                <tr>
-                    <td>5</td>
-                    <td>Evidence of Current ITF Compliance Certificate</td>
-                    <td>
-                        <input type="file" />
-                    </td>
-                </tr>
-                <tr>
-                    <td>6</td>
-                    <td>Bank Guaranty/Bond</td>
-                    <td>
-                        <input type="file" />
-                    </td>
-                </tr>
-                <tr>
-                    <td>7</td>
-                    <td>Three years Audited financial Statements</td>
-                    <td>
-                        <input type="file" />
-                    </td>
-                </tr>
-            </tbody>
-        </table>
+    <div class="row">
+        <div class="col-12">
+            <div class="row p-2">
+                <div class="col-12 panel border rounded shadow p-3 justify-content-around">
+                    <button class="btn btn-outline-dark px-2 btnToInvite"> Previous </button>
+                    <button class="btn btn-outline-dark px-2 btnToBid"> Next </button>
+                </div>
+            </div>
+        </div>
     </div>
 </div>
