@@ -5,6 +5,18 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="models\**" />
+    <Compile Remove="modelTest\**" />
+    <Compile Remove="testModels\**" />
+    <EmbeddedResource Remove="models\**" />
+    <EmbeddedResource Remove="modelTest\**" />
+    <EmbeddedResource Remove="testModels\**" />
+    <None Remove="models\**" />
+    <None Remove="modelTest\**" />
+    <None Remove="testModels\**" />
+  </ItemGroup>
+
+  <ItemGroup>
     <FrameworkReference Include="Microsoft.AspNetCore.App" />
   </ItemGroup>
 
@@ -12,12 +24,6 @@
     <Reference Include="Microsoft.EntityFrameworkCore">
       <HintPath>..\..\..\..\..\..\Program Files\dotnet\sdk\NuGetFallbackFolder\microsoft.entityframeworkcore\2.1.1\lib\netstandard2.0\Microsoft.EntityFrameworkCore.dll</HintPath>
     </Reference>
-  </ItemGroup>
-
-  <ItemGroup>
-    <Folder Include="models\" />
-    <Folder Include="modelTest\" />
-    <Folder Include="testModels\" />
   </ItemGroup>
 
   <ItemGroup>

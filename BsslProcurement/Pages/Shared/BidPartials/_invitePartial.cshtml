@@ -1,0 +1,83 @@
+﻿@model ViewModels.InvitePartialInputViewModel
+
+<div class="tab-pane" id="invitation">
+    <div class="col-md-12 text-center">
+        <h2 style="text-decoration:underline">Invitation</h2>
+    </div>
+    <div class="col-md-12">
+        <h3>REQUEST FOR “QUOTATION/PROPOSAL etc.”</h3>
+    </div>
+    <div class="col-md-12">
+        <p style="font-size:large;">eRFx No: 1234567</p>
+    </div>
+    <div class="col-md-12">
+        <p style="font-size:large;">Project Title: Construction of 200km Road, along Epe–Ajah Express way, Ajah, Lagos.</p>
+    </div>
+    <div class="col-md-12">
+        <p style="font-size:large;">eRFx No: 1234567</p>
+        <p>Dear Esteemed Vendor,</p>
+
+        <p style="font-weight:bold">Invitation to Participate</p>
+
+        <p>“Company Name” has invited you to “Bid Type (Technical Bid/Financial Bid/Both” for “Project ID (RFQ No) and Project Title”.</p>
+
+        <p>Please provide necessary information, download all required documents (if any) from the library, and review each document in its entirety; the Purchase Requisition, Specifications & Standards, and all relevant Drawings (if any).</p>
+
+        <p>You are expected to fill out the Technical Information and Financial information (where necessary) and submit to the system on or before submission deadline.</p>
+
+        <p>The deadline for Submission is “dd : mmmm : yyyy, “Time”</p>
+
+        <p>Please confirm receipt.</p>
+
+        <p>There is a Help button at the extreme of Tabs, which will provide you with further assistance.</p>
+
+        <p>
+            Click Vendor Access Point: https://www.bsslsoftware.com/ <br />
+            Best Regards,
+        </p>
+
+        <p>
+            ”Assigned Staff” <br />
+            “Assigned Designation”
+        </p>
+    </div>
+    <div class="col-12">
+        <div class="row p-2">
+            <div class="col-12 panel border rounded shadow p-3">
+                <div class="panel-heading font-weight-bold">
+                    Terms and Conditions
+                </div>
+                <div class="p-2">
+                    <!-- Button trigger modal -->
+                    <button type="button" class="btn btn-link" data-toggle="modal" data-target="#tncModal">
+                        Click here to read terms and conditions.
+                    </button>
+                </div>
+                <div class="text-center my-2">
+                    <div class="form-group mb-0">
+                        <label class="btn btn-outline-dark pl-4">
+                            <input asp-for="TnC" class="form-check-input" type="radio" checked value="Agree">
+                            Agree
+                        </label>
+                        <label class="btn btn-outline-dark pl-4">
+                            <input asp-for="TnC" class="form-check-input" type="radio" value="Disagree">
+                            Disagree
+                        </label>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <partial name="bidPartials/_tncPartial" />
+
+    <partial name="bidPartials/_confirmPartial" model="Model.ConfirmPartialInputViewModel"/>
+
+    <div class="col-12">
+        <div class="row p-2">
+            <div class="col-12 panel border rounded shadow p-3 justify-content-around">
+                <button class="btn btn-outline-dark px-2 btnToGenInfo"> Next </button>
+            </div>
+        </div>
+    </div>
+</div>

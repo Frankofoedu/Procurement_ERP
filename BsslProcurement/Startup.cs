@@ -119,8 +119,7 @@ namespace BsslProcurement
 
             services.AddRazorPages().AddRazorRuntimeCompilation();
             services.AddControllers();
-            services.AddAuthentication()
-            .AddCookie("Vendors", o =>
+            services.AddAuthentication().AddCookie("Vendors", o =>
             {// Cookie settings
                 o.Cookie.HttpOnly = true;
                 o.ExpireTimeSpan = TimeSpan.FromMinutes(15);
@@ -131,6 +130,12 @@ namespace BsslProcurement
                 o.ForwardAuthenticate = "Identity.Application";
             });
             services.AddAuthorization();
+
+            services.AddDistributedRedisCache(option =>
+            {
+                option.Configuration = "127.0.0.1";
+                option.InstanceName = "master";
+            });
 
             services.AddSwaggerGen(c =>
             {

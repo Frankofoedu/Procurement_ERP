@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using BsslProcurement.Interfaces;
+using BsslProcurement.ViewModels;
 using DcProcurement;
 using DcProcurement.Users;
 using Microsoft.AspNetCore.Http;
@@ -29,7 +30,7 @@ namespace BsslProcurement.Controllers.API
                 return NotFound("No data found");
             }
 
-            return gm.Select(x => new GroupViewModel { Name = x.GroupName }).ToList();
+            return gm.Select(x => new GroupViewModel { Name = x.GroupName, Id = x.Id }).ToList();
         }
         [HttpGet("{id}")]
         public async Task<ActionResult<GroupViewModel>> GetGroup(long id)
@@ -81,11 +82,6 @@ namespace BsslProcurement.Controllers.API
             };
     }
 
-    public class GroupViewModel
-    {
-        public int Id { get; set; }
-        public string Name { get; set; }
-    }
 
 
 }
