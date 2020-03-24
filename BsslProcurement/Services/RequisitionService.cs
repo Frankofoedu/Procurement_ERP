@@ -18,7 +18,7 @@ namespace BsslProcurement.Services
             _procurementDBContext = procurementDBContext;
         }
 
-        public async Task SaveNewRequisition(int requisitionId)
+        public async Task AddJobToNewRequisition(int requisitionId)
         {
             //get workflow for requisition
             var wkflw = _procurementDBContext.Workflows.Where(x => x.WorkflowTypeId == Constants.RequisitionWorkflowId).OrderBy(x => x.Step).ToList();
