@@ -1,5 +1,6 @@
 ﻿using BsslProcurement.ViewModels;
 using DcProcurement;
+using DcProcurement.Jobs;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -9,7 +10,8 @@ namespace BsslProcurement.Interfaces
 {
     public interface IRequisitionService
     {
-        Task<List<Requisition>> GetRequisitionsJobsAssignedToLoggedInUser(string userId);
+        Task SaveNewRequisition(int requisitionId);
+        Task<List<RequisitionJob>> GetRequisitionsJobsAssignedToLoggedInUser(string userId);
         Task<List<Requisition>> GetRequisitionsForLoggedInUser(string userId);
         Task<List<Requisition>> GetSavedRequisitionsForLoggedInUser(string userId);
         Task<List<Requisition>> GetBudgetClearedRequisitions();

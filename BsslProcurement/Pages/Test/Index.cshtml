@@ -12,6 +12,30 @@
     <input type="submit" value="Add Users" asp-page-handler="AddUsers" />
 
     <button data-preview="0" class="btnPreviewItemAttachment">Preview</button>
-
+    @{ await PrintName("Bola");}
 </form>
 <partial name="~/Pages/Shared/Modals/_AttachmentViewPartial.cshtml" model="Model.files" />
+
+@functions{
+    async Task PrintName(string c)
+    {
+        switch (c)
+        {
+            case "John":
+                <div>
+                    <a asp-page="../staff/Index">John</a>
+
+                </div>
+                break;
+            case "Bola":
+                <div>
+                    <a asp-page="../staff/Index">Bola</a>
+
+                </div>
+                break;
+            default:
+                break;
+        }
+
+    }
+}

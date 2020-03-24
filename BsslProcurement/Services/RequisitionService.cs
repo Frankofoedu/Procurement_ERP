@@ -12,21 +12,36 @@ namespace BsslProcurement.Services
 {
     public class RequisitionService : IRequisitionService
     {
-        protected readonly ProcurementDBContext _procurementDBContext;
+        private readonly ProcurementDBContext _procurementDBContext;
         public RequisitionService(ProcurementDBContext procurementDBContext)
         {
             _procurementDBContext = procurementDBContext;
         }
-        public async Task<List<Requisition>> GetRequisitionsJobsAssignedToLoggedInUser(string userId)
+
+        public async Task SaveNewRequisition(int requisitionId)
         {
-            var jobs = _procurementDBContext.RequisitionJobs.Include(reqJob => reqJob.Requisition).ThenInclude(req=> req.RequisitionItems).Where(x => x.StaffId == userId && x.JobStatus == Enums.JobState.NotDone);
+            //get workflow for requisition
+            var wkflw = _procurementDBContext.Workflows.Where(x => x.WorkflowTypeId == Constants.RequisitionWorkflowId).OrderBy(x => x.Step).ToList();
+
+            if (wkflw != null)
+            {
+                var firstStage = wkflw.First();
+
+                //create new job for next stage
+                var newReqJob = new RequisitionJob(requisitionId, firstStage.Staffs.First().StaffId, firstStage.Id, "");
+                _procurementDBContext.RequisitionJobs.Add(newReqJob);
+
+               await _procurementDBContext.SaveChangesAsync();
+            }
+        }
+        public async Task<List<RequisitionJob>> GetRequisitionsJobsAssignedToLoggedInUser(string userId)
+        {
+            var jobs = _procurementDBContext.RequisitionJobs.Include(req=> req.Workflow).ThenInclude(wk => wk.WorkflowAction).Where(x => x.StaffId == userId && x.JobStatus == Enums.JobState.NotDone);
 
             if (jobs != null)
             {
-                var reqList = new List<Requisition>();
 
-                reqList = await jobs.Select(x => x.Requisition).ToListAsync();
-                return reqList;
+                return await jobs.ToListAsync();
             }
 
             return null;
@@ -162,5 +177,6 @@ namespace BsslProcurement.Services
         private async Task<string> GetStaffIdFromCodeAsync(string staffCode) => (await _procurementDBContext.Staffs.FirstOrDefaultAsync(x => x.StaffCode == staffCode)).Id;
         private async Task<string> GetStaffCodeFromIdAsync(string staffId) => (await _procurementDBContext.Staffs.FindAsync(staffId)).Id;
 
+        
     }
 }

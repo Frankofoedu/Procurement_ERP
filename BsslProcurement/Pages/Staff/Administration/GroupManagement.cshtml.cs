@@ -2,8 +2,10 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+
 using BsslProcurement.Interfaces;
 using BsslProcurement.ViewModels;
+
 using DcProcurement;
 using DcProcurement.Users;
 using Microsoft.AspNetCore.Mvc;
@@ -15,6 +17,7 @@ namespace BsslProcurement
     {
         public string Message { get; set; }
         public string Error { get; set; }
+
 
         [BindProperty]
         public GroupViewModel GroupViewModel { get; set; }
@@ -28,10 +31,12 @@ namespace BsslProcurement
         {
             _procurementDBContext = procurementDBContext;
             _groupManagement = groupManagement;
+
         }
 
         public void OnGet()
         {
+
           //  GroupViewModels =_procurementDBContext.UserGroups.Select(x=> new GroupViewModel { Name = x.GroupName, Id = x.Id }).ToList();
         }
 
@@ -70,5 +75,4 @@ namespace BsslProcurement
            
         }
     }
-
 }

@@ -9,7 +9,7 @@ namespace BsslProcurement.Interfaces
     public interface IWorkFlowService
     {
 
-        Task<List<WorkFlowTypesViewModel>> GetNextWorkActionflowSteps(int workFlowId, int workflowTypeId);
+        IEnumerable<WorkFlowTypesViewModel> GetNextWorkActionflowSteps(int workFlowId, int workflowTypeId);
 
         Task<List<WorkFlowTypesViewModel>> GetPreviousWorkActionflowSteps(int workFlowId, int workflowTypeId);
 

@@ -6,6 +6,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using BsslProcurement.Interfaces;
 using DcProcurement;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
@@ -16,6 +17,7 @@ using Microsoft.Extensions.Logging;
 
 namespace BsslProcurement.Pages.Test
 {
+    [Authorize]
     public class IndexModel : PageModel
     {
 

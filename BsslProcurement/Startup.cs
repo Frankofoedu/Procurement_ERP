@@ -67,11 +67,12 @@ namespace BsslProcurement
             services.AddDbContext<BSSLSYS_ITF_DEMOContext>(options => options.UseSqlServer(conn, b => b.MigrationsAssembly("BsslProcurement")));
 
             services.AddSingleton<IEmailSenderService, EmailSenderService>();
-            services.AddTransient<IStaffLayoutViewModelService, StaffLayoutViewModelService>();
-            services.AddTransient<IWorkFlowService, WorkFlowService>();
-            services.AddTransient<IItemGridViewModelService, ItemGridViewModelService>();
-            services.AddTransient<IRequisitionService, RequisitionService>();
-            services.AddTransient<IProcurementService, ProcurementService>();
+            services.AddScoped<IStaffLayoutViewModelService, StaffLayoutViewModelService>();
+            services.AddScoped<IWorkFlowService, WorkFlowService>();
+            services.AddScoped<IItemGridViewModelService, ItemGridViewModelService>();
+            services.AddScoped<IRequisitionService, RequisitionService>();
+            services.AddScoped<IProcurementService, ProcurementService>();
+            services.AddScoped<IGroupManagement, GroupManagementService>();
 
             services.AddIdentity<User, IdentityRole>(config =>
             {

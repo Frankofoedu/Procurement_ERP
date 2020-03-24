@@ -20,10 +20,8 @@ namespace DcProcurement
         [DataType(DataType.Date)]
         public DateTime? DoneDate { get; protected set; }
         public Enums.JobState JobStatus { get; protected set; }
-
         public string  Remark { get; protected set; }
         public string StaffId { get; protected set; } // if staff field is null then any staff can see the job.
-
         [ForeignKey("StaffId")]
         public Staff Staff { get; private set; }
 

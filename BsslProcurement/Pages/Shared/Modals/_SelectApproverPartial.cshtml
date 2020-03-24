@@ -33,7 +33,7 @@
 {
     Model.Remark = null;
 
-    List<SelectListItem> ActionTypeItems = (await WorkflowService.GetNextWorkActionflowSteps(Model.WorkFlowId, Model.WorkFlowTypeId.Value)).Select(m => new SelectListItem { Value = m.Id.ToString(), Text = m.Name }).ToList();
+    List<SelectListItem> ActionTypeItems = ( WorkflowService.GetNextWorkActionflowSteps(Model.WorkFlowId, Model.WorkFlowTypeId.Value)).Select(m => new SelectListItem { Value = m.Id.ToString(), Text = m.Name }).ToList();
 
     //checks if job is at last stage
     //last stage: count == 0

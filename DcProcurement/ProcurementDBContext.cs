@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using System.Collections.Generic;
 using Microsoft.AspNetCore.Identity;
 using DcProcurement.Jobs;
+using DcProcurement.Users;
 
 namespace DcProcurement
 {
@@ -54,6 +55,7 @@ namespace DcProcurement
         #region Users Tables
         public DbSet<Staff> Staffs { get; set; }
         public DbSet<VendorUser> Vendors { get; set; }
+        public DbSet<UserGroup> UserGroups { get; set; }
         #endregion
 
         #region Jobs Tables

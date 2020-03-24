@@ -43,6 +43,7 @@
                         <div class="col-sm-4"></div>
                         <div class="col-sm-4">
                             <div class="form-group d-flex flex-row">
+
                                 <input class="form-control" asp-for="GroupViewModel.Name" />
                                 <input type="submit" id="btnNewGroup" class="btn btn-primary btn-sm mx-3" value="Add New Group" />
 
@@ -108,12 +109,14 @@
         $(document).ready(function () {
 
             //create group button
+
             //$('#btnNewGroup').on('click', function () {
             //   //getTable();
 
             //    var newGroupName = $('#groupName').val();
             //    createGroup(newGroupName);
             //});
+
 
             //delete button
             $('#groupTable').on('click', '.deleteBtn', function () {
@@ -139,6 +142,7 @@
                 
                 returnitem.push(null);
                 returnitem.push(responseJSON[i].id);
+
                 returnitem.push(responseJSON[i].name);
 
                 returnList.push(returnitem);
@@ -185,6 +189,7 @@
                                 { title: "" },
                                 
                                 { title: "Id", "visible":false},
+
                                 { title: "Name" },
                                 { 
                                     data: null,
