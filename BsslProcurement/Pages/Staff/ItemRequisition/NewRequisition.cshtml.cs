@@ -104,7 +104,7 @@ namespace BsslProcurement.Pages.Staff.ItemRequisition
                     await SaveOrSubmitRequisition(true);
 
                     //create and assign requisition job
-                   await _requisitionService.SendRequisitionToNextStageAsync(Requisition.Id, WfVm.AssignedStaffCode, WfVm.WorkFlowId, WfVm.Remark);
+                   await _requisitionService.AddJobToNewRequisition(Requisition.Id);
                     
 
                     Message = "Requisition Added successfully";

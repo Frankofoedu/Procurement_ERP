@@ -72,6 +72,14 @@
     </div>
 }
 
+@if (Model.WfVm == null)
+{
+    <div class="alert alert-danger alert-dismissable fade show">
+        <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+        Workflow Has not been setup. Please setup workflow
+    </div>
+}
+
 <div class="row mt-5">
     <div class="col-md-12">
         <form class="panel panel-login" method="post" enctype="multipart/form-data">
@@ -123,7 +131,7 @@
                             <div class="form-group">
                                 <label>Expected Delivery Date : </label>
 
-                                <input class="form-control" data-date="date" data-id="Deliverydate" value=@(Model.Requisition != null ? Model.Requisition.DeliveryDate.ToString() : null)  />
+                                <input class="form-control" data-date="date" data-id="Deliverydate" value=@(Model.Requisition != null ? Model.Requisition.DeliveryDate.ToString() : null) />
                                 <input type="hidden" data-id="Deliverydate" asp-for="Requisition.DeliveryDate" />
                             </div>
                         </div>
@@ -342,18 +350,6 @@
                             </div>
                         </div>
 
-                        <div class="col-sm-12">
-                            <div class="form-group">
-                                <label>Send to Next Staff :</label>
-                                <div class="panel border border-dark rounded p-2">
-                                    <partial name="~/Pages/Shared/Modals/_SelectApproverPartial.cshtml" model="Model.WfVm" />
-                                </div>
-                            </div>
-
-
-                        </div>
-                        <div class="col-sm-4">
-                        </div>
                     </div>
 
                     @if (Model.WfVm != null)
@@ -437,30 +433,6 @@
         </div>
     </div>
 </div>
-
-@*<div class="modal" id="approverModal">
-        <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable modal-lg">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h4 class="modal-title">Approver Details</h4>
-                    <button type="button" class="close" data-dismiss="modal">&times;</button>
-                </div>
-                <div class="modal-body">
-                    <div id="ApproverBody"></div>
-                </div>
-                <div id="Approverspinner" class="d-flex justify-content-center">
-                    <div class="loader">
-                    </div>
-                </div>
-
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
-                </div>
-            </div>
-        </div>
-    </div>*@
-
-
 
 <div class="modal" id="uomModal">
     <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable modal-lg">
@@ -607,7 +579,7 @@
                     $('#Requesterspinner').hide();
                     $('#RequesterTable').dataTable();
 
-                    $('#RequesterTable').on('click','.btnRequesterName', function () {
+                    $('#RequesterTable').on('click', '.btnRequesterName', function () {
 
                         $('.requesterCode').val($(this).val());
                         $('.requesterValue').val($(this).attr("rname"));
@@ -645,15 +617,15 @@
                         //assign staff name textbox
                         txtToAssign.val($(this).val());
                         var staffCode = $(this).text();
-                        var rankURL = window.location.origin +"/api/Users/GetStaffRank/" + staffCode;
+                        var rankURL = window.location.origin + "/api/Users/GetStaffRank/" + staffCode;
 
                         $.ajax({
                             url: rankURL,
-                            
+
                         }).done(function (data) {
                             //assign rank to rank textbox
                             txtRankToAssign.val(data);
-                        });                       
+                        });
 
                         //$('#forStaffText').val();
                         $('#staffModal').modal("hide");
@@ -738,12 +710,12 @@
         function newStepRow(index) {
 
             var html = `<tr>
-                                            <td><input type="text" required="" id="gridVm_${index}__RequisitionItem_Description" name="gridVm[${index}].RequisitionItem.Description" value=""></td>
-                                            <td><input type="number" required="" oninput="this.value=this.value.replace(/[^0-9]/g,' + ');" data-val="true" data-val-required="The Quantity field is required." id="gridVm_${index}__RequisitionItem_Quantity" name="gridVm[${index}].RequisitionItem.Quantity" value=""></td>
-                                            <td><div class="d-flex flex-row"><input type="text" readonly required="" data-value="forUOM ${index}" id="gridVm_${index}__RequisitionItem_UnitOfMeasurement" name="gridVm[${index}].RequisitionItem.UnitOfMeasurement" value=""><button class="btn loadUOMModal ml-1" value="forUOM ${index}" data-toggle="modal" data-target="#uomModal"><i class="fa fa-search"></i></button> </div></td>
-                                            <td> <div class="d-flex flex-row"><input data-attachment="${index}" accept=".pdf" class="fileItem" type="file" id="gridVm_${index}__Attachment" name="gridVm[${index}].Attachment"><button data-preview="${index}" class="btnPreviewItemAttachment">Preview</button>  </div></td>
-                                            <td><label class="del" onclick="deleteItem();"><i class="fa fa-trash-alt"></i></label></td>
-                                            </tr>`;
+                                                    <td><input type="text" required="" id="gridVm_${index}__RequisitionItem_Description" name="gridVm[${index}].RequisitionItem.Description" value=""></td>
+                                                    <td><input type="number" required="" oninput="this.value=this.value.replace(/[^0-9]/g,' + ');" data-val="true" data-val-required="The Quantity field is required." id="gridVm_${index}__RequisitionItem_Quantity" name="gridVm[${index}].RequisitionItem.Quantity" value=""></td>
+                                                    <td><div class="d-flex flex-row"><input type="text" readonly required="" data-value="forUOM ${index}" id="gridVm_${index}__RequisitionItem_UnitOfMeasurement" name="gridVm[${index}].RequisitionItem.UnitOfMeasurement" value=""><button class="btn loadUOMModal ml-1" value="forUOM ${index}" data-toggle="modal" data-target="#uomModal"><i class="fa fa-search"></i></button> </div></td>
+                                                    <td> <div class="d-flex flex-row"><input data-attachment="${index}" accept=".pdf" class="fileItem" type="file" id="gridVm_${index}__Attachment" name="gridVm[${index}].Attachment"><button data-preview="${index}" class="btnPreviewItemAttachment">Preview</button>  </div></td>
+                                                    <td><label class="del" onclick="deleteItem();"><i class="fa fa-trash-alt"></i></label></td>
+                                                    </tr>`;
             $('#requisitionBody').append(html);
         }
     </script>
