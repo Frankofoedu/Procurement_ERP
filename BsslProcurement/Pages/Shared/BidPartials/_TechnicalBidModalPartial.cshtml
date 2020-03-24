@@ -1,0 +1,191 @@
+﻿<div id="technicalBidModal" class="modal fade" role="dialog" aria-labelledby="technicalBidModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2 class="modal-title">Technical Bid</h2>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+
+
+
+                <div class="row">
+                    <div class="col-12">
+                        <h3 class="h3 bg-primary text-white px-3 py-1 mt-2 rounded">
+                            Key Personnel Details
+                        </h3>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-12">
+                        <table class="table table-responsive-sm table-striped">
+                            <thead>
+                                <tr class="table-primary">
+                                    <th>S/N</th>
+                                    <th>Name</th>
+                                    <th>Professional Qualification</th>
+                                    <th>CV</th>
+                                    <th>Professional Certificate</th>
+                                    <th>Passport Photograph</th>
+                                </tr>
+                            </thead>
+                            <tbody id="personnelTbody">
+                                @for (int i = 0; i < 1; i++)
+                                {
+                                    <tr>
+                                        <td> @(i + 1) </td>
+                                        <td><input type="text" class="form-control" /></td>
+                                        <td><input type="text" class="form-control" /></td>
+                                        <td><input type="file" class="form-control-file" /></td>
+                                        <td><input type="file" class="form-control-file" /></td>
+                                        <td><input type="file" class="form-control-file" /></td>
+                                    </tr>
+                                }
+
+
+                            </tbody>
+
+                        </table>
+                        <input id="personnelLastIndex" type="hidden" value="0">
+                        <button id="btnAddMorePersonnel" class=""> Add Row </button>
+                    </div>
+                </div>
+
+
+                <div class="row">
+                    <div class="col-12">
+                        <h3 class="h3 bg-primary text-white px-3 py-1 mt-2 rounded">
+                            Equipment Details
+                        </h3>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-12">
+                        <table class="table table-responsive-sm table-striped">
+                            <thead>
+                                <tr class="table-primary">
+                                    <th>S/N</th>
+                                    <th>Equipment Name</th>
+                                    <th>Equipment Description/Purpose</th>
+                                    <th>Quantity</th>
+                                    <th>Attachment</th>
+                                </tr>
+                            </thead>
+                            <tbody id="equipmentTbody">
+                                @for (int i = 0; i < 1; i++)
+                                {
+                                    <tr>
+                                        <td>@(i + 1)</td>
+                                        <td><input type="text" class="form-control" /></td>
+                                        <td><input type="text" class="form-control" /></td>
+                                        <td><input type="text" class="form-control" /></td>
+                                        <td><input type="file" class="form-control" /></td>
+                                    </tr>
+                                }
+                            </tbody>
+                        </table>
+
+                        <input id="equipmentLastIndex" type="hidden" value="0">
+                        <button id="btnAddMoreEquipment" class=""> Add Row </button>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-12">
+                        <h3 class="h3 bg-primary text-white px-3 py-1 mt-2 rounded">
+                            Relevant Contracts
+                        </h3>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-12">
+                        <table class="table table-responsive table-striped">
+                            <thead>
+                                <tr class="table-primary">
+                                    <th>S/N</th>
+                                    <th>Client Name/Address</th>
+                                    <th>Project Description</th>
+                                    <th>Start Date</th>
+                                    <th>Completion Date</th>
+                                    <th>Contact Person</th>
+                                    <th>Phone Number</th>
+                                    <th>Status</th>
+                                    <th>Remarks</th>
+                                </tr>
+                            </thead>
+                            <tbody id="experienceTbody">
+                                @for (int i = 0; i < 1; i++)
+                                {
+                                    <tr>
+                                        <td>@(i + 1)</td>
+                                        <td><input type="text" class="form-control" /></td>
+                                        <td><input type="text" class="form-control" /></td>
+                                        <td><input type="date" class="form-control" /></td>
+                                        <td><input type="date" class="form-control" /></td>
+                                        <td><input type="text" class="form-control" /></td>
+                                        <td><input type="text" class="form-control" /></td>
+                                        <td>
+                                            <select class="form-control">
+                                                <option>Completed</option>
+                                                <option>Ongoing</option>
+                                                <option>Discontinued</option>
+                                            </select>
+                                        </td>
+                                        <td><input type="text" class="form-control" /></td>
+                                    </tr>
+                                }
+                            </tbody>
+                        </table>
+
+                        <input id="experienceLastIndex" type="hidden" value="0">
+                        <button id="btnAddMoreExperience" class=""> Add Row </button>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-12">
+                        <h3 class="h3 bg-primary text-white px-3 py-1 mt-2 rounded">
+                            Details of Health, Safety and Environment (HSE)
+                        </h3>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-12">
+                        <table class="table table-responsive-sm table-striped">
+                            <thead>
+                                <tr class="table-primary">
+                                    <th>S/N</th>
+                                    <th>HSE Details</th>
+                                    <th>Yes/No</th>
+                                </tr>
+                            </thead>
+                            <tbody id="equipmentTbody">
+                                @for (int i = 0; i < 2; i++)
+                                {
+                                    <tr>
+                                        <td>@(i + 1)</td>
+                                        <td><input type="text" class="form-control" value="Use of Standard Protective Guides and Devices" /></td>
+                                        <td><input type="text" class="form-control" /></td>
+                                    </tr>
+                                }
+                            </tbody>
+                        </table>
+
+                        <input id="equipmentLastIndex" type="hidden" value="0">
+                        <button id="btnAddMoreEquipment" class=""> Add Row </button>
+                    </div>
+                </div>
+
+
+
+            </div>
+
+            <div class="modal-footer">
+                <button type="button" class="btn btn-outline-primary">Save</button>
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>

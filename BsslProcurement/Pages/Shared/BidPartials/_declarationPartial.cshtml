@@ -1,0 +1,36 @@
+﻿@model ViewModels.DeclarationPartialInputViewModel
+
+<div id="declaration" class="tab-pane col-12">
+    <div class="w-100 text-center">
+        <h2 style="text-decoration:underline">Declaration</h2>
+    </div>
+
+    <p class="font-weight-bold pt-4 px-3">
+        Dear Esteemed Vendor,
+    </p>
+    <p class="px-3 py-1">
+        I, <input type="text" class="form-control-sm" />, representing <b>"Company Name"</b> hereby
+        sincerely declare that all the information presented and documented for the purpose of this Bid is in accordance
+        with fact or truth, up to the best of my knowledge and believe  and I bear the responsibilities for the
+        correctness of and otherwise, deviation from the above mentioned particulars now and at a later date.
+    </p>
+    <div class="form-group form-inline">
+        <label>Email: </label>
+        <input class="form-control" type="text" />
+    </div>
+    <div class="form-group form-inline">
+        <label>Telephone: </label>
+        <input class="form-control" type="text" />
+    </div>
+
+    <div class="row">
+        <div class="col-12">
+            <div class="row p-2">
+                <div class="col-12 panel border rounded shadow p-3 justify-content-around">
+                    <button class="btn btn-outline-dark px-2 btnToBid"> Previous </button>
+                    <button class="btn btn-outline-dark px-2 btnToSubmit"> Next </button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
