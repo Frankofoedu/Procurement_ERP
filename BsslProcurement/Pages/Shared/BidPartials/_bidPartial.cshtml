@@ -73,7 +73,7 @@
                             <td></td>
                             <td></td>
                             <td>
-                                <a asp-page="/Vendor/Bid/TechnicalBidForm" class="btn btn-outline-primary">View Technical Bid</a>
+                                <a class="btn btn-outline-primary" data-toggle="modal" data-target="#technicalBidModal">View Technical Bid</a>
                             </td>
                             <td>
                                 <a asp-page="/Vendor/Bid/FinancialBidForm" class="btn btn-outline-primary">View Financial Bid</a>
@@ -95,4 +95,7 @@
             </div>
         </div>
     </div>
+
+    <partial name="bidPartials/_TechnicalBidModalPartial" />
+
 </div>
