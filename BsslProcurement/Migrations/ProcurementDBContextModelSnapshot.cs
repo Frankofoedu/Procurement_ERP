@@ -1107,20 +1107,20 @@ namespace BsslProcurement.Migrations
                     b.HasData(
                         new
                         {
-                            Id = "ab0b3e6a-cbda-44e9-9b0a-7490e4ddd515",
-                            ConcurrencyStamp = "150c73c2-5e4c-4b76-b646-abebf0ed4819",
+                            Id = "302f96c1-8bba-49f6-850b-06aa12db7ef6",
+                            ConcurrencyStamp = "74c0d5e6-aeda-44d4-bbca-c65fe59f8484",
                             Name = "Admin"
                         },
                         new
                         {
-                            Id = "60ecc651-89ca-4f3a-85e4-8528f3857499",
-                            ConcurrencyStamp = "86f01523-b672-419c-ba28-628e7c80752f",
+                            Id = "4df0ca2b-6d81-4a1e-85ac-f43fcb60cd0e",
+                            ConcurrencyStamp = "b50487aa-cf03-4ac0-9bed-9dda6d194ac4",
                             Name = "Staff"
                         },
                         new
                         {
-                            Id = "cc2fc37a-4feb-480f-a6e6-4eccd0e57bdd",
-                            ConcurrencyStamp = "8e6d3d9c-d17e-4bc4-84f8-94c1379dc1e4",
+                            Id = "2535144f-a97c-42e1-a619-7ebc0945396e",
+                            ConcurrencyStamp = "83a99fa9-4bc9-4731-845b-4a9726cfbe23",
                             Name = "Vendor"
                         });
                 });
@@ -1325,11 +1325,6 @@ namespace BsslProcurement.Migrations
                     b.Property<string>("StaffCode")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
-
-                    b.Property<int?>("UserGroupId")
-                        .HasColumnType("int");
-
-                    b.HasIndex("UserGroupId");
 
                     b.HasDiscriminator().HasValue("Staff");
                 });
@@ -1639,13 +1634,6 @@ namespace BsslProcurement.Migrations
                     b.HasOne("DcProcurement.Staff", null)
                         .WithMany("AssignedPrequalificationJobs")
                         .HasForeignKey("StaffId1");
-                });
-
-            modelBuilder.Entity("DcProcurement.Staff", b =>
-                {
-                    b.HasOne("DcProcurement.Users.UserGroup", null)
-                        .WithMany("Staffs")
-                        .HasForeignKey("UserGroupId");
                 });
 
             modelBuilder.Entity("DcProcurement.VendorUser", b =>
