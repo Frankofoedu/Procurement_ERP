@@ -2,6 +2,7 @@
 using BsslProcurement.ViewModels;
 using DcProcurement;
 using DcProcurement.Users;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
@@ -14,9 +15,11 @@ namespace BsslProcurement.Services
     {
         private readonly ProcurementDBContext procurementdbcontext;
 
-        public GroupManagementService(ProcurementDBContext _procurementdbcontext)
+        private readonly UserManager<User> _userManager;
+        public GroupManagementService(ProcurementDBContext _procurementdbcontext, UserManager<User> userManager)
         {
             procurementdbcontext = _procurementdbcontext;
+            _userManager = userManager;
         }
 
         public void AddListUserToGroup(List<string> userIds, int groupId)
@@ -38,6 +41,20 @@ namespace BsslProcurement.Services
                     throw new KeyNotFoundException("Group Not Found");
                 }
 
+            }
+        }
+
+        public async Task AddUsersInGroupToRole(string roleName, int groupId)
+        {
+            //get staff in group
+            var staffs = procurementdbcontext.UserGroups.Include(x => x.Staffs).FirstOrDefault(x => x.Id == groupId)?.Staffs;
+
+            if (staffs.Any() && staffs.Count> 0)
+            {
+                foreach (var staff in staffs)
+                {
+                   await _userManager.AddToRoleAsync(staff, roleName);
+                }
             }
         }
 
@@ -90,7 +107,7 @@ namespace BsslProcurement.Services
 
         public async Task<UserGroup> GetById(long id)
         {
-           var mn = await procurementdbcontext.UserGroups.FindAsync(id);          
+           var mn = await procurementdbcontext.UserGroups.Include(x => x.Staffs).FirstOrDefaultAsync( x=> x.Id == id);          
             return mn;
         }
 

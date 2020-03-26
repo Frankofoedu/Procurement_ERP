@@ -1,0 +1,150 @@
+﻿@page
+@model BsslProcurement.Pages.Staff.Administration.GroupAccessMgtModel
+@{
+    ViewData["Title"] = "Group Access Mgt";
+}
+
+
+@section Styles {
+}
+
+<h2>Create Access Role</h2>
+
+@if (!string.IsNullOrWhiteSpace(Model.Message))
+{
+    <div class="alert alert-success alert-dismissable fade show">
+        <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+        @Model.Message
+    </div>
+}
+@if (!string.IsNullOrWhiteSpace(Model.Error))
+{
+    <div class="alert alert-danger alert-dismissable fade show">
+        <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+        @Model.Error
+    </div>
+}
+
+
+<div class="row">
+    <div class="col-md-12">
+
+        <form method="post" class="form-horizontal">
+            @if (!(Model.Group.Staffs.Any()))
+            {
+                <div class="alert alert-danger alert-dismissable fade show">
+                    <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                    No staff added to the group. Please add staffs first
+                </div>
+            }
+            else
+            {
+
+                <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                <div class="form-group">
+                    <label asp-for="GroupName" class="control-label col-md-2"></label>
+                    <div class="col-md-10">
+                        <input asp-for="GroupName" class="form-control" />
+                        <span asp-validation-for="GroupName" class="text-danger"></span>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="col-md-3 control-label">Access List</label>
+                    <div class="col-md-12">
+                        <table class="table table-striped table-bordered" id="groupAccessTable">
+                            <thead>
+                                <tr>
+                                    <th></th>
+                                    <th>Page Name</th>
+
+                                    <th>Page Path</th>
+                                    <th>Select</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @for (int i = 0; i < Model.AccessViewModels.Count(); i++)
+                                {
+                                    var p = Model.AccessViewModels[i];
+                                    string name;
+                                    {
+                                        name = p.RazorPage.DisplayName;
+                                    }
+                                    <tr>
+                                        <td>
+                                            @(i + 1)
+                                        </td>
+                                        <td>
+                                            <label>@p.RazorPage.DisplayName</label>
+                                            <input type="hidden" asp-for="AccessViewModels[i].RazorPage.DisplayName" />
+                                        </td>
+                                        <td>
+                                            <label>@p.RazorPage.AreaName</label>
+                                            <input type="hidden" asp-for="AccessViewModels[i].RazorPage.AreaName" />
+                                        </td>
+                                        <td>
+                                            <input asp-for="AccessViewModels[i].IsSelected" />
+                                        </td>
+                                    </tr>
+                                }
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <input type="submit" value="Submit" class="btn btn-default" />
+                </div>
+
+
+            }
+        </form>
+        </div>
+</div>
+
+<div>
+    <a asp-action="Index">Back to List</a>
+</div>
+
+@section Scripts {
+    <script>
+
+        $(document).ready(function () {
+
+            $('#groupAccessTable').DataTable();
+
+        });
+                //$(function () {
+                //    $('#tree').bonsai({
+                //        expandAll: false,
+                //        checkboxes: true,
+                //        createInputs: 'checkbox'
+                //    });
+
+                //    $('form').submit(function () {
+                //        var i = 0, j = 0;
+                //        $('.controller > input[type="checkbox"]:checked, .controller > input[type="checkbox"]:indeterminate').each(function () {
+                //            var controller = $(this);
+                //            if ($(controller).prop('indeterminate')) {
+                //                $(controller).prop("checked", true);
+                //            }
+                //            var controllerName = 'SelectedControllers[' + i + ']';
+                //            $(controller).prop('name', controllerName + '.Name');
+
+                //            var area = $(controller).next().next();
+                //            $(area).prop('name', controllerName + '.AreaName');
+
+                //            $('ul > li > input[type="checkbox"]:checked', $(controller).parent()).each(function () {
+                //                var action = $(this);
+                //                var actionName = controllerName + '.Actions[' + j + '].Name';
+                //                $(action).prop('name', actionName);
+                //                j++;
+                //            });
+                //            j = 0;
+                //            i++;
+                //        });
+
+                //        return true;
+                //    });
+                //});
+    </script>
+}
+

@@ -26,5 +26,6 @@ namespace BsslProcurement.Interfaces
         Task<IList<UserGroup>> GetAll();
 
         Task<IList<GroupUsersViewModel>> GetAllUsersInGroup(int id);
+        Task AddUsersInGroupToRole(string roleName, int groupId);
     }
 }
