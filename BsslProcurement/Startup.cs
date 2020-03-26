@@ -19,6 +19,8 @@ using Microsoft.Extensions.DependencyInjection.Extensions;
 using Microsoft.OpenApi.Models;
 using Microsoft.Extensions.Logging;
 using Microsoft.AspNetCore.Authentication.Cookies;
+using DcProcurement.Users;
+using BsslProcurement.Filters;
 
 namespace BsslProcurement
 {
@@ -73,11 +75,13 @@ namespace BsslProcurement
             services.AddScoped<IRequisitionService, RequisitionService>();
             services.AddScoped<IProcurementService, ProcurementService>();
             services.AddScoped<IGroupManagement, GroupManagementService>();
+            services.AddSingleton<IRazorPagesControllerDiscovery, RazorPagesControllerDiscovery>();
 
-            services.AddIdentity<User, IdentityRole>(config =>
+            services.AddIdentity<User, UserRole>(config =>
             {
                 config.SignIn.RequireConfirmedEmail = false;
-            }).AddEntityFrameworkStores<ProcurementDBContext>().AddDefaultTokenProviders();
+               
+            }).AddDefaultUI().AddEntityFrameworkStores<ProcurementDBContext>();
 
             services.ConfigureApplicationCookie(o =>
             {
@@ -115,9 +119,11 @@ namespace BsslProcurement
                 //options.User.AllowedUserNameCharacters =
                 //"abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789-._@+";
                 options.User.RequireUniqueEmail = true;
+
+                
             });
 
-            services.AddRazorPages().AddRazorRuntimeCompilation();
+            services.AddRazorPages().AddMvcOptions(options => options.Filters.Add(typeof(DynamicAuthorizationFilter))).AddRazorRuntimeCompilation();
             services.AddControllers();
             services.AddAuthentication().AddCookie("Vendors", o =>
             {// Cookie settings
