@@ -8,7 +8,7 @@ using DcProcurement.Users;
 
 namespace DcProcurement
 {
-    public class ProcurementDBContext : IdentityDbContext<User>
+    public class ProcurementDBContext : IdentityDbContext<User, UserRole,string>
     {
         public ProcurementDBContext(DbContextOptions<ProcurementDBContext> options)
            : base(options)
@@ -160,12 +160,12 @@ namespace DcProcurement
 
 
             //seed roles
-            var roles = new List<IdentityRole> {
-                new IdentityRole { Id = Guid.NewGuid().ToString(), Name = Constants.Role.Admin },
-                new IdentityRole { Id = Guid.NewGuid().ToString(), Name = Constants.Role.Staff },
-                new IdentityRole { Id = Guid.NewGuid().ToString(), Name = Constants.Role.Vendor }
+            var roles = new List<UserRole> {
+                new UserRole { Id = Guid.NewGuid().ToString(), Name = Constants.Role.Admin },
+                new UserRole { Id = Guid.NewGuid().ToString(), Name = Constants.Role.Staff },
+                new UserRole { Id = Guid.NewGuid().ToString(), Name = Constants.Role.Vendor }
             };
-            modelBuilder.Entity<IdentityRole>().HasData(roles);
+            modelBuilder.Entity<UserRole>().HasData(roles);
             #endregion
 
 
