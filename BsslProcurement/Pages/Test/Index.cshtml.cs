@@ -17,7 +17,6 @@ using Microsoft.Extensions.Logging;
 
 namespace BsslProcurement.Pages.Test
 {
-    [Authorize]
     public class IndexModel : PageModel
     {
 
@@ -61,7 +60,7 @@ namespace BsslProcurement.Pages.Test
         }
         public async Task OnGetAsync()
         {
-            files =  Directory.EnumerateFiles(Path.Combine(_Env.WebRootPath, "Attachment")).Select(x => Path.GetFileName(x)).ToList();
+            //files =  Directory.EnumerateFiles(Path.Combine(_Env.WebRootPath, "Attachment")).Select(x => Path.GetFileName(x)).ToList();
 
             //var s = Url.Content("~/");
             //using (var stream = System.IO.File.OpenRead(t.ElementAt(1)))
