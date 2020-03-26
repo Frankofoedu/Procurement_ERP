@@ -46,7 +46,7 @@
                 </table>
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
+                <button type="button" id="staffEmailBtn" class="btn btn-danger" data-dismiss="modal">Close</button>
             </div>
         </div>
     </div>
@@ -60,7 +60,17 @@
         }
 
     $(document).ready(function () {
-        $('#staffTable').dataTable();
+        $('#staffTable').dataTable({
+            columnDefs: [
+                { "type": "html-input", "targets": [1, 2, 3] }
+            ]
+        });
+
+        $.fn.dataTableExt.ofnSearch['html-input'] = function (value) {
+            return $(value).val();
+        };
+
+
 
     });
 </script>
