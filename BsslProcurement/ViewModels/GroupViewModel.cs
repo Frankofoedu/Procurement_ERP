@@ -10,10 +10,4 @@ namespace BsslProcurement.ViewModels
         public int Id { get; set; }
         public string Name { get; set; }
     }
-
-    public class GroupUsersViewModel
-    {
-        public int GroupId { get; set; }
-        public DcProcurement.Staff Staff { get; set; }
-    }
 }

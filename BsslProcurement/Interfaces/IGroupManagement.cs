@@ -1,5 +1,4 @@
-﻿using BsslProcurement.ViewModels;
-using DcProcurement.Users;
+﻿using DcProcurement.Users;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -19,12 +18,9 @@ namespace BsslProcurement.Interfaces
         Task DeleteGroup(long id);
 
         void AddUserToGroup(string userId);
-        void AddListUserToGroup(List<string> userId, int groupId);
 
         void RemoveUserFromGroup(string userId);
         Task<UserGroup> GetById(long id);
         Task<IList<UserGroup>> GetAll();
-
-        Task<IList<GroupUsersViewModel>> GetAllUsersInGroup(int id);
     }
 }

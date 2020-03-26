@@ -22,20 +22,22 @@ namespace BsslProcurement
         [BindProperty]
         public GroupViewModel GroupViewModel { get; set; }
 
-        public IList<GroupViewModel>  GroupViewModels { get; set; } = new List<GroupViewModel>();
+        public List<GroupViewModel>  GroupViewModels { get; set; } = new List<GroupViewModel>();
 
+        private readonly ProcurementDBContext _procurementDBContext;
         private readonly IGroupManagement _groupManagement;
 
-        public GroupManagementModel(IGroupManagement groupManagement)
+        public GroupManagementModel(ProcurementDBContext procurementDBContext, IGroupManagement groupManagement)
         {
+            _procurementDBContext = procurementDBContext;
             _groupManagement = groupManagement;
 
         }
 
-        public async Task OnGet()
+        public void OnGet()
         {
 
-            GroupViewModels = (await _groupManagement.GetAll()).Select(x=> new GroupViewModel { Id = x.Id, Name = x.GroupName }).ToList();
+          //  GroupViewModels =_procurementDBContext.UserGroups.Select(x=> new GroupViewModel { Name = x.GroupName, Id = x.Id }).ToList();
         }
 
 
