@@ -915,20 +915,20 @@ namespace BsslProcurement.Migrations
                     b.HasData(
                         new
                         {
-                            Id = "55bb663b-e823-4a33-880c-f49b7488732b",
-                            ConcurrencyStamp = "2949e778-dc54-458f-90b5-ef23db7d1cf8",
+                            Id = "b5a7524b-427c-41cc-aa83-a174a5144103",
+                            ConcurrencyStamp = "55d97352-1170-4bae-9ecb-3da2c8616cdb",
                             Name = "Admin"
                         },
                         new
                         {
-                            Id = "475974e5-4322-447a-b461-54cfac1b6612",
-                            ConcurrencyStamp = "b58ed752-7bf2-428c-8cd3-17a2e59384e1",
+                            Id = "30c9d66f-5429-4606-90d2-0fe7be148230",
+                            ConcurrencyStamp = "b66fa9a9-0969-4403-8595-8d8243437ea9",
                             Name = "Staff"
                         },
                         new
                         {
-                            Id = "86061be3-5007-4a0e-9f29-c34c5ff232f4",
-                            ConcurrencyStamp = "f81b93a0-1cf1-43aa-83c5-7cf61e2c877c",
+                            Id = "7326f46a-f6b9-413a-992e-b5711ac17952",
+                            ConcurrencyStamp = "6f82343b-6ed8-4852-a301-2f9cade4dd14",
                             Name = "Vendor"
                         });
                 });

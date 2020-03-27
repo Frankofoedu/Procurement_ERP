@@ -349,4 +349,5 @@ healthchecksdb
 /ramblings.txt
 /BsslProcurement/wwwroot/Attachment
 /BsslProcurement/appsettings.json
+/BsslProcurement/Migrations
 /testApp
