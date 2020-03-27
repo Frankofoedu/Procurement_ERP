@@ -97,22 +97,22 @@ namespace DcProcurement
             modelBuilder.Entity<RequisitionItem>().HasOne(m => m.Vendor).WithMany(n => n.RequisitionItems).HasForeignKey(w => w.VendorId);
 
             modelBuilder.Entity<Job>().ToTable("Jobs");
-            modelBuilder.Entity<RequisitionJob>()
-             .Property(e => e.RequisitionId)
-             .HasColumnName("FK_Req_Job");
+            //modelBuilder.Entity<RequisitionJob>()
+            // .Property(e => e.RequisitionId)
+            // .HasColumnName("FK_Req_Job");
 
-            modelBuilder.Entity<ProcurementJob>()
-              .Property(e => e.RequisitionId)
-              .HasColumnName("FK_Proc_Job");
-            modelBuilder.Entity<PrequalificationJob>()
-              .Property(e => e.CompanyInfoId)
-              .HasColumnName(nameof(PrequalificationJob.CompanyInfoId));
+            //modelBuilder.Entity<ProcurementJob>()
+            //  .Property(e => e.RequisitionId)
+            //  .HasColumnName("FK_Proc_Job");
+            //modelBuilder.Entity<PrequalificationJob>()
+            //  .Property(e => e.CompanyInfoId)
+            //  .HasColumnName(nameof(PrequalificationJob.CompanyInfoId));
 
-            modelBuilder.Entity<RequisitionJob>().HasOne(x => x.Requisition).WithMany(x => x.RequisitionJobs).HasForeignKey(x => x.RequisitionId).OnDelete(DeleteBehavior.Cascade);
+            //modelBuilder.Entity<RequisitionJob>().HasOne(x => x.Requisition).WithMany(x => x.RequisitionJobs).HasForeignKey(x => x.RequisitionId).OnDelete(DeleteBehavior.Cascade);
 
-            modelBuilder.Entity<ProcurementJob>().HasOne(x => x.Requisition).WithMany(x => x.ProcurementJobs).HasForeignKey(x => x.RequisitionId).OnDelete(DeleteBehavior.Cascade);
+            //modelBuilder.Entity<ProcurementJob>().HasOne(x => x.Requisition).WithMany(x => x.ProcurementJobs).HasForeignKey(x => x.RequisitionId).OnDelete(DeleteBehavior.Cascade);
 
-            modelBuilder.Entity<PrequalificationJob>().HasOne(x => x.CompanyInfo).WithMany(x => x.PrequalificationJobs).HasForeignKey(x => x.CompanyInfoId).OnDelete(DeleteBehavior.Cascade);
+            //modelBuilder.Entity<PrequalificationJob>().HasOne(x => x.CompanyInfo).WithMany(x => x.PrequalificationJobs).HasForeignKey(x => x.CompanyInfoId).OnDelete(DeleteBehavior.Cascade);
 
             #region Seed Data
 

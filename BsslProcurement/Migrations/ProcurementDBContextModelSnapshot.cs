@@ -915,20 +915,20 @@ namespace BsslProcurement.Migrations
                     b.HasData(
                         new
                         {
-                            Id = "b5a7524b-427c-41cc-aa83-a174a5144103",
-                            ConcurrencyStamp = "55d97352-1170-4bae-9ecb-3da2c8616cdb",
+                            Id = "37ed42df-41bd-48e5-bf9a-8724a08926d8",
+                            ConcurrencyStamp = "bb25edca-cd90-4400-a056-992c972c20d9",
                             Name = "Admin"
                         },
                         new
                         {
-                            Id = "30c9d66f-5429-4606-90d2-0fe7be148230",
-                            ConcurrencyStamp = "b66fa9a9-0969-4403-8595-8d8243437ea9",
+                            Id = "b097318e-52c5-4e89-94fe-66a402bb955a",
+                            ConcurrencyStamp = "fd4c64c3-abf8-4ac0-b05f-c6ca3f84f4f4",
                             Name = "Staff"
                         },
                         new
                         {
-                            Id = "7326f46a-f6b9-413a-992e-b5711ac17952",
-                            ConcurrencyStamp = "6f82343b-6ed8-4852-a301-2f9cade4dd14",
+                            Id = "1cf118e7-706c-4974-adee-e8c33a7762e2",
+                            ConcurrencyStamp = "93fecb24-dbf6-4227-a5d8-fcb4cb4acbef",
                             Name = "Vendor"
                         });
                 });
@@ -1272,11 +1272,10 @@ namespace BsslProcurement.Migrations
                 {
                     b.HasBaseType("DcProcurement.Job");
 
-                    b.Property<int?>("RequisitionId")
-                        .HasColumnName("FK_Proc_Job")
+                    b.Property<int?>("RequisitionProcId")
                         .HasColumnType("int");
 
-                    b.HasIndex("RequisitionId");
+                    b.HasIndex("RequisitionProcId");
 
                     b.HasDiscriminator().HasValue("ProcurementJob");
                 });
@@ -1285,8 +1284,7 @@ namespace BsslProcurement.Migrations
                 {
                     b.HasBaseType("DcProcurement.Job");
 
-                    b.Property<int>("RequisitionId")
-                        .HasColumnName("FK_Req_Job")
+                    b.Property<int?>("RequisitionId")
                         .HasColumnType("int");
 
                     b.HasIndex("RequisitionId");
@@ -1299,7 +1297,6 @@ namespace BsslProcurement.Migrations
                     b.HasBaseType("DcProcurement.Job");
 
                     b.Property<int?>("CompanyInfoId")
-                        .HasColumnName("CompanyInfoId")
                         .HasColumnType("int");
 
                     b.Property<string>("StaffId1")
@@ -1619,25 +1616,21 @@ namespace BsslProcurement.Migrations
                 {
                     b.HasOne("DcProcurement.Requisition", "Requisition")
                         .WithMany("ProcurementJobs")
-                        .HasForeignKey("RequisitionId")
-                        .OnDelete(DeleteBehavior.Cascade);
+                        .HasForeignKey("RequisitionProcId");
                 });
 
             modelBuilder.Entity("DcProcurement.Jobs.RequisitionJob", b =>
                 {
                     b.HasOne("DcProcurement.Requisition", "Requisition")
                         .WithMany("RequisitionJobs")
-                        .HasForeignKey("RequisitionId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("RequisitionId");
                 });
 
             modelBuilder.Entity("DcProcurement.PrequalificationJob", b =>
                 {
                     b.HasOne("DcProcurement.CompanyInfo", "CompanyInfo")
                         .WithMany("PrequalificationJobs")
-                        .HasForeignKey("CompanyInfoId")
-                        .OnDelete(DeleteBehavior.Cascade);
+                        .HasForeignKey("CompanyInfoId");
 
                     b.HasOne("DcProcurement.Staff", null)
                         .WithMany("AssignedPrequalificationJobs")
