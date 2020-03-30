@@ -1,4 +1,5 @@
-﻿using System;
+﻿using DcProcurement.Users;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Text;
@@ -19,6 +20,8 @@ namespace DcProcurement
 
         public ICollection<PrequalificationJob> AssignedPrequalificationJobs { get; set; }
 
+        public List<StaffUserGroup> UserGroups { get; set; }
 
+       
     }
 }

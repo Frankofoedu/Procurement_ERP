@@ -8,7 +8,7 @@ using DcProcurement.Users;
 
 namespace DcProcurement
 {
-    public class ProcurementDBContext : IdentityDbContext<User, UserRole,string>
+    public class ProcurementDBContext : IdentityDbContext<User, UserRole, string>
     {
         public ProcurementDBContext(DbContextOptions<ProcurementDBContext> options)
            : base(options)
@@ -56,6 +56,7 @@ namespace DcProcurement
         public DbSet<Staff> Staffs { get; set; }
         public DbSet<VendorUser> Vendors { get; set; }
         public DbSet<UserGroup> UserGroups { get; set; }
+        public DbSet<StaffUserGroup>  StaffUserGroups { get; set; }
         #endregion
 
         #region Jobs Tables
@@ -89,6 +90,19 @@ namespace DcProcurement
 
             #endregion
 
+            #region Many to many between staff and groups
+            modelBuilder.Entity<StaffUserGroup>()
+                .HasKey(bc => new { bc.StaffId, bc.UserGroupId });
+            modelBuilder.Entity<StaffUserGroup>()
+                .HasOne(bc => bc.Staff)
+                .WithMany(b => b.UserGroups)
+                .HasForeignKey(bc => bc.StaffId);
+            modelBuilder.Entity<StaffUserGroup>()
+                .HasOne(bc => bc.UserGroup)
+                .WithMany(c => c.Staffs)
+                .HasForeignKey(bc => bc.UserGroupId);
+            #endregion
+
             modelBuilder.Entity<Attachment>().Property(m => m.DateCreated).HasDefaultValueSql("getdate()");
             modelBuilder.Entity<Requisition>().Property(m => m.DateCreated).HasDefaultValueSql("getdate()");
 
@@ -116,7 +130,7 @@ namespace DcProcurement
 
             #region Seed Data
 
-     
+
 
             //workflow types
             List<WorkflowType> ListWorkflowTypes = new List<WorkflowType>
@@ -158,12 +172,15 @@ namespace DcProcurement
 
             modelBuilder.Entity<Workflow>().HasData(lisProcurementWorkflow);
 
+            
 
-            //seed roles
-            var roles = new List<UserRole> {
-                new UserRole { Id = Guid.NewGuid().ToString(), Name = Constants.Role.Admin },
-                new UserRole { Id = Guid.NewGuid().ToString(), Name = Constants.Role.Staff },
-                new UserRole { Id = Guid.NewGuid().ToString(), Name = Constants.Role.Vendor }
+
+
+                    //seed roles
+                    var roles = new List<UserRole> {
+                new UserRole { Id = "d6dde6fb-8354-409d-b700-40da947c88d8", Name = Constants.Role.Admin },
+                new UserRole { Id = "02174cf0-9412-4cfe-afbf-59f706d72c8e", Name = Constants.Role.Staff },
+                new UserRole { Id = "19879c37-bc22-4ed8-a7be-8819026aa3ce", Name = Constants.Role.Vendor }
             };
             modelBuilder.Entity<UserRole>().HasData(roles);
             #endregion
