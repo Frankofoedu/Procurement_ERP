@@ -34,21 +34,26 @@ namespace BsslProcurement
 
         public async Task OnGet()
         {
-
-            GroupViewModels = (await _groupManagement.GetAll()).Select(x=> new GroupViewModel { Id = x.Id, Name = x.GroupName }).ToList();
+            await LoadData();
         }
 
+        private async Task LoadData()
+        {
+            GroupViewModels = (await _groupManagement.GetAll()).Select(x => new GroupViewModel { Id = x.Id, Name = x.GroupName }).ToList();
+        }
 
         public async Task<IActionResult> OnPostAsync()
         {
             if (!ModelState.IsValid)
             {
+                await LoadData();
                 return Page();
             }
 
             if (string.IsNullOrWhiteSpace(GroupViewModel.Name))
             {
                 Error = "Group must have a name";
+                await LoadData();
                 return Page();
             }
 
@@ -60,12 +65,14 @@ namespace BsslProcurement
 
                 Message = "Group created successfully";
 
+                await LoadData();
                 return Page();
             }
             catch (Exception e)
             {
                 Error = "An error occurred";
 
+                await LoadData();
                 return Page();
             }
 

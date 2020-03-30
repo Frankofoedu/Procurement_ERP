@@ -18,9 +18,8 @@ namespace DcProcurement.Jobs
             WorkFlowId = workflowId;
             JobStatus = Enums.JobState.NotDone;
         }
-        [ForeignKey("FK_Req_Job")]
-        [Column("FK_Req_Job")]
-        public int RequisitionId { get; private set; }
+        public int? RequisitionId { get; private set; }
+        [ForeignKey("RequisitionId")]
         public Requisition Requisition { get; private set; }
 
       

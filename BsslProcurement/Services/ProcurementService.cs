@@ -31,7 +31,7 @@ namespace BsslProcurement.Services
             }
 
             //get old job
-            var oldReqJob = await _procurementDBContext.ProcurementJobs.Where(req => req.RequisitionId == requisitionId && req.JobStatus == Enums.JobState.NotDone).FirstOrDefaultAsync();
+            var oldReqJob = await _procurementDBContext.ProcurementJobs.Where(req => req.RequisitionProcId == requisitionId && req.JobStatus == Enums.JobState.NotDone).FirstOrDefaultAsync();
 
             //get requisition workflow stages
             var reqWorkFlow = _procurementDBContext.Workflows.Where(x => x.WorkflowTypeId == DcProcurement.Constants.ProcurementWorkflowId).OrderBy(x => x.Step);
@@ -124,7 +124,7 @@ namespace BsslProcurement.Services
 
         public async Task<WorkFlowApproverViewModel> GetCurrentWorkFlowOFRequisition(Requisition requisition)
         {
-            var job = await _procurementDBContext.ProcurementJobs.FirstOrDefaultAsync(x => x.RequisitionId == requisition.Id && x.JobStatus == Enums.JobState.NotDone);
+            var job = await _procurementDBContext.ProcurementJobs.FirstOrDefaultAsync(x => x.RequisitionProcId == requisition.Id && x.JobStatus == Enums.JobState.NotDone);
 
             var staffCode = await GetStaffCodeFromIdAsync(job.StaffId);
 

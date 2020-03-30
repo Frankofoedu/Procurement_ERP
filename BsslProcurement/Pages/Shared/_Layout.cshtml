@@ -40,7 +40,12 @@
                     <a href="#transactionSubMenu" data-toggle="collapse" aria-expanded="true" class="dropdown-toggle"> <i class="fas fa-comment mr-1"></i>Purchase Requisition</a>
                     <ul class="collapse list-unstyled" id="transactionSubMenu">
                         <li>
-                            <a asp-page="/Staff/ItemRequisition/NewRequisition"><i class="fas fa-shopping-cart"></i>Create Purchase Requisition</a>
+
+                            <secure-content asp-viewenginepath="/Staff/ItemRequisition/NewRequisition">
+
+                                <a asp-page="/Staff/ItemRequisition/NewRequisition"><i class="fas fa-shopping-cart"></i>Create Purchase Requisition</a>
+                            </secure-content>
+
                             <a asp-page="/Staff/ItemRequisition/SavedRequisitions"><i class="fas fa-shopping-cart"></i> View Saved Requisition</a>
                             <a asp-page="/Staff/ItemRequisition/AllRequisition"><i class="fas fa-shopping-cart"></i> View Approved Requisition</a>
                             <a><i class="fas fa-shopping-cart"></i>Import Requisition</a>
@@ -143,7 +148,7 @@
                             <a asp-page="/Staff/UoM/Index"><i class="fas fa-file-invoice mr-1"></i> UoM</a>
                         </li>
                         <li>
-                            <a asp-page="/Staff/CoC"><i class="fas fa-file-archive mr-1"></i> B C Setup</a>
+                            <a asp-page="/Staff/Administration/GroupManagement"><i class="fas fa-file-archive mr-1"></i>Staff Groups</a>
                         </li>
                         <li>
                             <a asp-page="/Staff/Items"><i class="fas fa-file-archive mr-1"></i> Items</a>

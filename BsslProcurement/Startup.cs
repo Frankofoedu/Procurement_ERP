@@ -19,6 +19,9 @@ using Microsoft.Extensions.DependencyInjection.Extensions;
 using Microsoft.OpenApi.Models;
 using Microsoft.Extensions.Logging;
 using Microsoft.AspNetCore.Authentication.Cookies;
+using DcProcurement.Users;
+using BsslProcurement.Filters;
+using BsslProcurement.TagHelpers;
 
 namespace BsslProcurement
 {
@@ -73,11 +76,14 @@ namespace BsslProcurement
             services.AddScoped<IRequisitionService, RequisitionService>();
             services.AddScoped<IProcurementService, ProcurementService>();
             services.AddScoped<IGroupManagement, GroupManagementService>();
+            services.AddSingleton<IRazorPagesControllerDiscovery, RazorPagesControllerDiscovery>();
+            services.AddSingleton(new DynamicAuthorizationOptions { DefaultAdminUser = "admin@bssltech.com" });
 
-            services.AddIdentity<User, IdentityRole>(config =>
+            services.AddIdentity<User, UserRole>(config =>
             {
                 config.SignIn.RequireConfirmedEmail = false;
-            }).AddEntityFrameworkStores<ProcurementDBContext>().AddDefaultTokenProviders();
+               
+            }).AddDefaultUI().AddEntityFrameworkStores<ProcurementDBContext>();
 
             services.ConfigureApplicationCookie(o =>
             {
@@ -115,9 +121,11 @@ namespace BsslProcurement
                 //options.User.AllowedUserNameCharacters =
                 //"abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789-._@+";
                 options.User.RequireUniqueEmail = true;
+
+                
             });
 
-            services.AddRazorPages().AddRazorRuntimeCompilation();
+            services.AddRazorPages().AddMvcOptions(options => options.Filters.Add(typeof(DynamicAuthorizationFilter))).AddRazorRuntimeCompilation();
             services.AddControllers();
             services.AddAuthentication().AddCookie("Vendors", o =>
             {// Cookie settings
@@ -131,11 +139,11 @@ namespace BsslProcurement
             });
             services.AddAuthorization();
 
-            services.AddDistributedRedisCache(option =>
-            {
-                option.Configuration = "127.0.0.1";
-                option.InstanceName = "master";
-            });
+            //services.AddDistributedRedisCache(option =>
+            //{
+            //    option.Configuration = "127.0.0.1";
+            //    option.InstanceName = "master";
+            //});
 
             services.AddSwaggerGen(c =>
             {

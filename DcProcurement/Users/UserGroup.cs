@@ -11,7 +11,7 @@ namespace DcProcurement.Users
         {
 
         }
-        public UserGroup(string groupName, List<Staff> staffs)
+        public UserGroup(string groupName, List<StaffUserGroup> staffs)
         {
             if (string.IsNullOrWhiteSpace(groupName))
                 throw new ArgumentNullException(nameof(groupName));
@@ -26,9 +26,17 @@ namespace DcProcurement.Users
 
 
         }
+
+       public void AddRoleToGroup(string roleId)
+        {
+            UserRoleId = roleId;
+        }
         public int Id { get; private set; }
         public string GroupName { get; private set; }
 
-        public List<Staff> Staffs { get; private set; }
+        public string  UserRoleId { get; private set; }
+        public UserRole UserRole  { get; private set; }
+
+        public List<StaffUserGroup>  Staffs { get; private set; }
     }
 }

@@ -7,8 +7,8 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Compile Remove="Migrations\20200213093448_companyinfoUpdate.cs" />
-    <Compile Remove="Migrations\20200213093448_companyinfoUpdate.Designer.cs" />
+    <Compile Remove="Migrations\20200329101617_usergroupUpdatejoin.cs" />
+    <Compile Remove="Migrations\20200329101617_usergroupUpdatejoin.Designer.cs" />
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="AutoMapper" Version="9.0.0" />

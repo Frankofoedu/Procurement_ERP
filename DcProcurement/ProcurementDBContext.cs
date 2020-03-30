@@ -8,7 +8,7 @@ using DcProcurement.Users;
 
 namespace DcProcurement
 {
-    public class ProcurementDBContext : IdentityDbContext<User>
+    public class ProcurementDBContext : IdentityDbContext<User, UserRole, string>
     {
         public ProcurementDBContext(DbContextOptions<ProcurementDBContext> options)
            : base(options)
@@ -56,6 +56,7 @@ namespace DcProcurement
         public DbSet<Staff> Staffs { get; set; }
         public DbSet<VendorUser> Vendors { get; set; }
         public DbSet<UserGroup> UserGroups { get; set; }
+        public DbSet<StaffUserGroup>  StaffUserGroups { get; set; }
         #endregion
 
         #region Jobs Tables
@@ -89,6 +90,19 @@ namespace DcProcurement
 
             #endregion
 
+            #region Many to many between staff and groups
+            modelBuilder.Entity<StaffUserGroup>()
+                .HasKey(bc => new { bc.StaffId, bc.UserGroupId });
+            modelBuilder.Entity<StaffUserGroup>()
+                .HasOne(bc => bc.Staff)
+                .WithMany(b => b.UserGroups)
+                .HasForeignKey(bc => bc.StaffId);
+            modelBuilder.Entity<StaffUserGroup>()
+                .HasOne(bc => bc.UserGroup)
+                .WithMany(c => c.Staffs)
+                .HasForeignKey(bc => bc.UserGroupId);
+            #endregion
+
             modelBuilder.Entity<Attachment>().Property(m => m.DateCreated).HasDefaultValueSql("getdate()");
             modelBuilder.Entity<Requisition>().Property(m => m.DateCreated).HasDefaultValueSql("getdate()");
 
@@ -97,26 +111,26 @@ namespace DcProcurement
             modelBuilder.Entity<RequisitionItem>().HasOne(m => m.Vendor).WithMany(n => n.RequisitionItems).HasForeignKey(w => w.VendorId);
 
             modelBuilder.Entity<Job>().ToTable("Jobs");
-            modelBuilder.Entity<RequisitionJob>()
-             .Property(e => e.RequisitionId)
-             .HasColumnName("FK_Req_Job");
+            //modelBuilder.Entity<RequisitionJob>()
+            // .Property(e => e.RequisitionId)
+            // .HasColumnName("FK_Req_Job");
 
-            modelBuilder.Entity<ProcurementJob>()
-              .Property(e => e.RequisitionId)
-              .HasColumnName("FK_Proc_Job");
-            modelBuilder.Entity<PrequalificationJob>()
-              .Property(e => e.CompanyInfoId)
-              .HasColumnName(nameof(PrequalificationJob.CompanyInfoId));
+            //modelBuilder.Entity<ProcurementJob>()
+            //  .Property(e => e.RequisitionId)
+            //  .HasColumnName("FK_Proc_Job");
+            //modelBuilder.Entity<PrequalificationJob>()
+            //  .Property(e => e.CompanyInfoId)
+            //  .HasColumnName(nameof(PrequalificationJob.CompanyInfoId));
 
-            modelBuilder.Entity<RequisitionJob>().HasOne(x => x.Requisition).WithMany(x => x.RequisitionJobs).HasForeignKey(x => x.RequisitionId).OnDelete(DeleteBehavior.Cascade);
+            //modelBuilder.Entity<RequisitionJob>().HasOne(x => x.Requisition).WithMany(x => x.RequisitionJobs).HasForeignKey(x => x.RequisitionId).OnDelete(DeleteBehavior.Cascade);
 
-            modelBuilder.Entity<ProcurementJob>().HasOne(x => x.Requisition).WithMany(x => x.ProcurementJobs).HasForeignKey(x => x.RequisitionId).OnDelete(DeleteBehavior.Cascade);
+            //modelBuilder.Entity<ProcurementJob>().HasOne(x => x.Requisition).WithMany(x => x.ProcurementJobs).HasForeignKey(x => x.RequisitionId).OnDelete(DeleteBehavior.Cascade);
 
-            modelBuilder.Entity<PrequalificationJob>().HasOne(x => x.CompanyInfo).WithMany(x => x.PrequalificationJobs).HasForeignKey(x => x.CompanyInfoId).OnDelete(DeleteBehavior.Cascade);
+            //modelBuilder.Entity<PrequalificationJob>().HasOne(x => x.CompanyInfo).WithMany(x => x.PrequalificationJobs).HasForeignKey(x => x.CompanyInfoId).OnDelete(DeleteBehavior.Cascade);
 
             #region Seed Data
 
-     
+
 
             //workflow types
             List<WorkflowType> ListWorkflowTypes = new List<WorkflowType>
@@ -158,14 +172,17 @@ namespace DcProcurement
 
             modelBuilder.Entity<Workflow>().HasData(lisProcurementWorkflow);
 
+            
 
-            //seed roles
-            var roles = new List<IdentityRole> {
-                new IdentityRole { Id = Guid.NewGuid().ToString(), Name = Constants.Role.Admin },
-                new IdentityRole { Id = Guid.NewGuid().ToString(), Name = Constants.Role.Staff },
-                new IdentityRole { Id = Guid.NewGuid().ToString(), Name = Constants.Role.Vendor }
+
+
+                    //seed roles
+                    var roles = new List<UserRole> {
+                new UserRole { Id = "d6dde6fb-8354-409d-b700-40da947c88d8", Name = Constants.Role.Admin },
+                new UserRole { Id = "02174cf0-9412-4cfe-afbf-59f706d72c8e", Name = Constants.Role.Staff },
+                new UserRole { Id = "19879c37-bc22-4ed8-a7be-8819026aa3ce", Name = Constants.Role.Vendor }
             };
-            modelBuilder.Entity<IdentityRole>().HasData(roles);
+            modelBuilder.Entity<UserRole>().HasData(roles);
             #endregion
 
 

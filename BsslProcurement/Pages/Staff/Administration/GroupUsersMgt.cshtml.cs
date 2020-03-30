@@ -79,5 +79,25 @@ namespace BsslProcurement.Pages.Staff.Administration
             return Page();
         }
 
+        public async Task<IActionResult> OnPostDeleteStaff(string staffId)
+        {
+
+            try
+            {
+                _groupManagement.RemoveUserFromGroup(staffId, Id);
+                Message = "Staff removed from group";
+            }
+            catch (Exception e)
+            {
+                Error = "Error: Please contact support" + Environment.NewLine + e.Message;
+            }
+            finally
+            {
+                await LoadData(Id);
+            }
+
+            return Page();
+        }
+
     }
 }
