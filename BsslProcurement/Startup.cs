@@ -21,6 +21,7 @@ using Microsoft.Extensions.Logging;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using DcProcurement.Users;
 using BsslProcurement.Filters;
+using BsslProcurement.TagHelpers;
 
 namespace BsslProcurement
 {
@@ -76,6 +77,7 @@ namespace BsslProcurement
             services.AddScoped<IProcurementService, ProcurementService>();
             services.AddScoped<IGroupManagement, GroupManagementService>();
             services.AddSingleton<IRazorPagesControllerDiscovery, RazorPagesControllerDiscovery>();
+            services.AddSingleton(new DynamicAuthorizationOptions { DefaultAdminUser = "admin@bssltech.com" });
 
             services.AddIdentity<User, UserRole>(config =>
             {
@@ -137,11 +139,11 @@ namespace BsslProcurement
             });
             services.AddAuthorization();
 
-            services.AddDistributedRedisCache(option =>
-            {
-                option.Configuration = "127.0.0.1";
-                option.InstanceName = "master";
-            });
+            //services.AddDistributedRedisCache(option =>
+            //{
+            //    option.Configuration = "127.0.0.1";
+            //    option.InstanceName = "master";
+            //});
 
             services.AddSwaggerGen(c =>
             {
