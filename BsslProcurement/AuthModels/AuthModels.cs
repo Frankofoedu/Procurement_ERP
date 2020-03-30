@@ -7,11 +7,11 @@ namespace BsslProcurement.AuthModels
 {
     public class RazorPagesControllerInfo
     {
-        public string Id => $"{AreaName}:{DisplayName}";
+        public string Id => $"{ViewEnginePath}:{DisplayName}";
 
         public string DisplayName { get; set; }
 
-        public string AreaName { get; set; }
+        public string ViewEnginePath { get; set; }
        
     }
 

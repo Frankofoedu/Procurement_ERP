@@ -351,3 +351,4 @@ healthchecksdb
 /BsslProcurement/appsettings.json
 /BsslProcurement/Migrations
 /testApp
+/BsslProcurement/TagHelpers/btnTagHelper.cs

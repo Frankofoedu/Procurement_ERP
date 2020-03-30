@@ -27,7 +27,7 @@
         <form class="panel panel-login" id="grpUsersForm" method="post" enctype="multipart/form-data">
             <div class="panel-heading">
                 <div class="row">
-                    <p class="header-text"> Groups User Management</p>
+                    <p class="header-text"> @Model.GroupName User Management</p>
 
                 </div>
                 <hr>
@@ -39,12 +39,9 @@
                 <div class="">
 
                     <div class="row p-2">
-                        <a asp-page="GroupManagement">Back to Groups Management</a>
+                        <a asp-page="GroupManagement" class="btn btn-link">Back to Groups Management</a>
                         <div class="col-sm-6">
                             <div class="row">
-                                <div class="col-12">
-                                    <label>Group Name : <span class="font-weight-bold"> @Model.GroupName</span></label>
-                                </div>
                             </div>
                         </div>
                         <div class="row">
@@ -77,8 +74,7 @@
                                                 @grp.Staff.Name
                                             </td>
                                             <td>
-
-                                                <button class="btn btn-sm btn-outline-dark ">
+                                                <button type="submit" asp-route-staffId="@grp.Staff.Id" asp-page-handler="DeleteStaff" class="btn btn-sm btn-outline-dark ">
                                                     <span class="btn-label"><i class="fa fa-trash"></i></span>Remove
                                                 </button>
                                             </td>
@@ -92,6 +88,7 @@
 
                 </div>
             </div>
+            <input type="hidden" asp-for="Id"/>
             <partial name="~/Pages/Shared/Modals/_StaffWithEmailPartial.cshtml" model="Model.StaffEmailListObj" />
         </form>
     </div>

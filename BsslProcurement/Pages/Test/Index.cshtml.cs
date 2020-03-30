@@ -18,7 +18,6 @@ using Microsoft.Extensions.Logging;
 
 namespace BsslProcurement.Pages.Test
 {
-    [Authorize]
     public class IndexModel : PageModel
     {
 

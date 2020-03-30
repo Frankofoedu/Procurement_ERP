@@ -44,10 +44,12 @@ namespace BsslProcurement.Filters
                 select role
             ).ToListAsync();
 
+
+
             foreach (var role in roles)
             {
                 var accessList = JsonConvert.DeserializeObject<IEnumerable<RazorPagesControllerInfo>>(role.Access);
-                if (accessList.Any(a => a.AreaName == viewPath))
+                if (accessList.Any(a => a.ViewEnginePath == viewPath))
                     return;
             }
 

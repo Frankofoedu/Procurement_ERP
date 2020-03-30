@@ -1,9 +1,11 @@
-﻿using BsslProcurement.Interfaces;
+﻿using BsslProcurement.AuthModels;
+using BsslProcurement.Interfaces;
 using BsslProcurement.ViewModels;
 using DcProcurement;
 using DcProcurement.Users;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
+using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -16,17 +18,16 @@ namespace BsslProcurement.Services
         private readonly ProcurementDBContext procurementdbcontext;
 
         private readonly UserManager<User> _userManager;
-        public GroupManagementService(ProcurementDBContext _procurementdbcontext, UserManager<User> userManager)
+        public GroupManagementService(ProcurementDBContext _procurementdbcontext)
         {
             procurementdbcontext = _procurementdbcontext;
-            _userManager = userManager;
         }
 
         public void AddListUserToGroup(List<string> userIds, int groupId)
         {
             if (userIds != null && userIds.Count> 0)
             {
-                var staffs = procurementdbcontext.Staffs.Where(x=> userIds.Contains(x.Id));
+                var staffs = procurementdbcontext.Staffs.Where(x=> userIds.Contains(x.Id)).Select(x => new StaffUserGroup { StaffId = x.Id, UserGroupId = groupId });
 
                 var grp = procurementdbcontext.UserGroups.Include(x => x.Staffs).FirstOrDefault( x => x.Id == groupId);
 
@@ -46,15 +47,34 @@ namespace BsslProcurement.Services
 
         public async Task AddUsersInGroupToRole(string roleName, int groupId)
         {
-            //get staff in group
-            var staffs = procurementdbcontext.UserGroups.Include(x => x.Staffs).FirstOrDefault(x => x.Id == groupId)?.Staffs;
 
-            if (staffs.Any() && staffs.Count> 0)
+            //get group
+            var grp = procurementdbcontext.UserGroups.Include(x => x.Staffs).ThenInclude(x => x.Staff).FirstOrDefault(x => x.Id == groupId);
+
+            //get staff in group
+            var staffsGrps = grp?.Staffs;
+
+            if (staffsGrps.Any() && staffsGrps.Count> 0)
             {
-                foreach (var staff in staffs)
+                foreach (var staffgrp in staffsGrps)
                 {
-                   await _userManager.AddToRoleAsync(staff, roleName);
+                    var staff = staffgrp.Staff;
+                    await _userManager.AddToRoleAsync(staff, roleName);
                 }
+            }
+
+        }
+        public async Task AddRoleToGroup(UserRole role, int groupId)
+        {
+
+            //get group
+            var grp = procurementdbcontext.UserGroups.Include(x => x.Staffs).FirstOrDefault(x => x.Id == groupId);
+
+            if (grp != null && role != null)
+            {
+                grp.AddRoleToGroup(role.Id);
+
+               await procurementdbcontext.SaveChangesAsync();
             }
         }
 
@@ -95,25 +115,76 @@ namespace BsslProcurement.Services
 
         public async Task<IList<GroupUsersViewModel>> GetAllUsersInGroup(int id)
         {
-            var grp = await procurementdbcontext.UserGroups.Include(x => x.Staffs).FirstOrDefaultAsync(x => x.Id == id);
+            var grp = await procurementdbcontext.UserGroups.Include(x => x.Staffs).ThenInclude(x=> x.Staff).FirstOrDefaultAsync(x => x.Id == id);
 
             if (grp == null)
             {
                 throw new KeyNotFoundException("Group not found");
             }
 
-           return grp.Staffs.Select(x => new GroupUsersViewModel { Staff = x, GroupId = id }).ToList();
+           return grp.Staffs.Select(x => new GroupUsersViewModel { Staff = x.Staff, GroupId = id }).ToList();
         }
 
         public async Task<UserGroup> GetById(long id)
         {
-           var mn = await procurementdbcontext.UserGroups.Include(x => x.Staffs).FirstOrDefaultAsync( x=> x.Id == id);          
+           var mn = await procurementdbcontext.UserGroups.Include(x => x.Staffs).ThenInclude(x => x.Staff).FirstOrDefaultAsync( x=> x.Id == id);          
             return mn;
         }
 
-        public void RemoveUserFromGroup(string userId)
+        public void RemoveUserFromGroup(string userId, int groupId)
         {
-            throw new NotImplementedException();
+            //get  role in group
+           var grp =  procurementdbcontext.UserGroups.Include(x => x.UserRole).Include(x=> x.Staffs).ThenInclude(x => x.Staff).FirstOrDefault(x => x.Id == groupId);
+
+            var grpRole = grp?.UserRole;
+
+            var grpRoleName = grpRole?.Name;
+
+            var user = procurementdbcontext.Staffs.FirstOrDefault(x => x.Id == userId);
+
+            if ( user != null)
+            {
+
+                //remove user from group
+               var stgp = procurementdbcontext.StaffUserGroups.FirstOrDefault(x => x.StaffId == userId && x.UserGroupId == groupId);
+
+                procurementdbcontext.Remove(stgp);
+
+                if (grpRole != null)
+                {
+                    //remove user from role
+                    _userManager.RemoveFromRoleAsync(user, grpRoleName);
+                }
+
+
+                procurementdbcontext.SaveChanges();
+            }
+
+
+        }
+
+        public async Task<List<RazorPagesControllerInfo>> GetRolesInGroup(int groupId)
+        {
+            var grp = await procurementdbcontext.UserGroups.Include(x => x.UserRole).FirstOrDefaultAsync(x => x.Id == groupId);
+
+            return JsonConvert.DeserializeObject<List<RazorPagesControllerInfo>>(grp?.UserRole.Access);
+        }
+
+        public void ClearGroupRoles(int groupId)
+        {
+            var grp = procurementdbcontext.UserGroups.Include(x => x.UserRole).Include(x => x.Staffs).FirstOrDefault(x => x.Id == groupId);
+
+            if (grp != null )
+            {
+                if (grp.UserRole != null)
+                {
+
+                    var role = procurementdbcontext.Roles.Find(grp.UserRole.Id);
+                    procurementdbcontext.Remove(role);
+                    procurementdbcontext.SaveChanges();
+                }
+
+            }
         }
     }
 }

@@ -7,6 +7,7 @@ using BsslProcurement.AuthModels;
 using BsslProcurement.Interfaces;
 using BsslProcurement.Services;
 using DcProcurement.Users;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
@@ -44,6 +45,8 @@ namespace BsslProcurement.Pages.Staff.Administration
         [BindProperty]
         public List<AccessViewModel> AccessViewModels { get; set; }
 
+        public List<RazorPagesControllerInfo> AccessPages { get; set; } = new List<RazorPagesControllerInfo>();
+
         [BindProperty(SupportsGet = true)]
         public int Id { get; set; }
 
@@ -70,7 +73,34 @@ namespace BsslProcurement.Pages.Staff.Administration
 
             GroupName = Group.GroupName;
 
+            //check if group access has been setup
+            var result = await _roleManager.RoleExistsAsync(GroupName);
+            if (result)
+            {
+                //get access pages for group
+                AccessPages = await _groupManagement.GetRolesInGroup(Id);
+
+            }
+
             AccessViewModels = (await _razorPagesControllerDiscovery.GetControllers()).Select(x => new AccessViewModel { RazorPage = x }).ToList();
+        }
+
+        public async Task<ActionResult> OnPostDeleteAccess()
+        {
+            try
+            {
+                _groupManagement.ClearGroupRoles(Id);
+                Message = "Access cleared";
+            }
+            catch (Exception e)
+            {
+                Error = "Error occured. Contact Support :" + e.Message;
+
+            }
+
+            await LoadData();
+
+            return Page();
         }
 
         public async Task<ActionResult> OnPost()
@@ -86,16 +116,39 @@ namespace BsslProcurement.Pages.Staff.Administration
             var result = await _roleManager.CreateAsync(role);
             if (result.Succeeded)
             {
-               await _groupManagement.AddUsersInGroupToRole(role.Name, Id);
 
+                try
+                {
 
-                Message = "Access saved for group";
-                await LoadData();
+                    await _groupManagement.AddUsersInGroupToRole(role.Name, Id);
+
+                    await _groupManagement.AddRoleToGroup(role, Id);
+
+                    Message = "Access saved for group";
+                    
+                }
+                catch (Exception ex)
+                {
+                    await _roleManager.DeleteAsync(role);
+                    Error = "Error occurred while creating access :" + ex.Message;
+
+                }
+                finally
+                {
+                    await LoadData();                   
+                }
+
                 return Page();
+            }
+            else
+            {
+
             }
 
             foreach (var error in result.Errors)
                 ModelState.AddModelError("", error.Description);
+
+            await LoadData();
 
             return Page();
         }
