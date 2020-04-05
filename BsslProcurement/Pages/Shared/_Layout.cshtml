@@ -1,4 +1,9 @@
-﻿<!DOCTYPE html>
+﻿@using Microsoft.AspNetCore.Identity
+@using Microsoft.EntityFrameworkCore
+@using DcProcurement
+@inject SignInManager<User> SignInManager
+
+<!DOCTYPE html>
 <html>
 <head>
     <meta charset="utf-8" />
@@ -26,158 +31,169 @@
 <body>
 
     <div class="wrapper" style="transform: none !important;">
+        @if (SignInManager.IsSignedIn(User))
+        {
+            <nav id="sidebar" class="no-print" style="transform: none !important;">
+                <div class="sidebar-header">
+                    <h3>DcProcurement</h3>
+                </div>
 
+                <ul class="list-unstyled components">
+
+
+                    <li>
+                        <a href="#transactionSubMenu" data-toggle="collapse" aria-expanded="true" class="dropdown-toggle"> <i class="fas fa-comment mr-1"></i>Purchase Requisition</a>
+                        <ul class="collapse list-unstyled" id="transactionSubMenu">
+                            <li>
+
+                                <secure-content asp-viewenginepath="/Staff/ItemRequisition/NewRequisition">
+
+                                    <a asp-page="/Staff/ItemRequisition/NewRequisition"><i class="fas fa-shopping-cart"></i>Create Purchase Requisition</a>
+                                </secure-content>
+
+                                <a asp-page="/Staff/ItemRequisition/SavedRequisitions"><i class="fas fa-shopping-cart"></i> View Saved Requisition</a>
+                                <a asp-page="/Staff/ItemRequisition/AllRequisition"><i class="fas fa-shopping-cart"></i> View Approved Requisition</a>
+                                <a><i class="fas fa-shopping-cart"></i>Import Requisition</a>
+                            </li>
+                        </ul>
+                    </li>
+                    <li>
+                        <a href="#ProcurementSubMenu" data-toggle="collapse" aria-expanded="true" class="dropdown-toggle"> <i class="fas fa-comment mr-1"></i>Procurement Process</a>
+                        <ul class="collapse list-unstyled" id="ProcurementSubMenu">
+                            <li>
+                                <a asp-page="/Staff/ItemRequisition/ProcCommencement/AllRequisition"><i class="fas fa-shopping-cart"></i>Approved Purchase Requisitions</a>
+                                <a asp-page="/Staff/ItemRequisition/ItemPricing/AllRequisitionItemPricing"><i class="fas fa-shopping-cart"></i>Procurement Costing</a>
+                            </li>
+                        </ul>
+                    </li>
+                    <li>
+                        <a href="#bidSubMenu" data-toggle="collapse" aria-expanded="true" class="dropdown-toggle"> <i class="fas fa-comment mr-1"></i>Bid Preparation</a>
+                        <ul class="collapse list-unstyled" id="bidSubMenu">
+                            <li>
+                                <a asp-page="/Staff/ItemRequisition/BidPreparation/ClearedRequisitions"><i class="fas fa-shopping-cart"></i>Cleared Requisitions</a>
+                            </li>
+                        </ul>
+                    </li>
+                    <li>
+                        <a href="#accountSubmenu" data-toggle="collapse" aria-expanded="true" class="dropdown-toggle">
+                            <i class="fas fa-file-alt mr-1"></i> Reports/Inquiry
+                        </a>
+                        <ul class="collapse list-unstyled" id="accountSubmenu">
+                            <li>
+                                <a asp-page="/Staff/Reports/Preq/PreqReport"><i class="fas fa-file-archive mr-1"></i> Procurement Report</a>
+                            </li>
+                            <li>
+                                <a href="#"><i class="fas fa-file-invoice mr-1"></i> PR Inquiry Form</a>
+                            </li>
+                        </ul>
+                    </li>
+                    <li>
+                        <a href="#vendorSubmenu" data-toggle="collapse" aria-expanded="true" class="dropdown-toggle">
+                            <i class="fas fa-user-alt mr-1"></i> Vendor
+                        </a>
+                        <ul class="collapse list-unstyled" id="vendorSubmenu">
+                            <li>
+                                <a asp-page="/Vendor/Prequalification"><i class="fas fa-file-archive mr-1"></i> Prequalification</a>
+                            </li>
+                            <li>
+                                <a asp-page="/Vendor/Bidding"><i class="fas fa-file-archive mr-1"></i> Bidding</a>
+                            </li>
+                            <li>
+                                <a asp-page="/Vendor/VendorAccessPoint"><i class="fas fa-file-archive mr-1"></i> Access Point</a>
+                            </li>
+                            <li>
+                                <a asp-page="/Vendor/PreBidding"><i class="fas fa-file-archive mr-1"></i> Pre-Bidding</a>
+                            </li>
+                        </ul>
+                    </li>
+                    <li>
+                        <secure-content>
+                            <a href="#workflowSubmenu" data-toggle="collapse" aria-expanded="true" class="dropdown-toggle">
+                                <i class="fas fa-user-alt mr-1"></i> Manage Workflow
+                            </a>
+                            <ul class="collapse list-unstyled" id="workflowSubmenu">
+                                @*<li>
+                <a asp-page="/Staff/Workflow/Prequalification"><i class="fas fa-file-archive mr-1"></i> Prequalification</a>
+            </li>*@
+                                <li>
+                                    <a asp-page="/Staff/Workflow/WorkflowSetup"><i class="fas fa-file-archive mr-1"></i> Workflow Setup</a>
+                                </li>
+                                <li>
+                                    <a asp-page="/Staff/Workflow/WorkflowActionSetup"><i class="fas fa-file-archive mr-1"></i> Workflow Actions</a>
+                                </li>
+                                <li>
+                                    <a asp-page="/Staff/Workflow/WorkflowCategory"><i class="fas fa-file-archive mr-1"></i> Workflow Categories</a>
+                                </li>
+                            </ul>
+                        </secure-content>
+                    </li>
+                    <li>
+                        <a href="#criteriaSubmenu" data-toggle="collapse" aria-expanded="true" class="dropdown-toggle">
+                            <i class="fas fa-list mr-1"></i> Manage Criteria
+                        </a>
+                        <ul class="collapse list-unstyled" id="criteriaSubmenu">
+                            <li>
+                                <a asp-page="/Staff/Criteria/General"><i class="fas fa-file-archive mr-1"></i> General Criteria</a>
+                            </li>
+                            <li>
+                                <a asp-page="/Staff/Criteria/Category"><i class="fas fa-file-archive mr-1"></i> Category Criteria</a>
+                            </li>
+                            <li>
+                                <a asp-page="/Staff/Criteria/SubCategory"><i class="fas fa-file-archive mr-1"></i> Sub-category Criteria</a>
+                            </li>
+                            <li>
+                                <a asp-page="/Staff/Criteria/Item"><i class="fas fa-file-archive mr-1"></i> Item Criteria</a>
+                            </li>
+                        </ul>
+                    </li>
+                    <li>
+                        <secure-content>
+                            <a href="#pagesSubmenu" data-toggle="collapse" aria-expanded="true" class="dropdown-toggle">
+                                <i class="fas fa-file-alt mr-1"></i> Setup
+                            </a>
+                            <ul class="collapse list-unstyled" id="pagesSubmenu">
+                                <li>
+                                    <a asp-page="/Staff/UoM/Index"><i class="fas fa-file-invoice mr-1"></i> UoM</a>
+                                </li>
+                                <li>
+                                    <a asp-page="/Staff/Administration/GroupManagement"><i class="fas fa-file-archive mr-1"></i>User Management</a>
+                                </li>
+                                <li>
+                                    <a asp-page="/Staff/PreQSetup"><i class="fas fa-file-invoice mr-1"></i> Prequalification Setup</a>
+                                </li>
+
+                                @*<li>
+                <a asp-page="/Staff/ProPolicy"><i class="fas fa-file-invoice mr-1"></i> Publish Procurement</a>
+            </li>*@
+
+                                @*<li>
+                <a asp-page="/Staff/PSISS"><i class="fas fa-file-invoice mr-1"></i> PSISS</a>
+            </li>
+            <li>
+                <a asp-page="/Staff/WorkForce"><i class="fas fa-file-archive mr-1"></i> Work Force</a>
+            </li>
+            <li>
+                <a asp-page="/Staff/WPSetup"><i class="fas fa-file-invoice mr-1"></i> W P Setup</a>
+            </li>*@
+                                @*<li>
+                <a asp-page="/Staff/Items"><i class="fas fa-file-archive mr-1"></i> Items</a>
+            </li>*@
+                            </ul>
+                        </secure-content>
+                    </li>
+                </ul>
+            </nav>
+            <!----End Sidebar ---->
+            <button type="button" id="sidebarCollapse" class="navbar-btn no-print">
+                <span></span>
+                <span></span>
+                <span></span>
+            </button>
+
+
+        }
         <!---- Sidebar ---->
-        <nav id="sidebar" class="no-print" style="transform: none !important;">
-            <div class="sidebar-header">
-                <h3>DcProcurement</h3>
-            </div>
 
-            <ul class="list-unstyled components">
-
-
-                <li>
-                    <a href="#transactionSubMenu" data-toggle="collapse" aria-expanded="true" class="dropdown-toggle"> <i class="fas fa-comment mr-1"></i>Purchase Requisition</a>
-                    <ul class="collapse list-unstyled" id="transactionSubMenu">
-                        <li>
-
-                            <secure-content asp-viewenginepath="/Staff/ItemRequisition/NewRequisition">
-
-                                <a asp-page="/Staff/ItemRequisition/NewRequisition"><i class="fas fa-shopping-cart"></i>Create Purchase Requisition</a>
-                            </secure-content>
-
-                            <a asp-page="/Staff/ItemRequisition/SavedRequisitions"><i class="fas fa-shopping-cart"></i> View Saved Requisition</a>
-                            <a asp-page="/Staff/ItemRequisition/AllRequisition"><i class="fas fa-shopping-cart"></i> View Approved Requisition</a>
-                            <a><i class="fas fa-shopping-cart"></i>Import Requisition</a>
-                        </li>
-                    </ul>
-                </li>
-                <li>
-                    <a href="#ProcurementSubMenu" data-toggle="collapse" aria-expanded="true" class="dropdown-toggle"> <i class="fas fa-comment mr-1"></i>Procurement Process</a>
-                    <ul class="collapse list-unstyled" id="ProcurementSubMenu">
-                        <li>
-                            <a asp-page="/Staff/ItemRequisition/ProcCommencement/AllRequisition"><i class="fas fa-shopping-cart"></i>Approved Purchase Requisitions</a>
-                            <a asp-page="/Staff/ItemRequisition/ItemPricing/AllRequisitionItemPricing"><i class="fas fa-shopping-cart"></i>Procurement Costing</a>
-                        </li>
-                    </ul>
-                </li>
-                <li>
-                    <a href="#bidSubMenu" data-toggle="collapse" aria-expanded="true" class="dropdown-toggle"> <i class="fas fa-comment mr-1"></i>Bid Preparation</a>
-                    <ul class="collapse list-unstyled" id="bidSubMenu">
-                        <li>
-                            <a asp-page="/Staff/ItemRequisition/BidPreparation/ClearedRequisitions"><i class="fas fa-shopping-cart"></i>Cleared Requisitions</a>
-                        </li>
-                    </ul>
-                </li>
-                <li>
-                    <a href="#accountSubmenu" data-toggle="collapse" aria-expanded="true" class="dropdown-toggle">
-                        <i class="fas fa-file-alt mr-1"></i> Reports/Inquiry
-                    </a>
-                    <ul class="collapse list-unstyled" id="accountSubmenu">
-                        <li>
-                            <a asp-page="/Staff/Reports/Preq/PreqReport"><i class="fas fa-file-archive mr-1"></i> Procurement Report</a>
-                        </li>
-                        <li>
-                            <a href="#"><i class="fas fa-file-invoice mr-1"></i> PR Inquiry Form</a>
-                        </li>
-                    </ul>
-                </li>
-                <li>
-                    <a href="#vendorSubmenu" data-toggle="collapse" aria-expanded="true" class="dropdown-toggle">
-                        <i class="fas fa-user-alt mr-1"></i> Vendor
-                    </a>
-                    <ul class="collapse list-unstyled" id="vendorSubmenu">
-                        <li>
-                            <a asp-page="/Vendor/Prequalification"><i class="fas fa-file-archive mr-1"></i> Prequalification</a>
-                        </li>
-                        <li>
-                            <a asp-page="/Vendor/Bidding"><i class="fas fa-file-archive mr-1"></i> Bidding</a>
-                        </li>
-                        <li>
-                            <a asp-page="/Vendor/VendorAccessPoint"><i class="fas fa-file-archive mr-1"></i> Access Point</a>
-                        </li>
-                        <li>
-                            <a asp-page="/Vendor/PreBidding"><i class="fas fa-file-archive mr-1"></i> Pre-Bidding</a>
-                        </li>
-                    </ul>
-                </li>
-                <li>
-                    <a href="#workflowSubmenu" data-toggle="collapse" aria-expanded="true" class="dropdown-toggle">
-                        <i class="fas fa-user-alt mr-1"></i> Manage Workflow
-                    </a>
-                    <ul class="collapse list-unstyled" id="workflowSubmenu">
-                        @*<li>
-                                <a asp-page="/Staff/Workflow/Prequalification"><i class="fas fa-file-archive mr-1"></i> Prequalification</a>
-                            </li>*@
-                        <li>
-                            <a asp-page="/Staff/Workflow/WorkflowSetup"><i class="fas fa-file-archive mr-1"></i> Workflow Setup</a>
-                        </li>
-                        <li>
-                            <a asp-page="/Staff/Workflow/WorkflowActionSetup"><i class="fas fa-file-archive mr-1"></i> Workflow Actions</a>
-                        </li>
-                        <li>
-                            <a asp-page="/Staff/Workflow/WorkflowCategory"><i class="fas fa-file-archive mr-1"></i> Workflow Categories</a>
-                        </li>
-                    </ul>
-                </li>
-                <li>
-                    <a href="#criteriaSubmenu" data-toggle="collapse" aria-expanded="true" class="dropdown-toggle">
-                        <i class="fas fa-list mr-1"></i> Manage Criteria
-                    </a>
-                    <ul class="collapse list-unstyled" id="criteriaSubmenu">
-                        <li>
-                            <a asp-page="/Staff/Criteria/General"><i class="fas fa-file-archive mr-1"></i> General Criteria</a>
-                        </li>
-                        <li>
-                            <a asp-page="/Staff/Criteria/Category"><i class="fas fa-file-archive mr-1"></i> Category Criteria</a>
-                        </li>
-                        <li>
-                            <a asp-page="/Staff/Criteria/SubCategory"><i class="fas fa-file-archive mr-1"></i> Sub-category Criteria</a>
-                        </li>
-                        <li>
-                            <a asp-page="/Staff/Criteria/Item"><i class="fas fa-file-archive mr-1"></i> Item Criteria</a>
-                        </li>
-                    </ul>
-                </li>
-                <li>
-                    <a href="#pagesSubmenu" data-toggle="collapse" aria-expanded="true" class="dropdown-toggle">
-                        <i class="fas fa-file-alt mr-1"></i> Setup
-                    </a>
-                    <ul class="collapse list-unstyled" id="pagesSubmenu">
-                        <li>
-                            <a asp-page="/Staff/UoM/Index"><i class="fas fa-file-invoice mr-1"></i> UoM</a>
-                        </li>
-                        <li>
-                            <a asp-page="/Staff/Administration/GroupManagement"><i class="fas fa-file-archive mr-1"></i>Staff Groups</a>
-                        </li>
-                        <li>
-                            <a asp-page="/Staff/Items"><i class="fas fa-file-archive mr-1"></i> Items</a>
-                        </li>
-                        @*<li>
-            <a asp-page="/Staff/ProPolicy"><i class="fas fa-file-invoice mr-1"></i> Publish Procurement</a>
-        </li>*@
-                        <li>
-                            <a asp-page="/Staff/PreQSetup"><i class="fas fa-file-invoice mr-1"></i> Prequalification Setup</a>
-                        </li>
-                        <li>
-                            <a asp-page="/Staff/PSISS"><i class="fas fa-file-invoice mr-1"></i> PSISS</a>
-                        </li>
-                        <li>
-                            <a asp-page="/Staff/WorkForce"><i class="fas fa-file-archive mr-1"></i> Work Force</a>
-                        </li>
-                        <li>
-                            <a asp-page="/Staff/WPSetup"><i class="fas fa-file-invoice mr-1"></i> W P Setup</a>
-                        </li>
-                    </ul>
-                </li>
-            </ul>
-        </nav>
-        <!----End Sidebar ---->
-        <button type="button" id="sidebarCollapse" class="navbar-btn no-print">
-            <span></span>
-            <span></span>
-            <span></span>
-        </button>
 
         <div id="content" class="container-fluid">
             <nav id="navbar" class="navbar navbar-expand-lg navbar-light bg-white shadow-sm">
@@ -254,21 +270,21 @@
             return false;
         });
 
-        //var t = $('.table').DataTable({
-        //    "columnDefs": [{
-        //        "searchable": false,
-        //        "orderable": false,
-        //        "targets": 0
-        //    }],
-        //    "order": [[1, 'asc']]
+                    //var t = $('.table').DataTable({
+                    //    "columnDefs": [{
+                    //        "searchable": false,
+                    //        "orderable": false,
+                    //        "targets": 0
+                    //    }],
+                    //    "order": [[1, 'asc']]
 
-        //});
+                    //});
 
-        //t.on('order.dt search.dt', function () {
-        //    t.column(0, { search: 'applied', order: 'applied' }).nodes().each(function (cell, i) {
-        //        cell.innerHTML = i + 1;
-        //    });
-        //}).draw();
+                    //t.on('order.dt search.dt', function () {
+                    //    t.column(0, { search: 'applied', order: 'applied' }).nodes().each(function (cell, i) {
+                    //        cell.innerHTML = i + 1;
+                    //    });
+                    //}).draw();
 
     </script>
     @RenderSection("Scripts", required: false)

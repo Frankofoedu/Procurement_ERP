@@ -866,6 +866,26 @@ namespace BsslProcurement.Migrations
                     b.ToTable("AspNetUsers");
 
                     b.HasDiscriminator<string>("Discriminator").HasValue("User");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = "46b5ea46-80ab-4fba-8507-4908ac269d00",
+                            AccessFailedCount = 0,
+                            ConcurrencyStamp = "25b3444f-a85e-4e57-952b-cd9d9736b127",
+                            CreationDate = new DateTime(2020, 4, 5, 17, 20, 44, 450, DateTimeKind.Local).AddTicks(3427),
+                            Email = "admin@eproc.dcontroller.com.ng",
+                            EmailConfirmed = false,
+                            LockoutEnabled = false,
+                            NormalizedEmail = "ADMIN@EPROC.DCONTROLLER.COM.NG",
+                            NormalizedUserName = "ADMIN@EPROC.DCONTROLLER.COM.NG",
+                            PasswordHash = "AQAAAAEAACcQAAAAEA4jwXW/GAgKNpAqw/B71+NnmR1jH6esShPB+fZnqWkGLqOQHvKb8l5saPI93rZaag==",
+                            PhoneNumber = "123456789",
+                            PhoneNumberConfirmed = true,
+                            SecurityStamp = "a23f81c9-5f9a-48a5-bcc0-2788f2cc2626",
+                            TwoFactorEnabled = false,
+                            UserName = "admin@eproc.dcontroller.com.ng"
+                        });
                 });
 
             modelBuilder.Entity("DcProcurement.Users.StaffUserGroup", b =>
@@ -891,12 +911,16 @@ namespace BsslProcurement.Migrations
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
                     b.Property<string>("GroupName")
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("nvarchar(450)");
 
                     b.Property<string>("UserRoleId")
                         .HasColumnType("nvarchar(450)");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("GroupName")
+                        .IsUnique()
+                        .HasFilter("[GroupName] IS NOT NULL");
 
                     b.HasIndex("UserRoleId");
 
@@ -936,19 +960,19 @@ namespace BsslProcurement.Migrations
                         new
                         {
                             Id = "d6dde6fb-8354-409d-b700-40da947c88d8",
-                            ConcurrencyStamp = "a404355a-9aa2-46ed-afcb-4989748b6f60",
+                            ConcurrencyStamp = "df5cfe43-9d0c-459f-a1d6-30986f27bfff",
                             Name = "Admin"
                         },
                         new
                         {
                             Id = "02174cf0-9412-4cfe-afbf-59f706d72c8e",
-                            ConcurrencyStamp = "a3a05a04-433b-46d5-9ebe-2ed2831361b8",
+                            ConcurrencyStamp = "2252c3f2-cc2e-4af9-9a34-5d2722140cd9",
                             Name = "Staff"
                         },
                         new
                         {
                             Id = "19879c37-bc22-4ed8-a7be-8819026aa3ce",
-                            ConcurrencyStamp = "18128efc-feea-4054-ad07-4c29be9e00d1",
+                            ConcurrencyStamp = "cd5f25de-2c70-49a2-91e6-5a07b78887f6",
                             Name = "Vendor"
                         });
                 });
