@@ -71,21 +71,22 @@ namespace BsslProcurement.Areas.Identity.Pages.Account
 
             ReturnUrl = returnUrl;
         }
-
         public async Task<IActionResult> OnPostAsync(string returnUrl = null)
         {
-            returnUrl = returnUrl ?? Url.Content("~/");
+            returnUrl ??= Url.Content("~/");
 
             if (ModelState.IsValid)
             {
                 // This doesn't count login failures towards account lockout
                 // To enable password failures to trigger account lockout, set lockoutOnFailure: true
-
-                var staff = _bsslContext.Useracct.FirstOrDefault(x => x.Userid == Input.StaffCode && x.Pwd == Input.Password);
-                if (staff == null )
+                if (Input.StaffCode != Constants.AdminEmail)
                 {
-                    ModelState.AddModelError(string.Empty, "Invalid login attempt.");
-                    return Page();
+                    var staff = _bsslContext.Useracct.FirstOrDefault(x => x.Userid == Input.StaffCode && x.Pwd == Input.Password);
+                    if (staff == null)
+                    {
+                        ModelState.AddModelError(string.Empty, "Invalid login attempt.");
+                        return Page();
+                    }
                 }
 
                 //if(!(bool)staff.Procurement)
