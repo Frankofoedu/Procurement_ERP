@@ -18,9 +18,12 @@ namespace BsslProcurement.Services
         private readonly ProcurementDBContext procurementdbcontext;
 
         private readonly UserManager<User> _userManager;
-        public GroupManagementService(ProcurementDBContext _procurementdbcontext)
+        private readonly RoleManager<UserRole> _roleManager;
+        public GroupManagementService(ProcurementDBContext _procurementdbcontext, RoleManager<UserRole> roleManager, UserManager<User> userManager)
         {
             procurementdbcontext = _procurementdbcontext;
+            _roleManager = roleManager;
+            _userManager = userManager;
         }
 
         public void AddListUserToGroup(List<string> userIds, int groupId)
@@ -96,16 +99,27 @@ namespace BsslProcurement.Services
       
         public async Task DeleteGroup(long grpId)
         {
-          var ug =  procurementdbcontext.UserGroups.Find(grpId);
+          var ug = await  procurementdbcontext.UserGroups.Include(x => x.UserRole).FirstOrDefaultAsync(x => x.Id == grpId);
 
             if (ug == null)
             {
                 throw new KeyNotFoundException("Group not found");
             }
 
-            procurementdbcontext.UserGroups.Remove(ug);
 
-           await procurementdbcontext.SaveChangesAsync();
+
+            if (ug.UserRole != null)
+            {
+                var role = await _roleManager.FindByIdAsync(ug.UserRoleId);
+                if (role != null)
+                {
+                    await _roleManager.DeleteAsync(role);
+                }
+            }                      
+           
+             procurementdbcontext.Remove(ug);
+
+            await procurementdbcontext.SaveChangesAsync();
         }
 
         public async Task<IList<UserGroup>> GetAll()

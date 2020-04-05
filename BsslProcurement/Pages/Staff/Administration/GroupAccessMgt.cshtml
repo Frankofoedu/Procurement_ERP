@@ -28,18 +28,23 @@
     <div class="col-md-12">
 
         <form method="post" class="form-horizontal">
-            <input type="hidden" asp-for="Id"/>
+            <a asp-page="GroupManagement" class="btn btn-link">Back to Groups Management</a>
+            <input type="hidden" asp-for="Id" />
+            <input type="hidden" asp-for="GroupName" />
             @if (!(Model.Group.Staffs.Any()))
             {
                 <div class="alert alert-danger alert-dismissable fade show">
                     <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
                     No staff added to the group. Please add staffs first
+
                 </div>
+
+
             }
             else
             {
 
-                <div  asp-validation-summary="ModelOnly" class="text-danger"></div>
+                <div asp-validation-summary="ModelOnly" class="text-danger"></div>
 
                 if (Model.AccessPages.Count > 0)
                 {
@@ -53,7 +58,7 @@
                     <div class="form-group">
                         <div class="row d-flex mt-5 mb-5">
                             <div class="col-5">
-                                <input type="submit"   asp-page-handler="DeleteAccess" value="Clear Access" class="btn btn-danger" />
+                                <input type="submit" asp-page-handler="DeleteAccess" value="Clear Access" class="btn btn-danger" />
                             </div>
                         </div>
 
@@ -94,7 +99,7 @@
                 }
 
                 <div class="form-group mb-5 mt-5">
-                    <div class="row mt-3 mb-5" >
+                    <div class="row mt-3 mb-5">
                         <div class="col-12">
                             <h3 class="h3 bg-primary text-white px-3 py-1 mt-2 rounded">
                                 New Access List.

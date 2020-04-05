@@ -10,6 +10,7 @@ using DcProcurement;
 using DcProcurement.Users;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
+using Microsoft.EntityFrameworkCore;
 
 namespace BsslProcurement
 {
@@ -20,9 +21,9 @@ namespace BsslProcurement
 
 
         [BindProperty]
-        public GroupViewModel GroupViewModel { get; set; }
+        public GroupViewModel GroupViewModel { get; set; } = new GroupViewModel();
 
-        public IList<GroupViewModel>  GroupViewModels { get; set; } = new List<GroupViewModel>();
+        public IList<GroupViewModel> GroupViewModels { get; set; } = new List<GroupViewModel>();
 
         private readonly IGroupManagement _groupManagement;
 
@@ -40,9 +41,39 @@ namespace BsslProcurement
         private async Task LoadData()
         {
             GroupViewModels = (await _groupManagement.GetAll()).Select(x => new GroupViewModel { Id = x.Id, Name = x.GroupName }).ToList();
+            GroupViewModel.Name = "";
+            ModelState.Clear();
+        }
+        public async Task<IActionResult> OnPostDeleteAsync(int? id)
+        {
+            if (id == null)
+            {
+                Error = " Please select group";
+                await LoadData();
+                return Page();
+
+            }
+
+            try
+            {
+                await _groupManagement.DeleteGroup(id.Value);
+
+
+                Message = "Group deleted";
+            }
+            catch (Exception e)
+            {
+                Error = "An error occured";
+            }
+            finally
+            {
+                await LoadData();
+            }
+
+            return Page();
         }
 
-        public async Task<IActionResult> OnPostAsync()
+        public async Task<IActionResult> OnPostSaveAsync()
         {
             if (!ModelState.IsValid)
             {
@@ -59,25 +90,24 @@ namespace BsslProcurement
 
             try
             {
-
                 var mn = _groupManagement.CreateGroup(GroupViewModel.Name);
-
-
                 Message = "Group created successfully";
-
-                await LoadData();
-                return Page();
+            }
+            catch (DbUpdateException)
+            {
+                Error = "Group name already exists";
             }
             catch (Exception e)
             {
                 Error = "An error occurred";
-
+            }
+            finally
+            {
                 await LoadData();
-                return Page();
             }
 
-            
-           
+
+            return Page();
         }
     }
 }
