@@ -32,6 +32,8 @@ namespace DcProcurement.Users
             UserRoleId = roleId;
         }
         public int Id { get; private set; }
+
+        
         public string GroupName { get; private set; }
 
         public string  UserRoleId { get; private set; }

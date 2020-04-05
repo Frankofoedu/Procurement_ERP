@@ -56,7 +56,7 @@ namespace DcProcurement
         public DbSet<Staff> Staffs { get; set; }
         public DbSet<VendorUser> Vendors { get; set; }
         public DbSet<UserGroup> UserGroups { get; set; }
-        public DbSet<StaffUserGroup>  StaffUserGroups { get; set; }
+        public DbSet<StaffUserGroup> StaffUserGroups { get; set; }
         #endregion
 
         #region Jobs Tables
@@ -103,8 +103,11 @@ namespace DcProcurement
                 .HasForeignKey(bc => bc.UserGroupId);
             #endregion
 
+
+
             modelBuilder.Entity<Attachment>().Property(m => m.DateCreated).HasDefaultValueSql("getdate()");
             modelBuilder.Entity<Requisition>().Property(m => m.DateCreated).HasDefaultValueSql("getdate()");
+            modelBuilder.Entity<UserGroup>().HasIndex(u => u.GroupName).IsUnique();
 
             modelBuilder.Entity<CompanyInfo>().HasOne(m => m.Vendor).WithOne(n => n.CompanyInfo).HasForeignKey<VendorUser>(l => l.CompanyInfoId);
 
@@ -172,17 +175,39 @@ namespace DcProcurement
 
             modelBuilder.Entity<Workflow>().HasData(lisProcurementWorkflow);
 
-            
 
 
 
-                    //seed roles
-                    var roles = new List<UserRole> {
+
+            //seed roles
+            var roles = new List<UserRole> {
                 new UserRole { Id = "d6dde6fb-8354-409d-b700-40da947c88d8", Name = Constants.Role.Admin },
                 new UserRole { Id = "02174cf0-9412-4cfe-afbf-59f706d72c8e", Name = Constants.Role.Staff },
                 new UserRole { Id = "19879c37-bc22-4ed8-a7be-8819026aa3ce", Name = Constants.Role.Vendor }
             };
             modelBuilder.Entity<UserRole>().HasData(roles);
+
+            //seed admin user
+            var user = new User
+            {
+                Id = Constants.AdminId,
+                UserName = Constants.AdminEmail,
+                Email = Constants.AdminEmail,
+                NormalizedEmail = Constants.AdminEmail.ToUpper(),
+                NormalizedUserName = Constants.AdminEmail.ToUpper(),
+                LockoutEnabled = true,
+                TwoFactorEnabled = false,
+                EmailConfirmed = false,
+                PhoneNumber = "123456789",
+                PhoneNumberConfirmed = false
+            };
+
+            PasswordHasher<User> ph = new PasswordHasher<User>();
+            user.PasswordHash = ph.HashPassword(user, "P-oj5!%hs17");
+
+            modelBuilder.Entity<User>().HasData(user);
+
+
             #endregion
 
 

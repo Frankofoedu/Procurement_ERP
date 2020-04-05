@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Linq;
 using System.Threading.Tasks;
 using BsslProcurement.Interfaces;
@@ -12,6 +13,7 @@ using Microsoft.AspNetCore.Mvc.RazorPages;
 namespace BsslProcurement
 {
     [Authorize]
+    [DisplayName("Saved Requisitions")]
     public class SavedRequisitionsModel : PageModel
     {
         private readonly ProcurementDBContext _context;

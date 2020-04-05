@@ -36,8 +36,6 @@ namespace BsslProcurement.Pages.Staff.Administration
         }
 
 
-        [Required]
-        [StringLength(256, ErrorMessage = "The {0} must be at least {2} characters long.")]
         [BindProperty]
         public string GroupName { get; set; }
 
@@ -82,7 +80,7 @@ namespace BsslProcurement.Pages.Staff.Administration
 
             }
 
-            AccessViewModels = (await _razorPagesControllerDiscovery.GetControllers()).Select(x => new AccessViewModel { RazorPage = x }).ToList();
+            AccessViewModels = (await _razorPagesControllerDiscovery.GetControllers()).Select(x => new AccessViewModel { RazorPage = x, IsSelected = AccessPages.Any(j => j.ViewEnginePath == x.ViewEnginePath) }).ToList();
         }
 
         public async Task<ActionResult> OnPostDeleteAccess()

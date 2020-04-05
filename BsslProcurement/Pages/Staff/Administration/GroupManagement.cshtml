@@ -45,7 +45,7 @@
                             <div class="form-group d-flex flex-row">
 
                                 <input class="form-control" asp-for="GroupViewModel.Name" />
-                                <input type="submit" id="btnNewGroup" class="btn btn-primary btn-sm mx-3" value="Add New Group" />
+                                <input type="submit" id="btnNewGroup" class="btn btn-primary btn-sm mx-3" asp-page-handler="Save" value="Add New Group" />
 
                             </div>
 
@@ -59,8 +59,9 @@
                                     <tr>
                                         <th></th>
                                         <th>Group Name</th>
-                                        
+
                                         <th>Actions</th>
+                                        <th></th>
                                     </tr>
                                 </thead>
                                 <tbody>
@@ -82,6 +83,9 @@
                                                 <a  asp-page="GroupAccessMgt" asp-route-id="@grp.Id" class="btn btn-sm btn-outline-dark ">
                                                     <span class="btn-label"><i class="fa fa-edit"></i></span>Manage Group Access
                                                 </a>
+                                            </td>
+                                            <td>
+                                                <button type="submit" asp-page-handler="Delete" asp-route-id="@grp.Id"><span class="btn-label"><i class="fa fa-trash"></i></span>Delete</button>
                                             </td>
                                         </tr>
 

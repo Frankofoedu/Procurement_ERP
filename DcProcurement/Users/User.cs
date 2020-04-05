@@ -10,6 +10,6 @@ namespace DcProcurement
     {
         [Display(Name = "Creation Date")]
         [DataType(DataType.Date)]
-        public DateTime? CreationDate { get; set; }
+        public DateTime? CreationDate { get; set; } = DateTime.Now;
     }
 }

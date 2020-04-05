@@ -11,20 +11,25 @@ using Microsoft.AspNetCore.Authorization;
 using Newtonsoft.Json;
 using BsslProcurement.AuthModels;
 using Microsoft.EntityFrameworkCore;
+using BsslProcurement.TagHelpers;
 
 namespace BsslProcurement.Filters
 {
     public class DynamicAuthorizationFilter : IAsyncAuthorizationFilter
     {
-        private readonly ProcurementDBContext _dbContext;
+        private readonly ProcurementDBContext _dbContext; 
+        private readonly DynamicAuthorizationOptions _authorizationOptions;
 
-        public DynamicAuthorizationFilter(ProcurementDBContext dbContext)
+
+        public DynamicAuthorizationFilter(ProcurementDBContext dbContext,DynamicAuthorizationOptions authorizationOptions)
         {
             _dbContext = dbContext;
+            _authorizationOptions = authorizationOptions;
         }
 
         public async Task OnAuthorizationAsync(AuthorizationFilterContext context)
         {
+            //checks if page allowsanonymous
             if (!IsProtectedPage(context))
                 return;
 
@@ -33,8 +38,17 @@ namespace BsslProcurement.Filters
                 context.Result = new UnauthorizedResult();
                 return;
             }
-           var viewPath = GetViewPath(context);
+            var viewPath = GetViewPath(context);
             var userName = context.HttpContext.User.Identity.Name;
+           
+
+            //checks if user is admin
+            if (userName.Equals(_authorizationOptions.DefaultAdminUser, StringComparison.CurrentCultureIgnoreCase))
+                return;
+
+            //checks if page is index page
+            if (viewPath == "/Staff/Index")
+                return;
 
             var roles = await (
                 from user in _dbContext.Staffs
@@ -64,10 +78,14 @@ namespace BsslProcurement.Filters
 
         private bool IsProtectedPage(AuthorizationFilterContext context)
         {
-            if (context.Filters.Any(item => item is IAllowAnonymousFilter))
-                return false;
 
             var pageDescriptor = (PageActionDescriptor)context.ActionDescriptor;
+
+            var allowAnonymousAttribute = pageDescriptor.EndpointMetadata.OfType<AllowAnonymousAttribute>().FirstOrDefault();
+
+            if (allowAnonymousAttribute != null)
+                return false;
+
            // var controllerTypeInfo = controllerActionDescriptor.ControllerTypeInfo;
            // var actionMethodInfo = controllerActionDescriptor.MethodInfo;
 

@@ -77,7 +77,7 @@ namespace BsslProcurement
             services.AddScoped<IProcurementService, ProcurementService>();
             services.AddScoped<IGroupManagement, GroupManagementService>();
             services.AddSingleton<IRazorPagesControllerDiscovery, RazorPagesControllerDiscovery>();
-            services.AddSingleton(new DynamicAuthorizationOptions { DefaultAdminUser = "admin@bssltech.com" });
+            services.AddSingleton(new DynamicAuthorizationOptions { DefaultAdminUser = Constants.AdminEmail });
 
             services.AddIdentity<User, UserRole>(config =>
             {
@@ -90,7 +90,7 @@ namespace BsslProcurement
                 //o.LoginPath = new PathString("/Identity/Account/Login");
                 // Cookie settings
                 o.Cookie.HttpOnly = true;
-                o.ExpireTimeSpan = TimeSpan.FromMinutes(15);
+                o.ExpireTimeSpan = TimeSpan.FromHours(4);
 
                 o.LoginPath = "/Identity/Account/Login";
                 o.SlidingExpiration = true;
@@ -127,16 +127,7 @@ namespace BsslProcurement
 
             services.AddRazorPages().AddMvcOptions(options => options.Filters.Add(typeof(DynamicAuthorizationFilter))).AddRazorRuntimeCompilation();
             services.AddControllers();
-            services.AddAuthentication().AddCookie("Vendors", o =>
-            {// Cookie settings
-                o.Cookie.HttpOnly = true;
-                o.ExpireTimeSpan = TimeSpan.FromMinutes(15);
-
-                o.LoginPath = "/VendorIdentity/Account/Login";
-                o.SlidingExpiration = true;
-                o.Cookie.IsEssential = true;
-                o.ForwardAuthenticate = "Identity.Application";
-            });
+            services.AddAuthentication();
             services.AddAuthorization();
 
             //services.AddDistributedRedisCache(option =>

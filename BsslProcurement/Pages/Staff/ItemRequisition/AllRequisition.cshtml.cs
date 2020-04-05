@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Linq;
 using System.Threading.Tasks;
 using BsslProcurement.Interfaces;
@@ -14,6 +15,7 @@ using Microsoft.EntityFrameworkCore;
 namespace BsslProcurement.Pages.Staff.ItemRequisition
 {
     [Authorize]
+    [DisplayName("Approved Requisitions")]
     public class AllRequisitionModel : PageModel
     {
         private readonly ProcurementDBContext _context;
