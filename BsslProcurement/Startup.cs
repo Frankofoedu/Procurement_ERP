@@ -131,11 +131,11 @@ namespace BsslProcurement
             });
             services.AddAuthorization();
 
-            services.AddDistributedRedisCache(option =>
-            {
-                option.Configuration = "127.0.0.1";
-                option.InstanceName = "master";
-            });
+            //services.AddDistributedRedisCache(option =>
+            //{
+            //    option.Configuration = "127.0.0.1";
+            //    option.InstanceName = "master";
+            //});
 
             services.AddSwaggerGen(c =>
             {
