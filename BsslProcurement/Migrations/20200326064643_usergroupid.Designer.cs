@@ -4,14 +4,16 @@ using DcProcurement;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace BsslProcurement.Migrations
 {
     [DbContext(typeof(ProcurementDBContext))]
-    partial class ProcurementDBContextModelSnapshot : ModelSnapshot
+    [Migration("20200326064643_usergroupid")]
+    partial class usergroupid
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -1023,9 +1025,6 @@ namespace BsslProcurement.Migrations
                     b.Property<string>("StaffId")
                         .HasColumnType("nvarchar(450)");
 
-                    b.Property<int>("State")
-                        .HasColumnType("int");
-
                     b.Property<int>("WorkflowId")
                         .HasColumnType("int");
 
@@ -1110,20 +1109,20 @@ namespace BsslProcurement.Migrations
                     b.HasData(
                         new
                         {
-                            Id = "f3368141-6eea-41aa-bf71-77e440e31acf",
-                            ConcurrencyStamp = "2bb7f160-b31e-4857-b3ab-b53918290123",
+                            Id = "d9f831e9-0ad9-4087-85c0-05a25f7c2c1a",
+                            ConcurrencyStamp = "46f00790-f13b-41e2-a7b0-47506ecf85b1",
                             Name = "Admin"
                         },
                         new
                         {
-                            Id = "1cf0e53e-ff0b-49d4-93de-766edb567641",
-                            ConcurrencyStamp = "66520bf7-1aef-4534-a19f-24e881e189a7",
+                            Id = "0d9e2c60-cb0d-4228-92c4-fef40475666e",
+                            ConcurrencyStamp = "c3bab0a1-e787-4cbe-8455-e432afde5b38",
                             Name = "Staff"
                         },
                         new
                         {
-                            Id = "635a36a8-9529-4ef5-b71b-2e3684a6abef",
-                            ConcurrencyStamp = "9f7445e2-623b-4c01-9efb-810bd9af6830",
+                            Id = "30496337-d881-436f-a8ae-a6e1dc8060c8",
+                            ConcurrencyStamp = "12842078-8b40-438b-a525-a5fa0378cc6a",
                             Name = "Vendor"
                         });
                 });

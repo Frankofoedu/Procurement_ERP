@@ -33,28 +33,27 @@
 {
     Model.Remark = null;
 
-    List<SelectListItem> ActionTypeItems = ( WorkflowService.GetNextWorkActionflowSteps(Model.WorkFlowId, Model.WorkFlowTypeId.Value)).Select(m => new SelectListItem { Value = m.Id.ToString(), Text = m.Name }).ToList();
+    List<SelectListItem> ActionTypeItems = (await WorkflowService.GetNextWorkActionflowStepsAsync(Model.WorkFlowId, Model.WorkFlowTypeId.Value)).Select(m => new SelectListItem { Value = m.Id.ToString(), Text = m.Name }).ToList();
 
     //checks if job is at last stage
     //last stage: count == 0
     if (ActionTypeItems.Count > 0)
     {
-        @*<div class="row">
+        <div class="row">
             <div class="col-12">
                 <div class="form-group mb-0">
-                    <label class="btn btn-outline-dark"><input type="radio" checked asp-for="Requisition.RequesterType" value="Department" /> Department</label>
-                    <label class="btn btn-outline-dark"><input type="radio" asp-for="Requisition.RequesterType" value="Division" /> Division</label>
-                    <label class="btn btn-outline-dark"><input type="radio" asp-for="Requisition.RequesterType" value="Section" /> Section</label>
-                    <label class="btn btn-outline-dark"><input type="radio" asp-for="Requisition.RequesterType" value="Unit" /> Unit</label>
+                    <label class="btn btn-outline-dark"><input type="radio" asp-for="SelectedAction" checked value="Next" /> Send to Next Process</label>
+                    <label class="btn btn-outline-dark"><input type="radio" asp-for="SelectedAction" value="Further" /> Send for Further Processing</label>
+                    <label class="btn btn-outline-dark"><input type="radio" asp-for="SelectedAction" value="Previous" /> Send to Previous Process</label>
                 </div>
             </div>
-        </div>*@
+        </div>
+
         <div class="row">
             <div class="col-12">
                 <div class="form-group">
-                    <label>Next Authority : </label>
+                    <label>Next Process : </label>
                     <select class="form-control" id="selectAction" asp-items="ActionTypeItems" asp-for="WorkFlowId">
-                        <option value="">--Select--</option>
                     </select>
                 </div>
             </div>
@@ -124,6 +123,33 @@ else
 }
 
 <script>
+    $(document).ready(function () {
+        FillSelectActions();
+
+        $("input[name='SelectedAction']").change(function () {
+            FillSelectActions();
+        });
+    });
+
+    function FillSelectActions() {
+
+        var action = $('input[name="SelectedAction"]:checked').val();
+
+        $.ajax({
+            url: window.location.origin + "/api/workflow/WorkflowForAction/" +
+                action + "/" + @Model.WorkFlowId + "/" + @Model.WorkFlowTypeId.Value,
+
+        }).done(function (data) {
+
+            var $el = $("#selectAction");
+            $el.empty(); // remove old options
+            $.each(data, function (d) {
+              $el.append($("<option></option>")
+                 .attr("value", d.id).text(d.name));
+            });
+        });
+
+    }
 
     //to load staff modal for selecting next workflow staff
     $(function () {
