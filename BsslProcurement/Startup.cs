@@ -19,6 +19,9 @@ using Microsoft.Extensions.DependencyInjection.Extensions;
 using Microsoft.OpenApi.Models;
 using Microsoft.Extensions.Logging;
 using Microsoft.AspNetCore.Authentication.Cookies;
+using DcProcurement.Users;
+using BsslProcurement.Filters;
+using BsslProcurement.TagHelpers;
 
 namespace BsslProcurement
 {
@@ -73,18 +76,21 @@ namespace BsslProcurement
             services.AddScoped<IRequisitionService, RequisitionService>();
             services.AddScoped<IProcurementService, ProcurementService>();
             services.AddScoped<IGroupManagement, GroupManagementService>();
+            services.AddSingleton<IRazorPagesControllerDiscovery, RazorPagesControllerDiscovery>();
+            services.AddSingleton(new DynamicAuthorizationOptions { DefaultAdminUser = Constants.AdminEmail });
 
-            services.AddIdentity<User, IdentityRole>(config =>
+            services.AddIdentity<User, UserRole>(config =>
             {
                 config.SignIn.RequireConfirmedEmail = false;
-            }).AddEntityFrameworkStores<ProcurementDBContext>().AddDefaultTokenProviders();
+               
+            }).AddDefaultUI().AddEntityFrameworkStores<ProcurementDBContext>();
 
             services.ConfigureApplicationCookie(o =>
             {
                 //o.LoginPath = new PathString("/Identity/Account/Login");
                 // Cookie settings
                 o.Cookie.HttpOnly = true;
-                o.ExpireTimeSpan = TimeSpan.FromMinutes(15);
+                o.ExpireTimeSpan = TimeSpan.FromHours(4);
 
                 o.LoginPath = "/Identity/Account/Login";
                 o.SlidingExpiration = true;
@@ -115,20 +121,13 @@ namespace BsslProcurement
                 //options.User.AllowedUserNameCharacters =
                 //"abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789-._@+";
                 options.User.RequireUniqueEmail = true;
+
+                
             });
 
-            services.AddRazorPages().AddRazorRuntimeCompilation();
+            services.AddRazorPages().AddMvcOptions(options => options.Filters.Add(typeof(DynamicAuthorizationFilter))).AddRazorRuntimeCompilation();
             services.AddControllers();
-            services.AddAuthentication().AddCookie("Vendors", o =>
-            {// Cookie settings
-                o.Cookie.HttpOnly = true;
-                o.ExpireTimeSpan = TimeSpan.FromMinutes(15);
-
-                o.LoginPath = "/VendorIdentity/Account/Login";
-                o.SlidingExpiration = true;
-                o.Cookie.IsEssential = true;
-                o.ForwardAuthenticate = "Identity.Application";
-            });
+            services.AddAuthentication();
             services.AddAuthorization();
 
             //services.AddDistributedRedisCache(option =>

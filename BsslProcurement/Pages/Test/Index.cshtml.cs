@@ -5,6 +5,7 @@ using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 using BsslProcurement.Interfaces;
+using BsslProcurement.Services;
 using DcProcurement;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Hosting;
@@ -17,7 +18,6 @@ using Microsoft.Extensions.Logging;
 
 namespace BsslProcurement.Pages.Test
 {
-    [Authorize]
     public class IndexModel : PageModel
     {
 
@@ -27,6 +27,7 @@ namespace BsslProcurement.Pages.Test
         private readonly UserManager<User> _userManager;
         private readonly ILogger<IndexModel> _logger;
         private readonly IEmailSenderService _emailSender;
+        private readonly IRazorPagesControllerDiscovery _razorPagesControllerDiscovery;
 
         private readonly IWebHostEnvironment _Env;
 
@@ -49,7 +50,7 @@ namespace BsslProcurement.Pages.Test
             UserManager<User> userManager,
             ILogger<IndexModel> logger,
             SignInManager<User> signInManager,
-            IEmailSenderService emailSender, IWebHostEnvironment Env)
+            IEmailSenderService emailSender, IWebHostEnvironment Env, IRazorPagesControllerDiscovery razorPagesControllerDiscovery)
         {
             _procContext = procContext;
             _bsslContext = bsslContext;
@@ -57,11 +58,14 @@ namespace BsslProcurement.Pages.Test
             _logger = logger;
             _signInManager = signInManager;
             _emailSender = emailSender;
+            _razorPagesControllerDiscovery = razorPagesControllerDiscovery;
             _Env = Env;
         }
         public async Task OnGetAsync()
         {
-            files =  Directory.EnumerateFiles(Path.Combine(_Env.WebRootPath, "Attachment")).Select(x => Path.GetFileName(x)).ToList();
+
+            var m = await _razorPagesControllerDiscovery.GetControllers();
+            //files =  Directory.EnumerateFiles(Path.Combine(_Env.WebRootPath, "Attachment")).Select(x => Path.GetFileName(x)).ToList();
 
             //var s = Url.Content("~/");
             //using (var stream = System.IO.File.OpenRead(t.ElementAt(1)))

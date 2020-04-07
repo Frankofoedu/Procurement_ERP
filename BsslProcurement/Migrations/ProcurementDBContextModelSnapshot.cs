@@ -866,6 +866,41 @@ namespace BsslProcurement.Migrations
                     b.ToTable("AspNetUsers");
 
                     b.HasDiscriminator<string>("Discriminator").HasValue("User");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = "46b5ea46-80ab-4fba-8507-4908ac269d00",
+                            AccessFailedCount = 0,
+                            ConcurrencyStamp = "25b3444f-a85e-4e57-952b-cd9d9736b127",
+                            CreationDate = new DateTime(2020, 4, 5, 17, 20, 44, 450, DateTimeKind.Local).AddTicks(3427),
+                            Email = "admin@eproc.dcontroller.com.ng",
+                            EmailConfirmed = false,
+                            LockoutEnabled = false,
+                            NormalizedEmail = "ADMIN@EPROC.DCONTROLLER.COM.NG",
+                            NormalizedUserName = "ADMIN@EPROC.DCONTROLLER.COM.NG",
+                            PasswordHash = "AQAAAAEAACcQAAAAEA4jwXW/GAgKNpAqw/B71+NnmR1jH6esShPB+fZnqWkGLqOQHvKb8l5saPI93rZaag==",
+                            PhoneNumber = "123456789",
+                            PhoneNumberConfirmed = true,
+                            SecurityStamp = "a23f81c9-5f9a-48a5-bcc0-2788f2cc2626",
+                            TwoFactorEnabled = false,
+                            UserName = "admin@eproc.dcontroller.com.ng"
+                        });
+                });
+
+            modelBuilder.Entity("DcProcurement.Users.StaffUserGroup", b =>
+                {
+                    b.Property<string>("StaffId")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<int>("UserGroupId")
+                        .HasColumnType("int");
+
+                    b.HasKey("StaffId", "UserGroupId");
+
+                    b.HasIndex("UserGroupId");
+
+                    b.ToTable("StaffUserGroups");
                 });
 
             modelBuilder.Entity("DcProcurement.Users.UserGroup", b =>
@@ -876,11 +911,70 @@ namespace BsslProcurement.Migrations
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
                     b.Property<string>("GroupName")
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<string>("UserRoleId")
+                        .HasColumnType("nvarchar(450)");
 
                     b.HasKey("Id");
 
+                    b.HasIndex("GroupName")
+                        .IsUnique()
+                        .HasFilter("[GroupName] IS NOT NULL");
+
+                    b.HasIndex("UserRoleId");
+
                     b.ToTable("UserGroups");
+                });
+
+            modelBuilder.Entity("DcProcurement.Users.UserRole", b =>
+                {
+                    b.Property<string>("Id")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<string>("Access")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("ConcurrencyStamp")
+                        .IsConcurrencyToken()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Name")
+                        .HasColumnType("nvarchar(256)")
+                        .HasMaxLength(256);
+
+                    b.Property<string>("NormalizedName")
+                        .HasColumnType("nvarchar(256)")
+                        .HasMaxLength(256);
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("NormalizedName")
+                        .IsUnique()
+                        .HasName("RoleNameIndex")
+                        .HasFilter("[NormalizedName] IS NOT NULL");
+
+                    b.ToTable("AspNetRoles");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = "d6dde6fb-8354-409d-b700-40da947c88d8",
+                            ConcurrencyStamp = "df5cfe43-9d0c-459f-a1d6-30986f27bfff",
+                            Name = "Admin"
+                        },
+                        new
+                        {
+                            Id = "02174cf0-9412-4cfe-afbf-59f706d72c8e",
+                            ConcurrencyStamp = "2252c3f2-cc2e-4af9-9a34-5d2722140cd9",
+                            Name = "Staff"
+                        },
+                        new
+                        {
+                            Id = "19879c37-bc22-4ed8-a7be-8819026aa3ce",
+                            ConcurrencyStamp = "cd5f25de-2c70-49a2-91e6-5a07b78887f6",
+                            Name = "Vendor"
+                        });
                 });
 
             modelBuilder.Entity("DcProcurement.Workflow", b =>
@@ -1023,9 +1117,6 @@ namespace BsslProcurement.Migrations
                     b.Property<string>("StaffId")
                         .HasColumnType("nvarchar(450)");
 
-                    b.Property<int>("State")
-                        .HasColumnType("int");
-
                     b.Property<int>("WorkflowId")
                         .HasColumnType("int");
 
@@ -1078,53 +1169,6 @@ namespace BsslProcurement.Migrations
                             Id = 3,
                             Code = "0004",
                             Name = "Procurement"
-                        });
-                });
-
-            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRole", b =>
-                {
-                    b.Property<string>("Id")
-                        .HasColumnType("nvarchar(450)");
-
-                    b.Property<string>("ConcurrencyStamp")
-                        .IsConcurrencyToken()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("Name")
-                        .HasColumnType("nvarchar(256)")
-                        .HasMaxLength(256);
-
-                    b.Property<string>("NormalizedName")
-                        .HasColumnType("nvarchar(256)")
-                        .HasMaxLength(256);
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("NormalizedName")
-                        .IsUnique()
-                        .HasName("RoleNameIndex")
-                        .HasFilter("[NormalizedName] IS NOT NULL");
-
-                    b.ToTable("AspNetRoles");
-
-                    b.HasData(
-                        new
-                        {
-                            Id = "f3368141-6eea-41aa-bf71-77e440e31acf",
-                            ConcurrencyStamp = "2bb7f160-b31e-4857-b3ab-b53918290123",
-                            Name = "Admin"
-                        },
-                        new
-                        {
-                            Id = "1cf0e53e-ff0b-49d4-93de-766edb567641",
-                            ConcurrencyStamp = "66520bf7-1aef-4534-a19f-24e881e189a7",
-                            Name = "Staff"
-                        },
-                        new
-                        {
-                            Id = "635a36a8-9529-4ef5-b71b-2e3684a6abef",
-                            ConcurrencyStamp = "9f7445e2-623b-4c01-9efb-810bd9af6830",
-                            Name = "Vendor"
                         });
                 });
 
@@ -1272,11 +1316,10 @@ namespace BsslProcurement.Migrations
                 {
                     b.HasBaseType("DcProcurement.Job");
 
-                    b.Property<int?>("RequisitionId")
-                        .HasColumnName("FK_Proc_Job")
+                    b.Property<int?>("RequisitionProcId")
                         .HasColumnType("int");
 
-                    b.HasIndex("RequisitionId");
+                    b.HasIndex("RequisitionProcId");
 
                     b.HasDiscriminator().HasValue("ProcurementJob");
                 });
@@ -1285,8 +1328,7 @@ namespace BsslProcurement.Migrations
                 {
                     b.HasBaseType("DcProcurement.Job");
 
-                    b.Property<int>("RequisitionId")
-                        .HasColumnName("FK_Req_Job")
+                    b.Property<int?>("RequisitionId")
                         .HasColumnType("int");
 
                     b.HasIndex("RequisitionId");
@@ -1299,7 +1341,6 @@ namespace BsslProcurement.Migrations
                     b.HasBaseType("DcProcurement.Job");
 
                     b.Property<int?>("CompanyInfoId")
-                        .HasColumnName("CompanyInfoId")
                         .HasColumnType("int");
 
                     b.Property<string>("StaffId1")
@@ -1328,11 +1369,6 @@ namespace BsslProcurement.Migrations
                     b.Property<string>("StaffCode")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
-
-                    b.Property<int?>("UserGroupId")
-                        .HasColumnType("int");
-
-                    b.HasIndex("UserGroupId");
 
                     b.HasDiscriminator().HasValue("Staff");
                 });
@@ -1519,6 +1555,28 @@ namespace BsslProcurement.Migrations
                         .IsRequired();
                 });
 
+            modelBuilder.Entity("DcProcurement.Users.StaffUserGroup", b =>
+                {
+                    b.HasOne("DcProcurement.Staff", "Staff")
+                        .WithMany("UserGroups")
+                        .HasForeignKey("StaffId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("DcProcurement.Users.UserGroup", "UserGroup")
+                        .WithMany("Staffs")
+                        .HasForeignKey("UserGroupId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("DcProcurement.Users.UserGroup", b =>
+                {
+                    b.HasOne("DcProcurement.Users.UserRole", "UserRole")
+                        .WithMany()
+                        .HasForeignKey("UserRoleId");
+                });
+
             modelBuilder.Entity("DcProcurement.Workflow", b =>
                 {
                     b.HasOne("DcProcurement.WorkflowAction", "WorkflowAction")
@@ -1545,7 +1603,7 @@ namespace BsslProcurement.Migrations
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
                 {
-                    b.HasOne("Microsoft.AspNetCore.Identity.IdentityRole", null)
+                    b.HasOne("DcProcurement.Users.UserRole", null)
                         .WithMany()
                         .HasForeignKey("RoleId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -1572,7 +1630,7 @@ namespace BsslProcurement.Migrations
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserRole<string>", b =>
                 {
-                    b.HasOne("Microsoft.AspNetCore.Identity.IdentityRole", null)
+                    b.HasOne("DcProcurement.Users.UserRole", null)
                         .WithMany()
                         .HasForeignKey("RoleId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -1619,36 +1677,25 @@ namespace BsslProcurement.Migrations
                 {
                     b.HasOne("DcProcurement.Requisition", "Requisition")
                         .WithMany("ProcurementJobs")
-                        .HasForeignKey("RequisitionId")
-                        .OnDelete(DeleteBehavior.Cascade);
+                        .HasForeignKey("RequisitionProcId");
                 });
 
             modelBuilder.Entity("DcProcurement.Jobs.RequisitionJob", b =>
                 {
                     b.HasOne("DcProcurement.Requisition", "Requisition")
                         .WithMany("RequisitionJobs")
-                        .HasForeignKey("RequisitionId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("RequisitionId");
                 });
 
             modelBuilder.Entity("DcProcurement.PrequalificationJob", b =>
                 {
                     b.HasOne("DcProcurement.CompanyInfo", "CompanyInfo")
                         .WithMany("PrequalificationJobs")
-                        .HasForeignKey("CompanyInfoId")
-                        .OnDelete(DeleteBehavior.Cascade);
+                        .HasForeignKey("CompanyInfoId");
 
                     b.HasOne("DcProcurement.Staff", null)
                         .WithMany("AssignedPrequalificationJobs")
                         .HasForeignKey("StaffId1");
-                });
-
-            modelBuilder.Entity("DcProcurement.Staff", b =>
-                {
-                    b.HasOne("DcProcurement.Users.UserGroup", null)
-                        .WithMany("Staffs")
-                        .HasForeignKey("UserGroupId");
                 });
 
             modelBuilder.Entity("DcProcurement.VendorUser", b =>

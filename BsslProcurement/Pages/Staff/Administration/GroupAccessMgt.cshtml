@@ -1,0 +1,209 @@
+﻿@page
+@model BsslProcurement.Pages.Staff.Administration.GroupAccessMgtModel
+@{
+    ViewData["Title"] = "Group Access Mgt";
+}
+
+
+@section Styles {
+}
+
+@if (!string.IsNullOrWhiteSpace(Model.Message))
+{
+    <div class="alert alert-success alert-dismissable fade show">
+        <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+        @Model.Message
+    </div>
+}
+@if (!string.IsNullOrWhiteSpace(Model.Error))
+{
+    <div  class="alert alert-danger alert-dismissable fade show">
+        <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+        @Model.Error
+    </div>
+}
+
+
+<div class="row">
+    <div class="col-md-12">
+
+        <form method="post" class="form-horizontal">
+            <a asp-page="GroupManagement" class="btn btn-link">Back to Groups Management</a>
+            <input type="hidden" asp-for="Id" />
+            <input type="hidden" asp-for="GroupName" />
+            @if (!(Model.Group.Staffs.Any()))
+            {
+                <div class="alert alert-danger alert-dismissable fade show">
+                    <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                    No staff added to the group. Please add staffs first
+
+                </div>
+
+
+            }
+            else
+            {
+
+                <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+
+                if (Model.AccessPages.Count > 0)
+                {
+                    <div class="row">
+                        <div class="col-12">
+                            <h3 class="h3 bg-primary text-white px-3 py-1 mt-2 rounded">
+                                Current Access List
+                            </h3>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <div class="row d-flex mt-5 mb-5">
+                            <div class="col-5">
+                                <input type="submit" asp-page-handler="DeleteAccess" value="Clear Access" class="btn btn-danger" />
+                            </div>
+                        </div>
+
+                        <div class="col-md-12">
+                            <table class="table table-striped table-bordered" id="newGroupAccessTable">
+                                <thead>
+                                    <tr>
+                                        <th></th>
+                                        <th>Page Name</th>
+
+                                        <th>Page Path</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @for (int i = 0; i < Model.AccessPages.Count(); i++)
+                                    {
+                                        var p = Model.AccessPages[i];
+                                        string name;
+                                        {
+                                            name = p.DisplayName;
+                                        }
+                                        <tr>
+                                            <td>
+                                                @(i + 1)
+                                            </td>
+                                            <td>
+                                                <label>@p.DisplayName</label>
+                                            </td>
+                                            <td>
+                                                <label>@p.ViewEnginePath</label>
+                                            </td>
+                                        </tr>
+                                    }
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                }
+
+                <div class="form-group mb-5 mt-5">
+                    <div class="row mt-3 mb-5">
+                        <div class="col-12">
+                            <h3 class="h3 bg-primary text-white px-3 py-1 mt-2 rounded">
+                                New Access List.
+                            </h3>
+                        </div>
+                    </div>
+
+                    <div class="col-12">
+                        <table class="table table-striped table-bordered" id="groupAccessTable">
+                            <thead>
+                                <tr>
+                                    <th></th>
+                                    <th>Page Name</th>
+
+                                    <th>Page Path</th>
+                                    <th>Select</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @for (int i = 0; i < Model.AccessViewModels.Count(); i++)
+                                {
+                                    var p = Model.AccessViewModels[i];
+                                    string name;
+                                    {
+                                        name = p.RazorPage.DisplayName;
+                                    }
+                                    <tr>
+                                        <td>
+                                            @(i + 1)
+                                        </td>
+                                        <td>
+                                            <label>@p.RazorPage.DisplayName</label>
+                                            <input type="hidden" asp-for="AccessViewModels[i].RazorPage.DisplayName" />
+                                        </td>
+                                        <td>
+                                            <label>@p.RazorPage.ViewEnginePath</label>
+                                            <input type="hidden" asp-for="AccessViewModels[i].RazorPage.ViewEnginePath" />
+                                        </td>
+                                        <td>
+                                            <input asp-for="AccessViewModels[i].IsSelected" />
+                                        </td>
+                                    </tr>
+                                }
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+                <div class="form-group mt-2">
+                    <input type="submit" value="Create Access" class="btn btn-primary" />
+                </div>
+
+
+            }
+        </form>
+    </div>
+</div>
+
+<div>
+    <a asp-action="Index">Back to List</a>
+</div>
+
+@section Scripts {
+    <script>
+
+        $(document).ready(function () {
+
+            $('#groupAccessTable').DataTable();
+
+            $('#newGroupAccessTable').DataTable();
+
+        });
+                    //$(function () {
+                    //    $('#tree').bonsai({
+                    //        expandAll: false,
+                    //        checkboxes: true,
+                    //        createInputs: 'checkbox'
+                    //    });
+
+                    //    $('form').submit(function () {
+                    //        var i = 0, j = 0;
+                    //        $('.controller > input[type="checkbox"]:checked, .controller > input[type="checkbox"]:indeterminate').each(function () {
+                    //            var controller = $(this);
+                    //            if ($(controller).prop('indeterminate')) {
+                    //                $(controller).prop("checked", true);
+                    //            }
+                    //            var controllerName = 'SelectedControllers[' + i + ']';
+                    //            $(controller).prop('name', controllerName + '.Name');
+
+                    //            var area = $(controller).next().next();
+                    //            $(area).prop('name', controllerName + '.AreaName');
+
+                    //            $('ul > li > input[type="checkbox"]:checked', $(controller).parent()).each(function () {
+                    //                var action = $(this);
+                    //                var actionName = controllerName + '.Actions[' + j + '].Name';
+                    //                $(action).prop('name', actionName);
+                    //                j++;
+                    //            });
+                    //            j = 0;
+                    //            i++;
+                    //        });
+
+                    //        return true;
+                    //    });
+                    //});
+    </script>
+}
+

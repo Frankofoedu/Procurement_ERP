@@ -10,6 +10,7 @@ using DcProcurement;
 using DcProcurement.Users;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
+using Microsoft.EntityFrameworkCore;
 
 namespace BsslProcurement
 {
@@ -20,59 +21,93 @@ namespace BsslProcurement
 
 
         [BindProperty]
-        public GroupViewModel GroupViewModel { get; set; }
+        public GroupViewModel GroupViewModel { get; set; } = new GroupViewModel();
 
-        public List<GroupViewModel>  GroupViewModels { get; set; } = new List<GroupViewModel>();
+        public IList<GroupViewModel> GroupViewModels { get; set; } = new List<GroupViewModel>();
 
-        private readonly ProcurementDBContext _procurementDBContext;
         private readonly IGroupManagement _groupManagement;
 
-        public GroupManagementModel(ProcurementDBContext procurementDBContext, IGroupManagement groupManagement)
+        public GroupManagementModel(IGroupManagement groupManagement)
         {
-            _procurementDBContext = procurementDBContext;
             _groupManagement = groupManagement;
 
         }
 
-        public void OnGet()
+        public async Task OnGet()
         {
-
-          //  GroupViewModels =_procurementDBContext.UserGroups.Select(x=> new GroupViewModel { Name = x.GroupName, Id = x.Id }).ToList();
+            await LoadData();
         }
 
+        private async Task LoadData()
+        {
+            GroupViewModels = (await _groupManagement.GetAll()).Select(x => new GroupViewModel { Id = x.Id, Name = x.GroupName }).ToList();
+            GroupViewModel.Name = "";
+            ModelState.Clear();
+        }
+        public async Task<IActionResult> OnPostDeleteAsync(int? id)
+        {
+            if (id == null)
+            {
+                Error = " Please select group";
+                await LoadData();
+                return Page();
 
-        public async Task<IActionResult> OnPostAsync()
+            }
+
+            try
+            {
+                await _groupManagement.DeleteGroup(id.Value);
+
+
+                Message = "Group deleted";
+            }
+            catch (Exception e)
+            {
+                Error = "An error occured";
+            }
+            finally
+            {
+                await LoadData();
+            }
+
+            return Page();
+        }
+
+        public async Task<IActionResult> OnPostSaveAsync()
         {
             if (!ModelState.IsValid)
             {
+                await LoadData();
                 return Page();
             }
 
             if (string.IsNullOrWhiteSpace(GroupViewModel.Name))
             {
                 Error = "Group must have a name";
+                await LoadData();
                 return Page();
             }
 
             try
             {
-
                 var mn = _groupManagement.CreateGroup(GroupViewModel.Name);
-
-
                 Message = "Group created successfully";
-
-                return Page();
+            }
+            catch (DbUpdateException)
+            {
+                Error = "Group name already exists";
             }
             catch (Exception e)
             {
                 Error = "An error occurred";
-
-                return Page();
+            }
+            finally
+            {
+                await LoadData();
             }
 
-            
-           
+
+            return Page();
         }
     }
 }
