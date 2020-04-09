@@ -12,6 +12,7 @@ using Newtonsoft.Json;
 using BsslProcurement.AuthModels;
 using Microsoft.EntityFrameworkCore;
 using BsslProcurement.TagHelpers;
+using Microsoft.AspNetCore.Mvc.Controllers;
 
 namespace BsslProcurement.Filters
 {
@@ -29,6 +30,11 @@ namespace BsslProcurement.Filters
 
         public async Task OnAuthorizationAsync(AuthorizationFilterContext context)
         {
+            //checks if it is a controller 
+            if (context.ActionDescriptor.GetType() == typeof(ControllerActionDescriptor))
+            {
+                return;
+            }
             //checks if page allowsanonymous
             if (!IsProtectedPage(context))
                 return;
