@@ -27,7 +27,7 @@
 <div class="row">
     <div class="col-md-12">
 
-        <form method="post" class="form-horizontal">
+        <form id="groupForm" method="post" class="form-horizontal">
             <a asp-page="GroupManagement" class="btn btn-link">Back to Groups Management</a>
             <input type="hidden" asp-for="Id" />
             <input type="hidden" asp-for="GroupName" />
@@ -168,8 +168,30 @@
 
             $('#groupAccessTable').DataTable();
 
-            $('#newGroupAccessTable').DataTable();
+            var table = $('#newGroupAccessTable').DataTable();
 
+
+            // Handle form submission event
+           $('#groupForm').on('submit', function(e){
+              var form = this;
+
+              // Encode a set of form elements from all pages as an array of names and values
+              var params = table.$('input,select,textarea').serializeArray();
+
+              // Iterate over all form elements
+              $.each(params, function(){
+                 // If element doesn't exist in DOM
+                 if(!$.contains(document, form[this.name])){
+                    // Create a hidden element
+                    $(form).append(
+                       $('<input>')
+                          .attr('type', 'hidden')
+                          .attr('name', this.name)
+                          .val(this.value)
+                    );
+                 }
+              });
+           });
         });
                     //$(function () {
                     //    $('#tree').bonsai({

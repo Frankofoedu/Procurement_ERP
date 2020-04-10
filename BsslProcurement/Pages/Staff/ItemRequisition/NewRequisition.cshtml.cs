@@ -24,7 +24,7 @@ namespace BsslProcurement.Pages.Staff.ItemRequisition
 {
 
     [DisplayName("New Requisition")]
-    [Authorize]
+    [AllowAnonymous]
     public class NewRequisitionModel : PageModel
     {
         private readonly UserManager<User> _userManager;

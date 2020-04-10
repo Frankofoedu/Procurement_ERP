@@ -872,17 +872,17 @@ namespace BsslProcurement.Migrations
                         {
                             Id = "46b5ea46-80ab-4fba-8507-4908ac269d00",
                             AccessFailedCount = 0,
-                            ConcurrencyStamp = "25b3444f-a85e-4e57-952b-cd9d9736b127",
-                            CreationDate = new DateTime(2020, 4, 5, 17, 20, 44, 450, DateTimeKind.Local).AddTicks(3427),
+                            ConcurrencyStamp = "282eec05-8933-4655-a800-cacf1b1c65a8",
+                            CreationDate = new DateTime(2020, 4, 9, 0, 19, 13, 779, DateTimeKind.Local).AddTicks(8616),
                             Email = "admin@eproc.dcontroller.com.ng",
                             EmailConfirmed = false,
-                            LockoutEnabled = false,
+                            LockoutEnabled = true,
                             NormalizedEmail = "ADMIN@EPROC.DCONTROLLER.COM.NG",
                             NormalizedUserName = "ADMIN@EPROC.DCONTROLLER.COM.NG",
-                            PasswordHash = "AQAAAAEAACcQAAAAEA4jwXW/GAgKNpAqw/B71+NnmR1jH6esShPB+fZnqWkGLqOQHvKb8l5saPI93rZaag==",
+                            PasswordHash = "AQAAAAEAACcQAAAAEKhO4UVFUpsRF1nVb5RediT9qxpJYfUXUe9FTcxMrt4qC3y9fD4BXZio2a+MGIuMyQ==",
                             PhoneNumber = "123456789",
-                            PhoneNumberConfirmed = true,
-                            SecurityStamp = "a23f81c9-5f9a-48a5-bcc0-2788f2cc2626",
+                            PhoneNumberConfirmed = false,
+                            SecurityStamp = "626d8ac6-2295-4458-ab25-f8be678b7481",
                             TwoFactorEnabled = false,
                             UserName = "admin@eproc.dcontroller.com.ng"
                         });
@@ -960,19 +960,19 @@ namespace BsslProcurement.Migrations
                         new
                         {
                             Id = "d6dde6fb-8354-409d-b700-40da947c88d8",
-                            ConcurrencyStamp = "df5cfe43-9d0c-459f-a1d6-30986f27bfff",
+                            ConcurrencyStamp = "f5da770f-ec0b-408a-9d39-463d1453f207",
                             Name = "Admin"
                         },
                         new
                         {
                             Id = "02174cf0-9412-4cfe-afbf-59f706d72c8e",
-                            ConcurrencyStamp = "2252c3f2-cc2e-4af9-9a34-5d2722140cd9",
+                            ConcurrencyStamp = "f0c57ca1-6190-4ba0-98b6-40211835968c",
                             Name = "Staff"
                         },
                         new
                         {
                             Id = "19879c37-bc22-4ed8-a7be-8819026aa3ce",
-                            ConcurrencyStamp = "cd5f25de-2c70-49a2-91e6-5a07b78887f6",
+                            ConcurrencyStamp = "25556134-8b80-464c-ab15-6704ee767ec9",
                             Name = "Vendor"
                         });
                 });
@@ -1116,6 +1116,9 @@ namespace BsslProcurement.Migrations
 
                     b.Property<string>("StaffId")
                         .HasColumnType("nvarchar(450)");
+
+                    b.Property<int>("State")
+                        .HasColumnType("int");
 
                     b.Property<int>("WorkflowId")
                         .HasColumnType("int");
