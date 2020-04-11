@@ -6,6 +6,7 @@ using BsslProcurement.Interfaces;
 using BsslProcurement.ViewModels;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
+using Microsoft.EntityFrameworkCore;
 
 namespace BsslProcurement.Pages.Staff.Administration
 {
@@ -47,7 +48,7 @@ namespace BsslProcurement.Pages.Staff.Administration
 
         private async Task LoadData(int id)
         {
-            var grp = _context.UserGroups.Find(id);
+            var grp = await _context.UserGroups.FirstOrDefaultAsync(x => x.Id == id);
 
             if (grp != null)
             {

@@ -30,12 +30,15 @@ namespace BsslProcurement.Services
         {
             if (userIds != null && userIds.Count> 0)
             {
-                var staffs = procurementdbcontext.Staffs.Where(x=> userIds.Contains(x.Id)).Select(x => new StaffUserGroup { StaffId = x.Id, UserGroupId = groupId });
+                var staffs = procurementdbcontext.Staffs.Where(x=> userIds.Contains(x.Id)).Select(x => new StaffUserGroup { StaffId = x.Id, UserGroupId = groupId }).ToList();
 
                 var grp = procurementdbcontext.UserGroups.Include(x => x.Staffs).FirstOrDefault( x => x.Id == groupId);
 
                 if (grp != null)
                 {
+                    var oldstaffIds = grp.Staffs.Select(x => x.StaffId);
+                    staffs.RemoveAll(st => oldstaffIds.Contains(st.StaffId));
+
                     grp.Staffs.AddRange(staffs);
 
                     procurementdbcontext.SaveChanges();
