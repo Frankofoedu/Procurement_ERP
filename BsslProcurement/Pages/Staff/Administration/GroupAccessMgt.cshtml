@@ -17,7 +17,7 @@
 }
 @if (!string.IsNullOrWhiteSpace(Model.Error))
 {
-    <div  class="alert alert-danger alert-dismissable fade show">
+    <div class="alert alert-danger alert-dismissable fade show">
         <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
         @Model.Error
     </div>
@@ -28,6 +28,13 @@
     <div class="col-md-12">
 
         <form method="post" class="form-horizontal">
+            <div class="panel-heading">
+                <div class="panel-heading">
+                    <div class="row">
+                        <p class="header-text"> @Model.GroupName User Management</p>
+                    </div>
+                </div>
+            </div>
             <a asp-page="GroupManagement" class="btn btn-link">Back to Groups Management</a>
             <input type="hidden" asp-for="Id" />
             <input type="hidden" asp-for="GroupName" />
@@ -171,39 +178,39 @@
             $('#newGroupAccessTable').DataTable();
 
         });
-                    //$(function () {
-                    //    $('#tree').bonsai({
-                    //        expandAll: false,
-                    //        checkboxes: true,
-                    //        createInputs: 'checkbox'
-                    //    });
+                        //$(function () {
+                        //    $('#tree').bonsai({
+                        //        expandAll: false,
+                        //        checkboxes: true,
+                        //        createInputs: 'checkbox'
+                        //    });
 
-                    //    $('form').submit(function () {
-                    //        var i = 0, j = 0;
-                    //        $('.controller > input[type="checkbox"]:checked, .controller > input[type="checkbox"]:indeterminate').each(function () {
-                    //            var controller = $(this);
-                    //            if ($(controller).prop('indeterminate')) {
-                    //                $(controller).prop("checked", true);
-                    //            }
-                    //            var controllerName = 'SelectedControllers[' + i + ']';
-                    //            $(controller).prop('name', controllerName + '.Name');
+                        //    $('form').submit(function () {
+                        //        var i = 0, j = 0;
+                        //        $('.controller > input[type="checkbox"]:checked, .controller > input[type="checkbox"]:indeterminate').each(function () {
+                        //            var controller = $(this);
+                        //            if ($(controller).prop('indeterminate')) {
+                        //                $(controller).prop("checked", true);
+                        //            }
+                        //            var controllerName = 'SelectedControllers[' + i + ']';
+                        //            $(controller).prop('name', controllerName + '.Name');
 
-                    //            var area = $(controller).next().next();
-                    //            $(area).prop('name', controllerName + '.AreaName');
+                        //            var area = $(controller).next().next();
+                        //            $(area).prop('name', controllerName + '.AreaName');
 
-                    //            $('ul > li > input[type="checkbox"]:checked', $(controller).parent()).each(function () {
-                    //                var action = $(this);
-                    //                var actionName = controllerName + '.Actions[' + j + '].Name';
-                    //                $(action).prop('name', actionName);
-                    //                j++;
-                    //            });
-                    //            j = 0;
-                    //            i++;
-                    //        });
+                        //            $('ul > li > input[type="checkbox"]:checked', $(controller).parent()).each(function () {
+                        //                var action = $(this);
+                        //                var actionName = controllerName + '.Actions[' + j + '].Name';
+                        //                $(action).prop('name', actionName);
+                        //                j++;
+                        //            });
+                        //            j = 0;
+                        //            i++;
+                        //        });
 
-                    //        return true;
-                    //    });
-                    //});
+                        //        return true;
+                        //    });
+                        //});
     </script>
 }
 
