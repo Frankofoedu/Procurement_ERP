@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using BsslProcurement.Interfaces;
 using DcProcurement;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -14,10 +15,11 @@ namespace BsslProcurement.Controllers.API
     public class WorkflowController : ControllerBase
     {
         private readonly ProcurementDBContext _context;
-
-        public WorkflowController(ProcurementDBContext context)
+        private readonly IWorkFlowService _workflowService;
+        public WorkflowController(ProcurementDBContext context, IWorkFlowService workflowService)
         {
             _context = context;
+            _workflowService = workflowService;
         }
 
         // GET: api/Workflow/5
@@ -60,5 +62,78 @@ namespace BsslProcurement.Controllers.API
 
             return Ok(WorkflowStaffs);
         }
+
+        // Put: api/Workflow/WorkflowStaff/Suspend/5
+        [HttpPut("WorkflowStaff/Suspend/{WorkflowStaffId}")]
+        public async Task<IActionResult> PutSuspendWorkflowStaffAsync([FromRoute] int WorkflowStaffId)
+        {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+
+            var WorkflowStaff = await _context.WorkflowStaffs.FindAsync(WorkflowStaffId);
+            WorkflowStaff.State = Enums.WorkflowStaffState.Suspended;
+
+            await _context.SaveChangesAsync();
+
+            return Ok("Success");
+        }
+
+        // Put: api/Workflow/WorkflowStaff/Suspend/5
+        [HttpPut("WorkflowStaff/Unsuspend/{WorkflowStaffId}")]
+        public async Task<IActionResult> PutUnSuspendWorkflowStaffAsync([FromRoute] int WorkflowStaffId)
+        {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+
+            var WorkflowStaff = await _context.WorkflowStaffs.FindAsync(WorkflowStaffId);
+            WorkflowStaff.State = Enums.WorkflowStaffState.Normal;
+
+            await _context.SaveChangesAsync();
+
+            return Ok("Success");
+        }
+
+        // Delete: api/Workflow/WorkflowStaff/5
+        [HttpDelete("WorkflowStaff/{WorkflowStaffId}")]
+        public async Task<IActionResult> DeleteWorkflowStaffAsync([FromRoute] int WorkflowStaffId)
+        {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+
+            var WorkflowStaff = await _context.WorkflowStaffs.FindAsync(WorkflowStaffId);
+            _context.WorkflowStaffs.Remove(WorkflowStaff);
+            await _context.SaveChangesAsync();
+
+            return Ok("Success");
+        }
+
+        // GET: api/Workflow/WorkflowStaff/5
+        [HttpGet("WorkflowForAction/{action}/{workflowId}/{workflowTypeId}")]
+        public async Task<IActionResult> GetWorkflowForActionAsync([FromRoute] string action, [FromRoute] int workflowId, [FromRoute] int workflowTypeId)
+        {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+            var Workflows = new List<ViewModels.WorkFlowTypesViewModel>();
+
+            if (action.ToLower() == "next")
+            {
+                Workflows = await _workflowService.GetNextWorkActionflowStepsAsync(workflowId, workflowTypeId);
+            }
+            else if (action.ToLower() == "previous")
+            {
+                Workflows = await _workflowService.GetPreviousWorkActionflowStepsAsync(workflowId, workflowTypeId);
+            }
+
+            return Ok(Workflows);
+        }
+
     }
 }

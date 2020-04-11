@@ -49,6 +49,7 @@
                         <tr class="table-primary">
                             <th>S/N</th>
                             <th>Staff Name</th>
+                            <th></th>
                         </tr>
                     </thead>
                     <tbody id="workflowBody">
@@ -60,6 +61,18 @@
                             <td>@(i+1)</td>
 
                             <td>@item.Staff.Name</td>
+                            <td>
+                                @if (item.State == DcProcurement.Enums.WorkflowStaffState.Normal)
+                                {
+                                    <button class="btn btn-outline-primary btnSuspend" workflowstaffid="@item.Id">Suspend</button>
+                                }
+                                else
+                                {
+                                    <button class="btn btn-outline-primary btnSuspend" workflowstaffid="@item.Id">UnSuspend</button>
+                                }
+                                |
+                                <button class="btn btn-outline-danger btnDelete" workflowstaffid="@item.Id">Delete</button>
+                            </td>
                         </tr>
                         }
                     </tbody>
@@ -275,5 +288,50 @@
             });
         });
 
+        $('.btnDelete').on('click', function () {
+            $(this).html('<div class="spinner-border" role="status"><span class="sr-only">Loading...</span></div>');
+
+            var wid = $(this).attr('workflowstaffid');
+            var Url = window.location.origin + "/api/Workflow/WorkflowStaff/" + wid;
+
+            $.ajax({
+                url: Url,
+                type: 'DELETE'
+            }).done(function () {
+                location.reload();
+            }).fail(function (data) {
+                console.log(data);
+                alert("An error occured.");
+            });
+        });
+
+        $('.btnSuspend').on('click', function () {
+            var action = $(this).text();
+            $(this).html('<div class="spinner-border" role="status"><span class="sr-only">Loading...</span></div>');
+
+            var wid = $(this).attr('workflowstaffid');
+            var Url = window.location.origin + `/api/Workflow/WorkflowStaff/${action}/${wid}`;
+            var btn = $(this);
+
+            $.ajax({
+                url: Url,
+                type: 'PUT'
+            }).done(function () {
+                if (action.toLowerCase() === "suspend") {
+                    btn.html('UnSuspend')
+                } else {
+                    btn.html('Suspend')
+                }
+            }).fail(function (data) {
+                console.log(data);
+                alert("An error occured.");
+                
+                if (action.tolower() === "suspend") {
+                    btn.html('Suspend')
+                } else {
+                    btn.html('UnSuspend')
+                }
+            });
+        });
     </script>
 }

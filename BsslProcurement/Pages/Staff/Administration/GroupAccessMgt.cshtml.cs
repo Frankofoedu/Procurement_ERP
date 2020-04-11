@@ -11,6 +11,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
+using Microsoft.EntityFrameworkCore;
 using Newtonsoft.Json;
 
 namespace BsslProcurement.Pages.Staff.Administration
@@ -103,52 +104,62 @@ namespace BsslProcurement.Pages.Staff.Administration
 
         public async Task<ActionResult> OnPost()
         {
-           // RazorPagesControllers = await _razorPagesControllerDiscovery.GetControllers();
-           var selectedPages = AccessViewModels.Where(x => x.IsSelected).Select(x => x.RazorPage).ToList();
+            var selectedPages = AccessViewModels.Where(x => x.IsSelected).Select(x => x.RazorPage).ToList();
+            var role = await _roleManager.Roles.FirstOrDefaultAsync(m => m.NormalizedName == GroupName.ToUpper());
 
-
-            var accessJson = JsonConvert.SerializeObject(selectedPages);
-            var role = new UserRole { Name = GroupName, Access = accessJson };
-            
-
-            var result = await _roleManager.CreateAsync(role);
-            if (result.Succeeded)
+            if (role == null)
             {
+                var accessJson = JsonConvert.SerializeObject(selectedPages);
 
-                try
+                role = new UserRole { Name = GroupName, Access = accessJson };
+                var result = await _roleManager.CreateAsync(role);
+
+                if (!result.Succeeded)
                 {
+                    foreach (var error in result.Errors)
+                        ModelState.AddModelError("", error.Description);
 
-                    await _groupManagement.AddUsersInGroupToRole(role.Name, Id);
+                    await LoadData();
 
-                    await _groupManagement.AddRoleToGroup(role, Id);
-
-                    Message = "Access saved for group";
-                    
+                    return Page();
                 }
-                catch (Exception ex)
+                else
                 {
-                    await _roleManager.DeleteAsync(role);
-                    Error = "Error occurred while creating access :" + ex.Message;
+                    try
+                    {
+
+                        await _groupManagement.AddUsersInGroupToRole(role.Name, Id);
+
+                        await _groupManagement.AddRoleToGroup(role, Id);
+
+                        Message = "Access saved for group";
+                    }
+                    catch (Exception ex)
+                    {
+                        await _roleManager.DeleteAsync(role);
+                        Error = "Error occurred while creating access :" + ex.Message;
+
+                    }
+                    finally
+                    {
+                        await LoadData();                   
+                    }
+
+                    return Page();
 
                 }
-                finally
-                {
-                    await LoadData();                   
-                }
-
-                return Page();
             }
             else
             {
+                var access = JsonConvert.DeserializeObject<List<RazorPagesControllerInfo>>(role.Access);
+                access.AddRange(selectedPages);
+                role.Access = JsonConvert.SerializeObject(access.Distinct());
 
+                await _roleManager.UpdateAsync(role);
+                await LoadData();   
+                return Page();
             }
-
-            foreach (var error in result.Errors)
-                ModelState.AddModelError("", error.Description);
-
-            await LoadData();
-
-            return Page();
+                
         }
     }
 }

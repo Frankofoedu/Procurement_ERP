@@ -24,7 +24,7 @@ namespace BsslProcurement.Services
         /// </summary>
         /// <param name="id">current step of job. default is 0 for new jobs</param>
         /// <returns></returns>
-        public IEnumerable<WorkFlowTypesViewModel> GetNextWorkActionflowSteps(int workFlowId, int workflowTypeId) {
+        public async Task<List<WorkFlowTypesViewModel>> GetNextWorkActionflowStepsAsync(int workFlowId, int workflowTypeId) {
 
             //get current workflow
             var currWorkflow = _procurementDBContext.Workflows.Find(workFlowId);
@@ -36,7 +36,7 @@ namespace BsslProcurement.Services
                 //get current workflow step
                 var step = currWorkflow.Step;
 
-                var workflows = _procurementDBContext.Workflows.Include(y => y.WorkflowAction).Where(x => x.WorkflowTypeId == wfId && x.Step > step).OrderBy(x => x.Step).ToList();
+                var workflows = await _procurementDBContext.Workflows.Include(y => y.WorkflowAction).Where(x => x.WorkflowTypeId == wfId && x.Step > step).OrderBy(x => x.Step).ToListAsync();
 
                 var nextTwoWorkflows = workflows.Take(1);
 
@@ -44,7 +44,7 @@ namespace BsslProcurement.Services
                 {
                     Name = x.WorkflowAction.Name,
                     Id = x.Id
-                });
+                }).ToList();
 
 
                 return (data);
@@ -53,7 +53,7 @@ namespace BsslProcurement.Services
             else
             {
                 //new jobs e.g new requisition tasks not yet assigned a task
-                var workflows = _procurementDBContext.Workflows.Include(y => y.WorkflowAction).Where(x => x.WorkflowTypeId == workflowTypeId).OrderBy(x=> x.Step).ToList();
+                var workflows = await _procurementDBContext.Workflows.Include(y => y.WorkflowAction).Where(x => x.WorkflowTypeId == workflowTypeId).OrderBy(x=> x.Step).ToListAsync();
 
                 var nextTwoWorkflows = workflows.Take(1);
 
@@ -61,7 +61,7 @@ namespace BsslProcurement.Services
                 {
                     Name = x.WorkflowAction.Name,
                     Id = x.Id
-                });
+                }).ToList();
 
                 return data;
             }
@@ -76,7 +76,7 @@ namespace BsslProcurement.Services
         /// </summary>
         /// <param name="currentStepId">current step of job</param>
         /// <returns></returns>
-        public Task<List<WorkFlowTypesViewModel>> GetPreviousWorkActionflowSteps(int workFlowTypeId, int currentStepId) =>
+        public Task<List<WorkFlowTypesViewModel>> GetPreviousWorkActionflowStepsAsync(int workFlowTypeId, int currentStepId) =>
             //gets all workflow actions for the current job stage
             _procurementDBContext.Workflows.Include(y => y.WorkflowAction).Where(x => x.WorkflowTypeId == workFlowTypeId && x.Step < currentStepId).Select(x => new WorkFlowTypesViewModel { Name = x.WorkflowAction.Name, Id = x.Id }).ToListAsync();
     }
