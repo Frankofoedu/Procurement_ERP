@@ -102,7 +102,7 @@ namespace BsslProcurement.Pages.Staff.Administration
             return Page();
         }
 
-        public async Task<ActionResult> OnPost()
+        public async Task<ActionResult> OnPostSave()
         {
             var selectedPages = AccessViewModels.Where(x => x.IsSelected).Select(x => x.RazorPage).ToList();
             var role = await _roleManager.Roles.FirstOrDefaultAsync(m => m.NormalizedName == GroupName.ToUpper());
