@@ -85,7 +85,7 @@ namespace BsslProcurement.Pages.Staff.Administration
 
             try
             {
-                _groupManagement.RemoveUserFromGroup(staffId, Id);
+               await _groupManagement.RemoveUserFromGroupAsync(staffId, Id);
                 Message = "Staff removed from group";
             }
             catch (Exception e)

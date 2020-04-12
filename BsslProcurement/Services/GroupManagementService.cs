@@ -148,33 +148,33 @@ namespace BsslProcurement.Services
             return mn;
         }
 
-        public void RemoveUserFromGroup(string userId, int groupId)
+        public async Task RemoveUserFromGroupAsync(string userId, int groupId)
         {
             //get  role in group
-           var grp =  procurementdbcontext.UserGroups.Include(x => x.UserRole).Include(x=> x.Staffs).ThenInclude(x => x.Staff).FirstOrDefault(x => x.Id == groupId);
+           var grp = await procurementdbcontext.UserGroups.Include(x => x.UserRole).Include(x=> x.Staffs).ThenInclude(x => x.Staff).FirstOrDefaultAsync(x => x.Id == groupId);
 
             var grpRole = grp?.UserRole;
 
             var grpRoleName = grpRole?.Name;
 
-            var user = procurementdbcontext.Staffs.FirstOrDefault(x => x.Id == userId);
+            var user = await procurementdbcontext.Staffs.FirstOrDefaultAsync(x => x.Id == userId);
 
             if ( user != null)
             {
 
                 //remove user from group
-               var stgp = procurementdbcontext.StaffUserGroups.FirstOrDefault(x => x.StaffId == userId && x.UserGroupId == groupId);
+               var stgp = await procurementdbcontext.StaffUserGroups.FirstOrDefaultAsync(x => x.StaffId == userId && x.UserGroupId == groupId);
 
                 procurementdbcontext.Remove(stgp);
 
                 if (grpRole != null)
                 {
                     //remove user from role
-                    _userManager.RemoveFromRoleAsync(user, grpRoleName);
+                   await _userManager.RemoveFromRoleAsync(user, grpRoleName);
                 }
 
 
-                procurementdbcontext.SaveChanges();
+               await procurementdbcontext.SaveChangesAsync();
             }
 
 
@@ -203,5 +203,7 @@ namespace BsslProcurement.Services
 
             }
         }
+
+       
     }
 }
