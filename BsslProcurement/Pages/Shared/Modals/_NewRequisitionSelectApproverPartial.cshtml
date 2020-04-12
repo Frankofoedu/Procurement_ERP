@@ -1,0 +1,161 @@
+﻿@using BsslProcurement.Interfaces
+@using Microsoft.AspNetCore.Mvc.Rendering;
+@using BsslProcurement.ViewModels
+
+@inject IWorkFlowService  WorkflowService
+@model WorkFlowApproverViewModel
+
+<style>
+    .workflowloader {
+        border: 16px solid #f3f3f3;
+        border-top: 16px solid #3498db;
+        border-radius: 50%;
+        width: 120px;
+        height: 120px;
+        -webkit-animation: workflowspin 2s linear infinite;
+        animation: spin 2s linear infinite;
+    }
+
+    @@keyframes workflowspin {
+        0% {
+            transform: rotate(0deg);
+        }
+
+        100% {
+            transform: rotate(360deg);
+        }
+    }
+</style>
+
+@* checks if the workflow has been setup *@
+@if (Model != null)
+{
+    Model.Remark = null;
+
+    var ActionTypeItem = await WorkflowService.GetFirstWorkActionflowStepAsync(Model.WorkFlowTypeId.Value);
+
+    <div class="row">
+        <div class="col-12">
+            <div class="form-group">
+                <label>Next Process : </label>
+                <input id="selectAction" type="hidden" asp-for="WorkFlowId" value="@ActionTypeItem.Id" />
+                <input class="form-control" value="@ActionTypeItem.Name" />
+            </div>
+        </div>
+        <div class="col-sm-12">
+            <label>Staff Id : </label>
+            <span class="d-flex flex-row">
+                <input Id="txtWorkflowStaffCode" asp-for="AssignedStaffCode" class="form-control" readonly />
+                <button class="btn loadWorkflowStaffModal"><i class="fa fa-search"></i></button>
+            </span>
+        </div>
+        <div class="col-sm-12">
+            <label>Staff Name : </label>
+            <span class="d-flex flex-row">
+                <input class="form-control" asp-for="AssignedStaffName" readonly Id="txtWorkflowStaffName" />
+            </span>
+        </div>
+        <div class="col-sm-12">
+            <label>Designation : </label>
+            <span class="d-flex flex-row">
+                <input class="form-control" readonly Id="txtWorkflowStaffDesignation" />
+            </span>
+        </div>
+        <div class="col-sm-12">
+            <label>Remark : </label>
+            <span class="d-flex flex-row">
+                <textarea class="form-control" rows="5" asp-for="Remark"></textarea>
+
+            </span>
+        </div>
+    </div>
+
+    <div class="modal" id="staffWorkflowModal">
+        <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h4 class="modal-title">Staff Details</h4>
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                </div>
+                <div class="modal-body">
+                    <div id="workflowgrid"></div>
+                </div>
+                <div id="workflowspinner" class="d-flex justify-content-center">
+                    <div class="workflowloader">
+                    </div>
+                </div>
+
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <input type="hidden" id="hiddenURL" value="@Url.Action("GetStaffWorkflowPartial", "Staff", new { id = "*id*" })" )" />
+
+}
+else
+{
+    <div class="alert alert-danger alert-dismissable fade show">
+        <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+        Workflow Has not been setup. Please setup workflow
+    </div>
+}
+
+<script>
+    $(document).ready(function () {
+
+    });
+
+    //to load staff modal for selecting next workflow staff
+    $(function () {
+        $('.loadWorkflowStaffModal').on('click', function () {
+
+            var url = $('#hiddenURL').val();
+            var selId = $('#selectAction').val();
+            if (selId) {
+                url = url.replace('*id*', selId);
+            } else {
+                alert('No Action was Selected.');
+                return false;
+            }
+
+            $('#workflowgrid').empty();
+            $('#workflowspinner').addClass('d-flex');
+            $('#workflowspinner').show();
+            $('#staffWorkflowModal').modal("show");
+
+            $('#workflowgrid').load(url, function () {
+                $('#workflowspinner').removeClass('d-flex');
+                $('#workflowspinner').hide();
+                $('#staffTable').dataTable();
+
+                $('.btnStaffName').on('click', function () {
+                    //assign staff name textbox
+                    $('#txtWorkflowStaffName').val($(this).val());
+                    var staffCode = $(this).text();
+                    //assign staff code textbox
+                    $('#txtWorkflowStaffCode').val(staffCode);
+
+
+                    var rankURL = window.location.origin + "/api/Users/GetStaffRank/" + staffCode;
+
+                    $.ajax({
+                        url: rankURL,
+
+                    }).done(function (data) {
+                        //assign rank to rank textbox
+                        $('#txtWorkflowStaffDesignation').val(data);
+                    });
+
+
+                    //$('#forStaffText').val();
+                    $('#staffWorkflowModal').modal("hide");
+                    return false;
+                });
+            });
+
+            return false;
+        });
+    });
+</script>

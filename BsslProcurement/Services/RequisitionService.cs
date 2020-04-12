@@ -18,22 +18,6 @@ namespace BsslProcurement.Services
             _procurementDBContext = procurementDBContext;
         }
 
-        public async Task AddJobToNewRequisition(int requisitionId)
-        {
-            //get workflow for requisition
-            var wkflw = _procurementDBContext.Workflows.Where(x => x.WorkflowTypeId == Constants.RequisitionWorkflowId).OrderBy(x => x.Step).ToList();
-
-            if (wkflw != null)
-            {
-                var firstStage = wkflw.First();
-
-                //create new job for next stage
-                var newReqJob = new RequisitionJob(requisitionId, firstStage.Staffs.First().StaffId, firstStage.Id, "");
-                _procurementDBContext.RequisitionJobs.Add(newReqJob);
-
-               await _procurementDBContext.SaveChangesAsync();
-            }
-        }
         public async Task<List<RequisitionJob>> GetRequisitionsJobsAssignedToLoggedInUser(string userId)
         {
             var jobs = _procurementDBContext.RequisitionJobs.Include(req=> req.Workflow).ThenInclude(wk => wk.WorkflowAction).Where(x => x.StaffId == userId && x.JobStatus == Enums.JobState.NotDone);

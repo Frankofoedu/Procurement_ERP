@@ -68,8 +68,27 @@ namespace BsslProcurement.Services
 
            
         }
-            
 
+        /// <summary>
+        /// Gets all future steps for a workflow
+        /// </summary>
+        /// <param name="workflowTypeId">The workflow type's Id</param>
+        /// <returns></returns>
+        public async Task<WorkFlowTypesViewModel> GetFirstWorkActionflowStepAsync(int workflowTypeId)
+        {
+            //new jobs e.g new requisition tasks not yet assigned a task
+            var workflows = await _procurementDBContext.Workflows.Include(y => y.WorkflowAction).Where(x => x.WorkflowTypeId == workflowTypeId).OrderBy(x => x.Step).ToListAsync();
+
+            var nextTwoWorkflows = workflows.Take(1);
+
+            var data = nextTwoWorkflows.Select(x => new WorkFlowTypesViewModel
+            {
+                Name = x.WorkflowAction.Name,
+                Id = x.Id
+            }).FirstOrDefault();
+
+            return data;
+        }
 
         /// <summary>
         /// gets all the steps the job has passed through

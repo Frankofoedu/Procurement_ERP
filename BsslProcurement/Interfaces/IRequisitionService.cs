@@ -10,7 +10,6 @@ namespace BsslProcurement.Interfaces
 {
     public interface IRequisitionService
     {
-        Task AddJobToNewRequisition(int requisitionId);
         Task<List<RequisitionJob>> GetRequisitionsJobsAssignedToLoggedInUser(string userId);
         Task<List<Requisition>> GetRequisitionsForLoggedInUser(string userId);
         Task<List<Requisition>> GetSavedRequisitionsForLoggedInUser(string userId);

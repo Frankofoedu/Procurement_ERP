@@ -14,7 +14,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace BsslProcurement.Pages.Staff.Workflow
 {
-    [AllowAnonymous]
+    [Authorize]
     public class WorkflowSetupModel : PageModel
     {
         private readonly ProcurementDBContext _context;
