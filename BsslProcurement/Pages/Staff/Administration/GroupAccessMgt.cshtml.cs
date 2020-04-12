@@ -88,7 +88,7 @@ namespace BsslProcurement.Pages.Staff.Administration
         {
             try
             {
-                _groupManagement.ClearGroupRoles(Id);
+                await  _groupManagement.ClearGroupRolesAsync(Id);
                 Message = "Access cleared";
             }
             catch (Exception e)

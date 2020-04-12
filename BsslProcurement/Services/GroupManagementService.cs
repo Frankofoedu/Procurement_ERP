@@ -26,13 +26,13 @@ namespace BsslProcurement.Services
             _userManager = userManager;
         }
 
-        public void AddListUserToGroup(List<string> userIds, int groupId)
+        public async Task AddListUserToGroup(List<string> userIds, int groupId)
         {
             if (userIds != null && userIds.Count> 0)
             {
                 var staffs = procurementdbcontext.Staffs.Where(x=> userIds.Contains(x.Id)).Select(x => new StaffUserGroup { StaffId = x.Id, UserGroupId = groupId }).ToList();
 
-                var grp = procurementdbcontext.UserGroups.Include(x => x.Staffs).FirstOrDefault( x => x.Id == groupId);
+                var grp = await procurementdbcontext.UserGroups.Include(x => x.Staffs).FirstOrDefaultAsync( x => x.Id == groupId);
 
                 if (grp != null)
                 {
@@ -41,7 +41,7 @@ namespace BsslProcurement.Services
 
                     grp.Staffs.AddRange(staffs);
 
-                    procurementdbcontext.SaveChanges();
+                 await   procurementdbcontext.SaveChangesAsync();
                 }
                 else
                 {
@@ -187,18 +187,18 @@ namespace BsslProcurement.Services
             return JsonConvert.DeserializeObject<List<RazorPagesControllerInfo>>(grp?.UserRole.Access);
         }
 
-        public void ClearGroupRoles(int groupId)
+        public async Task ClearGroupRolesAsync(int groupId)
         {
-            var grp = procurementdbcontext.UserGroups.Include(x => x.UserRole).Include(x => x.Staffs).FirstOrDefault(x => x.Id == groupId);
+            var grp = await procurementdbcontext.UserGroups.Include(x => x.UserRole).Include(x => x.Staffs).FirstOrDefaultAsync(x => x.Id == groupId);
 
             if (grp != null )
             {
                 if (grp.UserRole != null)
                 {
 
-                    var role = procurementdbcontext.Roles.Find(grp.UserRole.Id);
+                    var role = await procurementdbcontext.Roles.FindAsync(grp.UserRole.Id);
                     procurementdbcontext.Remove(role);
-                    procurementdbcontext.SaveChanges();
+                    await procurementdbcontext.SaveChangesAsync();
                 }
 
             }
