@@ -20,10 +20,10 @@ namespace BsslProcurement.Interfaces
         Task DeleteGroup(long id);
 
         void AddUserToGroup(string userId);
-        void ClearGroupRoles(int groupId);
-        void AddListUserToGroup(List<string> userId, int groupId);
+        Task ClearGroupRolesAsync(int groupId);
+        Task AddListUserToGroup(List<string> userId, int groupId);
 
-        void RemoveUserFromGroup(string userId, int groupId);
+        Task RemoveUserFromGroupAsync(string userId, int groupId);
         Task<UserGroup> GetById(long id);
         Task<IList<UserGroup>> GetAll();
 
