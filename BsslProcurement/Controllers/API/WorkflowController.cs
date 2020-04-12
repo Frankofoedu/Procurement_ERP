@@ -58,7 +58,7 @@ namespace BsslProcurement.Controllers.API
             }
 
             var WorkflowStaffs = await _context.WorkflowStaffs.Include(n => n.Staff)
-                    .Where(x => x.WorkflowId == id).ToListAsync();
+                    .Where(x => x.WorkflowId == id && x.State == Enums.WorkflowStaffState.Normal).ToListAsync();
 
             return Ok(WorkflowStaffs);
         }
