@@ -29,8 +29,7 @@ namespace BsslProcurement
 
         public string Message { get; set; }
         public string Error { get; set; }
-        [BindProperty]
-        public IEnumerable<IGrouping<int?,RequisitionJob>> RequisitionJobs { get; set; }
+        public List<RequisitionJob> RequisitionJobs { get; set; }
 
 
         public async Task OnGetAsync()
@@ -39,12 +38,8 @@ namespace BsslProcurement
             {
                 var user = await GetCurrentUserAsync();
 
-                var t = await requisitionService.GetRequisitionsJobsAssignedToLoggedInUser(user.Id);
-                if (t.Count > 0)
-                {
-
-                    RequisitionJobs = t.GroupBy(x => x.Workflow.WorkflowTypeId);
-                }
+                RequisitionJobs = (await requisitionService.GetRequisitionsJobsAssignedToLoggedInUser(user.Id)).OrderBy(m=>m.Workflow.WorkflowActionId).ToList();
+                
             }
             catch (Exception ex)
             {

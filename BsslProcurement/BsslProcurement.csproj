@@ -5,6 +5,11 @@
 
     <OpenApiGenerateDocuments>false</OpenApiGenerateDocuments>
   </PropertyGroup>
+
+  <ItemGroup>
+    <Compile Remove="Migrations\BSSLSYS_ITF_DEMO\20200414174732_initial.cs" />
+    <Compile Remove="Migrations\BSSLSYS_ITF_DEMO\20200414174732_initial.Designer.cs" />
+  </ItemGroup>
   <ItemGroup>
     <PackageReference Include="AutoMapper" Version="9.0.0" />
     <PackageReference Include="MailKit" Version="2.4.1" />
@@ -32,6 +37,7 @@
 
   <ItemGroup>
     <Folder Include="Areas\Identity\Services\" />
+    <Folder Include="Migrations\BSSLSYS_ITF_DEMO\" />
     <Folder Include="wwwroot\JSON\" />
     <Folder Include="wwwroot\logo\" />
     <Folder Include="wwwroot\Attachment\" />

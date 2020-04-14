@@ -45,7 +45,7 @@
                             <tr class="table-primary">
                                 <th>S/N</th>
                                 <th>Job Action Type</th>
-                                <th>Count</th>
+                                <th>Date Assigned</th>
                                 <th>Action</th>
                             </tr>
                         </thead>
@@ -55,18 +55,16 @@
 
                             @if (Model.RequisitionJobs.Any())
                             {
+
                                 @for (int i = 0; i < Model.RequisitionJobs.Count(); i++)
                                 {
-                                    var group = Model.RequisitionJobs.ElementAt(i);
-                                    var groupCount = group.Count();
-                                    var groupAction = group.First().Workflow.WorkflowAction;
-                                    var groupName = groupAction.Name;
-                                    var groupActionId = groupAction.Id;
+                                    var Item = Model.RequisitionJobs[i];
+
                                     <tr>
                                         <td>@(i + 1).</td>
-                                        <td>@groupName Jobs</td>
-                                        <td>@groupCount</td>
-                                        <td>@{await RenderLink(groupActionId);}</td>
+                                        <td>@Item.Workflow.WorkflowAction.Name Jobs</td>
+                                        <td>@Item.CreationDate.ToShortDateString()</td>
+                                        <td><a asp-page="/Staff/Itemrequisition/DetailRequisition" asp-route-Id="@Item.RequisitionId" style="color: #007bff">View</a></td>
                                     </tr>
                                 }
                             }
@@ -79,30 +77,3 @@
         </form>
     </div>
 </div>
-
-@functions{
-   async Task  RenderLink(int id)
-    {
-        switch (id)
-        {
-            case Constants.ProcurementCostingActionId:                
-               <a asp-page="../Itemrequisition/ItemPricing/AllRequisitionItemPricing" style="color: #007bff">View</a>
-                break;
-            case Constants.ApproverActionId:
-                <a asp-page="../Itemrequisition/ProcApproval/AllRequisition" style="color: #007bff">View</a>
-                 break;
-            case Constants.AuthorizerActionId:
-                <a asp-page="../Itemrequisition/ProcCommencement/AllRequisition" style="color: #007bff">View</a>
-                break;
-            case Constants.ApproveRaiseERFxActionId:
-                <a asp-page="../Itemrequisition/" style="color: #007bff">View</a>
-                break;
-            case Constants.RaiseERFxActionId:
-                <a asp-page="../Itemrequisition/BidPreparation/ClearedRequisitions"  style="color: #007bff">View</a>
-                break;
-            default:
-                break;
-        }
-
-    }
-}
