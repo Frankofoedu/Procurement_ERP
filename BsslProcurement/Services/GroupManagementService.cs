@@ -89,12 +89,12 @@ namespace BsslProcurement.Services
             throw new NotImplementedException();
         }
 
-        public UserGroup CreateGroup(string groupName)
+        public async Task<UserGroup> CreateGroup(string groupName)
         {
             var mn = new UserGroup(groupName,null);
-            procurementdbcontext.UserGroups.Add(mn);
+           await procurementdbcontext.UserGroups.AddAsync(mn);
 
-            procurementdbcontext.SaveChanges();
+          await  procurementdbcontext.SaveChangesAsync();
 
             return mn;
         }

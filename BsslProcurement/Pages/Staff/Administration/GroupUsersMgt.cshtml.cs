@@ -65,7 +65,7 @@ namespace BsslProcurement.Pages.Staff.Administration
             var selectedStaff = StaffEmailListObj.StaffWithEmailList.Where(m => m.isSelected).Select(x => x.Id).ToList();
             try
             {
-                _groupManagement.AddListUserToGroup(selectedStaff, Id);
+                await _groupManagement.AddListUserToGroup(selectedStaff, Id);
                 Message = "Staffs added to group";
             }
             catch (KeyNotFoundException)
@@ -77,7 +77,7 @@ namespace BsslProcurement.Pages.Staff.Administration
                 await LoadData(Id);
             }
 
-            return Page();
+            return RedirectToPage(new {id = Id });
         }
 
         public async Task<IActionResult> OnPostDeleteStaff(string staffId)
