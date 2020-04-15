@@ -50,7 +50,7 @@ namespace BsslProcurement.Controllers.API
         {
             try
             {
-                var result = _groupManagement.CreateGroup(gvm.Name);
+                var result = await _groupManagement.CreateGroup(gvm.Name);
 
                 return CreatedAtAction(nameof(GetGroup), new { id = result.Id }, result);
             }
