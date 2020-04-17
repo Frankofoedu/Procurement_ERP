@@ -27,7 +27,7 @@ namespace BsslProcurement.Services
         public async Task<List<WorkFlowTypesViewModel>> GetNextWorkActionflowStepsAsync(int workFlowId, int workflowTypeId) {
 
             //get current workflow
-            var currWorkflow = _procurementDBContext.Workflows.Find(workFlowId);
+            var currWorkflow = await _procurementDBContext.Workflows.FirstOrDefaultAsync(m=>m.Id == workFlowId);
 
             if (currWorkflow != null)
             {
@@ -67,6 +67,26 @@ namespace BsslProcurement.Services
             }
 
            
+        }
+        
+        /// <summary>
+        /// Gets the current steps for a workflow
+        /// </summary>
+        /// <param name="id">current step of job. default is 0 for new jobs</param>
+        /// <returns></returns>
+        public async Task<List<WorkFlowTypesViewModel>> GetCurrentWorkActionflowStepsAsync(int workFlowId, int workflowTypeId)
+        {
+
+            //get current workflow
+            var currWorkflow = await _procurementDBContext.Workflows.Include(y => y.WorkflowAction).Where(m => m.Id == workFlowId).ToListAsync();
+
+            var data = currWorkflow.Select(x => new WorkFlowTypesViewModel
+            {
+                Name = x.WorkflowAction.Name,
+                Id = x.Id
+            }).ToList();
+
+            return (data);
         }
 
         /// <summary>

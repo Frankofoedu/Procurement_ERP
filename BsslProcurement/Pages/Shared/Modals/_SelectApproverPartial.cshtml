@@ -136,17 +136,18 @@ else
         var action = $('input[name="SelectedAction"]:checked').val();
 
         $.ajax({
-            url: window.location.origin + "/api/workflow/WorkflowForAction/" +
-                action + "/" + @Model.WorkFlowId + "/" + @Model.WorkFlowTypeId.Value,
+            url: window.location.origin + "/api/workflow/WorkflowForAction?action=" +
+                action + "&workflowId=" + @Model.WorkFlowId + "&workflowTypeId=" + @Model.WorkFlowTypeId.Value,
 
         }).done(function (data) {
 
-            var $el = $("#selectAction");
-            $el.empty(); // remove old options
+            var options = '';
+
             $.each(data, function (d) {
-              $el.append($("<option></option>")
-                 .attr("value", d.id).text(d.name));
+                options += '<option value="' + d.id + '">' + d.name + '</option>';
             });
+
+            $("#selectAction").html(options);
         });
 
     }
