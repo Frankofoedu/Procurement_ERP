@@ -11,7 +11,7 @@ namespace BsslProcurement.Interfaces
    public interface IGroupManagement
     {
 
-        UserGroup CreateGroup(string groupName);
+       Task< UserGroup> CreateGroup(string groupName);
         /// <summary>
         /// 
         /// </summary>
