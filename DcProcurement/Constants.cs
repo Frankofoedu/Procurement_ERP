@@ -41,6 +41,7 @@ namespace DcProcurement
 
         #region Admin User
         public const string AdminEmail = "admin@eproc.dcontroller.com.ng";
+        public const string AdminUserName = "admin";
         public const string AdminId = "46b5ea46-80ab-4fba-8507-4908ac269d00";
         #endregion
     }

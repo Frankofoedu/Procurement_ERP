@@ -191,10 +191,10 @@ namespace DcProcurement
             var user = new User
             {
                 Id = Constants.AdminId,
-                UserName = Constants.AdminEmail,
+                UserName = Constants.AdminUserName,
                 Email = Constants.AdminEmail,
                 NormalizedEmail = Constants.AdminEmail.ToUpper(),
-                NormalizedUserName = Constants.AdminEmail.ToUpper(),
+                NormalizedUserName = Constants.AdminUserName.ToUpper(),
                 LockoutEnabled = true,
                 TwoFactorEnabled = false,
                 EmailConfirmed = false,
