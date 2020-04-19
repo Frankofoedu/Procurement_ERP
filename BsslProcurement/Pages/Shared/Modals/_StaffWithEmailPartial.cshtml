@@ -26,10 +26,14 @@
                     <tbody>
                         @for (int i = 0; i < Model.StaffWithEmailList.Count; i++)
                         {
+
+                            var htmlCheckboxName = $"StaffWithEmailList[{i}].isSelected";
+                            var htmlCheckboxId = $"StaffWithEmailList_{i}__isSelected";
+                            var p = Model.StaffWithEmailList[i];
                             <tr>
                                 <td>
                                     <input type="hidden" asp-for="StaffWithEmailList[i].Id" />
-                                    <input asp-for="StaffWithEmailList[i].isSelected" />
+                                    <input type="checkbox" name=@htmlCheckboxName id=@htmlCheckboxId value="true" @(p.isSelected ? "checked" : "") />
                                 </td>
                                 <td>
                                     <input asp-for="StaffWithEmailList[i].Number" readonly />
@@ -60,7 +64,7 @@
         }
 
     $(document).ready(function () {
-        $('#staffTable').dataTable({
+       var table = $('#staffTable').DataTable({
             columnDefs: [
                 { "type": "html-input", "targets": [1, 2, 3] }
             ]
@@ -71,6 +75,28 @@
         };
 
 
+        //binds checkboxes and other data not showing on datatable
+        $('form').on('submit', function (e) {
+            var form = this;
+
+
+            var params = table.rows().nodes().to$().find('input').serializeArray();
+
+            console.log(params);
+            // Iterate over all form elements
+            $.each(params, function () {
+                // If element doesn't exist in DOM
+                if (!$.contains(document, form[this.name])) {
+                    // Create a hidden element
+                    $(form).append(
+                        $('<input>')
+                            .attr('type', 'hidden')
+                            .attr('name', this.name)
+                            .val(this.value)
+                    );
+                }
+            });
+        });
 
     });
 </script>
