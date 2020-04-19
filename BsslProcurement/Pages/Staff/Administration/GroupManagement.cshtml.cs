@@ -90,7 +90,7 @@ namespace BsslProcurement
 
             try
             {
-                var mn = _groupManagement.CreateGroup(GroupViewModel.Name);
+               await _groupManagement.CreateGroup(GroupViewModel.Name);
                 Message = "Group created successfully";
             }
             catch (DbUpdateException)

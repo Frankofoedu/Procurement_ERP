@@ -22,7 +22,7 @@ namespace BsslProcurement.Interfaces
         void AddUserToGroup(string userId);
         Task ClearGroupRolesAsync(int groupId);
         Task AddListUserToGroup(List<string> userId, int groupId);
-
+        Task RemoveRoleFromGroup(int groupId, string     roleId);
         Task RemoveUserFromGroupAsync(string userId, int groupId);
         Task<UserGroup> GetById(long id);
         Task<IList<UserGroup>> GetAll();
