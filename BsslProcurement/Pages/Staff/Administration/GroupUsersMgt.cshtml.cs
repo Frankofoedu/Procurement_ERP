@@ -55,13 +55,17 @@ namespace BsslProcurement.Pages.Staff.Administration
                 GroupName = grp.GroupName;
             }
             GroupUsersViewModel = await _groupManagement.GetAllUsersInGroup(id);
+
+            var idsToBeRemoved = new HashSet<string>(GroupUsersViewModel.Select(item => item.Staff.Id));
+
             StaffEmailListObj.StaffWithEmailList = StaffEmailListObj.GetStaffWithEmailList(_context.Staffs.ToList());
+
+            StaffEmailListObj.StaffWithEmailList.RemoveAll(x => idsToBeRemoved.Contains(x.Id));
 
         }
 
         public async Task<IActionResult> OnPost()
         {
-
             var selectedStaff = StaffEmailListObj.StaffWithEmailList.Where(m => m.isSelected).Select(x => x.Id).ToList();
             try
             {
@@ -76,13 +80,12 @@ namespace BsslProcurement.Pages.Staff.Administration
             {
                 await LoadData(Id);
             }
-
+            //return Page();
             return RedirectToPage(new {id = Id });
         }
 
         public async Task<IActionResult> OnPostDeleteStaff(string staffId)
         {
-
             try
             {
                await _groupManagement.RemoveUserFromGroupAsync(staffId, Id);
@@ -99,6 +102,5 @@ namespace BsslProcurement.Pages.Staff.Administration
 
             return Page();
         }
-
     }
 }

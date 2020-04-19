@@ -101,7 +101,22 @@ namespace BsslProcurement.Pages.Staff.Administration
 
             return Page();
         }
+        public async Task<ActionResult> OnPostDeleteAccessById(string accessId)
+        {
+            try
+            {
+                await _groupManagement.RemoveRoleFromGroup(Id,accessId);
+                Message = "Access removed";
+            }
+            catch (Exception e)
+            {
+                Error = "Error occured. Contact Support :" + e.Message;
+            }
 
+            await LoadData();
+
+            return Page();
+        }
         public async Task<ActionResult> OnPostSave()
         {
             var selectedPages = AccessViewModels.Where(x => x.IsSelected).Select(x => x.RazorPage).ToList();

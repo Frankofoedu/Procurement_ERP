@@ -30,16 +30,31 @@ namespace BsslProcurement.Services
         {
             if (userIds != null && userIds.Count> 0)
             {
-                var staffs = procurementdbcontext.Staffs.Where(x=> userIds.Contains(x.Id)).Select(x => new StaffUserGroup { StaffId = x.Id, UserGroupId = groupId }).ToList();
+                //get staff(s) from staff table 
+                var staffs = procurementdbcontext.Staffs.Where(x => userIds.Contains(x.Id)).ToList();
 
-                var grp = await procurementdbcontext.UserGroups.Include(x => x.Staffs).FirstOrDefaultAsync( x => x.Id == groupId);
+
+                  var staffVm = staffs.Select(x => new StaffUserGroup { StaffId = x.Id, UserGroupId = groupId }).ToList();
+
+                //get selected group
+                var grp = await procurementdbcontext.UserGroups.Include(x => x.UserRole).Include(x => x.Staffs).FirstOrDefaultAsync( x => x.Id == groupId);
 
                 if (grp != null)
                 {
                     var oldstaffIds = grp.Staffs.Select(x => x.StaffId);
-                    staffs.RemoveAll(st => oldstaffIds.Contains(st.StaffId));
+                    staffVm.RemoveAll(st => oldstaffIds.Contains(st.StaffId));
 
-                    grp.Staffs.AddRange(staffs);
+                    grp.Staffs.AddRange(staffVm);
+
+                    //check if group access was previously created
+                    if (grp.UserRole != null)
+                    {
+                        foreach (var staff in staffs)
+                        {
+
+                            await _userManager.AddToRoleAsync(staff,grp.GroupName);
+                        }
+                    }
 
                  await   procurementdbcontext.SaveChangesAsync();
                 }
@@ -204,6 +219,25 @@ namespace BsslProcurement.Services
             }
         }
 
-       
+        public async Task RemoveRoleFromGroup(int groupId, string roleId)
+        {
+            var grp = await procurementdbcontext.UserGroups.Include(x=> x.UserRole).FirstOrDefaultAsync(x=> x.Id == groupId);
+
+            if (grp == null )
+            {
+                throw new KeyNotFoundException("group not found");
+            }
+            else if ( grp.UserRole == null)
+            {
+                throw new KeyNotFoundException("User role Not found");
+            }
+
+            var savedPages = JsonConvert.DeserializeObject<List<RazorPagesControllerInfo>>(grp.UserRole.Access);
+
+            savedPages.RemoveAll(x => x.Id == roleId);
+           grp.UserRole.Access = JsonConvert.SerializeObject(savedPages);
+            await  procurementdbcontext.SaveChangesAsync();
+
+        }
     }
 }

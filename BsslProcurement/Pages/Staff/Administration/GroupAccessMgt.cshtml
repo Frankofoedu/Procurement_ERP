@@ -67,7 +67,7 @@
         <div class="form-group">
             <div class="row d-flex mt-5 mb-5">
                 <div class="col-5">
-                    <input type="submit" asp-page-handler="DeleteAccess" value="Clear Access" class="btn btn-danger" />
+                    <input type="submit" asp-page-handler="DeleteAccess" value="Clear All Access" class="btn btn-danger" />
                 </div>
             </div>
 
@@ -79,6 +79,7 @@
                             <th>Page Name</th>
 
                             <th>Page Path</th>
+                            <th></th>
                         </tr>
                     </thead>
                     <tbody>
@@ -89,17 +90,22 @@
                             {
                                 name = p.DisplayName;
                             }
-                            <tr>
-                                <td>
-                                    @(i + 1)
-                                </td>
-                                <td>
-                                    <label>@p.DisplayName</label>
-                                </td>
-                                <td>
-                                    <label>@p.ViewEnginePath</label>
-                                </td>
-                            </tr>
+                        <tr>
+                            <td>
+                                @(i + 1)
+                            </td>
+                            <td>
+                                <label>@p.DisplayName</label>
+                            </td>
+                            <td>
+                                <label>@p.ViewEnginePath</label>
+                            </td>
+                            <td>
+                                <button type="submit" asp-page-handler="DeleteAccessById" asp-route-accessId="@p.Id" class="btn btn-sm btn-outline-dark">
+                                    <span class="btn-label"><i class="fa fa-edit"></i></span>Delete
+                                </button>
+                            </td>
+                        </tr>
                         }
                     </tbody>
                 </table>
@@ -114,7 +120,7 @@
                     <div class="row mt-3 mb-5">
                         <div class="col-12">
                             <h3 class="h3 bg-primary text-white px-3 py-1 mt-2 rounded">
-                                New Access List.
+                                Access List.
                             </h3>
                         </div>
                     </div>
@@ -134,7 +140,7 @@
                                 @for (int i = 0; i < Model.AccessViewModels.Count(); i++)
                                 {
                                     var htmlCheckboxName = $"AccessViewModels[{i}].IsSelected";
-                                    var htmlCheckboxId = $"AccessViewModels_{i}__.IsSelected";
+                                    var htmlCheckboxId = $"AccessViewModels_{i}__IsSelected";
                                     var p = Model.AccessViewModels[i];
                                     string name;
                                     {

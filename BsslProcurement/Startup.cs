@@ -22,6 +22,7 @@ using Microsoft.AspNetCore.Authentication.Cookies;
 using DcProcurement.Users;
 using BsslProcurement.Filters;
 using BsslProcurement.TagHelpers;
+using Microsoft.AspNetCore.Http.Features;
 
 namespace BsslProcurement
 {
@@ -125,6 +126,8 @@ namespace BsslProcurement
                 
             });
 
+            //set form submit sizes
+            services.Configure<FormOptions>(config => { config.ValueCountLimit = int.MaxValue; } ) ;
             services.AddRazorPages().AddMvcOptions(options => options.Filters.Add(typeof(DynamicAuthorizationFilter))).AddRazorRuntimeCompilation();
             services.AddControllers();
             services.AddAuthentication();
