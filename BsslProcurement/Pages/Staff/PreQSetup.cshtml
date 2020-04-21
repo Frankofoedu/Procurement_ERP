@@ -43,12 +43,17 @@
                         </div>
                         <div class="form-group">
                             <label>Prequalification submission opening date</label>
-                            <input id="openingDate" asp-for="PrequalificationPolicy.PrequalificationStartDate" class="form-control-sm ml-1" type="date" placeholder="mm/dd/yyyy" />
+                         
+                            <input class="form-control" data-date="date" data-id="prequalificationstartdate" value=@(Model.PrequalificationPolicy != null ? Model.PrequalificationPolicy.PrequalificationStartDate.ToString() : null) />
+                            <input type = "hidden" data-id="prequalificationstartdate" asp-for= "PrequalificationPolicy.PrequalificationStartDate" />
+
                         </div>
                         <div class="form-row">
                             <div class="form-group">
                                 <label>Prequalification submission closing date</label>
-                                <input id="closingDate" asp-for="PrequalificationPolicy.PrequalificationEndDate" class="form-control-sm ml-1" />
+                                <input class="form-control" data-date="date" data-id="prequalificationenddate" value=@(Model.PrequalificationPolicy != null ? Model.PrequalificationPolicy.PrequalificationEndDate.ToString() : null) />
+                                <input type="hidden" data-id="prequalificationenddate" asp-for="PrequalificationPolicy.PrequalificationEndDate" />
+
                             </div>
                         </div>
                         <div class="form-group">
