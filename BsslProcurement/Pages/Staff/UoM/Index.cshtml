@@ -28,12 +28,6 @@
                             <th>
                                 @Html.DisplayNameFor(model => model.UnitOfMeasurement[0].Uname)
                             </th>
-                            <th>
-                                @Html.DisplayNameFor(model => model.UnitOfMeasurement[0].Copny)
-                            </th>
-                            <th>
-                                @Html.DisplayNameFor(model => model.UnitOfMeasurement[0].Zcopny)
-                            </th>
                             <th></th>
                         </tr>
                     </thead>
@@ -48,12 +42,6 @@
                                     @Html.DisplayFor(modelItem => item.Uname)
                                 </td>
                                 <td>
-                                    @Html.DisplayFor(modelItem => item.Copny)
-                                </td>
-                                <td>
-                                    @Html.DisplayFor(modelItem => item.Zcopny)
-                                </td>
-                                <td>
                                     <a asp-page="./Edit" asp-route-id="@item.Id">Edit</a> |
                                     <a asp-page="./Delete" asp-route-id="@item.Id">Delete</a>
                                 </td>
@@ -65,3 +53,14 @@
         </div>
     </div>
 </div>
+@section Scripts{ 
+<script>
+
+    $(document).ready(function () {
+        $('.table').DataTable();
+
+    });
+</script>
+
+
+}
