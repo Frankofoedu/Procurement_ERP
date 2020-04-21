@@ -233,6 +233,17 @@
     <script src="~/js/jquery.dataTables.min.js"></script>
     <script>
         // Use datepicker on the date inputs
+        
+      @* 1. add a date input tag e.g for a sample mydate property <input class="form-control" data-date="date" data-id="mydate" value=@(Model.mydate != null ? Model.mydate.ToString() : null) />
+        2. add a hidden field for posting the form e.g < input type = "hidden" data-id="mydate" asp-for= "Requisition.mydate" />
+         
+          
+          N.B 
+          a. the data-date="date" attribute is used by the jquery ui library to format the visible control as a date field using the GB culture
+          b. the data-id="mydate" links the hidden element with the visible
+          *@
+
+         
         $("input[data-date=date]").datepicker({
             dateFormat: "dd/mm/yy",
             minDate: new Date(),
