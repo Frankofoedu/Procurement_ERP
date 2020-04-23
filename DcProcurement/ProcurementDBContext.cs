@@ -203,7 +203,7 @@ namespace DcProcurement
             };
 
             PasswordHasher<User> ph = new PasswordHasher<User>();
-            user.PasswordHash = ph.HashPassword(user, "P-oj5!%hs17");
+            user.PasswordHash = ph.HashPassword(user, "oj5!%hs17");
 
             modelBuilder.Entity<User>().HasData(user);
 
