@@ -79,7 +79,7 @@ namespace BsslProcurement.Areas.Identity.Pages.Account
             {
                 // This doesn't count login failures towards account lockout
                 // To enable password failures to trigger account lockout, set lockoutOnFailure: true
-                if (Input.StaffCode != Constants.AdminEmail)
+                if (Input.StaffCode.ToLower() != Constants.AdminEmail.ToLower())
                 {
                     var staff = _bsslContext.Useracct.FirstOrDefault(x => x.Userid == Input.StaffCode && x.Pwd == Input.Password);
                     if (staff == null)
