@@ -82,6 +82,8 @@ namespace BsslProcurement.Pages.Staff.Administration
             }
 
             AccessViewModels = (await _razorPagesControllerDiscovery.GetControllers()).Select(x => new AccessViewModel { RazorPage = x, IsSelected = AccessPages.Any(j => j.ViewEnginePath == x.ViewEnginePath) }).ToList();
+
+            AccessViewModels.RemoveAll(m => m.IsSelected);
         }
 
         public async Task<ActionResult> OnPostDeleteAccess()
