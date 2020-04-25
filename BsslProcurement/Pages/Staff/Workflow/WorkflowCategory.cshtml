@@ -18,7 +18,7 @@
 
 @if (Model.workflowType != null)
 {
-
+    <a asp-page="WorkflowCategory" style="color:#7abaff">Back To Category Management</a>
     <div class="row mt-5">
         <div class="col-md-1 col-lg-3"></div>
         <div class="col-md-10 col-lg-6 my-5">
@@ -39,8 +39,7 @@
                             <label>Category Code</label>
                         </div>
                         <div class="col-sm-9">
-                            <input class="form-control-sm" asp-for="workflowType.Code" />
-                            <button class="btn btn-outline-primary btn-sm"><i class="fas fa-search"></i></button>
+                            <input readonly class="form-control-sm" asp-for="workflowType.Code" />
                             <span asp-validation-for="workflowType.Code" class="text-danger"></span>
                         </div>
                     </div>
