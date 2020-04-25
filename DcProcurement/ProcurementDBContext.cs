@@ -181,9 +181,9 @@ namespace DcProcurement
 
             //seed roles
             var roles = new List<UserRole> {
-                new UserRole { Id = "d6dde6fb-8354-409d-b700-40da947c88d8", Name = Constants.Role.Admin },
-                new UserRole { Id = "02174cf0-9412-4cfe-afbf-59f706d72c8e", Name = Constants.Role.Staff },
-                new UserRole { Id = "19879c37-bc22-4ed8-a7be-8819026aa3ce", Name = Constants.Role.Vendor }
+                new UserRole { Id = "d6dde6fb-8354-409d-b700-40da947c88d8", Name = Constants.Role.Admin, NormalizedName= Constants.Role.Admin.ToUpper() },
+                new UserRole { Id = "02174cf0-9412-4cfe-afbf-59f706d72c8e", Name = Constants.Role.Staff, NormalizedName= Constants.Role.Staff.ToUpper() },
+                new UserRole { Id = "19879c37-bc22-4ed8-a7be-8819026aa3ce", Name = Constants.Role.Vendor, NormalizedName= Constants.Role.Vendor.ToUpper() }
             };
             modelBuilder.Entity<UserRole>().HasData(roles);
 
