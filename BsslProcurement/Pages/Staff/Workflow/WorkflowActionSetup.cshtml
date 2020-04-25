@@ -79,7 +79,7 @@
                 </div>
 
                 <div class="mt-1">
-                    <table class="table table-responsive-sm table-striped">
+                    <table id="actionTable" class="table table-responsive-sm table-striped">
                         <thead>
                             <tr class="table-primary">
                                 <th>S/N</th>
@@ -100,6 +100,14 @@
                                         <a asp-page="./WorkflowActionSetup" asp-route-id="@item.Id" class="btn btn-outline-primary" data-toggle="tooltip" title="Edit Workflow Actions">
                                             Edit
                                         </a>
+                                        @if (item.Workflows.Count < 1)
+                                        {
+                                            <button class="btn btn-danger btnDelete" workflowactionid="@item.Id" title="Delete unused action.">Delete</button>
+                                        }
+                                        else
+                                        {
+                                            <button class="btn btn-outline-danger" disabled workflowactionid="@item.Id" title="Can't delete. Action already in use.">Delete</button>
+                                        }
                                     </td>
                                 </tr>
                             }
@@ -112,4 +120,29 @@
 
 @section Scripts {
     @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+
+<script>
+    
+    $(document).ready(function () {
+        $('#actionTable').dataTable();
+
+        $('.btnDelete').on('click', function (e) {
+            e.preventDefault();
+            $(this).html('<div class="spinner-border" role="status"><span class="sr-only">Loading...</span></div>');
+
+            var wid = $(this).attr('workflowactionid');
+            var Url = window.location.origin + "/api/Workflow/WorkflowAction/" + wid;
+
+            $.ajax({
+                url: Url,
+                type: 'DELETE'
+            }).done(function () {
+                window.location.href=window.location.href
+            }).fail(function (data) {
+                console.log(data);
+                alert("An error occured.");
+            });
+        });
+    });
+</script>
 }
