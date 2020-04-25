@@ -138,9 +138,9 @@ namespace DcProcurement
             //workflow types
             List<WorkflowType> ListWorkflowTypes = new List<WorkflowType>
             {
-                new WorkflowType {Id = Constants.PrequalificationWorkFlowId, Name = Constants.PrequalificationWorkFlow, Code = "0002"},
-                new WorkflowType {Id = Constants.RequisitionWorkflowId, Name = Constants.RequisitionWorkflow, Code = "0003"},
-                new WorkflowType { Id = Constants.ProcurementWorkflowId, Name = Constants.ProcurementWorkflow, Code = "0004" },
+                new WorkflowType {Id = Constants.PrequalificationWorkFlowId, Name = Constants.PrequalificationWorkFlow, Code = "002"},
+                new WorkflowType {Id = Constants.RequisitionWorkflowId, Name = Constants.RequisitionWorkflow, Code = "003"},
+                new WorkflowType { Id = Constants.ProcurementWorkflowId, Name = Constants.ProcurementWorkflow, Code = "004" },
             };
             //seed workflow types
             modelBuilder.Entity<WorkflowType>().HasData(ListWorkflowTypes);

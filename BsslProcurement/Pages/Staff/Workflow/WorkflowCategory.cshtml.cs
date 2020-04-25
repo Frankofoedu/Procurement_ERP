@@ -34,7 +34,7 @@ namespace BsslProcurement.Pages.Staff.Workflow
             }
            // else workflowType = new WorkflowType();
 
-            workflowTypes = _context.WorkflowTypes.ToList();
+            workflowTypes = _context.WorkflowTypes.OrderBy(x => x.Code).ToList();
         }
 
         public async void OnPost(int? id)

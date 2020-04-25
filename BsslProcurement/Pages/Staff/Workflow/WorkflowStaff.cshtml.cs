@@ -74,7 +74,7 @@ namespace BsslProcurement.Pages.Staff.Workflow
                 {
                     WorkflowId = curWorkflowId,
                 };
-                var staffid = (await _context.Staffs.FirstOrDefaultAsync(m => m.StaffCode == newWorkflowStaff.StaffId)).Id;
+                var staffid = (await _context.Staffs.FirstOrDefaultAsync(m => m.StaffCode == newWorkflowStaff.StaffId.Trim())).Id;
                 if (!string.IsNullOrWhiteSpace(staffid))
                 {
                     WS.StaffId = staffid;
