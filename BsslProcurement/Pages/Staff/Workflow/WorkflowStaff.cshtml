@@ -298,7 +298,7 @@
                 url: Url,
                 type: 'DELETE'
             }).done(function () {
-                location.reload();
+                window.location.href=window.location.href
             }).fail(function (data) {
                 console.log(data);
                 alert("An error occured.");
