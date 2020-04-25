@@ -106,11 +106,51 @@ namespace BsslProcurement.Controllers.API
                 return BadRequest(ModelState);
             }
 
-            var WorkflowStaff = await _context.WorkflowStaffs.FindAsync(WorkflowStaffId);
-            _context.WorkflowStaffs.Remove(WorkflowStaff);
-            await _context.SaveChangesAsync();
+            try
+            {
+                var WorkflowStaff = await _context.WorkflowStaffs.FindAsync(WorkflowStaffId);
+                _context.WorkflowStaffs.Remove(WorkflowStaff);
+                await _context.SaveChangesAsync();
 
-            return Ok("Success");
+                return Ok("Success");
+            }
+            catch (Exception ex)
+            {
+                return NotFound(ex.Message);
+            }
+        }
+
+        // Delete: api/Workflow/WorkflowAction/5
+        [HttpDelete("WorkflowAction/{WorkflowActionId}")]
+        public async Task<IActionResult> DeleteWorkflowActionAsync([FromRoute] int WorkflowActionId)
+        {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+
+            try
+            {
+                var WorkflowAction = await _context.WorkflowActions.Include(m=>m.Workflows).FirstOrDefaultAsync(n=>n.Id == WorkflowActionId);
+                if (WorkflowAction == null)
+                {
+                    return NotFound("Item not found.");
+                }
+
+                if (WorkflowAction.Workflows.Count < 1)
+                {
+                    _context.WorkflowActions.Remove(WorkflowAction);
+                    await _context.SaveChangesAsync();
+
+                    return Ok("Deleted successfully.");
+                }
+
+                return NotFound("Can not be deleted.");
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
         }
 
         // GET: api/Workflow/WorkflowStaff/5
