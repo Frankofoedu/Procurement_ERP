@@ -6,6 +6,7 @@ using DcProcurement;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
+using Microsoft.EntityFrameworkCore;
 
 namespace BsslProcurement.Pages.Staff.Workflow
 {
@@ -24,7 +25,9 @@ namespace BsslProcurement.Pages.Staff.Workflow
 
         [BindProperty]
         public WorkflowAction workflowAction { get; set; }
+
         public List<WorkflowAction> workflowActions { get; set; }
+        public List<bool> workflowActionDeletable { get; set; }
 
         public void OnGet(int? id)
         {
@@ -34,7 +37,7 @@ namespace BsslProcurement.Pages.Staff.Workflow
             }
             else workflowAction = new WorkflowAction();
 
-            workflowActions = _context.WorkflowActions.ToList();
+            workflowActions = _context.WorkflowActions.Include(m=>m.Workflows).ToList();
         }
 
         public async void OnPost(int? id)
@@ -74,7 +77,7 @@ namespace BsslProcurement.Pages.Staff.Workflow
                 }
             }
 
-            workflowActions = _context.WorkflowActions.ToList();
+            workflowActions = _context.WorkflowActions.Include(m => m.Workflows).ToList();
         }
     }
 }

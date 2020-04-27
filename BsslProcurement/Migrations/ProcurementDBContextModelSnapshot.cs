@@ -872,17 +872,17 @@ namespace BsslProcurement.Migrations
                         {
                             Id = "46b5ea46-80ab-4fba-8507-4908ac269d00",
                             AccessFailedCount = 0,
-                            ConcurrencyStamp = "eab156d5-67ce-42b6-9909-6a7108a04f6e",
-                            CreationDate = new DateTime(2020, 4, 19, 10, 7, 16, 778, DateTimeKind.Local).AddTicks(711),
+                            ConcurrencyStamp = "7a5fce70-c5e7-4f35-a966-217dde76f6b1",
+                            CreationDate = new DateTime(2020, 4, 24, 8, 7, 23, 824, DateTimeKind.Local).AddTicks(20),
                             Email = "AdminEproc",
                             EmailConfirmed = false,
                             LockoutEnabled = true,
                             NormalizedEmail = "ADMINEPROC",
                             NormalizedUserName = "ADMINEPROC",
-                            PasswordHash = "AQAAAAEAACcQAAAAEFGU4ODhVCMB9JtNbR6aE+RxYx1o0s9ZpZfN128Iaxs97q5pDovXPE71cMuUjCdhtQ==",
+                            PasswordHash = "AQAAAAEAACcQAAAAEH0wBC6uyjG9H73T6oQwpTkDR1O3xCU+H873JJYLBRs8blwcUL3vYKOyB3FNB5MVTA==",
                             PhoneNumber = "123456789",
                             PhoneNumberConfirmed = false,
-                            SecurityStamp = "073c74a0-a3c7-4a33-ba86-8b405a028b11",
+                            SecurityStamp = "ca65a6d5-fb92-4d07-ac0a-c83aa7c52638",
                             TwoFactorEnabled = false,
                             UserName = "AdminEproc"
                         });
@@ -960,19 +960,19 @@ namespace BsslProcurement.Migrations
                         new
                         {
                             Id = "d6dde6fb-8354-409d-b700-40da947c88d8",
-                            ConcurrencyStamp = "38842795-0559-4bd0-bd36-84bba0167323",
+                            ConcurrencyStamp = "a44f1a42-cca9-4320-85e2-ea99faba84a5",
                             Name = "Admin"
                         },
                         new
                         {
                             Id = "02174cf0-9412-4cfe-afbf-59f706d72c8e",
-                            ConcurrencyStamp = "e09b9ff2-036a-47ac-a995-5d17c211a2a4",
+                            ConcurrencyStamp = "44bfa33a-2d76-491f-be02-b36bc597aee1",
                             Name = "Staff"
                         },
                         new
                         {
                             Id = "19879c37-bc22-4ed8-a7be-8819026aa3ce",
-                            ConcurrencyStamp = "533ea073-cb88-4ec5-8ad9-dd648d782e14",
+                            ConcurrencyStamp = "103dc068-4b1d-4591-8589-234d560831e8",
                             Name = "Vendor"
                         });
                 });

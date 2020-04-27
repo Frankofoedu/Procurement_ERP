@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using BsslProcurement.ViewModels;
 using DcProcurement;
 using DcProcurement.Contexts;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.AspNetCore.Mvc.Rendering;
@@ -13,6 +14,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace BsslProcurement.Pages.Staff.Workflow
 {
+    [Authorize]
     public class WorkflowStaffModel : PageModel
     {
         private readonly ProcurementDBContext _context;
