@@ -11,6 +11,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.Extensions.Logging;
 using DcProcurement.Contexts;
+using BsslProcurement.UtilityMethods;
 
 namespace BsslProcurement.Areas.Identity.Pages.Account
 {
@@ -77,11 +78,14 @@ namespace BsslProcurement.Areas.Identity.Pages.Account
 
             if (ModelState.IsValid)
             {
+                var pwd = PasswordEncrypt.GetEncryptedPassword(Input.Password);
+
+
                 // This doesn't count login failures towards account lockout
                 // To enable password failures to trigger account lockout, set lockoutOnFailure: true
                 if (Input.StaffCode.ToLower() != Constants.AdminEmail.ToLower())
                 {
-                    var staff = _bsslContext.Useracct.FirstOrDefault(x => x.Userid == Input.StaffCode && x.Pwd == Input.Password);
+                    var staff = _bsslContext.Useracct.FirstOrDefault(x => x.Userid == Input.StaffCode && x.Pwd == pwd);
                     if (staff == null)
                     {
                         ModelState.AddModelError(string.Empty, "Invalid login attempt.");
@@ -95,7 +99,8 @@ namespace BsslProcurement.Areas.Identity.Pages.Account
                 //    return Page();
                 //}
 
-                var result = await _signInManager.PasswordSignInAsync(Input.StaffCode, Input.Password, Input.RememberMe, lockoutOnFailure: true);
+
+                var result = await _signInManager.PasswordSignInAsync(Input.StaffCode,pwd , Input.RememberMe, lockoutOnFailure: true);
                 if (result.Succeeded)
                 {
                     _logger.LogInformation("User logged in.");
