@@ -13,12 +13,12 @@ using Microsoft.EntityFrameworkCore;
 
 namespace BsslProcurement.Controllers.API
 {
-    public class UserAPIModel
+    public class UsersAPIModel
     {
-        public string name;
-        public string staffCode;
-        public string password;
-        public string email;
+        public string name { get; set; }
+        public string staffCode { get; set; }
+        public string password { get; set; }
+        public string email{ get; set; }
     }
     [Route("api/[controller]")]
     [ApiController]
@@ -61,19 +61,23 @@ namespace BsslProcurement.Controllers.API
         /// <param name="email">email of the staff. can be null in which case a random email will be used</param>
         /// <returns></returns>
         [HttpPost("CreateStaff")]
-        public async Task<ActionResult> PostUser([FromBody] UserAPIModel model)
+        public async Task<ActionResult> PostUser(UsersAPIModel userData)
         {
-            string em = GetEmail(model.email);
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState.Values);
+            }
+            string em = GetEmail(userData.email);
 
             var user = new Staff
             {
-                UserName = model.staffCode,
+                UserName = userData.staffCode,
                 Email = em,
                 CreationDate = DateTime.Now,
-                Name = model.name,
-                StaffCode = model.staffCode
+                Name = userData.name,
+                StaffCode = userData.staffCode
             };
-            var result = await _userManager.CreateAsync(user, model.password);
+            var result = await _userManager.CreateAsync(user, userData.password);
             if (result.Succeeded)
             {
                 _logger.LogInformation("User created a new account with password.");
