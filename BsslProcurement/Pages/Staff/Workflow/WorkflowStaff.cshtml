@@ -32,6 +32,9 @@
         }
     </style>
 }
+
+<a asp-page="./WorkflowSetup" class="btn btn-link"><i class="fas fa-arrow-left"></i> Back to Workflow Setup</a>
+
 <div class="row my-3">
     <div class="col-1"></div>
     <div class="col-lg-10">
@@ -58,7 +61,7 @@
                             var item = Model.WorkflowStaffs[i];
 
                             <tr>
-                                <td>@(i+1)</td>
+                                <td>@(i + 1)</td>
 
                                 <td>@item.Staff.Name</td>
                                 <td>
@@ -97,17 +100,17 @@
 
             @if (!string.IsNullOrWhiteSpace(Model.Message))
             {
-            <div class="alert alert-success alert-dismissable fade show">
-                <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                @Model.Message
-            </div>
+                <div class="alert alert-success alert-dismissable fade show">
+                    <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                    @Model.Message
+                </div>
             }
             @if (!string.IsNullOrWhiteSpace(Model.Error))
             {
-            <div class="alert alert-danger alert-dismissable fade show">
-                <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                @Model.Error
-            </div>
+                <div class="alert alert-danger alert-dismissable fade show">
+                    <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                    @Model.Error
+                </div>
             }
 
             <div asp-validation-summary="All" class="text-danger"></div>
@@ -253,30 +256,30 @@
                     $('#spinner').hide();
                     $('#staffTable').dataTable();
 
-                    $('#staffTable').on('click','.btnStaffName',function () {
+                    $('#staffTable').on('click', '.btnStaffName', function () {
                         //assign staff Id textbox
                         var code = $(this).text();
                         $('.staffCodeInput').val(code);
 
-        //code to get the staff rank
+                        //code to get the staff rank
                         $.ajax({
                             type: "GET",
                             url: `/api/Users/GetStaffRank/${code}`,
                             contentType: "application/json; charset=utf-8",
                             success: function (data) {
-                                //alert(JSON.stringify(data));                  
-                               
+                                //alert(JSON.stringify(data));
+
                                 console.log(data);
-                            }, //End of AJAX Success function  
+                            }, //End of AJAX Success function
 
                             failure: function (data) {
                                 alert(data.responseText);
-                            }, //End of AJAX failure function  
+                            }, //End of AJAX failure function
                             error: function (data) {
                                 alert(data.responseText);
-                            } //End of AJAX error function  
+                            } //End of AJAX error function
 
-                        });    
+                        });
                         //assign staff name textbox
                         $('.staffNameInput').val($(this).val());
 
@@ -300,7 +303,7 @@
                 url: Url,
                 type: 'DELETE'
             }).done(function () {
-                window.location.href=window.location.href
+                window.location.href = window.location.href
             }).fail(function (data) {
                 console.log(data);
                 alert("An error occured.");
@@ -327,7 +330,7 @@
             }).fail(function (data) {
                 console.log(data);
                 alert("An error occured.");
-                
+
                 if (action.tolower() === "suspend") {
                     btn.html('Suspend')
                 } else {
