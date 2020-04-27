@@ -24,6 +24,8 @@ namespace BsslProcurement.Pages.Staff.Administration
         public RazorPagesControllerInfo  RazorPage { get; set; }
         public bool IsSelected { get; set; }
     }
+    
+    [Authorize]
     public class GroupAccessMgtModel : PageModel
     {
         private readonly IRazorPagesControllerDiscovery _razorPagesControllerDiscovery;

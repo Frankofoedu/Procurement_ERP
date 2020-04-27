@@ -8,12 +8,14 @@ using BsslProcurement.ViewModels;
 
 using DcProcurement;
 using DcProcurement.Users;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.EntityFrameworkCore;
 
 namespace BsslProcurement
 {
+    [Authorize]
     public class GroupManagementModel : PageModel
     {
         public string Message { get; set; }
