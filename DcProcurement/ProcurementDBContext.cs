@@ -202,8 +202,15 @@ namespace DcProcurement
                 PhoneNumberConfirmed = false
             };
 
+
+            static string GetEncryptedPassword(string pwd)
+            {
+                byte[] passBytes = System.Text.Encoding.Unicode.GetBytes(pwd.ToUpper());
+                return Convert.ToBase64String(passBytes);
+            }
             PasswordHasher<User> ph = new PasswordHasher<User>();
-            user.PasswordHash = ph.HashPassword(user, "oj5!%hs17");
+            var pwd = GetEncryptedPassword(Constants.AdminPassword);
+            user.PasswordHash = ph.HashPassword(user, pwd);
 
             modelBuilder.Entity<User>().HasData(user);
 
