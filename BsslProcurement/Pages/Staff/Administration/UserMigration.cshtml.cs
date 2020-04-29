@@ -47,7 +47,7 @@ namespace BsslProcurement.Pages.Staff.Administration
 
         private async Task MigrateStaffFromUserAcctToIdentity()
         {
-            var oldstaff = await _bsslContext.Useracct.ToListAsync();
+            var oldstaff = await _bsslContext.Useracct.Where(x => x.Procurement == true).ToListAsync();
 
             SuccessCount = 0;
             DuplicateCount = 0;
