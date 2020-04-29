@@ -1,0 +1,20 @@
+﻿@page
+@model BsslProcurement.Pages.Staff.Administration.UserMigrationModel
+@{
+    ViewData["Title"] = "UserMigration";
+}
+
+@if (Model.SuccessCount > 0)
+{
+    <label>@Model.SuccessCount Staff added out of @Model.StaffCount</label>
+}
+@if (Model.DuplicateCount > 0)
+{
+    <label>@Model.DuplicateCount Staff(s) already added</label>
+}
+<form method="post">
+
+    <input type="submit" value="Migrate Users" asp-page-handler="AddUsers" />
+
+</form>
+

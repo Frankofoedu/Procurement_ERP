@@ -208,6 +208,8 @@ namespace DcProcurement
                 byte[] passBytes = System.Text.Encoding.Unicode.GetBytes(pwd.ToUpper());
                 return Convert.ToBase64String(passBytes);
             }
+
+
             PasswordHasher<User> ph = new PasswordHasher<User>();
             var pwd = GetEncryptedPassword(Constants.AdminPassword);
             user.PasswordHash = ph.HashPassword(user, pwd);
