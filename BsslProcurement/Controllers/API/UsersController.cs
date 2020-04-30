@@ -79,8 +79,7 @@ namespace BsslProcurement.Controllers.API
                 StaffCode = userData.staffCode
             };
 
-            var pwd = PasswordEncrypt.GetEncryptedPassword(userData.password);
-            var result = await _userManager.CreateAsync(user, pwd);
+            var result = await _userManager.CreateAsync(user, userData.password);
             if (result.Succeeded)
             {
                 _logger.LogInformation("User created a new account with password.");
