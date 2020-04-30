@@ -8,6 +8,7 @@ using Microsoft.Extensions.Logging;
 using Microsoft.AspNetCore.Identity;
 using DcProcurement.Contexts;
 using Microsoft.EntityFrameworkCore;
+using BsslProcurement.UtilityMethods;
 
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 
@@ -77,7 +78,9 @@ namespace BsslProcurement.Controllers.API
                 Name = userData.name,
                 StaffCode = userData.staffCode
             };
-            var result = await _userManager.CreateAsync(user, userData.password);
+
+            var pwd = PasswordEncrypt.GetEncryptedPassword(userData.password);
+            var result = await _userManager.CreateAsync(user, pwd);
             if (result.Succeeded)
             {
                 _logger.LogInformation("User created a new account with password.");
