@@ -126,7 +126,7 @@
     $(document).ready(function () {
         $('#actionTable').dataTable();
 
-        $('.btnDelete').on('click', function (e) {
+        $('#actionTable').on('click', '.btnDelete', function (e) {
             e.preventDefault();
             $(this).html('<div class="spinner-border" role="status"><span class="sr-only">Loading...</span></div>');
 
