@@ -5,11 +5,6 @@
 
     <OpenApiGenerateDocuments>false</OpenApiGenerateDocuments>
   </PropertyGroup>
-
-  <ItemGroup>
-    <Compile Remove="Migrations\BSSLSYS_ITF_DEMO\20200414174732_initial.cs" />
-    <Compile Remove="Migrations\BSSLSYS_ITF_DEMO\20200414174732_initial.Designer.cs" />
-  </ItemGroup>
   <ItemGroup>
     <PackageReference Include="AutoMapper" Version="9.0.0" />
     <PackageReference Include="MailKit" Version="2.4.1" />
@@ -37,7 +32,6 @@
 
   <ItemGroup>
     <Folder Include="Areas\Identity\Services\" />
-    <Folder Include="Migrations\BSSLSYS_ITF_DEMO\" />
     <Folder Include="wwwroot\JSON\" />
     <Folder Include="wwwroot\logo\" />
     <Folder Include="wwwroot\Attachment\" />
@@ -45,6 +39,20 @@
 
   <ItemGroup>
     <None Include="..\.editorconfig" Link=".editorconfig" />
+    <None Include="wwwroot\lib\DataTables\DataTables-1.10.20\js\dataTables.bootstrap.js" />
+    <None Include="wwwroot\lib\DataTables\DataTables-1.10.20\js\dataTables.bootstrap.min.js" />
+    <None Include="wwwroot\lib\DataTables\DataTables-1.10.20\js\dataTables.bootstrap4.js" />
+    <None Include="wwwroot\lib\DataTables\DataTables-1.10.20\js\dataTables.bootstrap4.min.js" />
+    <None Include="wwwroot\lib\DataTables\DataTables-1.10.20\js\dataTables.foundation.js" />
+    <None Include="wwwroot\lib\DataTables\DataTables-1.10.20\js\dataTables.foundation.min.js" />
+    <None Include="wwwroot\lib\DataTables\DataTables-1.10.20\js\dataTables.jqueryui.js" />
+    <None Include="wwwroot\lib\DataTables\DataTables-1.10.20\js\dataTables.jqueryui.min.js" />
+    <None Include="wwwroot\lib\DataTables\DataTables-1.10.20\js\dataTables.semanticui.js" />
+    <None Include="wwwroot\lib\DataTables\DataTables-1.10.20\js\dataTables.semanticui.min.js" />
+    <None Include="wwwroot\lib\DataTables\DataTables-1.10.20\js\jquery.dataTables.js" />
+    <None Include="wwwroot\lib\DataTables\DataTables-1.10.20\js\jquery.dataTables.min.js" />
+    <None Include="wwwroot\lib\DataTables\datatables.js" />
+    <None Include="wwwroot\lib\DataTables\datatables.min.js" />
   </ItemGroup>
 
   <ItemGroup>
