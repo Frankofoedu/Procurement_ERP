@@ -297,11 +297,11 @@ namespace BsslProcurement.Pages.Staff.ItemRequisition
         {
 
             //get staff object
-            var user = _procContext.Staffs.Find(userId);
+            var user = await _procContext.Staffs.FirstOrDefaultAsync(m=>m.Id==userId);
 
 
             //get current user details from staff table. From the fucking staff table
-            var staff = _bsslContext.Useracct.FirstOrDefault(x => x.Userid == user.StaffCode);
+            var staff = await _bsslContext.Useracct.FirstOrDefaultAsync(x => x.Userid == user.StaffCode);
 
             if (staff == null) throw new Exception("Staff Not Setup");
             //get company prefix 
