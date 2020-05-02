@@ -261,25 +261,6 @@
                         var code = $(this).text();
                         $('.staffCodeInput').val(code);
 
-                        //code to get the staff rank
-                        $.ajax({
-                            type: "GET",
-                            url: `/api/Users/GetStaffRank/${code}`,
-                            contentType: "application/json; charset=utf-8",
-                            success: function (data) {
-                                //alert(JSON.stringify(data));
-
-                                console.log(data);
-                            }, //End of AJAX Success function
-
-                            failure: function (data) {
-                                alert(data.responseText);
-                            }, //End of AJAX failure function
-                            error: function (data) {
-                                alert(data.responseText);
-                            } //End of AJAX error function
-
-                        });
                         //assign staff name textbox
                         $('.staffNameInput').val($(this).val());
 
