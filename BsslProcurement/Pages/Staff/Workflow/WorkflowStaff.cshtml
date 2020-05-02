@@ -274,7 +274,7 @@
             });
         });
 
-        $('.btnDelete').on('click', function () {
+        $("#tab").on('click', '.btnDelete', function () {
             $(this).html('<div class="spinner-border" role="status"><span class="sr-only">Loading...</span></div>');
 
             var wid = $(this).attr('workflowstaffid');
@@ -291,7 +291,7 @@
             });
         });
 
-        $('.btnSuspend').on('click', function () {
+        $("#tab").on('click', '.btnSuspend', function () {
             var action = $(this).text();
             $(this).html('<div class="spinner-border" role="status"><span class="sr-only">Loading...</span></div>');
 
