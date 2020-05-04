@@ -34,12 +34,16 @@ namespace BsslProcurement.Services
         public Task<List<StaffLayoutModel>> GetAllStaffNoRank()
         {
 
-            return  _bsslContext.Useracct.Select(x => new StaffLayoutModel { StaffName = x.Username, StaffCode = x.Userid, Rank = null}).ToListAsync();
+            return  _bsslContext.Useracct.Where(m => m.Procurement == true)
+                .Select(x => new StaffLayoutModel { StaffName = x.Username, StaffCode = x.Userid, Rank = null})
+                .ToListAsync();
         }
 
         public Task<List<StaffLayoutModel>> GetAllStaffWithRank()
         {
-           return  _bsslContext.Useracct.Select(x => new StaffLayoutModel { StaffName = x.Username, StaffCode = x.Userid }).ToListAsync();
+           return  _bsslContext.Useracct.Where(m=>m.Procurement==true)
+                .Select(x => new StaffLayoutModel { StaffName = x.Username, StaffCode = x.Userid })
+                .ToListAsync();
 
         }
 

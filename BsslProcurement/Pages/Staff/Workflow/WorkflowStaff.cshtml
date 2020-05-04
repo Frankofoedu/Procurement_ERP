@@ -261,25 +261,6 @@
                         var code = $(this).text();
                         $('.staffCodeInput').val(code);
 
-                        //code to get the staff rank
-                        $.ajax({
-                            type: "GET",
-                            url: `/api/Users/GetStaffRank/${code}`,
-                            contentType: "application/json; charset=utf-8",
-                            success: function (data) {
-                                //alert(JSON.stringify(data));
-
-                                console.log(data);
-                            }, //End of AJAX Success function
-
-                            failure: function (data) {
-                                alert(data.responseText);
-                            }, //End of AJAX failure function
-                            error: function (data) {
-                                alert(data.responseText);
-                            } //End of AJAX error function
-
-                        });
                         //assign staff name textbox
                         $('.staffNameInput').val($(this).val());
 
@@ -293,7 +274,7 @@
             });
         });
 
-        $('.btnDelete').on('click', function () {
+        $("#tab").on('click', '.btnDelete', function () {
             $(this).html('<div class="spinner-border" role="status"><span class="sr-only">Loading...</span></div>');
 
             var wid = $(this).attr('workflowstaffid');
@@ -310,7 +291,7 @@
             });
         });
 
-        $('.btnSuspend').on('click', function () {
+        $("#tab").on('click', '.btnSuspend', function () {
             var action = $(this).text();
             $(this).html('<div class="spinner-border" role="status"><span class="sr-only">Loading...</span></div>');
 
