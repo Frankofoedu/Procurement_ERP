@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Security.Claims;
 using System.Threading.Tasks;
+using BsslProcurement.Filters.Attributes;
 using BsslProcurement.Interfaces;
 using BsslProcurement.Services;
 using BsslProcurement.ViewModels;
@@ -17,6 +18,7 @@ using Microsoft.EntityFrameworkCore;
 namespace BsslProcurement.Pages.Staff.ItemRequisition
 {
     [Authorize]
+    [NoDiscovery]
     public class DetailRequisitionModel : PageModel
     {
 

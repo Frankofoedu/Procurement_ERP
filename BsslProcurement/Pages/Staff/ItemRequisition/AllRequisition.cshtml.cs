@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
 using System.Threading.Tasks;
+using BsslProcurement.Filters.Attributes;
 using BsslProcurement.Interfaces;
 using DcProcurement;
 using DcProcurement.Contexts;
@@ -16,6 +17,7 @@ namespace BsslProcurement.Pages.Staff.ItemRequisition
 {
     [Authorize]
     [DisplayName("Approved Requisitions")]
+    [NoDiscovery]
     public class AllRequisitionModel : PageModel
     {
         private readonly ProcurementDBContext _context;

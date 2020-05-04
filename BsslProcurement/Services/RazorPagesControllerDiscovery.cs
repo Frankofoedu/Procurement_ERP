@@ -9,6 +9,7 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc.ActionConstraints;
 using Microsoft.AspNetCore.Mvc.RazorPages.Infrastructure;
 using MoreLinq;
+using BsslProcurement.Filters.Attributes;
 
 namespace BsslProcurement.Services
 {
@@ -36,7 +37,7 @@ namespace BsslProcurement.Services
                   .OfType<PageActionDescriptor>().Where(x => x.AreaName != "Identity" && x.AreaName != "VendorIdentity").Select(async x => await _pageLoader.LoadAsync(x));
 
             var m = await Task.WhenAll(t);
-              _razorPages = m.Select(x => new RazorPagesControllerInfo { DisplayName = x.EndpointMetadata.OfType<System.ComponentModel.DisplayNameAttribute>().FirstOrDefault()?.DisplayName ?? x.DisplayName, ViewEnginePath = x.ViewEnginePath   }).DistinctBy(x=> x.ViewEnginePath)
+              _razorPages = m.Where(x => !x.EndpointMetadata.OfType<NoDiscoveryAttribute>().Any()).Select(x => new RazorPagesControllerInfo { DisplayName = x.EndpointMetadata.OfType<System.ComponentModel.DisplayNameAttribute>().FirstOrDefault()?.DisplayName ?? x.DisplayName, ViewEnginePath = x.ViewEnginePath   }).DistinctBy(x=> x.ViewEnginePath)
                 .ToList();
 
             //foreach (var actionDescriptors in items)

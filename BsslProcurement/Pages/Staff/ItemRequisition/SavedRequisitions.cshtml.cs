@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
 using System.Threading.Tasks;
+using BsslProcurement.Filters.Attributes;
 using BsslProcurement.Interfaces;
 using DcProcurement;
 using Microsoft.AspNetCore.Authorization;
@@ -14,6 +15,7 @@ namespace BsslProcurement
 {
     [Authorize]
     [DisplayName("Saved Requisitions")]
+    [NoDiscovery]
     public class SavedRequisitionsModel : PageModel
     {
         private readonly ProcurementDBContext _context;
