@@ -153,7 +153,7 @@
                             </a>
                             <ul class="collapse list-unstyled" id="pagesSubmenu">
                                 <li>
-                                    <a asp-page="/Staff/UoM/Index"><i class="fas fa-file-invoice mr-1"></i> UoM</a>
+                                    <a asp-page="/Staff/UoM/Index"><i class="fas fa-file-invoice mr-1"></i> Unit of Measurement</a>
                                 </li>
                                 <li>
                                     <a asp-page="/Staff/Administration/GroupManagement"><i class="fas fa-file-archive mr-1"></i>User Management</a>
@@ -265,6 +265,18 @@
                 //set asp date field
                 hidDateField.val(e);
             }
+        });
+        $(document).on('keydown', 'input[pattern]', function(e){
+          var input = $(this);
+          var oldVal = input.val();
+          var regex = new RegExp(input.attr('pattern'), 'g');
+
+          setTimeout(function(){
+            var newVal = input.val();
+            if(!regex.test(newVal)){
+              input.val(oldVal); 
+            }
+          }, 0);
         });
         //$(".datepicker").datepicker({
         //    dateFormat: "dd/mm/yy",
