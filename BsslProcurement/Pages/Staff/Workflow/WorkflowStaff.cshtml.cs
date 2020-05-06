@@ -37,14 +37,18 @@ namespace BsslProcurement.Pages.Staff.Workflow
         public string Message { get; set; }
         public string Error { get; set; }
 
-        public async Task<IActionResult> OnGetAsync(int? id, string msg)
+        public async Task<IActionResult> OnGetAsync(int? id, string msg, int? eid)
         {
             if (id == null)
             {
                 return LocalRedirect("WorkflowSetup");
             }
-
             Message = msg;
+
+            if (eid!=null)
+            {
+                newWorkflowStaff = await _context.WorkflowStaffs.Include(n => n.Staff).FirstOrDefaultAsync(m => m.Id == eid.Value);
+            }
             await InitializeAsync(id.Value);
 
             return Page();
@@ -60,7 +64,6 @@ namespace BsslProcurement.Pages.Staff.Workflow
                 WorkflowStaffs = await _context.WorkflowStaffs.Include(n => n.Staff)
                     .Where(x => x.WorkflowId == curWorkflowId).ToListAsync();
             }
-
         }
 
         public async Task<IActionResult> OnPostAsync()
@@ -73,27 +76,42 @@ namespace BsslProcurement.Pages.Staff.Workflow
             }
             else
             {
-                var WS = new WorkflowStaff()
+                if (newWorkflowStaff.Id <= 0)
                 {
-                    WorkflowId = curWorkflowId,
-                    Threshold = newWorkflowStaff.Threshold,
-                    MustApprove= newWorkflowStaff.MustApprove
-                };
+                    var WS = new WorkflowStaff()
+                    {
+                        WorkflowId = curWorkflowId,
+                        Threshold = newWorkflowStaff.Threshold,
+                        MustApprove= newWorkflowStaff.MustApprove,
+                        CanModify = newWorkflowStaff.CanModify,
+                    };
 
-                var staff = (await _context.Staffs.FirstOrDefaultAsync(m => m.StaffCode == newWorkflowStaff.StaffId.Trim()));
-                if (staff != null)
-                {
-                    WS.StaffId = staff.Id;
+                    var staff = (await _context.Staffs.FirstOrDefaultAsync(m => m.StaffCode == newWorkflowStaff.StaffId.Trim()));
+                    if (staff != null)
+                    {
+                        WS.StaffId = staff.Id;
 
 
-                    _context.WorkflowStaffs.Add(WS);
-                    _context.SaveChanges();
+                        _context.WorkflowStaffs.Add(WS);
+                        _context.SaveChanges();
 
-                    return RedirectToPage("./WorkflowStaff", new { id = curWorkflowId, msg = "Saved Successfully" });
+                        return RedirectToPage("./WorkflowStaff", new { id = curWorkflowId, msg = "Saved Successfully" });
+                    }
+                    else
+                    {
+                        Error = "Staff not found.";
+                    }
                 }
                 else
                 {
-                    Error = "Staff not found.";
+                    var ws = await _context.WorkflowStaffs.Include(n => n.Staff).FirstOrDefaultAsync(m => m.Id == newWorkflowStaff.Id);
+
+                    ws.Threshold = newWorkflowStaff.Threshold;
+                    ws.MustApprove = newWorkflowStaff.MustApprove;
+                    ws.CanModify = newWorkflowStaff.CanModify;
+
+                    await _context.SaveChangesAsync();
+                    return RedirectToPage("./WorkflowStaff", new { id = curWorkflowId, msg = "Updated Successfully" });
                 }
 
             }
