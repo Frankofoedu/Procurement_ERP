@@ -37,13 +37,14 @@ namespace BsslProcurement.Pages.Staff.Workflow
         public string Message { get; set; }
         public string Error { get; set; }
 
-        public async Task<IActionResult> OnGetAsync(int? id)
+        public async Task<IActionResult> OnGetAsync(int? id, string msg)
         {
             if (id == null)
             {
                 return LocalRedirect("WorkflowSetup");
             }
 
+            Message = msg;
             await InitializeAsync(id.Value);
 
             return Page();
@@ -62,7 +63,7 @@ namespace BsslProcurement.Pages.Staff.Workflow
 
         }
 
-        public async Task OnPostAsync()
+        public async Task<IActionResult> OnPostAsync()
         {
             var categories = _context.WorkflowTypes;
 
@@ -75,16 +76,20 @@ namespace BsslProcurement.Pages.Staff.Workflow
                 var WS = new WorkflowStaff()
                 {
                     WorkflowId = curWorkflowId,
+                    Threshold = newWorkflowStaff.Threshold,
+                    MustApprove= newWorkflowStaff.MustApprove
                 };
-                var staffid = (await _context.Staffs.FirstOrDefaultAsync(m => m.StaffCode == newWorkflowStaff.StaffId.Trim())).Id;
-                if (!string.IsNullOrWhiteSpace(staffid))
+
+                var staff = (await _context.Staffs.FirstOrDefaultAsync(m => m.StaffCode == newWorkflowStaff.StaffId.Trim()));
+                if (staff != null)
                 {
-                    WS.StaffId = staffid;
+                    WS.StaffId = staff.Id;
+
 
                     _context.WorkflowStaffs.Add(WS);
                     _context.SaveChanges();
 
-                    Message = "Saved Successfully";
+                    return RedirectToPage("./WorkflowStaff", new { id = curWorkflowId, msg = "Saved Successfully" });
                 }
                 else
                 {
@@ -94,6 +99,8 @@ namespace BsslProcurement.Pages.Staff.Workflow
             }
 
             await InitializeAsync(curWorkflowId);
+
+            return Page();
         }
 
 
