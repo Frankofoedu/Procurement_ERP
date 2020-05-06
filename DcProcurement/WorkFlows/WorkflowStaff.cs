@@ -12,6 +12,7 @@ namespace DcProcurement
         public string StaffId { get; set; }
         public decimal Threshold { get; set; }
         public bool MustApprove { get; set; }
+        public bool CanModify { get; set; }
         public Enums.WorkflowStaffState State { get; set; } = Enums.WorkflowStaffState.Normal;
 
         public Workflow Workflow { get; set; }
