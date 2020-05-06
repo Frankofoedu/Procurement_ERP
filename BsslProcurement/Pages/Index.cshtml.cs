@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Mvc.RazorPages;
 
 namespace BsslProcurement.Pages
 {
+    [BsslProcurement.Filters.Attributes.NoDiscovery]
     public class IndexModel : PageModel
     {
         public void OnGet()

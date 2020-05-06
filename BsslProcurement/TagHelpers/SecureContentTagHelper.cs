@@ -1,4 +1,5 @@
 ﻿using BsslProcurement.AuthModels;
+using BsslProcurement.Filters;
 using DcProcurement;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.AspNetCore.Mvc.ViewFeatures;
@@ -12,38 +13,35 @@ using System.Threading.Tasks;
 
 namespace BsslProcurement.TagHelpers
 {
-    public class DynamicAuthorizationOptions
-    {
-        /// <summary>
-        /// Sets the default admin user. Authorization check will be suppressed.
-        /// </summary>
-        /// <value>The default admin user.</value>
-        public string DefaultAdminUser { get; set; }
-    }
+   
 
     [HtmlTargetElement("secure-content")]
-    public class SecureContentTagHelper : TagHelper
+    public class SecureContentTagHelper : Microsoft.AspNetCore.Mvc.TagHelpers.AnchorTagHelper
     {
         private readonly ProcurementDBContext _dbContext;
         private readonly DynamicAuthorizationOptions _authorizationOptions;
 
-        public SecureContentTagHelper(ProcurementDBContext dbContext, DynamicAuthorizationOptions authorizationOptions)
+
+        public SecureContentTagHelper(ProcurementDBContext dbContext, DynamicAuthorizationOptions authorizationOptions, IHtmlGenerator generator) : base(generator)
         {
             _dbContext = dbContext;
             _authorizationOptions = authorizationOptions;
         }
 
-        [HtmlAttributeName("asp-viewenginepath")]
-        public string Path { get; set; }
 
+        /// <summary>
+        /// Set to true if all staff can view
+        /// </summary>
 
+        [HtmlAttributeName("proc-nodiscovery")]
+        public bool NoDiscovery { get; set; }
 
-        [ViewContext, HtmlAttributeNotBound]
-        public ViewContext ViewContext { get; set; }
 
         public override async Task ProcessAsync(TagHelperContext context, TagHelperOutput output)
         {
-            output.TagName = null;
+            await base.ProcessAsync(context, output);
+
+            output.TagName = "a";
             var user = ViewContext.HttpContext.User;
 
             if (!user.Identity.IsAuthenticated)
@@ -54,6 +52,12 @@ namespace BsslProcurement.TagHelpers
 
             if (user.Identity.Name.Equals(_authorizationOptions.DefaultAdminUser, StringComparison.CurrentCultureIgnoreCase))
                 return;
+
+            //check if page can be accessed by all staff
+            if (NoDiscovery)
+            {
+                return;
+            }
 
             var roles = await (
                 from usr in _dbContext.Users
@@ -71,7 +75,7 @@ namespace BsslProcurement.TagHelpers
                     continue;
 
                 var accessList = JsonConvert.DeserializeObject<IEnumerable<RazorPagesControllerInfo>>(role.Access);
-                if (accessList.Any(a => a.ViewEnginePath == Path))
+                if (accessList.Any(a => a.ViewEnginePath == Page))
                     return;
             }
 

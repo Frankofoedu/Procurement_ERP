@@ -46,14 +46,12 @@
                         <ul class="collapse list-unstyled" id="transactionSubMenu">
                             <li>
 
-                                <secure-content asp-viewenginepath="/Staff/ItemRequisition/NewRequisition">
+                                <secure-content proc-nodiscovery="true" asp-page="/Staff/ItemRequisition/NewRequisition"><i class="fas fa-shopping-cart"></i>Create Purchase Requisition</secure-content>
+                               
 
-                                    <a asp-page="/Staff/ItemRequisition/NewRequisition"><i class="fas fa-shopping-cart"></i>Create Purchase Requisition</a>
-                                </secure-content>
-
-                                <a asp-page="/Staff/ItemRequisition/SavedRequisitions"><i class="fas fa-shopping-cart"></i> View Saved Requisition</a>
-                                <a asp-page="/Staff/ItemRequisition/AllRequisition"><i class="fas fa-shopping-cart"></i> View Approved Requisition</a>
-                                <a><i class="fas fa-shopping-cart"></i>Import Requisition</a>
+                                <secure-content proc-nodiscovery="true" asp-page="/Staff/ItemRequisition/SavedRequisitions"><i class="fas fa-shopping-cart"></i> View Saved Requisition</secure-content>
+                                <secure-content proc-nodiscovery="true" asp-page="/Staff/ItemRequisition/AllRequisition"><i class="fas fa-shopping-cart"></i> View Approved Requisition</secure-content>
+                                <secure-content proc-nodiscovery="true"><i class="fas fa-shopping-cart"></i>Import Requisition</secure-content>
                             </li>
                         </ul>
                     </li>
@@ -106,8 +104,7 @@
                             </li>
                         </ul>
                     </li>
-                    <li>
-                        <secure-content>
+                    <li is-admin-control="true">
                             <a href="#workflowSubmenu" data-toggle="collapse" aria-expanded="true" class="dropdown-toggle">
                                 <i class="fas fa-user-alt mr-1"></i> Manage Workflow
                             </a>
@@ -125,9 +122,8 @@
                                     <a asp-page="/Staff/Workflow/WorkflowCategory"><i class="fas fa-file-archive mr-1"></i> Workflow Categories</a>
                                 </li>
                             </ul>
-                        </secure-content>
                     </li>
-                    <li>
+                    <li is-admin-control="true">
                         <a href="#criteriaSubmenu" data-toggle="collapse" aria-expanded="true" class="dropdown-toggle">
                             <i class="fas fa-list mr-1"></i> Manage Criteria
                         </a>
@@ -146,8 +142,7 @@
                             </li>
                         </ul>
                     </li>
-                    <li>
-                        <secure-content>
+                    <li is-admin-control="true">
                             <a href="#pagesSubmenu" data-toggle="collapse" aria-expanded="true" class="dropdown-toggle">
                                 <i class="fas fa-file-alt mr-1"></i> Setup
                             </a>
@@ -165,24 +160,7 @@
                                     <a asp-page="/Staff/PreQSetup"><i class="fas fa-file-invoice mr-1"></i> Prequalification Setup</a>
                                 </li>
 
-                                @*<li>
-            <a asp-page="/Staff/ProPolicy"><i class="fas fa-file-invoice mr-1"></i> Publish Procurement</a>
-        </li>*@
-
-                                @*<li>
-            <a asp-page="/Staff/PSISS"><i class="fas fa-file-invoice mr-1"></i> PSISS</a>
-        </li>
-        <li>
-            <a asp-page="/Staff/WorkForce"><i class="fas fa-file-archive mr-1"></i> Work Force</a>
-        </li>
-        <li>
-            <a asp-page="/Staff/WPSetup"><i class="fas fa-file-invoice mr-1"></i> W P Setup</a>
-        </li>*@
-                                @*<li>
-            <a asp-page="/Staff/Items"><i class="fas fa-file-archive mr-1"></i> Items</a>
-        </li>*@
-                            </ul>
-                        </secure-content>
+                               </ul>
                     </li>
                 </ul>
             </nav>

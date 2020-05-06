@@ -23,11 +23,4 @@ jobs:
       run: dotnet build --configuration Release --no-restore
     - name: Test
       run: dotnet test --no-restore --verbosity normal
-    - name: Deploy
-      uses: azure/webapps-deploy@v2
-      with: 
-          app-name: DcProcurementTest 
-          publish-profile: ${{ secrets.publish_profile  }} # Define secret variable in repository settings as per action documentation
-          package: './BSSL_Procurement'
-
-        
+   

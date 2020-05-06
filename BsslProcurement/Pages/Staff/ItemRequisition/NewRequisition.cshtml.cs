@@ -4,6 +4,7 @@ using System.ComponentModel;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
+using BsslProcurement.Filters.Attributes;
 using BsslProcurement.Interfaces;
 using BsslProcurement.Services;
 using BsslProcurement.UtilityMethods;
@@ -25,6 +26,7 @@ namespace BsslProcurement.Pages.Staff.ItemRequisition
 
     [DisplayName("New Requisition")]
     [Authorize]
+    [NoDiscovery]
     public class NewRequisitionModel : PageModel
     {
         private readonly UserManager<User> _userManager;

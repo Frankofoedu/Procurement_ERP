@@ -13,19 +13,31 @@ using BsslProcurement.AuthModels;
 using Microsoft.EntityFrameworkCore;
 using BsslProcurement.TagHelpers;
 using Microsoft.AspNetCore.Mvc.Controllers;
+using Microsoft.AspNetCore.Mvc.RazorPages.Infrastructure;
+using BsslProcurement.Filters.Attributes;
 
 namespace BsslProcurement.Filters
 {
+    public class DynamicAuthorizationOptions
+    {
+        /// <summary>
+        /// Sets the default admin user. Authorization check will be suppressed.
+        /// </summary>
+        /// <value>The default admin user.</value>
+        public string DefaultAdminUser { get; set; }
+
+    }
     public class DynamicAuthorizationFilter : IAsyncAuthorizationFilter
     {
         private readonly ProcurementDBContext _dbContext; 
         private readonly DynamicAuthorizationOptions _authorizationOptions;
+        private readonly PageLoader _pageLoader;
 
-
-        public DynamicAuthorizationFilter(ProcurementDBContext dbContext,DynamicAuthorizationOptions authorizationOptions)
+        public DynamicAuthorizationFilter(PageLoader pageLoader,ProcurementDBContext dbContext,DynamicAuthorizationOptions authorizationOptions)
         {
             _dbContext = dbContext;
             _authorizationOptions = authorizationOptions;
+            _pageLoader = pageLoader;
         }
 
         public async Task OnAuthorizationAsync(AuthorizationFilterContext context)
@@ -52,9 +64,13 @@ namespace BsslProcurement.Filters
             if (userName.Equals(_authorizationOptions.DefaultAdminUser, StringComparison.CurrentCultureIgnoreCase))
                 return;
 
-            //checks if page is index page
-            if (viewPath == "/Staff/Index")
+            //checks if page can be accessed by all staff
+            var page = (PageActionDescriptor)context.ActionDescriptor;
+           var compiledPage = await _pageLoader.LoadAsync(page);
+            if (compiledPage.EndpointMetadata.OfType<NoDiscoveryAttribute>().Any())
+            {
                 return;
+            }
 
             var roles = await (
                 from user in _dbContext.Staffs
