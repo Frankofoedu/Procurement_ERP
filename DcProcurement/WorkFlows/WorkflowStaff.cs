@@ -9,6 +9,7 @@ namespace DcProcurement
     {
         public int Id { get; set; }
         public int WorkflowId { get; set; }
+        [Required(ErrorMessage ="Please Select Staff")]
         public string StaffId { get; set; }
         public decimal Threshold { get; set; }
         public bool MustApprove { get; set; }
