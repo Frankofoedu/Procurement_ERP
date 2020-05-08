@@ -26,9 +26,6 @@ namespace BsslProcurement.TagHelpers
             _authorizationOptions = authorizationOptions;
         }
 
-
-
-
         [ViewContext, HtmlAttributeNotBound]
         public ViewContext ViewContext { get; set; }
         public override async Task ProcessAsync(TagHelperContext context, TagHelperOutput output)
