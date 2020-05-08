@@ -17,16 +17,17 @@
 
             <div class="mt-1">
                 <p>
-                    <a asp-page="Create" class="btn btn-outline-primary" >Create New</a>
+                    <a asp-page="Create" class="btn btn-outline-primary">Create New</a>
+                    <a asp-page="Index" class="btn btn-outline-dark ml-2">Refresh</a>
                 </p>
                 <table class="table table-responsive-sm table-striped table-bordered">
                     <thead>
                         <tr>
                             <th>
-                                @Html.DisplayNameFor(model => model.UnitOfMeasurement[0].Ucode)
+                                UoM Code
                             </th>
                             <th>
-                                @Html.DisplayNameFor(model => model.UnitOfMeasurement[0].Uname)
+                                UoM Name
                             </th>
                             <th></th>
                         </tr>

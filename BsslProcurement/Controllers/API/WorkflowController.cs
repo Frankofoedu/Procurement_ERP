@@ -35,7 +35,7 @@ namespace BsslProcurement.Controllers.API
 
             if (Workflows.Count < 1)
             {
-                return NotFound();
+                return Ok();
             }
 
             foreach (var item in Workflows)

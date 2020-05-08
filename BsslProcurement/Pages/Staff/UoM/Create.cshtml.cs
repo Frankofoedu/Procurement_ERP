@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using DcProcurement.Contexts;
+using Microsoft.EntityFrameworkCore;
 
 namespace BsslProcurement.Pages.Staff.UoM
 {
@@ -35,6 +36,13 @@ namespace BsslProcurement.Pages.Staff.UoM
         {
             if (!ModelState.IsValid)
             {
+                return Page();
+            }
+            var check = await _context.UnitOfMeasurements.FirstOrDefaultAsync
+                (m => m.Ucode == UnitOfMeasurement.Ucode || m.Uname == UnitOfMeasurement.Uname);
+            if (check != null)
+            {
+                Error = "Error! UoM Code and UoM Name must be unique";
                 return Page();
             }
 
