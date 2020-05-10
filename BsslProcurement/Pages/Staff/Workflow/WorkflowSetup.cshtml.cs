@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Threading.Tasks;
 using BsslProcurement.ViewModels;
@@ -29,6 +30,7 @@ namespace BsslProcurement.Pages.Staff.Workflow
         public class Input
         {
             public int Step { get; set; }
+            [Required(ErrorMessage ="Select Action")]
             public int WorkflowActionId { get; set; }
         }
 
