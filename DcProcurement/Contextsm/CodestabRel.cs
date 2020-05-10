@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace DcProcurement.Contexts
+namespace DcProcurement.Contextsm
 {
     public partial class CodestabRel
     {

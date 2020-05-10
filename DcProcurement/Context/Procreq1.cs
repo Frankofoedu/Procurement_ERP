@@ -5,7 +5,6 @@ namespace DcProcurement.Contexts
 {
     public partial class Procreq1
     {
-        public int Id { get; set; }
         public string Reqno { get; set; }
         public string Copny { get; set; }
         public string Zcopny { get; set; }
@@ -48,5 +47,6 @@ namespace DcProcurement.Contexts
         public DateTime? Tensdate { get; set; }
         public DateTime? Tenedate { get; set; }
         public string Sentforapprval { get; set; }
+        public int Id { get; set; }
     }
 }
