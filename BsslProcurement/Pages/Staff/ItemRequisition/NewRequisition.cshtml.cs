@@ -160,6 +160,7 @@ namespace BsslProcurement.Pages.Staff.ItemRequisition
             //get current logged in user
             var loggedInUserCode = (await GetCurrentUserAsync()).Id;
 
+            
 
             (PrNo, RequestingDeptCode, RequestingDept, Departments) = await GeneratePRNo(loggedInUserCode);
         }

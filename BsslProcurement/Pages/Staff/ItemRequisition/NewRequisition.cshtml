@@ -664,7 +664,7 @@
                     $('#UOMspinner').hide();
                     $('#uomTable').dataTable();
 
-                    $('.btnUOMName').on('click', function () {
+                    $('#uomTable').on('click','.btnUOMName', function () {
                         //assign unit of measurement name textbox
                         txtToAssign.val($(this).attr('itemName'));
 
