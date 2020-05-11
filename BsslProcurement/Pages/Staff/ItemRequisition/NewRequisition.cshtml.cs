@@ -58,6 +58,8 @@ namespace BsslProcurement.Pages.Staff.ItemRequisition
         public Requisition Requisition { get; set; }
         [BindProperty]
         public WorkFlowApproverViewModel WfVm { get; set; }
+        [BindProperty]
+        public string UserCode { get; set; }
         #endregion
 
         public NewRequisitionModel(UserManager<User> userManager,
@@ -158,11 +160,12 @@ namespace BsslProcurement.Pages.Staff.ItemRequisition
             //    WfVm = new WorkFlowApproverViewModel { WorkFlowTypeId = workflow.Id};
             //}
             //get current logged in user
-            var loggedInUserCode = (await GetCurrentUserAsync()).Id;
+            var loggedInUserId = (await GetCurrentUserAsync()).Id;
+            UserCode  = (await GetCurrentUserAsync()).UserName;
 
-            
 
-            (PrNo, RequestingDeptCode, RequestingDept, Departments) = await GeneratePRNo(loggedInUserCode);
+
+            (PrNo, RequestingDeptCode, RequestingDept, Departments) = await GeneratePRNo(loggedInUserId);
         }
 
         private async Task<List<ItemGridViewModel>> LoadGridViewItemsFromRequisition(Requisition requisition, IWebHostEnvironment env)
