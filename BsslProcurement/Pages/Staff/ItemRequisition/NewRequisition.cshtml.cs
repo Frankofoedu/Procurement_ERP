@@ -161,7 +161,7 @@ namespace BsslProcurement.Pages.Staff.ItemRequisition
             var loggedInUserCode = (await GetCurrentUserAsync()).Id;
 
 
-            //(PrNo, RequestingDeptCode, RequestingDept, Departments) = await GeneratePRNo(loggedInUserCode);
+            (PrNo, RequestingDeptCode, RequestingDept, Departments) = await GeneratePRNo(loggedInUserCode);
         }
 
         private async Task<List<ItemGridViewModel>> LoadGridViewItemsFromRequisition(Requisition requisition, IWebHostEnvironment env)
@@ -301,7 +301,7 @@ namespace BsslProcurement.Pages.Staff.ItemRequisition
         }
        
 
-        private async Task<(string, string, string, List<SelectListItem>)> GeneratePRNo(string userId)
+        private async Task<(string prNo, string requestDeptCode, string requestDept, List<SelectListItem> dept)> GeneratePRNo(string userId)
         {
 
             //get staff object
