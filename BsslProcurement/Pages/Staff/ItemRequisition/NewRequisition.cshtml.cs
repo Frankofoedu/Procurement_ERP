@@ -41,6 +41,7 @@ namespace BsslProcurement.Pages.Staff.ItemRequisition
         [BindProperty]
         public string PrNo { get; set; }
 
+        #region Properties
         [BindProperty]
         public List<ItemGridViewModel> gridVm { get; set; }
 
