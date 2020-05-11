@@ -113,12 +113,16 @@ namespace BsslProcurement.Controllers.API
         [HttpGet("Login")]
         public async Task<ActionResult> GetLoginUser([FromQuery] string userId, [FromQuery] string password, [FromQuery] string returnUrl = null)
         {
-            returnUrl ??= Url.Content("~/");
+            returnUrl = returnUrl ?? Url.Content("~/");
+
+            //          {
+            //              "name": "Abiodun Abdul",
+            //"staffCode": "0908",
+            //"password": "admin1234",
+            //"email": ""
 
 
-            var pwd = PasswordEncrypt.GetEncryptedPassword(password);
-
-            var result = await _signInManager.PasswordSignInAsync(userId, pwd, true, lockoutOnFailure: false);
+            var result = await _signInManager.PasswordSignInAsync(userId, password, true, lockoutOnFailure: false);
 
             if (result.Succeeded)
             {

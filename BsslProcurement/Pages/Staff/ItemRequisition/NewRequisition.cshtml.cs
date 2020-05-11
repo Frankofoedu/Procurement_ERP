@@ -37,13 +37,14 @@ namespace BsslProcurement.Pages.Staff.ItemRequisition
 
         public string Message { get; set; }
         public string Error { get; set; }
-
-        #region Properties
         [BindProperty]
         public string PrNo { get; set; }
 
         [BindProperty]
         public List<ItemGridViewModel> gridVm { get; set; }
+
+        //[BindProperty]
+        //public IFormFile File { get; set; }
 
         [BindProperty]
         public string RequestingDept { get; set; }
@@ -108,11 +109,11 @@ namespace BsslProcurement.Pages.Staff.ItemRequisition
                 try
                 {
                     //save requisition
-                    await SaveOrSubmitRequisition(true,true);
+                    await SaveOrSubmitRequisition(true);
 
                     //create and assign requisition job
-                   //await _requisitionService.SendRequisitionToNextStageAsync(Requisition.Id, 
-                   //    WfVm.AssignedStaffCode, WfVm.WorkFlowId, WfVm.Remark);
+                   await _requisitionService.SendRequisitionToNextStageAsync(Requisition.Id, 
+                       WfVm.AssignedStaffCode, WfVm.WorkFlowId, WfVm.Remark);
                     
 
                     Message = "Requisition Added successfully";
@@ -134,7 +135,7 @@ namespace BsslProcurement.Pages.Staff.ItemRequisition
             {
                 try
                 {
-                    await SaveOrSubmitRequisition(false,false);
+                    await SaveOrSubmitRequisition(false);
                     
                     return RedirectToPage("SavedRequisitions");
                 }
@@ -153,12 +154,12 @@ namespace BsslProcurement.Pages.Staff.ItemRequisition
         {
 
             //load requisition workflow
-            //var workflow = _procContext.WorkflowTypes.Include(c=> c.Workflows).FirstOrDefault(x => x.Name == DcProcurement.Constants.RequisitionWorkflow);
+            var workflow = _procContext.WorkflowTypes.Include(c=> c.Workflows).FirstOrDefault(x => x.Name == DcProcurement.Constants.RequisitionWorkflow);
 
-            //if (workflow.Workflows.Count > 0)
-            //{
-            //    WfVm = new WorkFlowApproverViewModel { WorkFlowTypeId = workflow.Id};
-            //}
+            if (workflow.Workflows.Count > 0)
+            {
+                WfVm = new WorkFlowApproverViewModel { WorkFlowTypeId = workflow.Id};
+            }
             //get current logged in user
             var loggedInUserId = (await GetCurrentUserAsync()).Id;
             UserCode  = (await GetCurrentUserAsync()).UserName;
@@ -195,12 +196,11 @@ namespace BsslProcurement.Pages.Staff.ItemRequisition
                 throw;
             }
         }
-        private async Task SaveOrSubmitRequisition(bool isSubmitted, bool isApprovedRequisition)
+        private async Task SaveOrSubmitRequisition(bool isSubmitted)
         {
             //save requisition items
-            Requisition.RequisitionItems = await GetRequisitionItemsFromViewModel(gridVm);
-
-            Requisition.isApproved = isApprovedRequisition;
+            Requisition.RequisitionItems = await GetRequisitionItemsFromViewModel(gridVm);   
+                       
             Requisition.isSubmitted = isSubmitted;
 
             Requisition.Status = isSubmitted ? "Sent For Processing" : "Saved";
@@ -208,7 +208,6 @@ namespace BsslProcurement.Pages.Staff.ItemRequisition
             Requisition.LoggedInUserId = (await GetCurrentUserAsync()).Id;
 
             _procContext.Requisitions.Add(Requisition);
-           
 
             _procContext.SaveChanges();
             

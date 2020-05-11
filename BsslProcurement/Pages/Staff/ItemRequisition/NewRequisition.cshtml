@@ -72,13 +72,13 @@
     </div>
 }
 
-@*@if (Model.WfVm == null)
-    {
-        <div class="alert alert-danger alert-dismissable fade show">
-            <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-            Workflow Has not been setup. Please setup workflow
-        </div>
-    }*@
+@if (Model.WfVm == null)
+{
+    <div class="alert alert-danger alert-dismissable fade show">
+        <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+        Workflow Has not been setup. Please setup workflow
+    </div>
+}
 
 <div class="row mt-5">
     <div class="col-md-12">
@@ -114,7 +114,7 @@
                         <div class="col-sm-4">
                             <div class="form-group">
                                 <label>PR No : </label>
-                                <input class="form-control" asp-for="Requisition.PRNumber" placeholder="" />
+                                <input class="form-control" readonly asp-for="Requisition.PRNumber" value="@Model.PrNo" placeholder="" />
 
                             </div>
                         </div>
@@ -352,17 +352,17 @@
 
                     </div>
 
-                    @*@if (Model.WfVm != null)
-                        {*@
+                    @if (Model.WfVm != null)
+                    {
 
-                    @*<div class="col-sm-12">
+                        <div class="col-sm-12">
                             <div class="form-group">
                                 <label>Send to Next Staff :</label>
                                 <div class="panel border border-dark rounded p-2">
                                     <partial name="~/Pages/Shared/Modals/_NewRequisitionSelectApproverPartial.cshtml" model="Model.WfVm" />
                                 </div>
                             </div>
-                        </div>*@
+                        </div>
 
                     <div class="d-flex justify-content-around no-print">
                         @*  <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>*@
@@ -373,7 +373,7 @@
                         <button id="printBtn" class="btn btn-lg btn-info" onclick="print(); return false;">Print/Preview</button>
                     </div>
 
-                    @*}*@
+                    }
                 </div>
             </div>
         </form>
