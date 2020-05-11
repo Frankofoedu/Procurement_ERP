@@ -41,7 +41,7 @@
                 <ul class="list-unstyled components">
 
 
-                    @*<li>
+                    <li>
                         <a href="#transactionSubMenu" data-toggle="collapse" aria-expanded="true" class="dropdown-toggle"> <i class="fas fa-comment mr-1"></i>Purchase Requisition</a>
                         <ul class="collapse list-unstyled" id="transactionSubMenu">
                             <li>
@@ -54,13 +54,11 @@
                                 <secure-content proc-nodiscovery="true"><i class="fas fa-shopping-cart"></i>Import Requisition</secure-content>
                             </li>
                         </ul>
-                    </li>*@
+                    </li>
                     <li>
                         <a href="#ProcurementSubMenu" data-toggle="collapse" aria-expanded="true" class="dropdown-toggle"> <i class="fas fa-comment mr-1"></i>Procurement Process</a>
                         <ul class="collapse list-unstyled" id="ProcurementSubMenu">
                             <li>
-
-                                <a asp-page="/Staff/ItemRequisition/NewRequisition"><i class="fas fa-shopping-cart"></i>Create Purchase Requisition</a>
                                 <a asp-page="/Staff/ItemRequisition/ProcCommencement/AllRequisition"><i class="fas fa-shopping-cart"></i>Approved Purchase Requisitions</a>
                                 <a asp-page="/Staff/ItemRequisition/ItemPricing/AllRequisitionItemPricing"><i class="fas fa-shopping-cart"></i>Procurement Costing</a>
                             </li>
