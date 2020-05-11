@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace DcProcurement.Contextsm
+namespace DcProcurement.Contexts
 {
     public partial class Codestab
     {

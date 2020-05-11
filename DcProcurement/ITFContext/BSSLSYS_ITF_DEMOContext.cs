@@ -2,7 +2,7 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata;
 
-namespace DcProcurement.Contextsm
+namespace DcProcurement.Contexts
 {
     public partial class BSSLSYS_ITF_DEMOContext : DbContext
     {
