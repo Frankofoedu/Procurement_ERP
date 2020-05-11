@@ -51,7 +51,7 @@ namespace BsslProcurement.Pages.Staff.ItemRequisition
 
             VendorEmailListObj = new VendorWithEmailViewModel();
 
-            VendorEmailListObj.VendorWithEmailList = VendorEmailListObj.GetVendorWithEmailList(bsslContext.Accust.ToList());
+            VendorEmailListObj.VendorWithEmailList = VendorEmailListObj.GetVendorWithEmailList(bsslContext.Accusts.ToList());
         }
         public async Task OnGet(int id)
         {
