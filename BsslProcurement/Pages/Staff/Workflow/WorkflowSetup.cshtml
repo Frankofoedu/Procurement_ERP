@@ -126,7 +126,9 @@
                                             <label>Action</label>
                                         </div>
                                         <div class="col-sm-9">
-                                            <select asp-for="InputModel[i].WorkflowActionId" class="form-control @("selectAction" + i)" asp-items="ViewBag.Actions"></select>
+                                            <select asp-for="InputModel[i].WorkflowActionId" class="form-control @("selectAction" + i)" asp-items="ViewBag.Actions">
+                                                <option value="">--Select Action--</option>
+                                            </select>
                                         </div>
                                     </div>
                                 </div>

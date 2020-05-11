@@ -46,5 +46,8 @@ namespace DcProcurement.Contexts
         public DateTime? Datein { get; set; }
         public bool? Patsalinvo { get; set; }
         public DateTime? Lastlogin { get; set; }
+        public bool? Reimburse { get; set; }
+        public bool? Invest { get; set; }
+        public bool? Investment { get; set; }
     }
 }

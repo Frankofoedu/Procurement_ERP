@@ -83,7 +83,7 @@ namespace BsslProcurement.Pages.Staff.ItemRequisition.BidPreparation
                 return;
             }
 
-            VendorEmailListObj.VendorWithEmailList = VendorEmailListObj.GetVendorWithEmailList(_ITFcontext.Accusts.ToList());
+            VendorEmailListObj.VendorWithEmailList = VendorEmailListObj.GetVendorWithEmailList(_ITFcontext.Accust.ToList());
             StaffEmailListObj.StaffWithEmailList = StaffEmailListObj.GetStaffWithEmailList(_context.Staffs.ToList());
 
             ERFXViewModel = new ErfxViewModel();

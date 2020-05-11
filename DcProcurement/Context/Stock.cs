@@ -5,7 +5,6 @@ namespace DcProcurement.Contexts
 {
     public partial class Stock
     {
-        public int Id { get; set; }
         public string TypeCode { get; set; }
         public string Groupno { get; set; }
         public string Stockno { get; set; }
@@ -45,5 +44,6 @@ namespace DcProcurement.Contexts
         public string Surdefacct { get; set; }
         public string Project2 { get; set; }
         public string Nonestock { get; set; }
+        public int Id { get; set; }
     }
 }
