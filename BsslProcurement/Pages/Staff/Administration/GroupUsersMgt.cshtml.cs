@@ -102,7 +102,7 @@ namespace BsslProcurement.Pages.Staff.Administration
                 await LoadData(Id);
             }
 
-            return Page();
+            return RedirectToPage(new { id = Id });
         }
     }
 }
