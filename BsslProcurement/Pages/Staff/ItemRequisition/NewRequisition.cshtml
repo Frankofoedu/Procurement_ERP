@@ -364,14 +364,18 @@
                             </div>
                         </div>
 
-                    <div class="d-flex justify-content-around no-print">
-                        @*  <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>*@
-                        <input id="btnSave" class="btn btn-lg btn-outline-info float-left" asp-page-handler="Save" value="Save For Later" type="submit" placeholder="" />
+                        <div class="d-flex justify-content-around no-print">
+                            @*  <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>*@
+                            <input id="btnSave" class="btn btn-lg btn-outline-info float-left" asp-page-handler="Save" value="Save For Later" asp-route-id="@((Model.Requisition != null) ? Model.Requisition.Id : (int?)null)" type="submit" placeholder="" />
+                            @if (Model.Requisition != null)
+                            {
+                                <input id="btnQuarantine" type="submit" asp-route-id="@Model.Requisition.Id" asp-page-handler="Quarantine" class="btn btn-lg btn-outline-danger" value="Quarantine" />
 
-                        <input id="btnSubmit" class="btn btn-lg btn-primary" asp-page-handler="Submit" value="Submit" type="submit" placeholder="" />
+                            }
+                            <input id="btnSubmit" class="btn btn-lg btn-primary" asp-page-handler="Submit" asp-route-id="@((Model.Requisition != null) ? Model.Requisition.Id : (int?)null)" value="Submit" type="submit" placeholder="" />
 
-                        <button id="printBtn" class="btn btn-lg btn-info" onclick="print(); return false;">Print/Preview</button>
-                    </div>
+                            <button id="printBtn" class="btn btn-lg btn-info" onclick="print(); return false;">Print/Preview</button>
+                        </div>
 
                     }
                 </div>

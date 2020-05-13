@@ -1,4 +1,5 @@
 ﻿@page
+@using BsslProcurement.UtilityMethods;
 @model BsslProcurement.SavedRequisitionsModel
 @{
     ViewData["Title"] = "Saved Requisitions";
@@ -43,17 +44,18 @@
             }
             <div class="row pt-3 " style="">
                 <div class="col-12 table-responsive table-responsive-sm">
-                    <table class="table  table-striped">
+                    <table id="reqTable" class="table  table-striped">
                         <thead>
                             <tr class="table-primary">
                                 <th>S/N</th>
                                 <th>PR Number</th>
-                                <th>Description</th>
-                                <th>Delivery Date</th>
+                                <th>Request Description</th>
+                                <th>Expected Delivery Date</th>
                                 <th>No Of Items</th>
-                                <th>Required At</th>
+                                <th>Delivery Destination</th>
                                 <th>Prepared By</th>
-                                <th>Total Amount</th>
+                                <th>Prepared For</th>
+                                <th>Date Saved</th>
                                 <th>Status</th>
                                 <th>Action</th>
                             </tr>
@@ -68,18 +70,19 @@
                                 @for (int i = 0; i < Model.Requisitions.Count; i++)
                                 {
                                     var item = Model.Requisitions[i];
-                                    <tr>
-                                        <td>@(i + 1)</td>
-                                        <td>@item.PRNumber</td>
-                                        <td>@item.Description</td>
-                                        <td>@(((DateTime)item.DeliveryDate).ToShortDateString())</td>
-                                        <td>@item.RequisitionItems.Count</td>
-                                        <td>@item.RequiredAtDepartment</td>
-                                        <td>@item.PreparedBy</td>
-                                        <td>@item.RequisitionItems.Sum(x => x.UnitPrice * x.Quantity)</td>
-                                        <td>@item.Status</td>
-                                        <td><a asp-page="./NewRequisition" asp-route-id="@item.Id" style="color: #007bff">Continue Process</a></td>
-                                    </tr>
+                            <tr>
+                                <td>@(i + 1)</td>
+                                <td>@item.PRNumber</td>
+                                <td>@item.Description</td>
+                                <td>@(((DateTime)item.DeliveryDate).ToShortDateString())</td>
+                                <td>@item.RequisitionItems.Count</td>
+                                <td>@item.RequiredAtDepartment</td>
+                                <td>@item.PreparedBy</td>
+                                <td>@item.PreparedFor</td>
+                                <td>@item.DateCreated.ToShortNigeriaDateString()</td>
+                                <td>@item.Status</td>
+                                <td><a asp-page="./NewRequisition" asp-route-id="@item.Id" style="color: #007bff">Continue Process</a></td>
+                            </tr>
                                 }
                             }
                         </tbody>
@@ -99,4 +102,10 @@
         </form>
     </div>
 </div>
+@section Scripts{ 
 
+<script>
+    $("#reqTable").DataTable();
+</script>
+
+}

@@ -76,10 +76,13 @@ namespace BsslProcurement.Pages.Staff.ItemRequisition
             _requisitionService = requisitionService;
         }
 
-        public async Task<ActionResult> OnGetAsync(int? id)
+        public async Task<ActionResult> OnGetAsync(int? id, string message)
         {
             try
             {
+                Error = message;
+                await LoadData();
+
                 if (id != null)
                 {
                     Requisition = _procContext.Requisitions.Include(x => x.RequisitionItems).ThenInclude(c => c.Attachment).FirstOrDefault( c => c.Id == id);
@@ -92,7 +95,6 @@ namespace BsslProcurement.Pages.Staff.ItemRequisition
 
                     gridVm = await LoadGridViewItemsFromRequisition(Requisition, _environment);
                 }
-                await LoadData();
             }
             catch (Exception ex)
             {
@@ -104,22 +106,34 @@ namespace BsslProcurement.Pages.Staff.ItemRequisition
 
         }
 
-        public async Task<ActionResult> OnPostSubmitAsync()
+        public async Task<ActionResult> OnPostSubmitAsync(int? id)
         {
             if (ModelState.IsValid)
             {
                 try
                 {
-                    //save requisition
-                    await SaveOrSubmitRequisition(true);
+                    //check if its a saved requisition
 
-                    //create and assign requisition job
-                   await _requisitionService.SendRequisitionToNextStageAsync(Requisition.Id, 
-                       WfVm.AssignedStaffCode, WfVm.WorkFlowId, WfVm.Remark);
-                    
+                    if (id != null)
+                    {
+                        _procContext.Update(Requisition);
+                       await _procContext.SaveChangesAsync();
 
-                    Message = "Requisition Added successfully";
-                   // return RedirectToPage("AllRequisition");
+                        Message = "Requisition Updated and Submitted successfully";
+                    }
+                    else
+                    {
+                        //save requisition
+                        await SaveOrSubmitRequisition(true);
+
+                        //create and assign requisition job
+                        await _requisitionService.SendRequisitionToNextStageAsync(Requisition.Id,
+                            WfVm.AssignedStaffCode, WfVm.WorkFlowId, WfVm.Remark);
+
+
+                        Message = "Requisition Added successfully";
+                    }
+
                 }
                 catch (Exception ex)
                 {
@@ -131,15 +145,58 @@ namespace BsslProcurement.Pages.Staff.ItemRequisition
             return Page();
         }
 
-        public async Task<ActionResult> OnPostSaveAsync()
+        /// <summary>
+        /// Deletes a Requisition
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
+        public async Task<ActionResult> OnPostQuarantineAsync(int? id)
         {
             if (ModelState.IsValid)
             {
                 try
                 {
-                    await SaveOrSubmitRequisition(false);
-                    
-                    return RedirectToPage("SavedRequisitions");
+                    if (id != null)
+                    {
+                        Requisition.Id = id.Value;
+                        _procContext.Remove(Requisition);
+                        await _procContext.SaveChangesAsync();
+
+                        Message = "Requisition Deleted successfully";
+                    }
+                }
+                catch (Exception ex)
+                {
+                    Error = "An error has occurred." + Environment.NewLine + ex.Message;
+                    await LoadData();
+                    return Page();
+                }
+
+            }
+
+            await LoadData();
+            return RedirectToPage(new { message = Message });
+        }
+
+        public async Task<ActionResult> OnPostSaveAsync(int? id)
+        {
+            if (ModelState.IsValid)
+            {
+                try
+                {
+                    if (id != null)
+                    {
+                        _procContext.Update(Requisition);
+                        await _procContext.SaveChangesAsync();
+
+                        Message = "Requisition Updated and Saved successfully";
+                    }
+                    else
+                    {
+                        await SaveOrSubmitRequisition(false);
+
+                        return RedirectToPage("SavedRequisitions");
+                    }
                 }
                 catch (Exception ex)
                 {
@@ -190,7 +247,7 @@ namespace BsslProcurement.Pages.Staff.ItemRequisition
             try
             {
 
-                return requisition.RequisitionItems.Select(x => new ItemGridViewModel { RequisitionItem = x, Attachment = CreateFormFile(x.Attachment.FilePath) }).ToList();
+                return requisition.RequisitionItems.Select(x => new ItemGridViewModel { RequisitionItem = x, Attachment = x.Attachment != null ? CreateFormFile(x.Attachment.FilePath) : null }).ToList();
             }
             catch (Exception ex)
             {
