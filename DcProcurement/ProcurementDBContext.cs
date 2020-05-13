@@ -242,7 +242,7 @@ namespace DcProcurement
         }
         private void UpdateSoftDeleteStatuses()
         {
-            foreach (var entry in ChangeTracker.Entries())
+            foreach (var entry in ChangeTracker.Entries<Requisition>())
             {
                 switch (entry.State)
                 {
