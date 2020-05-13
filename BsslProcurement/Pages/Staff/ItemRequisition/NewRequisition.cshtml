@@ -114,7 +114,7 @@
                         <div class="col-sm-4">
                             <div class="form-group">
                                 <label>PR No : </label>
-                                <input class="form-control" readonly asp-for="Requisition.PRNumber" value="@Model.PrNo" placeholder="" />
+                                <input class="form-control" readonly asp-for="Requisition.PRNumber" value="@(Model.Requisition != null ? Model.Requisition.PRNumber :  Model.PrNo)" placeholder="" />
 
                             </div>
                         </div>
@@ -321,7 +321,7 @@
                             <div class="row">
                                 <div class="my-2">
                                     <div class="col-sm-12">
-                                        <label>For : </label>
+                                        <label>Prepared For : </label>
                                         <span class="d-flex flex-row">
                                             <input class="form-control" asp-for="Requisition.PreparedFor" readonly id="forStaffText" rows="6" placeholder="" />
                                             <button class="btn loadStaffModal ml-1" value="forStaffText" data-toggle="modal" data-target="#staffModal"><i class="fa fa-search"></i></button>
