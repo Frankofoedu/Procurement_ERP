@@ -1,5 +1,5 @@
 ﻿@using Microsoft.AspNetCore.Http;
-@model List<string>
+@model string
 
 <div class="modal fade" id="modItemPreview" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
     <div class="modal-dialog modal-lg" role="document">
@@ -28,10 +28,10 @@
         //attachment preview button
         $('.btnPreviewItemAttachment').on('click', function (e) {
 
-             var fileNamesArray = @Html.Raw( @Json.Serialize(Model));
+             var fileName = "@Model";
            
             var index = $(this).data('preview');
-            var url = getFileUrl(fileNamesArray[index]);
+            var url = getFileUrl(fileName);
             displayPhotos(url);
             e.preventDefault();
         });
