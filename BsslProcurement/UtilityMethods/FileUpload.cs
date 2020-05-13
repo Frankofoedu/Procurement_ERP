@@ -33,12 +33,13 @@ namespace BsslProcurement.UtilityMethods
 
                 foreach (var file in files)
                 {
+                    var filename = DateTime.Now.Ticks.ToString() + file.FileName;
 
-                    using (var fileStream = new FileStream(Path.Combine(folderPath, file.FileName), FileMode.Create))
+                    using (var fileStream = new FileStream(Path.Combine(folderPath, filename), FileMode.Create))
                     {
                         await file.CopyToAsync(fileStream);
                     }
-                    filePaths.Add(new Attachment { FilePath = file.FileName });
+                    filePaths.Add(new Attachment { FilePath = filename });
                 }
             }
             catch (FileNotFoundException)
@@ -62,10 +63,11 @@ namespace BsslProcurement.UtilityMethods
             var folderPath = Path.Combine(_environment.WebRootPath, folder);
             Directory.CreateDirectory(folderPath);
 
+            var filename = DateTime.Now.Ticks.ToString() + file.FileName;
             try
-            {
+            {               
 
-                using var fileStream = new FileStream(Path.Combine(folderPath, file.FileName), FileMode.Create);
+                using var fileStream = new FileStream(Path.Combine(folderPath, filename), FileMode.Create);
 
                 await file.CopyToAsync(fileStream);
             }
@@ -79,7 +81,7 @@ namespace BsslProcurement.UtilityMethods
             }
 
             
-            return new Attachment { FilePath = Path.Combine(folder, file.FileName) ,DateCreated = DateTime.Now};
+            return new Attachment { FilePath = Path.Combine(folder, filename) ,DateCreated = DateTime.Now};
         }
     }
 }
