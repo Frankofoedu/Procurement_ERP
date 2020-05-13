@@ -5,6 +5,8 @@ using System.Collections.Generic;
 using Microsoft.AspNetCore.Identity;
 using DcProcurement.Jobs;
 using DcProcurement.Users;
+using System.Threading.Tasks;
+using System.Threading;
 
 namespace DcProcurement
 {
@@ -101,6 +103,11 @@ namespace DcProcurement
                 .HasOne(bc => bc.UserGroup)
                 .WithMany(c => c.Staffs)
                 .HasForeignKey(bc => bc.UserGroupId);
+            #endregion
+
+
+            #region Configure Soft Delete
+            modelBuilder.Entity<Requisition>().HasQueryFilter(m => EF.Property<bool>(m, "isDeleted") == false);
             #endregion
 
 
@@ -222,6 +229,32 @@ namespace DcProcurement
 
             base.OnModelCreating(modelBuilder);
 
+        }
+        public override int SaveChanges()
+        {
+            UpdateSoftDeleteStatuses();
+            return base.SaveChanges();
+        }
+        public override Task<int> SaveChangesAsync(bool acceptAllChangesOnSuccess, CancellationToken cancellationToken = default)
+        {
+            UpdateSoftDeleteStatuses();
+            return base.SaveChangesAsync(acceptAllChangesOnSuccess, cancellationToken);
+        }
+        private void UpdateSoftDeleteStatuses()
+        {
+            foreach (var entry in ChangeTracker.Entries())
+            {
+                switch (entry.State)
+                {
+                    case EntityState.Added:
+                        entry.CurrentValues["isDeleted"] = false;
+                        break;
+                    case EntityState.Deleted:
+                        entry.State = EntityState.Modified;
+                        entry.CurrentValues["isDeleted"] = true;
+                        break;
+                }
+            }
         }
     }
 }

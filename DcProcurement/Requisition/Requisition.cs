@@ -8,6 +8,7 @@ namespace DcProcurement
 {
     public class Requisition
     {
+        public bool isDeleted { get; set; }
         public int Id { get; set; }
 
         [Required(ErrorMessage ="Please provide the description for this Requisition")]
