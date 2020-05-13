@@ -268,6 +268,7 @@ namespace BsslProcurement.Pages.Staff.ItemRequisition
 
             _procContext.Requisitions.Add(Requisition);
 
+            SaveRequisitionNumber(Requisition.PRNumber);
             _procContext.SaveChanges();
             
         }
@@ -394,31 +395,55 @@ namespace BsslProcurement.Pages.Staff.ItemRequisition
 
             var year = DateTime.Now.Year.ToString();
 
-            //implement serial no
-            var lastRequisition = _procContext.Requisitions.OrderByDescending(t => t.PRNumber).FirstOrDefault();
+            ////implement serial no
+            //var lastRequisition = _procContext.Requisitions.OrderByDescending(t => t.PRNumber).FirstOrDefault();
 
-            var serialNo = "";
+      // var serialNo = "";
 
-            if (lastRequisition == null)
+            //if (lastRequisition == null)
+            //{
+            //    serialNo = "00001";
+            //}
+            //else
+            //{
+            //    var num = (Convert.ToInt32(lastRequisition.PRNumber.Split('/').Last()) + 1);
+            //    serialNo = num.ToString("00000");
+            //}
+
+     
+
+            //get last req no
+            var lastReqNo = _procContext.PRNos.OrderByDescending(x => x.SerialNo).FirstOrDefault(x => x.CompCode == compPrefix && x.DeptCode == deptCode && x.DeptPrefix == DeptPrefix && x.Year == year);
+            if (lastReqNo != null)
             {
-                serialNo = "00001";
+              return ($"{compPrefix.Trim()}/{deptCode.Trim()}/{DeptPrefix.Trim()}/{year}/{(Convert.ToInt32(lastReqNo.SerialNo) + 1).ToString("00000")}", deptCode, Dept.Desc1, Depts.Select(depts => new SelectListItem { Text = depts.Desc1 }).ToList());
+
             }
             else
             {
-                var num = (Convert.ToInt32(lastRequisition.PRNumber.Split('/').Last()) + 1);
-                serialNo = num.ToString("00000");
+
+                return ($"{compPrefix.Trim()}/{deptCode.Trim()}/{DeptPrefix.Trim()}/{year}/00001", deptCode, Dept.Desc1, Depts.Select(depts => new SelectListItem { Text = depts.Desc1 }).ToList());
+
             }
 
-           // serialNo = PrNo == null ? "00001" : (Convert.ToInt32(lastRequisition.PRNumber) + 1).ToString("00000");
+            // serialNo = PrNo == null ? "00001" : (Convert.ToInt32(lastRequisition.PRNumber) + 1).ToString("00000");
 
             //itf/deptcode/deptprefix/year/serial no
 
-            return ($"{compPrefix.Trim()}/{deptCode.Trim()}/{DeptPrefix.Trim()}/{year}/{serialNo}", deptCode, Dept.Desc1, Depts.Select(depts => new SelectListItem { Text = depts.Desc1 }).ToList());
 
 
         }
 
         private Task<User> GetCurrentUserAsync() => _userManager.GetUserAsync(HttpContext.User);
+
+        private void SaveRequisitionNumber(string reqNo)
+        {
+            var arr = reqNo.Split('/');
+
+            var prno = new PRNo { CompCode = arr[0], DeptCode = arr[1], DeptPrefix = arr[2], Year = arr[3], SerialNo = arr[4] };
+
+            _procContext.Add(prno);
+        }
 
     }
 }
