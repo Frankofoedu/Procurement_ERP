@@ -10,6 +10,8 @@ namespace BsslProcurement.ViewModels
     {
 
         public RequisitionItem RequisitionItem { get; set; }
+        public int? AttachmentId { get; set; }
         public IFormFile Attachment { get; set; }
+        public bool isAttachmentChanged { get; set; }
     }
 }

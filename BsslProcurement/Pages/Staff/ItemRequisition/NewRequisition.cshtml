@@ -196,6 +196,8 @@
 
                                             <tr>
                                                 <td>
+                                                    <input type="hidden" asp-for="gridVm[i].RequisitionItem.Id" />
+                                                    <input type="hidden" asp-for="gridVm[i].RequisitionItem.RequisitionId" />
                                                     <input type="text" required asp-for="gridVm[i].RequisitionItem.Description" />
                                                 </td>
                                                 <td>
@@ -212,8 +214,27 @@
 
                                                 <td>
                                                     <div class="d-flex flex-row">
-                                                        <input asp-for="gridVm[i].Attachment" data-attachment="@i" accept=".pdf" class="fileItem" />
-                                                        <button data-preview="@i" class="btnPreviewItemAttachment">Preview</button>
+                                                        @if (gridItem.Attachment != null)
+                                                        {
+                                                        <span class="attachexist @i">
+                                                            <partial name="~/Pages/Shared/Modals/_AttachmentViewPartial.cshtml" model="gridItem.Attachment.FileName" />
+                                                            <button data-preview="@i" class="btnPreviewItemAttachment">View File</button>
+                                                            <input type="hidden" asp-for="gridVm[i].isAttachmentChanged" value="True" />
+                                                            <input type="hidden" asp-for="gridVm[i].AttachmentId" />
+                                                            <label class="del ml-1 @i" title="Delete Attachment" onclick="deleteAttachment(@i);">
+                                                                <i class="fa fa-trash-alt"></i>
+                                                            </label>
+                                                        </span>
+                                                            <span hidden class="attachnoexist @i">
+                                                                <input type="file" asp-for="gridVm[i].Attachment" />
+                                                                <button data-preview="@i" class="btnPreviewItemAttachment">Preview</button>
+                                                            </span>
+                                                        }
+                                                        else
+                                                        {
+                                                            <input type="file" asp-for="gridVm[i].Attachment" />
+                                                            <button data-preview="@i" class="btnPreviewItemAttachment">Preview</button>
+                                                        }
                                                     </div>
                                                 </td>
                                                 <td>
@@ -393,6 +414,7 @@
                             <input id="btnSave" class="btn btn-lg btn-outline-info float-left" asp-page-handler="Save" value="Save For Later" asp-route-id="@((Model.Requisition != null) ? Model.Requisition.Id : (int?)null)" type="submit" placeholder="" />
                             @if (Model.Requisition != null)
                             {
+                                <input type="hidden" asp-for="Requisition.Id" />
                                 <input id="btnQuarantine" type="submit" asp-route-id="@Model.Requisition.Id" asp-page-handler="Quarantine" class="btn btn-lg btn-outline-danger" value="Quarantine" />
 
                             }
@@ -403,6 +425,7 @@
                     }
                 </div>
             </div>
+
         </form>
     </div>
 </div>
@@ -529,6 +552,13 @@
     <script src="~/js/quill.js"></script>
 
     <script>
+
+        function deleteAttachment(index) {
+            $('.attachexist.'+ index).hide('slow', function () { $(this).remove() }); 
+            $('.attachnoexist.' +index).removeAttr('hidden');
+            $('.attachnoexist.' + index).show(200);
+
+        }
 
         //fils the prepared by fields
         (function () {

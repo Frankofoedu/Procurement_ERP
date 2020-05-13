@@ -116,15 +116,14 @@ namespace BsslProcurement.Pages.Staff.ItemRequisition
 
                     if (id != null)
                     {
-                        _procContext.Update(Requisition);
-                       await _procContext.SaveChangesAsync();
+                        await SaveOrSubmitRequisition(true, true);
 
                         Message = "Requisition Updated and Submitted successfully";
                     }
                     else
                     {
                         //save requisition
-                        await SaveOrSubmitRequisition(true);
+                        await SaveOrSubmitRequisition(true, false);
 
                         //create and assign requisition job
                         await _requisitionService.SendRequisitionToNextStageAsync(Requisition.Id,
@@ -186,14 +185,14 @@ namespace BsslProcurement.Pages.Staff.ItemRequisition
                 {
                     if (id != null)
                     {
-                        _procContext.Update(Requisition);
-                        await _procContext.SaveChangesAsync();
+
+                        await SaveOrSubmitRequisition(false, true);
 
                         Message = "Requisition Updated and Saved successfully";
                     }
                     else
                     {
-                        await SaveOrSubmitRequisition(false);
+                        await SaveOrSubmitRequisition(false, false);
 
                         return RedirectToPage("SavedRequisitions");
                     }
@@ -247,7 +246,7 @@ namespace BsslProcurement.Pages.Staff.ItemRequisition
             try
             {
 
-                return requisition.RequisitionItems.Select(x => new ItemGridViewModel { RequisitionItem = x, Attachment = x.Attachment != null ? CreateFormFile(x.Attachment.FilePath) : null }).ToList();
+                return requisition.RequisitionItems.Select(x => new ItemGridViewModel { RequisitionItem = x, AttachmentId = x.Attachment != null ? x.Attachment.Id : (int?)null, Attachment = x.Attachment != null ? CreateFormFile(x.Attachment.FilePath) : null }).ToList();
             }
             catch (Exception ex)
             {
@@ -255,7 +254,7 @@ namespace BsslProcurement.Pages.Staff.ItemRequisition
                 throw;
             }
         }
-        private async Task SaveOrSubmitRequisition(bool isSubmitted)
+        private async Task SaveOrSubmitRequisition(bool isSubmitted, bool isUpdate)
         {
             //save requisition items
             Requisition.RequisitionItems = await GetRequisitionItemsFromViewModel(gridVm);   
@@ -266,9 +265,18 @@ namespace BsslProcurement.Pages.Staff.ItemRequisition
 
             Requisition.LoggedInUserId = (await GetCurrentUserAsync()).Id;
 
-            _procContext.Requisitions.Add(Requisition);
+            if (isUpdate)
+            {
+                _procContext.Attachments.UpdateRange(Requisition.RequisitionItems.Select(x => x.Attachment));
+                _procContext.RequisitionItems.UpdateRange(Requisition.RequisitionItems);
+                _procContext.Requisitions.Update(Requisition);
+            }
+            else
+            {
+                _procContext.Requisitions.Add(Requisition);
 
-            SaveRequisitionNumber(Requisition.PRNumber);
+                SaveRequisitionNumber(Requisition.PRNumber);
+            }
             _procContext.SaveChanges();
             
         }
@@ -279,14 +287,21 @@ namespace BsslProcurement.Pages.Staff.ItemRequisition
             foreach (ItemGridViewModel v in gridVm)
             {
                 RequisitionItem re = v.RequisitionItem;
-                if (v.Attachment != null)
+                if (!v.isAttachmentChanged)
                 {
-                    re.Attachment = await FileUpload.GetFilePathsFromFileAsync(v.Attachment, _environment, "Attachment");                   
+                    if (v.Attachment != null)
+                    {
+                        re.Attachment = await FileUpload.GetFilePathsFromFileAsync(v.Attachment, _environment, "Attachment");
 
+                    }
+                    else
+                    {
+                        re.Attachment = null;
+                    }
                 }
                 else
                 {
-                    re.Attachment = null;
+                    re.Attachment = _procContext.Attachments.Find(v.AttachmentId);
                 }
                 reList.Add(re);
             }
@@ -444,6 +459,14 @@ namespace BsslProcurement.Pages.Staff.ItemRequisition
 
             _procContext.Add(prno);
         }
+
+        /*
+         user uploads file and saves requisition
+         user reloads requisition
+         file is showing
+         file is no more showing
+
+         */
 
     }
 }
