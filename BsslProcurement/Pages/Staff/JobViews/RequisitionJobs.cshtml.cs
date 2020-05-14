@@ -1,7 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Linq;
 using System.Threading.Tasks;
+using BsslProcurement.Filters.Attributes;
 using BsslProcurement.Interfaces;
 using DcProcurement;
 using DcProcurement.Jobs;
@@ -13,6 +15,8 @@ using Microsoft.AspNetCore.Mvc.RazorPages;
 namespace BsslProcurement
 {
     [Authorize]
+    [DisplayName("Requisition Tasks")]
+    [NoDiscovery]
     public class RequisitionJobsModel : PageModel
     {
         private readonly ProcurementDBContext _context;
