@@ -97,19 +97,19 @@
                 <div class="">
 
                     @*<div class=" panel">
-            <div class="text-center mb-3">
-                <div class="form-group mb-0">
-                    <label class="btn btn-outline-dark pl-4">
-                        <input class="form-check-input" type="radio" checked asp-for="Requisition.ProcurementType" value="Capital Procurement">
-                        Capital Procurement
-                    </label>
-                    <label class="btn btn-outline-dark pl-4">
-                        <input class="form-check-input" type="radio" asp-for="Requisition.ProcurementType" value="Recurrent Procurement">
-                        Recurrent Procurement
-                    </label>
-                </div>
-            </div>
-        </div>*@
+                            <div class="text-center mb-3">
+                                <div class="form-group mb-0">
+                                    <label class="btn btn-outline-dark pl-4">
+                                        <input class="form-check-input" type="radio" checked asp-for="Requisition.ProcurementType" value="Capital Procurement">
+                                        Capital Procurement
+                                    </label>
+                                    <label class="btn btn-outline-dark pl-4">
+                                        <input class="form-check-input" type="radio" asp-for="Requisition.ProcurementType" value="Recurrent Procurement">
+                                        Recurrent Procurement
+                                    </label>
+                                </div>
+                            </div>
+                        </div>*@
                     <div class="row p-2">
                         <div class="col-sm-4">
                             <div class="form-group">
@@ -150,9 +150,9 @@
                                         </div>
                                         <div class="col-sm-6">
                                             <div class="form-group mb-0">
-                                                <input readonly type="text" class="requesterCode form-control-sm" value="@Model.RequestingDeptCode" />
+                                                <input readonly type="text" class="requesterCode form-control-sm" asp-for="Requisition.RequesterCode" value="@(Model.Requisition != null ? Model.Requisition.RequesterCode : Model.RequestingDeptCode)" />
                                                 <button id="btnRequester" class="btn btn-default btn-sm"><i class="fas fa-search"></i></button>
-                                                <input class="requesterValue form-control-sm" readonly asp-for="Requisition.RequesterValue" value="@Model.RequestingDept" placeholder="Enter Department" />
+                                                <input class="requesterValue form-control-sm" readonly asp-for="Requisition.RequesterValue" value="@(Model.Requisition != null ? Model.Requisition.RequesterValue : Model.RequestingDept)" placeholder="Enter Department" />
                                             </div>
                                         </div>
                                     </div>
@@ -216,15 +216,15 @@
                                                     <div class="d-flex flex-row">
                                                         @if (gridItem.Attachment != null)
                                                         {
-                                                        <span class="attachexist @i">
-                                                            <partial name="~/Pages/Shared/Modals/_AttachmentViewPartial.cshtml" model="gridItem.Attachment.FileName" />
-                                                            <button data-preview="@i" class="btnPreviewItemAttachment">View File</button>
-                                                            <input type="hidden" asp-for="gridVm[i].isAttachmentChanged" value="True" />
-                                                            <input type="hidden" asp-for="gridVm[i].AttachmentId" />
-                                                            <label class="del ml-1 @i" title="Delete Attachment" onclick="deleteAttachment(@i);">
-                                                                <i class="fa fa-trash-alt"></i>
-                                                            </label>
-                                                        </span>
+                                                            <span class="attachexist @i">
+                                                                <partial name="~/Pages/Shared/Modals/_AttachmentViewPartial.cshtml" model="gridItem.Attachment.FileName" />
+                                                                <button data-preview="@i" class="btnPreviewItemAttachment">View File</button>
+                                                                <input type="hidden" asp-for="gridVm[i].isAttachmentChanged" value="True" />
+                                                                <input type="hidden" asp-for="gridVm[i].AttachmentId" />
+                                                                <label class="del ml-1 @i" title="Delete Attachment" onclick="deleteAttachment(@i);">
+                                                                    <i class="fa fa-trash-alt"></i>
+                                                                </label>
+                                                            </span>
                                                             <span hidden class="attachnoexist @i">
                                                                 <input type="file" asp-for="gridVm[i].Attachment" />
                                                                 <button data-preview="@i" class="btnPreviewItemAttachment">Preview</button>
@@ -324,18 +324,18 @@
                                 </div>
                             </div>
                             @*<div class="custom-file-container" data-upload-id="myUniqueUploadId">
-                    <label>
-                        Attach Multiple Files <a href="javascript:void(0)" class="custom-file-container__image-clear"
-                                                 title="Clear Image">&times;</a>
-                    </label>
-                    <label class="custom-file-container__custom-file">
-                        <input type="file" name="files" class="custom-file-container__custom-file__custom-file-input" accept="*" multiple
-                               aria-label="Choose File">
-                        <input type="hidden" name="MAX_FILE_SIZE" value="10485760" />
-                        <span class="custom-file-container__custom-file__custom-file-control"></span>
-                    </label>
-                    <div class="custom-file-container__image-preview"></div>
-                </div>*@
+                                    <label>
+                                        Attach Multiple Files <a href="javascript:void(0)" class="custom-file-container__image-clear"
+                                                                 title="Clear Image">&times;</a>
+                                    </label>
+                                    <label class="custom-file-container__custom-file">
+                                        <input type="file" name="files" class="custom-file-container__custom-file__custom-file-input" accept="*" multiple
+                                               aria-label="Choose File">
+                                        <input type="hidden" name="MAX_FILE_SIZE" value="10485760" />
+                                        <span class="custom-file-container__custom-file__custom-file-control"></span>
+                                    </label>
+                                    <div class="custom-file-container__image-preview"></div>
+                                </div>*@
                         </div>
 
                         <div class="col-sm-6">
@@ -374,17 +374,17 @@
                     </div>
 
                     @*<div class="col-sm-12">
-            <div class="form-group">
-                <label>Send to Next Staff :</label>
-                <div class="panel border border-dark rounded p-2">
-                    <partial name="~/Pages/Shared/Modals/_NewRequisitionSelectApproverPartial.cshtml" model="Model.WfVm" />
-                </div>
-            </div>
-        </div>
-        <div class="d-flex justify-content-around no-print">
+                            <div class="form-group">
+                                <label>Send to Next Staff :</label>
+                                <div class="panel border border-dark rounded p-2">
+                                    <partial name="~/Pages/Shared/Modals/_NewRequisitionSelectApproverPartial.cshtml" model="Model.WfVm" />
+                                </div>
+                            </div>
+                        </div>
+                        <div class="d-flex justify-content-around no-print">
 
-           
-        </div>*@
+
+                        </div>*@
 
                     @if (Model.WfVm != null)
                     {
@@ -542,6 +542,7 @@
 <input type="hidden" id="hiddenURLRank" value="@Url.Action("GetStaffWithRank", "Staff")" />
 <input type="hidden" id="hiddenURLNoRank" value="@Url.Action("GetStaffNoRank", "Staff")" />
 <input type="hidden" id="uomHiddenURL" value="@Url.Action("GetUOM", "UnitsOfM")" />
+<input type="hidden" id="requesterHiddenURL" value="@Url.Action("GetRequester", "Requester")" />
 <input type="hidden" id="rankHiddenURL" value="@Url.Action("GetRankOfStaff", "Staff")" />
 <input type="hidden" id="usercode" value="@Model.UserCode" />
 <!--Modal: Name-->
@@ -554,8 +555,8 @@
     <script>
 
         function deleteAttachment(index) {
-            $('.attachexist.'+ index).hide('slow', function () { $(this).remove() }); 
-            $('.attachnoexist.' +index).removeAttr('hidden');
+            $('.attachexist.' + index).hide('slow', function () { $(this).remove() });
+            $('.attachnoexist.' + index).removeAttr('hidden');
             $('.attachnoexist.' + index).show(200);
 
         }
@@ -660,8 +661,9 @@
                 $('#requesterModal').modal("show");
 
                 var type = $("input[name='Requisition.RequesterType']:checked").val();
-
-                $('#Requestergrid').load(this.baseURI + '?handler=RequesterPartial&type=' + type, function () {
+                
+                var url = $('#requesterHiddenURL').val();
+                $('#Requestergrid').load(url + "?type=" + type, function () {
                     $('#Requesterspinner').removeClass('d-flex');
                     $('#Requesterspinner').hide();
                     $('#RequesterTable').dataTable();
@@ -797,12 +799,12 @@
         function newStepRow(index) {
 
             var html = `<tr>
-                                                            <td><input type="text" required="" id="gridVm_${index}__RequisitionItem_Description" name="gridVm[${index}].RequisitionItem.Description" value=""></td>
-                                                            <td><input type="number" required="" oninput="this.value=this.value.replace(/[^0-9]/g,' + ');" data-val="true" data-val-required="The Quantity field is required." id="gridVm_${index}__RequisitionItem_Quantity" name="gridVm[${index}].RequisitionItem.Quantity" value=""></td>
-                                                            <td><div class="d-flex flex-row"><input type="text" readonly required="" data-value="forUOM ${index}" id="gridVm_${index}__RequisitionItem_UnitOfMeasurement" name="gridVm[${index}].RequisitionItem.UnitOfMeasurement" value=""><button class="btn loadUOMModal ml-1" value="forUOM ${index}" data-toggle="modal" data-target="#uomModal"><i class="fa fa-search"></i></button> </div></td>
-                                                            <td> <div class="d-flex flex-row"><input data-attachment="${index}" accept=".pdf" class="fileItem" type="file" id="gridVm_${index}__Attachment" name="gridVm[${index}].Attachment"><button data-preview="${index}" class="btnPreviewItemAttachment">Preview</button>  </div></td>
-                                                            <td><label class="del" onclick="deleteItem();"><i class="fa fa-trash-alt"></i></label></td>
-                                                            </tr>`;
+                                                                <td><input type="text" required="" id="gridVm_${index}__RequisitionItem_Description" name="gridVm[${index}].RequisitionItem.Description" value=""></td>
+                                                                <td><input type="number" required="" oninput="this.value=this.value.replace(/[^0-9]/g,' + ');" data-val="true" data-val-required="The Quantity field is required." id="gridVm_${index}__RequisitionItem_Quantity" name="gridVm[${index}].RequisitionItem.Quantity" value=""></td>
+                                                                <td><div class="d-flex flex-row"><input type="text" readonly required="" data-value="forUOM ${index}" id="gridVm_${index}__RequisitionItem_UnitOfMeasurement" name="gridVm[${index}].RequisitionItem.UnitOfMeasurement" value=""><button class="btn loadUOMModal ml-1" value="forUOM ${index}" data-toggle="modal" data-target="#uomModal"><i class="fa fa-search"></i></button> </div></td>
+                                                                <td> <div class="d-flex flex-row"><input data-attachment="${index}" accept=".pdf" class="fileItem" type="file" id="gridVm_${index}__Attachment" name="gridVm[${index}].Attachment"><button data-preview="${index}" class="btnPreviewItemAttachment">Preview</button>  </div></td>
+                                                                <td><label class="del" onclick="deleteItem();"><i class="fa fa-trash-alt"></i></label></td>
+                                                                </tr>`;
             $('#requisitionBody').append(html);
         }
     </script>
