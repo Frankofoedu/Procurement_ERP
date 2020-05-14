@@ -117,7 +117,8 @@ namespace BsslProcurement.Pages.Staff.ItemRequisition
                     if (id != null)
                     {
                         await SaveOrSubmitRequisition(true, true);
-
+                        await _requisitionService.SendRequisitionToNextStageAsync(Requisition.Id,
+                          WfVm.AssignedStaffCode, WfVm.WorkFlowId, WfVm.Remark);
                         Message = "Requisition Updated and Submitted successfully";
                     }
                     else

@@ -166,7 +166,8 @@ else
                                                 {
 
                                                     <td>
-                                                        <button data-preview="@i" class="btnPreviewItemAttachment">View Attachment</button>
+                                                        <partial name="~/Pages/Shared/Modals/_AttachmentViewPartial.cshtml" model="item.Attachment.FilePath" />
+                                                        <button data-preview="@i" class="btnPreviewItemAttachment">View File</button>
                                                     </td>
                                                 }
 
@@ -241,45 +242,51 @@ else
                                 </div>
                             </div>
 
-                            @if (Model.WfVm != null)
-                            {
-                                <div class="col-sm-12">
-                                    <div class="form-group">
-                                        <label>Send to Next Staff :</label>
-                                        <div class="panel border border-dark rounded p-2">
-                                            <partial name="~/Pages/Shared/Modals/_SelectApproverPartial.cshtml" model="Model.WfVm" />
-                                        </div>
-                                    </div>
 
-
-                                </div>
-                                <div class="d-flex justify-content-around no-print">
-                                    @*  <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>*@
-                                    <input id="btnSave" class="btn btn-lg btn-outline-info float-left" asp-page-handler="Save" value="Save For Later" type="submit" placeholder="" />
-
-                                    <input id="btnSubmit" class="btn btn-lg btn-primary" asp-page-handler="Submit" value="Submit" type="submit" placeholder="" />
-
-                                    <button id="printBtn" class="btn btn-lg btn-info" onclick="print(); return false;">Print/Preview</button>
-                                </div>
-
-                            }
 
                             @*<div class="col-sm-4">
-                                    <div class="form-group">
-                                        <input class="btn btn-block btn-danger fa-print" value="Print" type="button" placeholder="Enter Resgistration Number" />
-                                    </div>
-                                </div>*@
+                <div class="form-group">
+                    <input class="btn btn-block btn-danger fa-print" value="Print" type="button" placeholder="Enter Resgistration Number" />
+                </div>
+            </div>*@
                         </div>
+                        @if (Model.WfVm != null)
+                        {
+                           <div class="modal fade" id="approverModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+                                <div class="modal-dialog modal-lg modal-dialog-centered" role="document">
+                                    <div class="modal-content">
+                                        <div class="modal-header">
+                                            <h5 class="modal-title" id="exampleModalLongTitle">Send to Next Staff :</h5>
+                                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                                <span aria-hidden="true">&times;</span>
+                                            </button>
+                                        </div>
+                                        <div class="modal-body">
+                                            <partial name="~/Pages/Shared/Modals/_SelectApproverPartial.cshtml" model="Model.WfVm" />
+                                        </div>
+                                        <div class="modal-footer justify-content-around">
+                                            <input id="btnSubmit" class="btn btn-lg btn-primary" asp-page-handler="Submit" value="Ok" type="submit" placeholder="" />
+
+                                            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="d-flex justify-content-around no-print">
+                                @*  <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>*@
+    
+                                <input data-toggle="modal" data-target="#approverModal" class="btn btn-lg btn-primary"  value="Submit" type="button" placeholder="" />
+
+                                <button id="printBtn" class="btn btn-lg btn-info" onclick="print(); return false;">Print/Preview</button>
+                            </div>
+
+                        }
                     </div>
                 </div>
             </form>
         </div>
     </div>
-    @if (Model.ItemGridViewModels.Count > 0)
-    {
-        var fileNames = Model.ItemGridViewModels.Where(x => x.Attachment != null).Select(x => x.Attachment.FileName).ToList();
-        <partial name="~/Pages/Shared/Modals/_AttachmentViewPartial.cshtml" model="fileNames" />
-    }
+
 }
 
 @section Scripts{

@@ -5,6 +5,11 @@
 
     <OpenApiGenerateDocuments>false</OpenApiGenerateDocuments>
   </PropertyGroup>
+
+  <ItemGroup>
+    <Compile Remove="Migrations\20200514072124_update.cs" />
+    <Compile Remove="Migrations\20200514072124_update.Designer.cs" />
+  </ItemGroup>
   <ItemGroup>
     <PackageReference Include="AutoMapper" Version="9.0.0" />
     <PackageReference Include="MailKit" Version="2.4.1" />

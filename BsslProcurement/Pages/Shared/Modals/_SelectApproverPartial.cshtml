@@ -142,10 +142,9 @@ else
         }).done(function (data) {
 
             var options = '';
-
-            $.each(data, function (d) {
-                options += '<option value="' + d.id + '">' + d.name + '</option>';
-            });
+            for (var i = 0; i < data.length; i++) {
+                options += '<option value="' + data[i].id + '">' + data[i].name + '</option>';
+            }
 
             $("#selectAction").html(options);
         });
