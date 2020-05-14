@@ -325,61 +325,6 @@ namespace BsslProcurement.Pages.Staff.ItemRequisition
             };
         }
 
-        public PartialViewResult OnGetApproverPartial()
-        {
-            return new PartialViewResult
-            {
-                ViewName = "Modals/_SelectApproverPartial",
-                ViewData = new ViewDataDictionary<List<int>>(ViewData, new List<int>() { 1, 2 })
-            };
-        }
-
-        public class requesterObj
-        {
-            public string code { get; set; }
-            public string name { get; set; }
-            public string type { get; set; }
-        }
-
-        public PartialViewResult OnGetRequesterPartial(string type)
-        {
-            //get requester
-
-            var requesters = new List<requesterObj>();
-
-            if (type.ToLower() == "department")
-            {
-                requesters = _bsslContext.Codestab.Where(opt => opt.Option1 == "F5")
-                    .Select(m=> new requesterObj() { code = m.Code, name=m.Desc1, type=type }).ToList();
-            }
-            else if (type.ToLower() == "division")
-            {
-                requesters = _bsslContext.Codestab.Where(opt => opt.Option1 == "Div")
-                    .Select(m => new requesterObj() { code = m.Code, name = m.Desc1, type = type }).ToList();
-            }
-            else if (type.ToLower() == "section")
-            {
-                requesters = _bsslContext.Codestab.Where(opt => opt.Option1 == "SECT")
-                    .Select(m => new requesterObj() { code = m.Code, name = m.Desc1, type = type }).ToList();
-            }
-            else if (type.ToLower() == "unit")
-            {
-                requesters = _bsslContext.Codestab.Where(opt => opt.Option1 == "Z16")
-                    .Select(m => new requesterObj() { code = m.Code, name = m.Desc1, type = type }).ToList();
-            }
-            else if (type.ToLower() == "staff")
-            {
-                requesters = _bsslContext.Stafftab.Select(x => new requesterObj { code = x.Staffid, name = x.Surname + x.Othernames, type = type }).ToList();
-            }
-
-            return new PartialViewResult
-            {
-                ViewName = "Modals/_RequesterPartial",
-                ViewData = new ViewDataDictionary<List<requesterObj>>(ViewData, requesters)
-            };
-        }
-       
-
         private async Task<(string prNo, string requestDeptCode, string requestDept, List<SelectListItem> dept)> GeneratePRNo(string userId)
         {
 

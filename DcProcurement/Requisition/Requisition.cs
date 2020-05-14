@@ -24,6 +24,8 @@ namespace DcProcurement
         [Required(ErrorMessage = "Select Requester Type")]
         public string RequesterType { get; set; }
         [Required(ErrorMessage = "Select Requester")]
+        public string RequesterCode { get; set; }
+        [Required(ErrorMessage = "Select Requester")]
         public string RequesterValue { get; set; }
         [Required(ErrorMessage = "Select Department Required At")]
         public string RequiredAtDepartment { get; set; }
