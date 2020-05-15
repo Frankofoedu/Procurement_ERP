@@ -64,13 +64,13 @@ namespace BsslProcurement.Pages.Test
         public async Task OnGetAsync()
         {
 
-            var m = await _razorPagesControllerDiscovery.GetControllers();
-            //files =  Directory.EnumerateFiles(Path.Combine(_Env.WebRootPath, "Attachment")).Select(x => Path.GetFileName(x)).ToList();
+            //  var m = await _razorPagesControllerDiscovery.GetControllers();
+            files = Directory.EnumerateFiles(Path.Combine(_Env.WebRootPath, "Attachment")).Select(x => Path.GetFileName(x)).ToList();
 
             //var s = Url.Content("~/");
             //using (var stream = System.IO.File.OpenRead(t.ElementAt(1)))
             //{
-            //    files.Add( new FormFile(stream, 0, stream.Length, null, Path.GetFileName(stream.Name))
+            //    files.Add(new FormFile(stream, 0, stream.Length, null, Path.GetFileName(stream.Name))
             //    {
             //        Headers = new HeaderDictionary(),
             //        ContentType = "application/pdf"

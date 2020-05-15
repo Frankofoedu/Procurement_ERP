@@ -266,10 +266,21 @@ namespace BsslProcurement.Pages.Staff.ItemRequisition
 
             Requisition.LoggedInUserId = (await GetCurrentUserAsync()).Id;
 
+            //checks if requisition is an update or new requisition
             if (isUpdate)
             {
-                _procContext.Attachments.UpdateRange(Requisition.RequisitionItems.Select(x => x.Attachment));
-                _procContext.RequisitionItems.UpdateRange(Requisition.RequisitionItems);
+                if (Requisition.RequisitionItems.Any())
+                {
+                    _procContext.RequisitionItems.UpdateRange(Requisition.RequisitionItems);
+                    foreach (var item in Requisition.RequisitionItems)
+                    {
+                        if (item.Attachment != null)
+                        {
+                            _procContext.Attachments.Update(item.Attachment);
+                        }
+                    }
+                }            
+                
                 _procContext.Requisitions.Update(Requisition);
             }
             else
@@ -278,6 +289,8 @@ namespace BsslProcurement.Pages.Staff.ItemRequisition
 
                 SaveRequisitionNumber(Requisition.PRNumber);
             }
+
+
             _procContext.SaveChanges();
             
         }
@@ -310,20 +323,6 @@ namespace BsslProcurement.Pages.Staff.ItemRequisition
         }
 
         
-        public PartialViewResult OnGetVendorPartial()
-        {
-
-            //get all vendor 
-            var vendors = _procContext.Vendors.ToList();
-
-
-            //           var  = _bsslContext.Stafftab.ToList();
-            return new PartialViewResult
-            {
-                ViewName = "_VendorLayoutModal",
-                ViewData = new ViewDataDictionary<List<VendorUser>>(ViewData, vendors)
-            };
-        }
 
         private async Task<(string prNo, string requestDeptCode, string requestDept, List<SelectListItem> dept)> GeneratePRNo(string userId)
         {
@@ -356,22 +355,7 @@ namespace BsslProcurement.Pages.Staff.ItemRequisition
 
             var year = DateTime.Now.Year.ToString();
 
-            ////implement serial no
-            //var lastRequisition = _procContext.Requisitions.OrderByDescending(t => t.PRNumber).FirstOrDefault();
-
-      // var serialNo = "";
-
-            //if (lastRequisition == null)
-            //{
-            //    serialNo = "00001";
-            //}
-            //else
-            //{
-            //    var num = (Convert.ToInt32(lastRequisition.PRNumber.Split('/').Last()) + 1);
-            //    serialNo = num.ToString("00000");
-            //}
-
-     
+              
 
             //get last req no
             var lastReqNo = _procContext.PRNos.OrderByDescending(x => x.SerialNo).FirstOrDefault(x => x.CompCode == compPrefix && x.DeptCode == deptCode && x.DeptPrefix == DeptPrefix && x.Year == year);
@@ -386,9 +370,7 @@ namespace BsslProcurement.Pages.Staff.ItemRequisition
                 return ($"{compPrefix.Trim()}/{deptCode.Trim()}/{DeptPrefix.Trim()}/{year}/00001", deptCode, Dept.Desc1, Depts.Select(depts => new SelectListItem { Text = depts.Desc1 }).ToList());
 
             }
-
-            // serialNo = PrNo == null ? "00001" : (Convert.ToInt32(lastRequisition.PRNumber) + 1).ToString("00000");
-
+            
             //itf/deptcode/deptprefix/year/serial no
 
 
@@ -406,13 +388,6 @@ namespace BsslProcurement.Pages.Staff.ItemRequisition
             _procContext.Add(prno);
         }
 
-        /*
-         user uploads file and saves requisition
-         user reloads requisition
-         file is showing
-         file is no more showing
-
-         */
-
+       
     }
 }
