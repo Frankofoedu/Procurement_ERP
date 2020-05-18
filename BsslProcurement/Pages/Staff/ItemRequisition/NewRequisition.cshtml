@@ -218,7 +218,7 @@
                                                         {
                                                             <span class="attachexist @i">
                                                                 <partial name="~/Pages/Shared/Modals/_AttachmentViewPartial.cshtml" model="gridItem.Attachment.FileName" />
-                                                                <button data-preview="@i" class="btnPreviewItemAttachment">View File</button>
+                                                                <button data-preview="@i" data-url="@gridItem.Attachment.FileName" class="btnPreviewItemAttachment">View File</button>
                                                                 <input type="hidden" asp-for="gridVm[i].isAttachmentChanged" value="True" />
                                                                 <input type="hidden" asp-for="gridVm[i].AttachmentId" />
                                                                 <label class="del ml-1 @i" title="Delete Attachment" onclick="deleteAttachment(@i);">
@@ -226,14 +226,15 @@
                                                                 </label>
                                                             </span>
                                                             <span hidden class="attachnoexist @i">
-                                                                <input type="file" asp-for="gridVm[i].Attachment" />
+                                                                <input asp-for="gridVm[i].Attachment" data-attachment="@i" accept=".pdf" class="fileItem" />
                                                                 <button data-preview="@i" class="btnPreviewItemAttachment">Preview</button>
                                                             </span>
                                                         }
                                                         else
                                                         {
-                                                            <input type="file" asp-for="gridVm[i].Attachment" />
-                                                            <button data-preview="@i" class="btnPreviewItemAttachment">Preview</button>
+
+                                                            <input asp-for="gridVm[i].Attachment" data-attachment="@i" accept=".pdf" class="fileItem" />
+                                                            <button data-preview="@i" hidden class="btnPreviewItemAttachment">Preview</button>
                                                         }
                                                     </div>
                                                 </td>
@@ -269,7 +270,7 @@
                                             <td>
                                                 <div class="d-flex flex-row">
                                                     <input asp-for="gridVm[0].Attachment" data-attachment="0" accept=".pdf" class="fileItem" />
-                                                    <button data-preview="0" class="btnPreviewItemAttachment">Preview</button>
+                                                    <button data-preview="0" hidden class="btnPreviewItemAttachment">Preview</button>
                                                 </div>
                                             </td>
                                             <td>
@@ -605,6 +606,7 @@
 
                 reader.onload = function (e) {
                     var previewBtn = $(`button[data-preview=${id}]`);
+                    previewBtn.removeAttr('hidden');
                     previewBtn.attr('src', e.target.result)
                 }
 
@@ -762,7 +764,7 @@
 
         //post value of quill editor
         $(function () {
-            $('#btnSubmit').on('click', function () {
+            $('#btnSubmit').add('#btnSave').on('click', function () {
                 var purpose = $('#Requisition_Purpose');
                 purpose.val(quill.getText());
             })
@@ -800,14 +802,35 @@
 
 
         function newStepRow(index) {
-
+            
             var html = `<tr>
-                                                                <td><input type="text" required="" id="gridVm_${index}__RequisitionItem_Description" name="gridVm[${index}].RequisitionItem.Description" value=""></td>
-                                                                <td><input type="number" required="" oninput="this.value=this.value.replace(/[^0-9]/g,' + ');" data-val="true" data-val-required="The Quantity field is required." id="gridVm_${index}__RequisitionItem_Quantity" name="gridVm[${index}].RequisitionItem.Quantity" value=""></td>
-                                                                <td><div class="d-flex flex-row"><input type="text" readonly required="" data-value="forUOM ${index}" id="gridVm_${index}__RequisitionItem_UnitOfMeasurement" name="gridVm[${index}].RequisitionItem.UnitOfMeasurement" value=""><button class="btn loadUOMModal ml-1" value="forUOM ${index}" data-toggle="modal" data-target="#uomModal"><i class="fa fa-search"></i></button> </div></td>
-                                                                <td> <div class="d-flex flex-row"><input data-attachment="${index}" accept=".pdf" class="fileItem" type="file" id="gridVm_${index}__Attachment" name="gridVm[${index}].Attachment"><button data-preview="${index}" class="btnPreviewItemAttachment">Preview</button>  </div></td>
-                                                                <td><label class="del" onclick="deleteItem();"><i class="fa fa-trash-alt"></i></label></td>
-                                                                </tr>`;
+                <td>
+                    <input type="text" required="" id="gridVm_${index}__RequisitionItem_Description" name="gridVm[${index}].RequisitionItem.Description" value="">
+                                            </td>
+                    <td>
+                        <input type="number" required="" oninput="this.value=this.value.replace(/[^${index}-9]/g,'');" data-val="true" data-val-required="The Quantity field is required." id="gridVm_${index}__RequisitionItem_Quantity" name="gridVm[${index}].RequisitionItem.Quantity" value="">
+
+                                            </td>
+                        <td>
+                            <div class="d-flex flex-row">
+                                <input type="text" readonly="" required="" data-value="forUOM ${index}" id="gridVm_${index}__RequisitionItem_UnitOfMeasurement" name="gridVm[${index}].RequisitionItem.UnitOfMeasurement" value="">
+
+                                    <button class="btn loadUOMModal ml-1" value="forUOM ${index}" data-toggle="modal" data-target="#uomModal"><i class="fa fa-search"></i></button>
+                                                </div>
+                                            </td>
+                            <td>
+                                <div class="d-flex flex-row">
+                                    <input data-attachment="${index}" accept=".pdf" class="fileItem" type="file" id="gridVm_${index}__Attachment" name="gridVm[${index}].Attachment">
+                                        <button data-preview="${index}" hidden="" class="btnPreviewItemAttachment">Preview</button>
+                                                </div>
+                                            </td>
+                                <td>
+                                    <label class="del" onclick="deleteItem();">
+                                        <i class="fa fa-trash-alt"></i>
+                                    </label>
+                                </td>
+
+                                        </tr>` ;
             $('#requisitionBody').append(html);
         }
     </script>
