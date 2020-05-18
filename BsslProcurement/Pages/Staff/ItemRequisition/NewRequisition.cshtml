@@ -82,7 +82,7 @@
 
 <div class="row mt-5">
     <div class="col-md-12">
-        <form class="panel panel-login" method="post" enctype="multipart/form-data">
+        <form id="formX" class="panel panel-login" method="post" enctype="multipart/form-data">
             <div class="panel-heading">
                 <div class="row">
                     <p class="header-text">Purchase Requisition</p>
@@ -366,7 +366,7 @@
                                 <input type="hidden" asp-for="Requisition.Purpose" />
                                 <div id="editor">
                                 </div>
-                                <span asp-validation-for="Requisition.Purpose" class="text-danger"></span>
+                                <span id="justificationValidation" class="text-danger"></span>
                             </div>
                         </div>
 
@@ -557,6 +557,33 @@
             $('.attachnoexist.' + index).removeAttr('hidden');
             $('.attachnoexist.' + index).show(200);
 
+        }
+
+        function requiredValidation(e) {
+
+            var jempty = $("#Requisition_Purpose").val() == false;
+            var rempty = $("#remarkInput").val() == false;
+
+            if (jempty || rempty) {
+                if (jempty) {
+                    $("#justificationValidation").text("This field is required.");
+                    $("#Requisition_Purpose").focus();
+                } else {
+                    $("#justificationValidation").text("");
+                }
+                if (rempty) {
+                    $("#remarkValidation").text("This field is required.");
+                    $("#remarkInput").focus();
+                } else {
+                    $("#remarkValidation").text("");
+                }
+
+                e.preventDefault();
+                return false;
+            } else {
+                $("#justificationValidation").text("");
+                $("#remarkValidation").text("");
+            }
         }
 
         //fils the prepared by fields
@@ -762,9 +789,10 @@
 
         //post value of quill editor
         $(function () {
-            $('#btnSubmit').on('click', function () {
+            $('#btnSubmit').on('click', function (event) {
                 var purpose = $('#Requisition_Purpose');
                 purpose.val(quill.getText());
+                requiredValidation(event);
             })
         })
 
