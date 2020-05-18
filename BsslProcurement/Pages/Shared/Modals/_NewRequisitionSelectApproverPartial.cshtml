@@ -64,9 +64,9 @@
         <div class="col-sm-12">
             <label>Remark : </label>
             <span class="d-flex flex-row">
-                <textarea class="form-control" rows="5" asp-for="Remark"></textarea>
+                <textarea id="remarkInput" class="form-control" rows="5" asp-for="Remark"></textarea>
             </span>
-            <span asp-validation-for="Remark" class="text-danger"></span>
+            <span id="remarkValidation" class="text-danger"></span>
         </div>
     </div>
 
