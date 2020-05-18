@@ -99,7 +99,7 @@ namespace BsslProcurement.Pages.Staff.ItemRequisition.ProcCommencement
         {
 
             ReqId = id.Value;
-            Requisition = await _context.Requisitions.AsNoTracking().FirstOrDefaultAsync(x => x.Id == id);
+            Requisition = await _context.Requisitions.FirstOrDefaultAsync(x => x.Id == id);
             ItemGridViewModels = await _itemGridViewModelService.GetItemsInRequisition(id.Value);
             //   ItemGridViewModels = Requisition.RequisitionItems.Select(x=> new ItemGridViewModel { Attachment = x.Attachment, RequisitionItem = x });
 

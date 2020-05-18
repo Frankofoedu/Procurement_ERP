@@ -1,29 +1,24 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.ComponentModel;
 using System.Linq;
 using System.Threading.Tasks;
 using BsslProcurement.Filters.Attributes;
 using BsslProcurement.Interfaces;
 using DcProcurement;
-using DcProcurement.Contexts;
-using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
-using Microsoft.EntityFrameworkCore;
 
 namespace BsslProcurement.Pages.Staff.ItemRequisition
 {
     [NoDiscovery]
-    [AllowAnonymous]
-    public class AllRequisitionModel : PageModel
+    public class RazModel : PageModel
     {
         private readonly ProcurementDBContext _context;
         private readonly IRequisitionService requisitionService;
 
         private readonly UserManager<User> _userManager;
-        public AllRequisitionModel(ProcurementDBContext context, IRequisitionService _requisitionService, UserManager<User> userManager)
+        public RazModel(ProcurementDBContext context, IRequisitionService _requisitionService, UserManager<User> userManager)
         {
             _context = context;
             requisitionService = _requisitionService;
@@ -48,7 +43,7 @@ namespace BsslProcurement.Pages.Staff.ItemRequisition
 
                 Error = "Error has occured. Please contact Admin." + Environment.NewLine + ex.Message;
             }
-           
+
         }
 
         private Task<User> GetCurrentUserAsync() => _userManager.GetUserAsync(HttpContext.User);

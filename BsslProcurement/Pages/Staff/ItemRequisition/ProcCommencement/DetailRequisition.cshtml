@@ -221,7 +221,8 @@ else
                                                 {
 
                                                     <td>
-                                                        <button data-preview="@i" class="btnPreviewItemAttachment">View Attachment</button>
+                                                        <partial name="~/Pages/Shared/Modals/_AttachmentViewPartial.cshtml" model="item.Attachment.FilePath" />
+                                                        <button data-preview="@i" class="btnPreviewItemAttachment">View File</button>
                                                     </td>
                                                 }
                                                 else
@@ -231,28 +232,27 @@ else
                                                     </td>
                                                 }
 
-
                                             </tr>
 
                                         }
                                         @*<tfoot>
-                                    <tr>
-                                        <td></td>
-                                        <td class="font-weight-bold text-right">Total Amount : </td>
-                                        <td class="font-weight-bold text-lg-center">@NairaFormat.GetNairaValue(Model.Requisition.RequisitionItems.Sum(x => Convert.ToInt32(x.Amount)))</td>
-                                        <td></td>
-                                    </tr>
-                                </tfoot>*@
+                            <tr>
+                                <td></td>
+                                <td class="font-weight-bold text-right">Total Amount : </td>
+                                <td class="font-weight-bold text-lg-center">@NairaFormat.GetNairaValue(Model.Requisition.RequisitionItems.Sum(x => Convert.ToInt32(x.Amount)))</td>
+                                <td></td>
+                            </tr>
+                        </tfoot>*@
                                 </table>
                                 <input type="hidden" id="lastIndex" value="0" />
                                 @*<div class="form-group">
-                            <div class="row">
-                                <div class="col-sm-3"> </div>
-                                <div class="col-sm-6 text-center">
-                                    <button id="btnMore" class="btn btn-outline-primary">New Item</button>
-                                </div>
-                            </div>
-                        </div>*@
+                    <div class="row">
+                        <div class="col-sm-3"> </div>
+                        <div class="col-sm-6 text-center">
+                            <button id="btnMore" class="btn btn-outline-primary">New Item</button>
+                        </div>
+                    </div>
+                </div>*@
                             </div>
 
 
@@ -300,28 +300,28 @@ else
                             </div>
                             <div class="col-sm-12 m-4 ">
                                 @*@if (Model.Requisition.Attachments.Count > 0)
-                        {
-                            <h5 class="font-weight-bold">Attachments</h5>
-                            <br>
-                            <div class="d-flex flex-column">
-                                <p>
-                                    @foreach (var file in Model.Requisition.Attachments)
-                                    {
-                                        if (file.FilePath.EndsWith("pdf"))
-                                        {
-                                            <a class="fancybox m-5 btn btn-link fas fa-file-pdf" data-fancybox-type="iframe" href="@Url.Content("~/Attachments/" + file.FilePath)">Open PDf Attachment</a>
-                                        }
-                                        else
-                                        {
-                                            <a class="fancybox m-5" href="@Url.Content("~/Attachments/" + file.FilePath)"><img src="@Url.Content("~/Attachments/" + file.FilePath)" class="img-thumbnail" style="max-width : 10% !important" asp-append-version="true" /></a>
+                {
+                    <h5 class="font-weight-bold">Attachments</h5>
+                    <br>
+                    <div class="d-flex flex-column">
+                        <p>
+                            @foreach (var file in Model.Requisition.Attachments)
+                            {
+                                if (file.FilePath.EndsWith("pdf"))
+                                {
+                                    <a class="fancybox m-5 btn btn-link fas fa-file-pdf" data-fancybox-type="iframe" href="@Url.Content("~/Attachments/" + file.FilePath)">Open PDf Attachment</a>
+                                }
+                                else
+                                {
+                                    <a class="fancybox m-5" href="@Url.Content("~/Attachments/" + file.FilePath)"><img src="@Url.Content("~/Attachments/" + file.FilePath)" class="img-thumbnail" style="max-width : 10% !important" asp-append-version="true" /></a>
 
-                                        }
+                                }
 
-                                    }
-                                </p>
+                            }
+                        </p>
 
-                            </div>
-                        }*@
+                    </div>
+                }*@
 
                             </div>
 
@@ -335,30 +335,42 @@ else
                                     </div>
                                 </div>
                             </div>
-                            <div class="col-sm-12">
-                                <div class="form-group">
-                                    <label>Send to Next Staff :</label>
-                                    <div class="panel border border-dark rounded p-2">
-                                        <partial name="~/Pages/Shared/Modals/_SelectApproverPartial.cshtml" model="Model.WfVm" />
-                                    </div>
-                                </div>
-
-
-                            </div>
+                           
                         </div>
+                     
+
                         @if (Model.WfVm != null)
                         {
+                            <div class="modal fade" id="approverModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+                                <div class="modal-dialog modal-lg modal-dialog-centered" role="document">
+                                    <div class="modal-content">
+                                        <div class="modal-header">
+                                            <h5 class="modal-title" id="exampleModalLongTitle">Send to Next Staff :</h5>
+                                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                                <span aria-hidden="true">&times;</span>
+                                            </button>
+                                        </div>
+                                        <div class="modal-body">
+                                            <partial name="~/Pages/Shared/Modals/_SelectApproverPartial.cshtml" model="Model.WfVm" />
+                                        </div>
+                                        <div class="modal-footer justify-content-around">
+                                            <input id="btnSubmit" class="btn btn-lg btn-primary" asp-page-handler="Submit" value="Ok" type="submit" placeholder="" />
 
+                                            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
                             <div class="d-flex justify-content-around no-print">
                                 @*  <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>*@
-                                @* <input id="btnSave" class="btn btn-lg btn-outline-info float-left" asp-page-handler="Save" value="Save For Later" type="submit" placeholder="" />*@
 
-                                <input id="btnSubmit" class="btn btn-lg btn-primary" asp-page-handler="Submit" value="Submit" type="submit" placeholder="" />
+                                <input data-toggle="modal" data-target="#approverModal" class="btn btn-lg btn-primary" value="Submit" type="button" placeholder="" />
 
                                 <button id="printBtn" class="btn btn-lg btn-info" onclick="print(); return false;">Print/Preview</button>
                             </div>
 
                         }
+
                     </div>
                 </div>
             </form>
@@ -386,11 +398,7 @@ else
             </div>
         </div>
     </div>
-    @if (Model.ItemGridViewModels.Count > 0)
-    {
-        var fileNames = Model.ItemGridViewModels.Where(x=> x.Attachment != null).Select(x => x.Attachment.FileName).ToList();
-        <partial name="~/Pages/Shared/Modals/_AttachmentViewPartial.cshtml" model="fileNames" />
-    }
+   
 }
 
 @section Scripts{

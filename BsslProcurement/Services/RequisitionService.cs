@@ -36,7 +36,7 @@ namespace BsslProcurement.Services
         }
         public async Task<List<Requisition>> GetSavedRequisitionsForLoggedInUser(string userId)
         {
-            return await _procurementDBContext.Requisitions.Include(x => x.RequisitionItems).Where(p => p.LoggedInUserId == userId && p.isSubmitted == false).OrderBy(x => x.DateCreated).ToListAsync();
+            return await _procurementDBContext.Requisitions.Include(x => x.RequisitionItems).ThenInclude(x=> x.Attachment).Where(p => p.LoggedInUserId == userId && p.isSubmitted == false).OrderBy(x => x.DateCreated).ToListAsync();
         }
         public async Task<List<Requisition>> GetBudgetClearedRequisitions()
         {

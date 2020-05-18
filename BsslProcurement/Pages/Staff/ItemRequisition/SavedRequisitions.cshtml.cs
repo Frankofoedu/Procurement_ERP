@@ -13,8 +13,8 @@ using Microsoft.AspNetCore.Mvc.RazorPages;
 
 namespace BsslProcurement
 {
-    [Authorize]
     [DisplayName("Saved Requisitions")]
+    [Authorize]
     [NoDiscovery]
     public class SavedRequisitionsModel : PageModel
     {
@@ -38,11 +38,14 @@ namespace BsslProcurement
 
         [BindProperty]
         public List<Requisition> Requisitions { get; set; }
-        public async Task OnGetAsync()
+        public async Task OnGetAsync(string message)
         {
             try
             {
-
+                if (!string.IsNullOrWhiteSpace(message))
+                {
+                    Message = message;
+                }
                 var user = await GetCurrentUserAsync();
 
                 Requisitions = await requisitionService.GetSavedRequisitionsForLoggedInUser(user.Id);

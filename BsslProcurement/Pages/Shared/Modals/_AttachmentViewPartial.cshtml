@@ -31,7 +31,7 @@
              var fileName = "@Model";
            
             var index = $(this).data('preview');
-            var url = getFileUrl(fileName);
+            var url = getFileUrl( $(this).data('url'));
             displayPhotos(url);
             e.preventDefault();
         });

@@ -1,11 +1,8 @@
 ﻿@page
-@using BsslProcurement.UtilityMethods;
-@model BsslProcurement.SavedRequisitionsModel
+@model BsslProcurement.Pages.Staff.ItemRequisition.RazModel
 @{
-    ViewData["Title"] = "Saved Requisitions";
-    Layout = "~/Pages/Shared/_Layout.cshtml";
+    ViewData["Title"] = "Raz";
 }
-
 
 <div class="row mt-5">
     <div class="col-md-1"></div>
@@ -37,23 +34,21 @@
 
             @*<button class="btn btn-primary pt-2" asp-page="NewRequisition">Add New</button>*@
 
-            <a asp-page="NewRequisition" role="button" class="btn btn-primary">Create Requisition</a>
-           
+            <a asp-page="NewRequisition" role="button" class="btn btn-primary">New Requisition</a>
+
             <div class="row pt-3 " style="">
                 <div class="col-12 table-responsive table-responsive-sm">
-                    <table id="reqTable" class="table  table-striped">
+                    <table class="table  table-striped">
                         <thead>
                             <tr class="table-primary">
                                 <th>S/N</th>
                                 <th>PR Number</th>
-                                <th>Request Description</th>
-                                <th>Expected Delivery Date</th>
+                                <th>Description</th>
+                                <th>Delivery Date</th>
                                 <th>No Of Items</th>
-                                <th>Attachments</th>
-                                <th>Delivery Destination</th>
+                                <th>Required At</th>
                                 <th>Prepared By</th>
-                                <th>Prepared For</th>
-                                <th>Date Saved</th>
+                                <th>Total Amount</th>
                                 <th>Status</th>
                                 <th>Action</th>
                             </tr>
@@ -62,28 +57,28 @@
 
                         <tbody>
 
-                            @if (Model.Requisitions != null && Model.Requisitions.Any())
+                            @if (Model.Requisitions.Any())
                             {
-
                                 @for (int i = 0; i < Model.Requisitions.Count; i++)
                                 {
                                     var item = Model.Requisitions[i];
-                            <tr>
-                                <td>@(i + 1)</td>
-                                <td>@item.PRNumber</td>
-                                <td>@item.Description</td>
-                                <td>@(((DateTime)item.DeliveryDate).ToShortDateString())</td>
-                                <td>@item.RequisitionItems.Count</td>
-                                <td>@(item.RequisitionItems.Any(x=> x.Attachment != null)? "Contains attachment(s)": "No attachment")</td>
-                                <td>@item.RequiredAtDepartment</td>
-                                <td>@item.PreparedBy</td>
-                                <td>@item.PreparedFor</td>
-                                <td>@item.DateCreated.ToShortNigeriaDateString()</td>
-                                <td>@item.Status</td>
-                                <td><a asp-page="./NewRequisition" asp-route-id="@item.Id" style="color: #007bff">Continue Process</a></td>
-                            </tr>
+                                    <tr>
+                                        <td>@(i + 1)</td>
+                                        <td>@item.PRNumber</td>
+                                        <td>@item.Description</td>
+                                        <td>@(((DateTime)item.DeliveryDate).ToShortDateString())</td>
+                                        <td>@item.RequisitionItems.Count</td>
+                                        <td>@item.RequiredAtDepartment</td>
+                                        <td>@item.PreparedBy</td>
+                                        <td>@item.RequisitionItems.Sum(x => x.UnitPrice * x.Quantity)</td>
+                                        <td>@item.Status</td>
+                                        <td><a asp-page="./DetailRequisition" asp-route-id="@item.Id" style="color: #007bff">View</a></td>
+                                    </tr>
                                 }
+
                             }
+
+
                         </tbody>
                         <tfoot>
                             @*<tr class="font-weight-bold">
@@ -101,10 +96,4 @@
         </form>
     </div>
 </div>
-@section Scripts{ 
 
-<script>
-    $("#reqTable").DataTable();
-</script>
-
-}

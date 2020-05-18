@@ -1,6 +1,5 @@
 ﻿using DcProcurement;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.Authorization;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.AspNetCore.Mvc.Filters;
 using System;
@@ -11,7 +10,6 @@ using Microsoft.AspNetCore.Authorization;
 using Newtonsoft.Json;
 using BsslProcurement.AuthModels;
 using Microsoft.EntityFrameworkCore;
-using BsslProcurement.TagHelpers;
 using Microsoft.AspNetCore.Mvc.Controllers;
 using Microsoft.AspNetCore.Mvc.RazorPages.Infrastructure;
 using BsslProcurement.Filters.Attributes;
@@ -47,10 +45,11 @@ namespace BsslProcurement.Filters
             {
                 return;
             }
-            //checks if page allowsanonymous
+            //checks if page has allowsanonymous attribute
             if (!IsProtectedPage(context))
                 return;
 
+            //checks if user is logged in
             if (!IsUserAuthenticated(context))
             {
                 context.Result = new UnauthorizedResult();
@@ -64,9 +63,11 @@ namespace BsslProcurement.Filters
             if (userName.Equals(_authorizationOptions.DefaultAdminUser, StringComparison.CurrentCultureIgnoreCase))
                 return;
 
-            //checks if page can be accessed by all staff
+           
             var page = (PageActionDescriptor)context.ActionDescriptor;
            var compiledPage = await _pageLoader.LoadAsync(page);
+
+            //checks if page can be accessed by all staff
             if (compiledPage.EndpointMetadata.OfType<NoDiscoveryAttribute>().Any())
             {
                 return;
