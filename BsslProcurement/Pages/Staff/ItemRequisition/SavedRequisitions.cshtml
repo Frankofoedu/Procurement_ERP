@@ -52,6 +52,7 @@
                                 <th>Request Description</th>
                                 <th>Expected Delivery Date</th>
                                 <th>No Of Items</th>
+                                <th>Attachments</th>
                                 <th>Delivery Destination</th>
                                 <th>Prepared By</th>
                                 <th>Prepared For</th>
@@ -76,6 +77,7 @@
                                 <td>@item.Description</td>
                                 <td>@(((DateTime)item.DeliveryDate).ToShortDateString())</td>
                                 <td>@item.RequisitionItems.Count</td>
+                                <td>@(item.RequisitionItems.Any(x=> x.Attachment != null)? "Contains attachment(s)": "No attachment")</td>
                                 <td>@item.RequiredAtDepartment</td>
                                 <td>@item.PreparedBy</td>
                                 <td>@item.PreparedFor</td>
