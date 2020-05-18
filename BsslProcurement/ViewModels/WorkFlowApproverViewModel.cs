@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -13,6 +14,7 @@ namespace BsslProcurement.ViewModels
         public string AssignedStaffName { get; set; }
         public int? WorkFlowTypeId { get; set; }
         public int WorkflowStep { get; set; }
+        [Required(ErrorMessage = "Enter remark")]
         public string Remark { get; set; }
     }
 }

@@ -224,10 +224,12 @@
                         },
                         contentType: 'application/json',
                         error: function () {
+                            displayWorkflow([]);
                             alert('An Error occured...');
                         },
                         success: function (data) {
                             if (!data) {
+                                displayWorkflow([]);
                                 alert('No Workflow for the selected category.');
                                 return;
                             }

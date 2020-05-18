@@ -354,7 +354,6 @@
                                         <span class="d-flex flex-row">
                                             <input class="form-control" asp-for="Requisition.PreparedForRank" readonly id="forStaffTextRank" rows="6" placeholder="" />
                                         </span>
-
                                     </div>
                                 </div>
 
@@ -366,8 +365,8 @@
                                 <label>Justification : </label>
                                 <input type="hidden" asp-for="Requisition.Purpose" />
                                 <div id="editor">
-
                                 </div>
+                                <span asp-validation-for="Requisition.Purpose" class="text-danger"></span>
                             </div>
                         </div>
 
@@ -411,14 +410,13 @@
 
                         <div class="d-flex justify-content-around no-print">
                             @*  <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>*@
-                            <input id="btnSave" class="btn btn-lg btn-outline-info float-left" asp-page-handler="Save" value="Save For Later" asp-route-id="@((Model.Requisition != null) ? Model.Requisition.Id : (int?)null)" type="submit" placeholder="" />
+                            <input id="btnSave" class="btn btn-lg btn-outline-info float-left" asp-page-handler="Save" value="Save as Draft" asp-route-id="@((Model.Requisition != null) ? Model.Requisition.Id : (int?)null)" type="submit" placeholder="" />
+                            <button type="button" class="btn btn-lg btn-primary" data-toggle="modal" data-target="#approverModal">Send to Next Process</button>
                             @if (Model.Requisition != null)
                             {
                                 <input type="hidden" asp-for="Requisition.Id" />
                                 <input id="btnQuarantine" type="submit" asp-route-id="@Model.Requisition.Id" asp-page-handler="Quarantine" class="btn btn-lg btn-outline-danger" value="Quarantine" />
-
                             }
-                            <button type="button" class="btn btn-lg btn-primary" data-toggle="modal" data-target="#approverModal">Submit</button>
                             <button id="printBtn" class="btn btn-lg btn-info" onclick="print(); return false;">Print/Preview</button>
                         </div>
 
