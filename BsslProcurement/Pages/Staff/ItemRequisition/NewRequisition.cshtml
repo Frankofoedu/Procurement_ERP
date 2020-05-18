@@ -768,8 +768,13 @@
                 var purpose = $('#Requisition_Purpose');
                 purpose.val(quill.getText());
             })
-        })
+        });
 
+        //sets value of quill editor
+        $(document).ready(function () {
+            var purpose = $('#Requisition_Purpose');
+            quill.setText(purpose.val());
+        });
 
         //to attach multiple files in preview mode
         //var upload = new FileUploadWithPreview('myUniqueUploadId');
