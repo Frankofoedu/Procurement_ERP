@@ -38,10 +38,7 @@
             @*<button class="btn btn-primary pt-2" asp-page="NewRequisition">Add New</button>*@
 
             <a asp-page="NewRequisition" role="button" class="btn btn-primary">Create Requisition</a>
-            @if (Model.Requisitions.Any())
-            {
-
-            }
+           
             <div class="row pt-3 " style="">
                 <div class="col-12 table-responsive table-responsive-sm">
                     <table id="reqTable" class="table  table-striped">
@@ -65,7 +62,7 @@
 
                         <tbody>
 
-                            @if (Model.Requisitions.Any())
+                            @if (Model.Requisitions != null && Model.Requisitions.Any())
                             {
 
                                 @for (int i = 0; i < Model.Requisitions.Count; i++)
