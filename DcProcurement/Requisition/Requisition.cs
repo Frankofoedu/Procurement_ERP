@@ -35,7 +35,6 @@ namespace DcProcurement
         [Required(ErrorMessage = "Select Staff Prepared For")]
         public string PreparedFor { get; set; }
         public string PreparedForRank { get; set; }
-        [Required(ErrorMessage = "Enter Justification")]
         public string Purpose { get; set; }
         public string ProcurementMethod { get; set; }
         public string ProcessType { get; set; }

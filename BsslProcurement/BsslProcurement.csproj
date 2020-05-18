@@ -9,6 +9,8 @@
   <ItemGroup>
     <Compile Remove="Migrations\20200514072124_update.cs" />
     <Compile Remove="Migrations\20200514072124_update.Designer.cs" />
+    <Compile Remove="Migrations\20200518101652_test.cs" />
+    <Compile Remove="Migrations\20200518101652_test.Designer.cs" />
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="AutoMapper" Version="9.0.0" />

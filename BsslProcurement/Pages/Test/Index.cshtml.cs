@@ -4,6 +4,7 @@ using System.ComponentModel.DataAnnotations;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
+using BsslProcurement.Filters.Attributes;
 using BsslProcurement.Interfaces;
 using BsslProcurement.Services;
 using DcProcurement;
@@ -18,6 +19,8 @@ using Microsoft.Extensions.Logging;
 
 namespace BsslProcurement.Pages.Test
 {
+    [NoDiscovery]
+    [AllowAnonymous]
     public class IndexModel : PageModel
     {
 
