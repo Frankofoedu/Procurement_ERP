@@ -14,7 +14,6 @@ namespace BsslProcurement.ViewModels
         public string AssignedStaffName { get; set; }
         public int? WorkFlowTypeId { get; set; }
         public int WorkflowStep { get; set; }
-        [Required(ErrorMessage = "Enter remark")]
         public string Remark { get; set; }
     }
 }
