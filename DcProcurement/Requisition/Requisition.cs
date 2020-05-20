@@ -52,7 +52,7 @@ namespace DcProcurement
         public string LoggedInUserId { get; set; }
 
         //default database creation date
-        public DateTime DateCreated { get; set; }
+        public DateTime? DateCreated { get; set; } = DateTime.Now;
         public List<RequisitionItem> RequisitionItems { get; set; }
          public List<RequisitionJob> RequisitionJobs { get; set; }
         public List<ProcurementJob> ProcurementJobs { get; set; }

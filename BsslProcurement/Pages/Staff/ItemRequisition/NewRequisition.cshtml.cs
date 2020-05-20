@@ -116,6 +116,11 @@ namespace BsslProcurement.Pages.Staff.ItemRequisition
 
                     if (id != null)
                     {
+                        if (Requisition.DateCreated == null)
+                        {
+                            Requisition.DateCreated = DateTime.Now;
+                        }
+
                         await SaveOrSubmitRequisition(true, true);
                         await _requisitionService.SendRequisitionToNextStageAsync(Requisition.Id,
                           WfVm.AssignedStaffCode, WfVm.WorkFlowId, WfVm.Remark);
@@ -186,9 +191,7 @@ namespace BsslProcurement.Pages.Staff.ItemRequisition
                 {
                     if (id != null)
                     {
-
                         await SaveOrSubmitRequisition(false, true);
-
                         Message = "Requisition Updated and Saved successfully";
                         return RedirectToPage("SavedRequisitions", new {message= Message });
                     }
