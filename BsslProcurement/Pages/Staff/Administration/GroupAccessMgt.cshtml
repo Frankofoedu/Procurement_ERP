@@ -120,7 +120,7 @@
             <input type="submit" asp-page-handler="Save" value="Add Access" class="btn btn-primary" />
         </div>
         <div class="form-group mb-5 mt-5">
-            <div class="row mt-3 mb-5">
+            <div class="row mt-3 mb-2">
                 <div class="col-12">
                     <h3 class="h3 bg-primary text-white px-3 py-1 mt-2 rounded">
                         Access List.
@@ -129,6 +129,11 @@
             </div>
 
             <div class="col-12">
+                <div class="form-group text-right">
+                    <label class="btn btn-outline-dark">
+                        <input type="checkbox" id="selectAll" /> Select All
+                    </label>
+                </div>
                 <table class="table table-striped table-bordered" id="groupAccessTable">
                     <thead>
                         <tr>
@@ -162,7 +167,7 @@
                                     <input type="hidden" asp-for="AccessViewModels[i].RazorPage.ViewEnginePath" />
                                 </td>
                                 <td>
-                                    <input type="checkbox" name=@htmlCheckboxName id=@htmlCheckboxId value="true" @(p.IsSelected ? "checked" : "") />
+                                    <input class="selectBtn" type="checkbox" name=@htmlCheckboxName id=@htmlCheckboxId value="true" @(p.IsSelected ? "checked" : "") />
                                 </td>
                             </tr>
                         }
@@ -187,7 +192,19 @@
             $('#newGroupAccessTable').DataTable();
 
             var table = $('#groupAccessTable').DataTable();
+            $('#groupAccessTable').on('click', '.selectBtn', function (e) {
+                if ($(this).not(':checked')) {
+                    $("#selectAll").prop('checked', false);
+                }
+            });
 
+            $("#selectAll").on( "click", function(e) {
+                if ($(this).is(":checked")) {
+                    table.rows().nodes().to$().find('.selectBtn').prop('checked', $(this).is(':checked')); 
+                } else {
+                    table.rows().nodes().to$().find('.selectBtn').prop('checked', $(this).is(':checked'));
+                }
+            });
 
             // Handle form submission event
             $('#groupForm').on('submit', function (e) {
