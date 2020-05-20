@@ -197,7 +197,7 @@
                                         {
                                             var gridItem = Model.gridVm[i];
 
-                                            <tr>
+                                            <tr class="@("row" + i)">
                                                 <td>
                                                     <input type="hidden" asp-for="gridVm[i].RequisitionItem.Id" />
                                                     <input type="hidden" asp-for="gridVm[i].RequisitionItem.RequisitionId" />
@@ -242,7 +242,7 @@
                                                     </div>
                                                 </td>
                                                 <td>
-                                                    <label class="del" onclick="deleteItem();">
+                                                    <label class="del" delRow="@(i)">
                                                         <i class="fa fa-trash-alt"></i>
                                                     </label>
                                                 </td>
@@ -255,7 +255,7 @@
                                     }
                                     else
                                     {
-                                        <tr>
+                                        <tr class="row0">
                                             <td>
                                                 <input type="text" required asp-for="gridVm[0].RequisitionItem.Description" />
                                             </td>
@@ -277,7 +277,7 @@
                                                 </div>
                                             </td>
                                             <td>
-                                                <label class="del" onclick="deleteItem();">
+                                                <label class="del" delRow="0">
                                                     <i class="fa fa-trash-alt"></i>
                                                 </label>
                                             </td>
@@ -834,12 +834,22 @@
                 return false;
             });
         }
+        
+        //delete row
+        $(function () {
+            $('#requisitionBody').on('click', '.del', function () {
+                //get row id
+                var curRowId = $(this).attr("delRow");
+                $('.row' + curRowId).remove();
 
+                return false;
+            });
+        });
 
 
         function newStepRow(index) {
             
-            var html = `<tr>
+            var html = `<tr class="row${index}">
                 <td>
                     <input type="text" required="" id="gridVm_${index}__RequisitionItem_Description" name="gridVm[${index}].RequisitionItem.Description" value="">
                                             </td>
@@ -861,7 +871,7 @@
                                                 </div>
                                             </td>
                                 <td>
-                                    <label class="del" onclick="deleteItem();">
+                                    <label class="del" delRow="${index}">
                                         <i class="fa fa-trash-alt"></i>
                                     </label>
                                 </td>
