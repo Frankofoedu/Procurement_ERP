@@ -18,6 +18,7 @@ namespace DcProcurement.Contexts
         public virtual DbSet<Codestab> Codestab { get; set; }
         public virtual DbSet<Accust> Accusts { get; set; }
         public virtual DbSet<CodestabRel> CodestabRel { get; set; }
+        public virtual DbSet<Joborder> Joborder { get; set; }
         public virtual DbSet<Procreq1> Procreq1 { get; set; }
         public virtual DbSet<Procreq2> Procreq2 { get; set; }
         public virtual DbSet<Useracct> Useracct { get; set; }
@@ -547,6 +548,37 @@ namespace DcProcurement.Contexts
                     .HasMaxLength(50)
                     .IsUnicode(false);
             });
+
+            modelBuilder.Entity<Joborder>(entity =>
+            {
+                entity.HasNoKey();
+
+                entity.ToTable("joborder");
+
+                entity.Property(e => e.Copny)
+                    .HasColumnName("copny")
+                    .HasMaxLength(2)
+                    .IsUnicode(false);
+
+                entity.Property(e => e.Jcode)
+                    .IsRequired()
+                    .HasColumnName("jcode")
+                    .HasMaxLength(10)
+                    .IsUnicode(false)
+                    .IsFixedLength();
+
+                entity.Property(e => e.Jdesc)
+                    .HasColumnName("jdesc")
+                    .HasMaxLength(40)
+                    .IsUnicode(false)
+                    .IsFixedLength();
+
+                entity.Property(e => e.Zcopny)
+                    .HasColumnName("zcopny")
+                    .HasMaxLength(10)
+                    .IsUnicode(false);
+            });
+
             modelBuilder.Entity<Procreq1>(entity =>
             {
                 entity.ToTable("procreq1");

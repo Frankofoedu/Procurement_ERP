@@ -32,6 +32,7 @@ namespace DcProcurement
         [Required(ErrorMessage = "Select Staff Prepared By")]
         public string PreparedBy { get; set; }
         public string PreparedByRank { get; set; }
+        public string PreparedForType { get; set; }
         [Required(ErrorMessage = "Select Staff Prepared For")]
         public string PreparedFor { get; set; }
         public string PreparedForRank { get; set; }

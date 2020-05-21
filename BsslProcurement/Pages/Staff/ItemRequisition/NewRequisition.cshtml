@@ -328,32 +328,52 @@
                                 </div>
                             </div>
                             @*<div class="custom-file-container" data-upload-id="myUniqueUploadId">
-                <label>
-                    Attach Multiple Files <a href="javascript:void(0)" class="custom-file-container__image-clear"
-                                             title="Clear Image">&times;</a>
-                </label>
-                <label class="custom-file-container__custom-file">
-                    <input type="file" name="files" class="custom-file-container__custom-file__custom-file-input" accept="*" multiple
-                           aria-label="Choose File">
-                    <input type="hidden" name="MAX_FILE_SIZE" value="10485760" />
-                    <span class="custom-file-container__custom-file__custom-file-control"></span>
-                </label>
-                <div class="custom-file-container__image-preview"></div>
-            </div>*@
+                                    <label>
+                                        Attach Multiple Files <a href="javascript:void(0)" class="custom-file-container__image-clear"
+                                                                 title="Clear Image">&times;</a>
+                                    </label>
+                                    <label class="custom-file-container__custom-file">
+                                        <input type="file" name="files" class="custom-file-container__custom-file__custom-file-input" accept="*" multiple
+                                               aria-label="Choose File">
+                                        <input type="hidden" name="MAX_FILE_SIZE" value="10485760" />
+                                        <span class="custom-file-container__custom-file__custom-file-control"></span>
+                                    </label>
+                                    <div class="custom-file-container__image-preview"></div>
+                                </div>*@
                         </div>
 
                         <div class="col-sm-6">
                             <div class="row">
                                 <div class="my-2">
-                                    <div class="col-sm-12">
+                                    <div class="col-12">
                                         <label>Prepared For : </label>
+                                    </div>
+                                    <div class="col-12 justify-content-center">
+                                        @if (Model.Requisition == null)
+                                        {
+                                            <label class="btn btn-outline-dark"><input type="radio" class="btnPreparedForType" checked asp-for="Requisition.PreparedForType" value="Staff" /> Staff</label>
+                                            <label class="btn btn-outline-dark"><input type="radio" class="btnPreparedForType" asp-for="Requisition.PreparedForType" value="Project" /> Project</label>
+                                        }
+                                        else if (Model.Requisition.PreparedForType == "Staff")
+                                        {
+                                            <label class="btn btn-outline-dark"><input type="radio" class="btnPreparedForType" checked asp-for="Requisition.PreparedForType" value="Staff" /> Staff</label>
+                                            <label class="btn btn-outline-dark"><input type="radio" class="btnPreparedForType" asp-for="Requisition.PreparedForType" value="Project" /> Project</label>
+                                        }
+                                        else
+                                        {
+                                            <label class="btn btn-outline-dark"><input type="radio" class="btnPreparedForType" asp-for="Requisition.PreparedForType" value="Staff" /> Staff</label>
+                                            <label class="btn btn-outline-dark"><input type="radio" class="btnPreparedForType" checked asp-for="Requisition.PreparedForType" value="Project" /> Project</label>
+                                        }
+                                    </div>
+                                    <div class="col-sm-12">
+                                        <label>Name : </label>
                                         <span class="d-flex flex-row">
                                             <input class="form-control" asp-for="Requisition.PreparedFor" readonly id="forStaffText" rows="6" placeholder="" />
                                             <button class="btn loadStaffModal ml-1" value="forStaffText" data-toggle="modal" data-target="#staffModal"><i class="fa fa-search"></i></button>
                                         </span>
 
                                     </div>
-                                    <div class="col-sm-12">
+                                    <div class="col-sm-12" id="designationDiv">
                                         <label>Designation : </label>
                                         <span class="d-flex flex-row">
                                             <input class="form-control" asp-for="Requisition.PreparedForRank" readonly id="forStaffTextRank" rows="6" placeholder="" />
@@ -517,6 +537,28 @@
     </div>
 </div>
 
+<div class="modal" id="projectModal">
+    <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title">Projects</h4>
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+            </div>
+            <div class="modal-body">
+                <div id="projectgrid"></div>
+            </div>
+            <div id="projectspinner" class="d-flex justify-content-center">
+                <div class="loader">
+                </div>
+            </div>
+
+            <div class="modal-footer">
+                <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
+
 <div class="modal fade" id="modItemPreview" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
     <div class="modal-dialog modal-lg" role="document">
 
@@ -544,6 +586,7 @@
 <input type="hidden" id="hiddenURLRank" value="@Url.Action("GetStaffWithRank", "Staff")" />
 <input type="hidden" id="hiddenURLNoRank" value="@Url.Action("GetStaffNoRank", "Staff")" />
 <input type="hidden" id="uomHiddenURL" value="@Url.Action("GetUOM", "UnitsOfM")" />
+<input type="hidden" id="projectHiddenURL" value="@Url.Action("GetProjects", "Project")" />
 <input type="hidden" id="requesterHiddenURL" value="@Url.Action("GetRequester", "Requester")" />
 <input type="hidden" id="rankHiddenURL" value="@Url.Action("GetRankOfStaff", "Staff")" />
 <input type="hidden" id="usercode" value="@Model.UserCode" />
@@ -555,6 +598,7 @@
     <script src="~/js/quill.js"></script>
 
     <script>
+        designationDivDisplay();
 
         function deleteAttachment(index) {
             $('.attachexist.' + index).hide('slow', function () { $(this).remove() });
@@ -691,7 +735,7 @@
                 $('#requesterModal').modal("show");
 
                 var type = $("input[name='Requisition.RequesterType']:checked").val();
-                
+
                 var url = $('#requesterHiddenURL').val();
                 $('#Requestergrid').load(url + "?type=" + type, function () {
                     $('#Requesterspinner').removeClass('d-flex');
@@ -713,46 +757,89 @@
             });
         });
 
+        //PreparedForType check changes
+        $(function () {
+            $('.btnPreparedForType').on('change', function () { designationDivDisplay(); });
+        });
+
+        function designationDivDisplay() {
+            var preparedFor = $("input[name='Requisition.PreparedForType']:checked").val();
+
+            $('#forStaffTextRank').val('');
+            $('#forStaffText').val('');
+
+            if (preparedFor === 'Staff') {
+                $('#designationDiv').show(500);
+            } else {
+                $('#designationDiv').hide(500);
+            }
+        }
+
         //to load staff modal
         $(function () {
             $('.loadStaffModal').on('click', function () {
-                $('#grid').empty();
-                $('#spinner').addClass('d-flex');
-                $('#spinner').show();
-                $('#staffModal').modal("show");
-
                 //get staff name textbox
                 var txtToAssign = $('#' + $(this).val() + '');
                 //get staff rank textbox
-
                 var txtRankToAssign = $('#' + $(this).val() + 'Rank');
-                var url = $('#hiddenURLRank').val();
-                $('#grid').load(url, function () {
-                    $('#spinner').removeClass('d-flex');
-                    $('#spinner').hide();
-                    $('#staffTable').dataTable();
 
-                    $('#staffTable').on('click', '.btnStaffName', function () {
-                        //assign staff name textbox
-                        txtToAssign.val($(this).val());
-                        var staffCode = $(this).text();
-                        var rankURL = window.location.origin + "/api/Users/GetStaffRank/" + staffCode;
+                var preparedFor = $("input[name='Requisition.PreparedForType']:checked").val();
 
-                        $.ajax({
-                            url: rankURL,
+                if ($(this).val() === 'forStaffText' && preparedFor === 'Project') {
+                    $('#projectgrid').empty();
+                    $('#projectspinner').addClass('d-flex');
+                    $('#projectspinner').show();
+                    $('#projectModal').modal("show");
 
-                        }).done(function (data) {
-                            //assign rank to rank textbox
-                            txtRankToAssign.val(data);
+                    var url = $('#projectHiddenURL').val();
+                    $('#projectgrid').load(url, function () {
+                        $('#projectspinner').removeClass('d-flex');
+                        $('#projectspinner').hide();
+                        $('#projectTable').dataTable();
+
+                        $('#projectTable').on('click', '.btnProjectName', function () {
+                            //assign unit of measurement name textbox
+                            txtToAssign.val($(this).attr('itemName'));
+
+                            $('#projectModal').modal("hide");
+                            return false;
                         });
-
-                        //$('#forStaffText').val();
-                        $('#staffModal').modal("hide");
-                        return false;
                     });
-                });
+                    return false;
+                } else {
+                    $('#grid').empty();
+                    $('#spinner').addClass('d-flex');
+                    $('#spinner').show();
+                    $('#staffModal').modal("show");
 
-                return false;
+                    var url = $('#hiddenURLRank').val();
+                    $('#grid').load(url, function () {
+                        $('#spinner').removeClass('d-flex');
+                        $('#spinner').hide();
+                        $('#staffTable').dataTable();
+
+                        $('#staffTable').on('click', '.btnStaffName', function () {
+                            //assign staff name textbox
+                            txtToAssign.val($(this).val());
+                            var staffCode = $(this).text();
+                            var rankURL = window.location.origin + "/api/Users/GetStaffRank/" + staffCode;
+
+                            $.ajax({
+                                url: rankURL,
+
+                            }).done(function (data) {
+                                //assign rank to rank textbox
+                                txtRankToAssign.val(data);
+                            });
+
+                            //$('#forStaffText').val();
+                            $('#staffModal').modal("hide");
+                            return false;
+                        });
+                    });
+
+                    return false;
+                }
             });
         });
 
@@ -834,7 +921,7 @@
                 return false;
             });
         }
-        
+
         //delete row
         $(function () {
             $('#requisitionBody').on('click', '.del', function () {
@@ -848,35 +935,35 @@
 
 
         function newStepRow(index) {
-            
+
             var html = `<tr class="row${index}">
-                <td>
-                    <input type="text" required="" id="gridVm_${index}__RequisitionItem_Description" name="gridVm[${index}].RequisitionItem.Description" value="">
-                                            </td>
-                    <td>
-                        <input type="number" required="" oninput="this.value=this.value.replace(/[^${index}-9]/g,'');" data-val="true" data-val-required="The Quantity field is required." id="gridVm_${index}__RequisitionItem_Quantity" name="gridVm[${index}].RequisitionItem.Quantity" value="">
-
-                                            </td>
                         <td>
-                            <div class="d-flex flex-row">
-                                <input type="text" readonly="" required="" data-value="forUOM ${index}" id="gridVm_${index}__RequisitionItem_UnitOfMeasurement" name="gridVm[${index}].RequisitionItem.UnitOfMeasurement" value="">
-
-                                    <button class="btn loadUOMModal ml-1" value="forUOM ${index}" data-toggle="modal" data-target="#uomModal"><i class="fa fa-search"></i></button>
-                                                </div>
-                                            </td>
+                            <input type="text" required="" id="gridVm_${index}__RequisitionItem_Description" name="gridVm[${index}].RequisitionItem.Description" value="">
+                                                    </td>
                             <td>
-                                <div class="d-flex flex-row">
-                                    <input data-attachment="${index}" accept=".pdf" class="fileItem" type="file" id="gridVm_${index}__Attachment" name="gridVm[${index}].Attachment">
-                                        <button data-preview="${index}" hidden="" class="btnPreviewItemAttachment">Preview</button>
-                                                </div>
-                                            </td>
-                                <td>
-                                    <label class="del" delRow="${index}">
-                                        <i class="fa fa-trash-alt"></i>
-                                    </label>
-                                </td>
+                                <input type="number" required="" oninput="this.value=this.value.replace(/[^${index}-9]/g,'');" data-val="true" data-val-required="The Quantity field is required." id="gridVm_${index}__RequisitionItem_Quantity" name="gridVm[${index}].RequisitionItem.Quantity" value="">
 
-                                        </tr>` ;
+                                                    </td>
+                                <td>
+                                    <div class="d-flex flex-row">
+                                        <input type="text" readonly="" required="" data-value="forUOM ${index}" id="gridVm_${index}__RequisitionItem_UnitOfMeasurement" name="gridVm[${index}].RequisitionItem.UnitOfMeasurement" value="">
+
+                                            <button class="btn loadUOMModal ml-1" value="forUOM ${index}" data-toggle="modal" data-target="#uomModal"><i class="fa fa-search"></i></button>
+                                                        </div>
+                                                    </td>
+                                    <td>
+                                        <div class="d-flex flex-row">
+                                            <input data-attachment="${index}" accept=".pdf" class="fileItem" type="file" id="gridVm_${index}__Attachment" name="gridVm[${index}].Attachment">
+                                                <button data-preview="${index}" hidden="" class="btnPreviewItemAttachment">Preview</button>
+                                                        </div>
+                                                    </td>
+                                        <td>
+                                            <label class="del" delRow="${index}">
+                                                <i class="fa fa-trash-alt"></i>
+                                            </label>
+                                        </td>
+
+                                                </tr>` ;
             $('#requisitionBody').append(html);
         }
     </script>

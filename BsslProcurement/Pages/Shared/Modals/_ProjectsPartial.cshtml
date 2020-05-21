@@ -1,0 +1,27 @@
+﻿
+@using DcProcurement.Contexts
+@model List<Joborder>
+
+<!DOCTYPE html>
+
+
+<table id="projectTable" class="table table-striped">
+    <thead>
+        <tr>
+            <th>Code</th>
+            <th>Project Name</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>
+                    <button class="btn btn-link btnProjectName" itemName="@item.Jdesc" value="@item.Jcode">@item.Jcode</button>
+                </td>
+                <td>@item.Jdesc</td>
+            </tr>
+        }
+    </tbody>
+</table>
+
