@@ -80,7 +80,7 @@ namespace BsslProcurement.Pages.Staff.ItemRequisition
         {
             try
             {
-                Error = message;
+                Message = message;
                 await LoadData();
 
                 if (id != null)
@@ -108,8 +108,14 @@ namespace BsslProcurement.Pages.Staff.ItemRequisition
 
         public async Task<ActionResult> OnPostSubmitAsync(int? id)
         {
-            if (ModelState.IsValid)
+            if (!ModelState.IsValid)
             {
+                await LoadData();
+                return Page();
+            }
+               
+
+
                 try
                 {
                     //check if its a saved requisition
@@ -139,15 +145,18 @@ namespace BsslProcurement.Pages.Staff.ItemRequisition
                         Message = "Requisition Added successfully";
                     }
 
+                   return RedirectToPage(new { message="Requisition submitted successfully"});
+
                 }
                 catch (Exception ex)
                 {
                     Error = "An error has occurred." + Environment.NewLine + ex.Message;
+                    await LoadData();
+                    return Page();
                 }
-            }
+            
 
-            await LoadData();
-            return Page();
+           
         }
 
         /// <summary>

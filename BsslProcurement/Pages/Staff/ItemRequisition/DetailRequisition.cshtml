@@ -8,6 +8,7 @@
 @section Styles{
 
     <link href="~/css/jquery.dataTables.min.css" rel="stylesheet" />
+    <link href="~/css/quill.snow.css" rel="stylesheet" />
     <style>
         .loader {
             border: 16px solid #f3f3f3;
@@ -103,7 +104,7 @@ else
                             </div>
                             <div class="col-sm-4">
                                 <div class="form-group">
-                                    <label>Date : </label>
+                                    <label>PR Date : </label>
                                     <input class="form-control" readonly value="@Model.Requisition.Date.Value.ToString("dd/MM/yyyy")" placeholder="Pick Date" />
                                 </div>
                             </div>
@@ -123,7 +124,7 @@ else
                             </div>
                             <div class="col-sm-6">
                                 <div class="form-group">
-                                    <label>Required At : </label>
+                                    <label>Delivery Destination: </label>
                                     <input class="form-control" readonly value=@Model.Requisition.RequiredAtDepartment />
 
                                 </div>
@@ -203,7 +204,7 @@ else
 
                                         </div>
                                         <div class="col-sm-12 mt-2">
-                                            <label>Rank : </label>
+                                            <label>Designation : </label>
                                             <span class="d-flex flex-row">
                                                 <input class="form-control" asp-for="Requisition.PreparedByRank" readonly id="txtpreparedRank" rows="6" placeholder="" />
                                             </span>
@@ -212,7 +213,7 @@ else
                                     </div>
                                     <div class="my-2 col-sm-6">
                                         <div class="col-sm-12">
-                                            <label>For : </label>
+                                            <label>Prepared For : </label>
                                             <span class="d-flex flex-row">
                                                 <input class="form-control" asp-for="Requisition.PreparedFor" readonly id="forStaffText" rows="6" placeholder="" />
                                                 @*<button class="btn loadStaffModal" value="forStaffText" data-toggle="modal" data-target="#staffModal"><i class="fa fa-search"></i></button>*@
@@ -221,7 +222,7 @@ else
 
                                         </div>
                                         <div class="col-sm-12 mt-2">
-                                            <label>Rank : </label>
+                                            <label>Designation : </label>
                                             <span class="d-flex flex-row">
                                                 <input class="form-control" asp-for="Requisition.PreparedForRank" readonly id="forStaffTextRank" rows="6" placeholder="" />
                                             </span>
@@ -234,7 +235,7 @@ else
 
                             <div class="col-sm-12 m-4">
                                 <div class="form-group">
-                                    <h5 class="font-weight-bold">Purpose : </h5>
+                                    <h5 class="font-weight-bold">Justification : </h5>
                                     <input type="hidden" id="purpose" value="@Model.Requisition.Purpose" />
                                     <div id="editor">
 
@@ -245,14 +246,14 @@ else
 
 
                             @*<div class="col-sm-4">
-                <div class="form-group">
-                    <input class="btn btn-block btn-danger fa-print" value="Print" type="button" placeholder="Enter Resgistration Number" />
-                </div>
-            </div>*@
+                                    <div class="form-group">
+                                        <input class="btn btn-block btn-danger fa-print" value="Print" type="button" placeholder="Enter Resgistration Number" />
+                                    </div>
+                                </div>*@
                         </div>
                         @if (Model.WfVm != null)
                         {
-                           <div class="modal fade" id="approverModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+                            <div class="modal fade" id="approverModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
                                 <div class="modal-dialog modal-lg modal-dialog-centered" role="document">
                                     <div class="modal-content">
                                         <div class="modal-header">
@@ -274,8 +275,8 @@ else
                             </div>
                             <div class="d-flex justify-content-around no-print">
                                 @*  <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>*@
-    
-                                <input data-toggle="modal" data-target="#approverModal" class="btn btn-lg btn-primary"  value="Send to Next Process" type="button" placeholder="" />
+
+                                <input data-toggle="modal" data-target="#approverModal" class="btn btn-lg btn-primary" value="Send to Next Process" type="button" placeholder="" />
 
                                 <button id="printBtn" class="btn btn-lg btn-info" onclick="print(); return false;">Print/Preview</button>
                             </div>
@@ -293,27 +294,36 @@ else
     <script src="~/js/fileUpload.js"></script>
     <script src="~/js/quill.js"></script>
     <script src="~/js/jquery.dataTables.min.js"></script>
-    <script src="~/js/jquery.fancybox.pack.js"></script>
     <script src="~/js/quill.js"></script>
     <script>
 
 
         $(document).ready(function () {
-            $(".fancybox").fancybox({
-                openEffect: 'none',
-                closeEffect: 'none',
-                iframe: {
-                    preload: false
+            //$(".fancybox").fancybox({
+            //    openEffect: 'none',
+            //    closeEffect: 'none',
+            //    iframe: {
+            //        preload: false
+            //    }
+            //});
+
+            //to create a custom memo field/ textbox
+            var quill = new Quill('#editor', {
+                theme: 'snow',
+                format: {
+                    color :'red'
                 }
             });
 
-
-
-
             //set purpose field
             var purposeValue = $("#purpose").val();
-            var purposeField = document.getElementById('editor');
-            purposeField.innerHTML = purposeValue;
+             quill.enable(false);
+            quill.setText(purposeValue);
+
+
+
+            //var purposeField = document.getElementById('editor');
+            //purposeField.innerHTML = purposeValue;
 
         });
     </script>
