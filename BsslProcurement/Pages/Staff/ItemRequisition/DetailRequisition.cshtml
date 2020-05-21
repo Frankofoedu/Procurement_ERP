@@ -81,7 +81,7 @@ else
 
     <div class="row mt-5">
         <div class="col-md-12">
-            <form id="reqForm" class="panel panel-login" method="post" enctype="multipart/form-data">
+            <form id="reqForm" class="panel panel-login" method="post"  enctype="multipart/form-data">
                 <div class="panel-heading">
                     <div class="row">
                         <p class="header-text">Purchase Requisition For @Model.Requisition.PRNumber</p>
@@ -266,6 +266,7 @@ else
                                             <partial name="~/Pages/Shared/Modals/_SelectApproverPartial.cshtml" model="Model.WfVm" />
                                         </div>
                                         <div class="modal-footer justify-content-around">
+
                                             <input id="btnSubmit" class="btn btn-lg btn-primary" asp-page-handler="Submit" value="Ok" type="submit" placeholder="" />
 
                                             <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
@@ -275,6 +276,8 @@ else
                             </div>
                             <div class="d-flex justify-content-around no-print">
                                 @*  <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>*@
+
+                                <input id="btnQuarantine" type="submit" asp-route-returnUrl="@Model.ReturnUrl"  asp-page-handler="Quarantine" class="btn btn-lg btn-outline-danger" value="Quarantine" />
 
                                 <input data-toggle="modal" data-target="#approverModal" class="btn btn-lg btn-primary" value="Send to Next Process" type="button" placeholder="" />
 

@@ -62,9 +62,9 @@
 
                                     <tr>
                                         <td>@(i + 1).</td>
-                                        <td>@Item.Workflow.WorkflowAction.Name Jobs</td>
+                                        <td>@Item.Workflow.WorkflowAction.Name</td>
                                         <td>@Item.CreationDate.ToShortDateString()</td>
-                                        <td><a asp-page="/Staff/Itemrequisition/DetailRequisition" asp-route-Id="@Item.RequisitionId" style="color: #007bff">View</a></td>
+                                        <td><a asp-page="/Staff/Itemrequisition/DetailRequisition" asp-route-Id="@Item.RequisitionId" asp-route-returnUrl="@Url.Page("/Staff/Jobviews/requisitionjobs", new { area = "" })" style="color: #007bff">View</a></td>
                                     </tr>
                                 }
                             }
