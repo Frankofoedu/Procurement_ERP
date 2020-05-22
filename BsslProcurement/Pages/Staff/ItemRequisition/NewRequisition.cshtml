@@ -760,14 +760,17 @@
 
         //PreparedForType check changes
         $(function () {
-            $('.btnPreparedForType').on('change', function () { designationDivDisplay(); });
+            $('.btnPreparedForType').on('change', function () {
+
+                $('#forStaffTextRank').val('');
+                $('#forStaffText').val('');
+
+                designationDivDisplay();
+            });
         });
 
         function designationDivDisplay() {
             var preparedFor = $("input[name='Requisition.PreparedForType']:checked").val();
-
-            $('#forStaffTextRank').val('');
-            $('#forStaffText').val('');
 
             if (preparedFor === 'Staff') {
                 $('#designationDiv').show(500);
