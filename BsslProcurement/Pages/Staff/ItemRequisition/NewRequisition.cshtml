@@ -439,6 +439,7 @@
                             @if (Model.Requisition != null)
                             {
                                 <input type="hidden" asp-for="Requisition.Id" />
+
                                 <input id="btnQuarantine" type="submit" asp-route-id="@Model.Requisition.Id" asp-page-handler="Quarantine" class="btn btn-lg btn-outline-danger" value="Quarantine" />
                             }
                             <button id="printBtn" class="btn btn-lg btn-info" onclick="print(); return false;">Print/Preview</button>

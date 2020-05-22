@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using BsslProcurement.Filters.Attributes;
 using BsslProcurement.Interfaces;
 using DcProcurement;
 using DcProcurement.Contexts;
@@ -14,6 +15,7 @@ using Microsoft.EntityFrameworkCore;
 namespace BsslProcurement.Pages.Staff.ItemRequisition.ProcCommencement
 {
     [Authorize]
+    [NoDiscovery]
     public class AllRequisitionModel : PageModel
     {
         private readonly IProcurementService _procurementService;

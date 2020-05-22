@@ -35,6 +35,11 @@ namespace BsslProcurement.Pages.Staff.ItemRequisition
         }
         public string Message { get; set; }
         public string Error { get; set; }
+        public string ReturnUrl { get; set; }
+
+        [BindProperty(SupportsGet = true)]
+        public int Id { get; set; }
+
         [BindProperty]
         public Requisition Requisition { get; set; }
         [BindProperty]
@@ -42,15 +47,14 @@ namespace BsslProcurement.Pages.Staff.ItemRequisition
         [BindProperty]
         public WorkFlowApproverViewModel WfVm { get; set; }
 
-        [BindProperty(SupportsGet = true)]
-        public int Id { get; set; }
-        public async Task<IActionResult> OnGetAsync()
+        public async Task OnGetAsync(string returnUrl = null)
         {
 
-           await LoadData();
- 
+            returnUrl ??= Url.Content("~/");
 
-            return Page();
+            await LoadData();
+
+            ReturnUrl = returnUrl;
         }
 
 
@@ -84,17 +88,51 @@ namespace BsslProcurement.Pages.Staff.ItemRequisition
 
             WfVm.AssignedStaffCode = null;
         }
-        public async Task<IActionResult> OnPostAsync()
+        public async Task<IActionResult> OnPostAsync(string returnUrl = null)
         {
+            returnUrl ??= Url.Content("~/");
+
             var staffCode = WfVm.AssignedStaffCode;
             var newStage = WfVm.WorkFlowId;
             var remark = WfVm.Remark;
 
-           await _requisitionService.SendRequisitionToNextStageAsync(Id, staffCode, newStage, remark);
+            await _requisitionService.SendRequisitionToNextStageAsync(Id, staffCode, newStage, remark);
             //Message = "Requisition Sent!";
 
 
-            return RedirectToPage("Allrequisition");
+            return LocalRedirect(returnUrl);
+        }
+
+        /// <summary>
+        /// Deletes a Requisition
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
+        public async Task<ActionResult> OnPostQuarantineAsync(string returnUrl = null)
+        {
+
+            returnUrl ??= Url.Content("~/");
+
+
+            try
+            {
+
+                Requisition.Id = Id;
+                _context.Remove(Requisition);
+                await _context.SaveChangesAsync();
+
+                Message = "Requisition Deleted successfully";
+
+            }
+            catch (Exception ex)
+            {
+                Error = "An error has occurred." + Environment.NewLine + ex.Message;
+                await LoadData();
+                return Page();
+            }
+
+
+            return LocalRedirect(returnUrl);
         }
 
     }
