@@ -212,22 +212,38 @@ else
                                         </div>
                                     </div>
                                     <div class="my-2 col-sm-6">
-                                        <div class="col-sm-12">
+                                        <div class="col-12">
                                             <label>Prepared For : </label>
+                                        </div>
+                                        <div class="col-12">
+                                            @if (Model.Requisition.PreparedForType == "Project")
+                                            {
+                                                <label class="btn btn-outline-dark"><input type="radio" onclick="return false;" class="btnPreparedForType" asp-for="Requisition.PreparedForType" value="Staff" /> Staff</label>
+                                                <label class="btn btn-outline-dark"><input type="radio" onclick="return false;" class="btnPreparedForType" checked asp-for="Requisition.PreparedForType" value="Project" /> Project</label>
+                                            }
+                                            else
+                                            {
+                                                <label class="btn btn-outline-dark"><input type="radio" onclick="return false;" class="btnPreparedForType" checked asp-for="Requisition.PreparedForType" value="Staff" /> Staff</label>
+                                                <label class="btn btn-outline-dark"><input type="radio" onclick="return false;" class="btnPreparedForType" asp-for="Requisition.PreparedForType" value="Project" /> Project</label>
+                                            }
+                                        </div>
+                                        <div class="col-sm-12">
+                                            <label>Name : </label>
                                             <span class="d-flex flex-row">
                                                 <input class="form-control" asp-for="Requisition.PreparedFor" readonly id="forStaffText" rows="6" placeholder="" />
                                                 @*<button class="btn loadStaffModal" value="forStaffText" data-toggle="modal" data-target="#staffModal"><i class="fa fa-search"></i></button>*@
 
                                             </span>
-
                                         </div>
-                                        <div class="col-sm-12 mt-2">
-                                            <label>Designation : </label>
-                                            <span class="d-flex flex-row">
-                                                <input class="form-control" asp-for="Requisition.PreparedForRank" readonly id="forStaffTextRank" rows="6" placeholder="" />
-                                            </span>
-
-                                        </div>
+                                        @if (!string.IsNullOrWhiteSpace(Model.Requisition.PreparedForRank))
+                                        {
+                                            <div class="col-sm-12 mt-2">
+                                                <label>Designation : </label>
+                                                <span class="d-flex flex-row">
+                                                    <input class="form-control" asp-for="Requisition.PreparedForRank" readonly id="forStaffTextRank" rows="6" placeholder="" />
+                                                </span>
+                                            </div>
+                                        }
                                     </div>
 
                                 </div>
