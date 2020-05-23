@@ -11,6 +11,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
+using Microsoft.AspNetCore.Mvc.Rendering;
 
 namespace BsslProcurement
 {
@@ -34,7 +35,10 @@ namespace BsslProcurement
         public string Message { get; set; }
         public string Error { get; set; }
         public List<RequisitionJob> RequisitionJobs { get; set; }
+        public List<SelectListItem> RequisitionWorkFlows { get; set; }
 
+        [BindProperty]
+        public int WorkflowId { get; set; }
 
         public async Task OnGetAsync()
         {
@@ -43,11 +47,39 @@ namespace BsslProcurement
                 var user = await GetCurrentUserAsync();
 
                 RequisitionJobs = (await requisitionService.GetRequisitionsJobsAssignedToLoggedInUser(user.Id)).OrderBy(m=>m.Workflow.WorkflowActionId).ToList();
-                
+                RequisitionWorkFlows = (await requisitionService.GetRequisitionWorkflows()).Select(
+                    m=> new SelectListItem() { 
+                        Value = m.Id.ToString(), 
+                        Text=m.WorkflowAction.Name
+                    }).ToList();
             }
             catch (Exception ex)
             {
 
+                Error = "Error has occured. Please contact Admin." + Environment.NewLine + ex.Message;
+            }
+        }
+        public async Task OnPostAsync()
+        {
+            try
+            {
+                var user = await GetCurrentUserAsync();
+
+                RequisitionJobs = (await requisitionService.GetRequisitionsJobsAssignedToLoggedInUser(user.Id)).OrderBy(m => m.Workflow.WorkflowActionId).ToList();
+                RequisitionWorkFlows = (await requisitionService.GetRequisitionWorkflows()).Select(
+                    m => new SelectListItem()
+                    {
+                        Value = m.Id.ToString(),
+                        Text = m.WorkflowAction.Name
+                    }).ToList();
+
+                if (WorkflowId > 0)
+                {
+                    RequisitionJobs = RequisitionJobs.Where(m => m.WorkFlowId == WorkflowId).ToList();
+                }
+            }
+            catch (Exception ex)
+            {
                 Error = "Error has occured. Please contact Admin." + Environment.NewLine + ex.Message;
             }
         }
