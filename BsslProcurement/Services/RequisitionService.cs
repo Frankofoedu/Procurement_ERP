@@ -20,11 +20,13 @@ namespace BsslProcurement.Services
 
         public async Task<List<RequisitionJob>> GetRequisitionsJobsAssignedToLoggedInUser(string userId)
         {
-            var jobs = _procurementDBContext.RequisitionJobs.Include(req=> req.Workflow).ThenInclude(wk => wk.WorkflowAction).Where(x => x.StaffId == userId && x.JobStatus == Enums.JobState.NotDone);
+            var jobs = _procurementDBContext.RequisitionJobs
+                .Include(req=> req.Workflow).ThenInclude(wk => wk.WorkflowAction)
+                .Include(r=> r.Requisition).ThenInclude(ri=>ri.RequisitionItems)
+                .Where(x => x.StaffId == userId && x.JobStatus == Enums.JobState.NotDone);
 
             if (jobs != null)
             {
-
                 return await jobs.ToListAsync();
             }
 
