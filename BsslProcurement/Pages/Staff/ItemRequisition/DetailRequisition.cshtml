@@ -93,8 +93,6 @@ else
 
                 <div>
                     <div class="">
-
-
                         <div class="row p-2">
                             <div class="col-sm-4">
                                 <div class="form-group">
@@ -293,9 +291,9 @@ else
                             <div class="d-flex justify-content-around no-print">
                                 @*  <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>*@
 
-                                <input id="btnQuarantine" type="submit" asp-route-returnUrl="@Model.ReturnUrl"  asp-page-handler="Quarantine" class="btn btn-lg btn-outline-danger" value="Quarantine" />
-
                                 <input data-toggle="modal" data-target="#approverModal" class="btn btn-lg btn-primary" value="Send to Next Process" type="button" placeholder="" />
+
+                                <input id="btnQuarantine" type="submit" asp-route-returnUrl="@Model.ReturnUrl" asp-page-handler="Quarantine" class="btn btn-lg btn-outline-danger" value="Quarantine" />
 
                                 <button id="printBtn" class="btn btn-lg btn-info" onclick="print(); return false;">Print/Preview</button>
                             </div>
