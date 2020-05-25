@@ -108,7 +108,7 @@ else
                             </div>
                             <div class="col-sm-4">
                                 <div class="form-group">
-                                    <label>Delivery Date : </label>
+                                    <label>Expected Delivery Date : </label>
                                     <input class="form-control" readonly value="@Model.Requisition.DeliveryDate.Value.ToString("dd/MM/yyyy")" placeholder="Pick Delivery Date" />
                                     <input asp-for="Requisition.DeliveryDate" type="hidden" />
                                 </div>
@@ -116,18 +116,23 @@ else
 
                             <div class="col-sm-6">
                                 <div class="form-group">
-                                    <label>Requesting Dept/Section : </label>
+                                    <label>Requesting @(Model.Requisition.RequesterType) : </label>
                                     <input class="form-control" readonly asp-for="Requisition.RequesterValue" placeholder="Enter Department" />
                                 </div>
                             </div>
                             <div class="col-sm-6">
                                 <div class="form-group">
                                     <label>Delivery Destination: </label>
-                                    <input class="form-control" readonly value=@Model.Requisition.RequiredAtDepartment />
-
+                                    <input class="form-control" readonly value="@Model.Requisition.RequiredAtDepartment" />
                                 </div>
                             </div>
 
+                            <div class="col-sm-12">
+                                <div class="form-group">
+                                    <label>Request Description : </label>
+                                    <textarea readonly class="form-control" rows="3">@Model.Requisition.Description</textarea>
+                                </div>
+                            </div>
 
 
                             <div class="mt-3 mb-5 col-sm-12 table-responsive">
