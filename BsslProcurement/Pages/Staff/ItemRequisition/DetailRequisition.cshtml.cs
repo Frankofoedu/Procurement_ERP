@@ -9,6 +9,7 @@ using BsslProcurement.Services;
 using BsslProcurement.ViewModels;
 using DcProcurement;
 using DcProcurement.Contexts;
+using DcProcurement.Jobs;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
@@ -36,6 +37,8 @@ namespace BsslProcurement.Pages.Staff.ItemRequisition
         public string Message { get; set; }
         public string Error { get; set; }
         public string ReturnUrl { get; set; }
+        
+        public string RequisitionJobRemarks { get; set; }
 
         [BindProperty(SupportsGet = true)]
         public int Id { get; set; }
@@ -62,6 +65,12 @@ namespace BsslProcurement.Pages.Staff.ItemRequisition
         {
             Requisition = await _context.Requisitions.FirstOrDefaultAsync(x => x.Id == Id);
 
+            var RequisitionJobs = await _context.RequisitionJobs.Include(n=>n.Workflow).ThenInclude(n=>n.WorkflowAction)
+                .Include(m=>m.Staff).Where(x => x.RequisitionId == Requisition.Id).ToListAsync();
+            foreach (var item in RequisitionJobs)
+            {
+                RequisitionJobRemarks += $"{item.Staff.Name.ToUpper()} -- ({item.Workflow.WorkflowAction.Name}) -- : {item.Remark} \n\n";
+            }
             //   ItemGridViewModels = Requisition.RequisitionItems.Select(x=> new ItemGridViewModel { Attachment = x.Attachment, RequisitionItem = x });
 
             if (Requisition == null)

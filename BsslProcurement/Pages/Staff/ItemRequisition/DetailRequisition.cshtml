@@ -247,7 +247,7 @@ else
                                 </div>
                             </div>
 
-                            <div class="col-sm-12 m-4">
+                            <div class="col-sm-12 mt-2">
                                 <div class="form-group">
                                     <h5 class="font-weight-bold">Justification : </h5>
                                     <input type="hidden" id="purpose" value="@Model.Requisition.Purpose" />
@@ -257,13 +257,19 @@ else
                                 </div>
                             </div>
 
+                            <div class="col-sm-12 mt-2">
+                                <div class="form-group">
+                                    <h5 class="font-weight-bold">Previous Remarks : </h5>
+                                    <textarea readonly class="form-control" rows="5">@Model.RequisitionJobRemarks</textarea>
+                                </div>
+                            </div>
 
 
                             @*<div class="col-sm-4">
-                                    <div class="form-group">
-                                        <input class="btn btn-block btn-danger fa-print" value="Print" type="button" placeholder="Enter Resgistration Number" />
-                                    </div>
-                                </div>*@
+            <div class="form-group">
+                <input class="btn btn-block btn-danger fa-print" value="Print" type="button" placeholder="Enter Resgistration Number" />
+            </div>
+        </div>*@
                         </div>
                         @if (Model.WfVm != null)
                         {
