@@ -82,7 +82,7 @@
                                         <td>@Item.Requisition.RequisitionItems.Count</td>
                                         <td>@Item.Requisition.PreparedBy</td>
                                         <td>@Item.Requisition.PreparedFor</td>
-                                        @if (PrevItem != null) {<td> @PrevItem.Staff.Name </td>}
+                                        @if (PrevItem.Id > 0) {<td> @PrevItem.Staff.Name </td>}
                                         else { <td></td>}
                                         <td>@Item.CreationDate.ToShortDateString()</td>
                                         <td><a asp-page="/Staff/Itemrequisition/DetailRequisition" asp-route-Id="@Item.RequisitionId" asp-route-returnUrl="@Url.Page("/Staff/Jobviews/requisitionjobs", new { area = "" })" style="color: #007bff">View</a></td>
