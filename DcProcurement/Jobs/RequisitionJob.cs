@@ -22,6 +22,9 @@ namespace DcProcurement.Jobs
         [ForeignKey("RequisitionId")]
         public Requisition Requisition { get; private set; }
 
-      
+        public static RequisitionJob Empty()
+        {
+            return new RequisitionJob();
+        }
     }
 }
