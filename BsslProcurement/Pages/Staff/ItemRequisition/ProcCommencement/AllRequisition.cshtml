@@ -37,7 +37,7 @@
 
             <div class="row pt-3 " style="">
                 <div class="col-12 table-responsive table-responsive-sm">
-                    <table class="table  table-striped">
+                    <table id="allTable" class="table table-striped">
                         <thead>
                             <tr class="table-primary">
                                 <th>S/N</th>
@@ -77,17 +77,19 @@
                         </tbody>
                         <tfoot>
                             @*<tr class="font-weight-bold">
-                                <td class="text-right" style="text-align: right;" colspan="8">Total :</td>
-                                <td>@Model.Requisitions.Sum(x => x.)</td>
-                            </tr>*@
+                                    <td class="text-right" style="text-align: right;" colspan="8">Total :</td>
+                                    <td>@Model.Requisitions.Sum(x => x.)</td>
+                                </tr>*@
                         </tfoot>
                     </table>
                 </div>
             </div>
-
-
-         
-
         </form>
     </div>
 </div>
+
+<script>
+    $(document).ready(function () {
+        $("#allTable").DataTable();
+    });
+</script>
