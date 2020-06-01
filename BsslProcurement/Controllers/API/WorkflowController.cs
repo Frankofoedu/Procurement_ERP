@@ -31,7 +31,8 @@ namespace BsslProcurement.Controllers.API
                 return BadRequest(ModelState);
             }
 
-            var Workflows = await _context.Workflows.Include(m => m.WorkflowAction).Include(m => m.WorkflowType).Where(m => m.WorkflowTypeId == id).ToListAsync();
+            var Workflows = await _context.Workflows.Include(m => m.WorkflowAction).Include(m => m.WorkflowType)
+                .Where(m => m.WorkflowTypeId == id && m.WorkflowAction.Name != Constants.RequisitionInitiatorActionName).ToListAsync();
 
             if (Workflows.Count < 1)
             {
@@ -155,7 +156,7 @@ namespace BsslProcurement.Controllers.API
 
         // GET: api/Workflow/WorkflowStaff/5
         [HttpGet("WorkflowForAction")]
-        public async Task<IActionResult> GetWorkflowForActionAsync([FromQuery] string action, [FromQuery] int workflowId, [FromQuery] int workflowTypeId)
+        public async Task<IActionResult> GetWorkflowForActionAsync([FromQuery] string action, [FromQuery] int workflowId, [FromQuery] int workflowTypeId, [FromQuery] int reqId)
         {
             if (!ModelState.IsValid)
             {
@@ -169,7 +170,7 @@ namespace BsslProcurement.Controllers.API
             }
             else if (action.ToLower() == "previous")
             {
-                Workflows = await _workflowService.GetPreviousWorkActionflowStepsAsync(workflowId, workflowTypeId);
+                Workflows = await _workflowService.GetPreviousWorkActionflowStepsAsync(reqId);
             }
             else if (action.ToLower() == "further")
             {
