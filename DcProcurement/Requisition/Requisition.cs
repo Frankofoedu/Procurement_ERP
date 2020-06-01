@@ -41,10 +41,7 @@ namespace DcProcurement
         public string ProcessType { get; set; }
         public string ERFx { get; set; }
 
-        //== true when requisition items has been submitted
-        public bool isSubmitted { get; set; } = false;
-        ///== true when requisition has been sent to procurement
-        public bool isApproved { get; set; }
+        public Enums.RequisitionState RequisitionState { get; set; } = Enums.RequisitionState.Saved;
         //== true when requisition items has been priced
         public bool isPriced { get; set; }
         //== true when requisition has passed budget clearing stage
