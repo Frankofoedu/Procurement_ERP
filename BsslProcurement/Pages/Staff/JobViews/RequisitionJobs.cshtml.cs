@@ -89,6 +89,16 @@ namespace BsslProcurement
                 {
                     RequisitionJobs = RequisitionJobs.Where(m => m.WorkFlowId == WorkflowId).ToList();
                 }
+
+                PreviousRequisitionJobs = new List<RequisitionJob>();
+                foreach (var item in RequisitionJobs)
+                {
+                    var prj = await _context.RequisitionJobs.Include(n => n.Staff).Where(m => m.RequisitionId == item.RequisitionId &&
+                          m.JobStatus == Enums.JobState.Done).OrderByDescending(l => l.Id).FirstOrDefaultAsync();
+
+                    if (prj != null) { PreviousRequisitionJobs.Add(prj); }
+                    else { PreviousRequisitionJobs.Add(RequisitionJob.Empty()); }
+                }
             }
             catch (Exception ex)
             {
