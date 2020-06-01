@@ -97,7 +97,9 @@ namespace BsslProcurement.Services
         public async Task<WorkFlowTypesViewModel> GetFirstWorkActionflowStepAsync(int workflowTypeId)
         {
             //new jobs e.g new requisition tasks not yet assigned a task
-            var workflows = await _procurementDBContext.Workflows.Include(y => y.WorkflowAction).Where(x => x.WorkflowTypeId == workflowTypeId).OrderBy(x => x.Step).ToListAsync();
+            var workflows = await _procurementDBContext.Workflows.Include(y => y.WorkflowAction)
+                .Where(x => x.WorkflowTypeId == workflowTypeId && x.WorkflowAction.Name != Constants.RequisitionInitiatorActionName)
+                .OrderBy(x => x.Step).ToListAsync();
 
             var nextTwoWorkflows = workflows.Take(1);
 
@@ -115,32 +117,24 @@ namespace BsslProcurement.Services
         /// </summary>
         /// <param name="currentStepId">current step of job</param>
         /// <returns></returns>
-        public async Task<List<WorkFlowTypesViewModel>> GetPreviousWorkActionflowStepsAsync(int workFlowId, int workFlowTypeId)
+        public async Task<List<WorkFlowTypesViewModel>> GetPreviousWorkActionflowStepsAsync(int requisitionId)
         {
-            //get current workflow
-            var currWorkflow = await _procurementDBContext.Workflows.FirstOrDefaultAsync(m => m.Id == workFlowId);
 
-            if (currWorkflow != null)
+            //get old job
+            var prevReqJobs = await _procurementDBContext.RequisitionJobs.Include(m=>m.Workflow).ThenInclude(n=>n.WorkflowAction).Include(k=>k.Staff)
+                .Where(req => req.RequisitionId == requisitionId && req.JobStatus != Enums.JobState.NotDone)
+                .OrderByDescending(m=>m.Id).ToListAsync();
+
+            var data = prevReqJobs.Select(x => new WorkFlowTypesViewModel
             {
-                //get current workflow type Id
-                var wfId = currWorkflow.WorkflowTypeId;
-                //get current workflow step
-                var step = currWorkflow.Step;
+                Name = x.Workflow.WorkflowAction.Name,
+                Id = x.Workflow.Id,
+                StaffCode = x.Staff.StaffCode,
+                StaffId = x.StaffId,
+                StaffName = x.Staff.Name
+            }).ToList();
 
-                var workflows = await _procurementDBContext.Workflows.Include(y => y.WorkflowAction).Where(x => x.WorkflowTypeId == wfId && x.Step < step).OrderByDescending(x => x.Step).ToListAsync();
-
-                var data = workflows.Select(x => new WorkFlowTypesViewModel
-                {
-                    Name = x.WorkflowAction.Name,
-                    Id = x.Id
-                }).ToList();
-
-
-                return data;
-
-            }
-
-            return new List<WorkFlowTypesViewModel>();
+            return data;
         }
             
     }
