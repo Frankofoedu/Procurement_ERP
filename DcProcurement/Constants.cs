@@ -6,6 +6,7 @@ namespace DcProcurement
 {
     public class Constants
     {
+        #region Constants for workflow Types
         public const string RequisitionWorkflow = "Requisition";
         public const int RequisitionWorkflowId = 1;
         public const string PrequalificationWorkFlow = "Prequalification";
@@ -14,15 +15,15 @@ namespace DcProcurement
         public const int ProcurementWorkflowId = 3;
         public const string ItemPricingWorkflow = "ItemPricing";
         public const int ItemPricingWorkflowId = 4;
-
+        #endregion
 
         #region Constants for procurement workflow Actions
         public const string ProcurementCostingAction = "Procurement Costing";
         public const int ProcurementCostingActionId = 100;
         public const string BudgetaryControlAction = "Budgetary Control";
         public const int BudgetaryControlActionId = 200;
-        public const int ApproverActionId = 300;
-        public const string ApproverAction = "Procurement Approval";
+        public const int ProcurementApproverActionId = 300;
+        public const string ProcurementApproverAction = "Procurement Approval";
         public const int AuthorizerActionId = 400;
         public const string AuthorizerAction = "Procurement Authorization";
         public const int ApproveRaiseERFxActionId = 500;
@@ -31,6 +32,12 @@ namespace DcProcurement
         public const string RaiseERFxAction = "Raise eRFx";
         #endregion
 
+        #region Constants for Other Important Workflow Action
+        public const string RequisitionInitiatorActionName = "Requisition Initiator";
+        public const int RequisitionInitiatorActionId = 700;
+        public const string ApproverActionName = "Approval";
+        public const int ApproverActionId = 800;
+        #endregion
 
         public static class Role
         {
