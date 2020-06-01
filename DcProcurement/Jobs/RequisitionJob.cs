@@ -9,12 +9,12 @@ namespace DcProcurement.Jobs
     {
         private RequisitionJob() { }
 
-        public RequisitionJob(int reqId, string staffId,int workflowId, string remark) 
+        public RequisitionJob(int reqId, string staffId,int workflowId) 
         {
             RequisitionId = reqId;
             CreationDate = DateTime.Now;
             StaffId = staffId;
-            Remark = remark;
+            Remark = "";
             WorkFlowId = workflowId;
             JobStatus = Enums.JobState.NotDone;
         }

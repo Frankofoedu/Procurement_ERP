@@ -8,12 +8,12 @@ namespace DcProcurement.Jobs
     public class ProcurementJob : Job
     {
         private ProcurementJob() { }
-        public ProcurementJob(int reqId, string staffId, int workflowId, string remark)
+        public ProcurementJob(int reqId, string staffId, int workflowId)
         {
             RequisitionProcId = reqId;
             CreationDate = DateTime.Now;
             StaffId = staffId;
-            Remark = remark;
+            Remark = "";
             WorkFlowId = workflowId;
             JobStatus = Enums.JobState.NotDone;
         }
