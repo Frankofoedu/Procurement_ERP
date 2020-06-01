@@ -9,5 +9,8 @@ namespace BsslProcurement.ViewModels
     {
         public string Name { get; internal set; }
         public int? Id { get; internal set; }
+        public string StaffId { get; internal set; }
+        public string StaffCode { get; internal set; }
+        public string StaffName { get; internal set; }
     }
 }
