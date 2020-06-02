@@ -89,6 +89,7 @@
                 <div class="row">
                     <p class="header-text">Add New <span class="workflowType">Prequalification</span> Workflow</p>
                     <input id="CategoryId" type="hidden" asp-for="CategoryId" />
+                    <input id="CategoryName" type="hidden" asp-for="CategoryName" />
                 </div>
                 <hr>
             </div>
@@ -209,8 +210,10 @@
             function fetchWorkflows() {
                 var select = document.getElementById("categorySelect");
                 var id = select.value;
+                var cName = select.options[select.selectedIndex].innerHTML;
                 $("#CategoryId").val(id);
-                $('.workflowType').text(select.options[select.selectedIndex].innerHTML);
+                $("#CategoryName").val(cName);
+                $('.workflowType').text(cName);
 
                 if (id) {
 
@@ -244,12 +247,12 @@
                 $("#workflowBody").html("");
 
                 for (var i = 0; i < workflows.length; i++) {
-                    $("#workflowBody").append(NewWorkflowRow(workflows[i]));
+                    $("#workflowBody").append(NewWorkflowRow(workflows[i], i));
                 }
             }
 
-            function NewWorkflowRow(workflow) {
-                var html = '<tr><td>' + workflow.step + '</td> <td>' + workflow.workflowAction.name + '</td>' +
+            function NewWorkflowRow(workflow, index) {
+                var html = '<tr><td>' + (Number(index) + 1) + '</td> <td>' + workflow.workflowAction.name + '</td>' +
                     '<td><a class="btn btn-outline-dark" href="WorkflowStaff?id=' + workflow.id + '">Setup Staff</a></th> </tr>';
 
                 return html;
