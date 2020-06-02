@@ -1,0 +1,110 @@
+﻿@page
+@using BsslProcurement.UtilityMethods;
+@model BsslProcurement.ApprovedRequisitionsModel
+@{
+    ViewData["Title"] = "Saved Requisitions";
+    Layout = "~/Pages/Shared/_Layout.cshtml";
+}
+
+
+<div class="row mt-5">
+    <div class="col-md-1"></div>
+    <div class="col-md-11">
+        <form method="post" class="panel panel-login">
+            <div class="panel-heading">
+                <div class="row">
+                    <p class="header-text">@ViewData["Title"]</p>
+                </div>
+                <hr>
+            </div>
+            <div asp-validation-summary="All" class="text-danger"></div>
+
+            @if (!string.IsNullOrWhiteSpace(Model.Message))
+            {
+                <div class="alert alert-success alert-dismissable fade show">
+                    <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                    @Model.Message
+                </div>
+            }
+            @if (!string.IsNullOrWhiteSpace(Model.Error))
+            {
+                <div class="alert alert-danger alert-dismissable fade show">
+                    <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                    @Model.Error
+                </div>
+            }
+
+
+            @*<button class="btn btn-primary pt-2" asp-page="NewRequisition">Add New</button>*@
+
+            <a asp-page="NewRequisition" role="button" class="btn btn-primary">Create Requisition</a>
+           
+            <div class="row pt-3 " style="">
+                <div class="col-12 table-responsive table-responsive-sm">
+                    <table id="reqTable" class="table  table-striped">
+                        <thead>
+                            <tr class="table-primary">
+                                <th>S/N</th>
+                                <th>PR Number</th>
+                                <th>Request Description</th>
+                                <th>Expected Delivery Date</th>
+                                <th>No Of Items</th>
+                                <th>Attachments</th>
+                                <th>Delivery Destination</th>
+                                <th>Prepared By</th>
+                                <th>Prepared For</th>
+                                <th>Date Saved</th>
+                                <th>Status</th>
+                                <th>Action</th>
+                            </tr>
+                        </thead>
+
+
+                        <tbody>
+
+                            @if (Model.Requisitions != null && Model.Requisitions.Any())
+                            {
+
+                                @for (int i = 0; i < Model.Requisitions.Count; i++)
+                                {
+                                    var item = Model.Requisitions[i];
+                            <tr>
+                                <td>@(i + 1)</td>
+                                <td>@item.PRNumber</td>
+                                <td>@item.Description</td>
+                                <td>@(((DateTime)item.DeliveryDate).ToShortDateString())</td>
+                                <td>@item.RequisitionItems.Count</td>
+                                <td>@(item.RequisitionItems.Any(x=> x.Attachment != null)? "Contains attachment(s)": "No attachment")</td>
+                                <td>@item.RequiredAtDepartment</td>
+                                <td>@item.PreparedBy</td>
+                                <td>@item.PreparedFor</td>
+                                <td>@item.DateCreated.Value.ToShortNigeriaDateString()</td>
+                                <td>@item.Status</td>
+                                <td><a asp-page="./NewRequisition" asp-route-id="@item.Id" style="color: #007bff">Continue Process</a></td>
+                            </tr>
+                                }
+                            }
+                        </tbody>
+                        <tfoot>
+                            @*<tr class="font-weight-bold">
+                                    <td class="text-right" style="text-align: right;" colspan="8">Total :</td>
+                                    <td>@Model.Requisitions.Sum(x => x.)</td>
+                                </tr>*@
+                        </tfoot>
+                    </table>
+                </div>
+            </div>
+
+
+
+
+        </form>
+    </div>
+</div>
+@section Scripts{ 
+
+<script>
+    $("#reqTable").DataTable();
+</script>
+
+}

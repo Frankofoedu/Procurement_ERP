@@ -32,7 +32,7 @@ namespace BsslProcurement.Services
         }
         public async Task<List<Requisition>> GetRequisitionsForLoggedInUser(string userId)
         {
-            return await _procurementDBContext.Requisitions.Include(x => x.RequisitionItems).Where(p => p.LoggedInUserId == userId && p.isSubmitted == true).ToListAsync();
+            return await _procurementDBContext.Requisitions.Include(x => x.RequisitionItems).Where(p => p.LoggedInUserId == userId).ToListAsync();
         }
         public async Task<List<Requisition>> GetSavedRequisitionsForLoggedInUser(string userId)
         {
@@ -155,12 +155,21 @@ namespace BsslProcurement.Services
 
             return new WorkFlowApproverViewModel { Remark = job.Remark, AssignedStaffCode = staffCode, WorkFlowTypeId = DcProcurement.Constants.RequisitionWorkflowId, WorkFlowId  = job.WorkFlowId };
         }
+        public async Task<List<Requisition>> GetSubmittedRequisitionsForLoggedInUser(string userId)
+        {
+            return await _procurementDBContext.Requisitions.Include(x => x.RequisitionItems).Where(p => p.LoggedInUserId == userId && p.isSubmitted == true).ToListAsync();
 
+        }
+        public async Task<List<Requisition>> GetApprovedRequisitionsForLoggedInUser(string userId)
+        {
+            return await _procurementDBContext.Requisitions.Include(x => x.RequisitionItems).Where(p => p.LoggedInUserId == userId && p.isSubmitted == true && p.isApproved == true).ToListAsync();
+
+        }
 
 
         private async Task<string> GetStaffIdFromCodeAsync(string staffCode) => (await _procurementDBContext.Staffs.FirstOrDefaultAsync(x => x.StaffCode == staffCode)).Id;
         private async Task<string> GetStaffCodeFromIdAsync(string staffId) => (await _procurementDBContext.Staffs.FindAsync(staffId)).Id;
 
-        
+    
     }
 }
