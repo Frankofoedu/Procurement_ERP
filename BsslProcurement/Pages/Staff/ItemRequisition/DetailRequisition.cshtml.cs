@@ -49,6 +49,8 @@ namespace BsslProcurement.Pages.Staff.ItemRequisition
         public List<ItemGridViewModel> ItemGridViewModels { get; set; }
         [BindProperty]
         public WorkFlowApproverViewModel WfVm { get; set; }
+        [BindProperty]
+        public string QuarantineRemark { get; set; }
 
         public async Task OnGetAsync(string returnUrl = null)
         {
@@ -66,7 +68,9 @@ namespace BsslProcurement.Pages.Staff.ItemRequisition
             Requisition = await _context.Requisitions.FirstOrDefaultAsync(x => x.Id == Id);
 
             var RequisitionJobs = await _context.RequisitionJobs.Include(n=>n.Workflow).ThenInclude(n=>n.WorkflowAction)
-                .Include(m=>m.Staff).Where(x => x.RequisitionId == Requisition.Id).ToListAsync();
+                .Include(m=>m.Staff).Where(x => x.RequisitionId == Requisition.Id && x.JobStatus!= Enums.JobState.NotDone)
+                .OrderByDescending(m=>m.Id).ToListAsync();
+
             foreach (var item in RequisitionJobs)
             {
                 RequisitionJobRemarks += $"{item.Staff.Name.ToUpper()} -- ({item.Workflow.WorkflowAction.Name}) -- : {item.Remark} \n\n";
@@ -125,13 +129,9 @@ namespace BsslProcurement.Pages.Staff.ItemRequisition
 
             try
             {
+                await _requisitionService.SendToQuarantine(Id, $"Quarantined - {QuarantineRemark}");
 
-                Requisition.Id = Id;
-                _context.Remove(Requisition);
-                await _context.SaveChangesAsync();
-
-                Message = "Requisition Deleted successfully";
-
+                Message = "Requisition Quarantined";
             }
             catch (Exception ex)
             {
