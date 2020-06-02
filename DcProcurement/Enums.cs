@@ -12,5 +12,6 @@ namespace DcProcurement
         public enum JobState { Done, Cancelled, NotDone };
         public enum SubmittedBidState { Saved, Submitted };
         public enum WorkflowStaffState { Normal, Suspended };
+        public enum RequisitionState { Saved, Submitted, Approved, Quarantined };
     }
 }
