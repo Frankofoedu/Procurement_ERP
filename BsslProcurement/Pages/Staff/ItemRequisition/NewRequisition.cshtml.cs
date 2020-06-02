@@ -63,6 +63,8 @@ namespace BsslProcurement.Pages.Staff.ItemRequisition
         public WorkFlowApproverViewModel WfVm { get; set; }
         [BindProperty]
         public string UserCode { get; set; }
+        [BindProperty]
+        public string QuarantineRemark { get; set; }
         #endregion
 
         public NewRequisitionModel(UserManager<User> userManager,
@@ -128,22 +130,22 @@ namespace BsslProcurement.Pages.Staff.ItemRequisition
                         }
 
                         await SaveOrSubmitRequisition(true, true);
-                        await _requisitionService.SendRequisitionToNextStageAsync(Requisition.Id,
-                          WfVm.AssignedStaffCode, WfVm.WorkFlowId, WfVm.Remark);
-                        Message = "Requisition Updated and Submitted successfully";
                     }
                     else
                     {
                         //save requisition
                         await SaveOrSubmitRequisition(true, false);
-
-                        //create and assign requisition job
-                        await _requisitionService.SendRequisitionToNextStageAsync(Requisition.Id,
-                            WfVm.AssignedStaffCode, WfVm.WorkFlowId, WfVm.Remark);
-
-
-                        Message = "Requisition Added successfully";
                     }
+
+                    //create and mark done initiator requisition job
+                    await _requisitionService.CreateInitiatorJobAsync(Requisition.Id, (await GetCurrentUserAsync()).Id, WfVm.Remark);
+
+                    //create and assign next requisition job
+                    await _requisitionService.SendRequisitionToNextStageAsync(Requisition.Id,
+                        WfVm.AssignedStaffCode, WfVm.WorkFlowId, WfVm.Remark);
+
+                    Message = "Requisition Submitted successfully";
+
 
                    return RedirectToPage(new { message="Requisition submitted successfully"});
 
@@ -172,11 +174,9 @@ namespace BsslProcurement.Pages.Staff.ItemRequisition
                 {
                     if (id != null)
                     {
-                        Requisition.Id = id.Value;
-                        _procContext.Remove(Requisition);
-                        await _procContext.SaveChangesAsync();
+                        await _requisitionService.SendToQuarantine(id.Value, $"Quarantined - {QuarantineRemark}");
 
-                        Message = "Requisition Deleted successfully";
+                        Message = "Requisition Quarantined";
                     }
                 }
                 catch (Exception ex)
@@ -273,7 +273,7 @@ namespace BsslProcurement.Pages.Staff.ItemRequisition
             //save requisition items
             Requisition.RequisitionItems = await GetRequisitionItemsFromViewModel(gridVm);   
                        
-            Requisition.isSubmitted = isSubmitted;
+            Requisition.RequisitionState = isSubmitted ? Enums.RequisitionState.Submitted : Enums.RequisitionState.Saved;
 
             Requisition.Status = isSubmitted ? "Sent For Processing" : "Saved";
 
@@ -304,7 +304,7 @@ namespace BsslProcurement.Pages.Staff.ItemRequisition
             }
 
 
-            _procContext.SaveChanges();
+            await _procContext.SaveChangesAsync();
             
         }
 
