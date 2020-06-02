@@ -38,27 +38,28 @@ namespace BsslProcurement.Pages.Staff.Workflow
         public List<Input> InputModel { get; set; }
         [BindProperty]
         public int CategoryId { get; set; }
+        [BindProperty]
+        public string CategoryName { get; set; }
 
         public List<DcProcurement.WorkflowAction> WorkflowActions { get; set; }
 
         public string Message { get; set; }
         public string Error { get; set; }
 
-        public void OnGet()
+        public async Task OnGetAsync()
         {
-            WorkflowActions = _context.WorkflowActions.ToList();
+            WorkflowActions = await _context.WorkflowActions.Where(m=>m.Name != Constants.RequisitionInitiatorActionName).ToListAsync();
             foreach (var item in WorkflowActions) item.Workflows = null;
 
             ViewData["Categories"] = new SelectList(_context.WorkflowTypes, "Id", "Name");
-
         }
 
-        public void OnPost()
+        public async Task OnPostAsync()
         {
             if (!ModelState.IsValid)
             {
                 Error = "An Error occured. Please check the data and try again.";
-                WorkflowActions = _context.WorkflowActions.ToList();
+                WorkflowActions = await _context.WorkflowActions.Where(m => m.Name != Constants.RequisitionInitiatorActionName).ToListAsync();
                 foreach (var item in WorkflowActions) item.Workflows = null;
 
                 ViewData["Categories"] = new SelectList(_context.WorkflowTypes, "Id", "Name");
@@ -66,6 +67,22 @@ namespace BsslProcurement.Pages.Staff.Workflow
             }
 
             var newPWF = new List<DcProcurement.Workflow>();
+            var count = 0;
+
+            if (CategoryName == Constants.RequisitionWorkflow)
+            {
+                var initiatorAction = await _context.WorkflowActions.FirstOrDefaultAsync(m=>m.Name == Constants.RequisitionInitiatorActionName);
+                count++;
+
+                var initiatorWf = new DcProcurement.Workflow()
+                {
+                    WorkflowTypeId = CategoryId,
+                    WorkflowActionId = initiatorAction.Id,
+
+                    Step = count,
+                };
+                newPWF.Add(initiatorWf);
+            }
 
             for (var i = 0; i < InputModel.Count; i++)
             {
@@ -76,7 +93,7 @@ namespace BsslProcurement.Pages.Staff.Workflow
                     WorkflowTypeId = CategoryId,
                     WorkflowActionId = item.WorkflowActionId,
 
-                    Step = i + 1,
+                    Step = i + count + 1,
                 };
 
                 newPWF.Add(pwf);
@@ -85,21 +102,21 @@ namespace BsslProcurement.Pages.Staff.Workflow
             if (newPWF.Count < 1)
             {
                 Error = "An Error Occured. Make sure make sure one or more workflow steps are added.";
-                WorkflowActions = _context.WorkflowActions.ToList();
+                WorkflowActions = await _context.WorkflowActions.Where(m => m.Name != Constants.RequisitionInitiatorActionName).ToListAsync();
                 foreach (var item in WorkflowActions) item.Workflows = null;
 
                 ViewData["Categories"] = new SelectList(_context.WorkflowTypes, "Id", "Name");
                 return;
             }
 
-            var curWF = _context.Workflows.Where(m => m.WorkflowTypeId == CategoryId).OrderBy(n => n.Step).ToList();
+            var curWF = await _context.Workflows.Where(m => m.WorkflowTypeId == CategoryId).OrderBy(n => n.Step).ToListAsync();
             _context.Workflows.RemoveRange(curWF);
             _context.Workflows.AddRange(newPWF);
 
             _context.SaveChanges();
 
             InputModel = null;
-            WorkflowActions = _context.WorkflowActions.ToList();
+            WorkflowActions = await _context.WorkflowActions.Where(m => m.Name != Constants.RequisitionInitiatorActionName).ToListAsync();
             foreach (var item in WorkflowActions) item.Workflows = null;
 
             ViewData["Categories"] = new SelectList(_context.WorkflowTypes, "Id", "Name", CategoryId);
@@ -111,10 +128,10 @@ namespace BsslProcurement.Pages.Staff.Workflow
         {
 
             //get all staff and thier ranks
-            var staffs = _bsslContext.Stafftab.Select(x => new StaffLayoutModel { StaffCode = x.Staffid, StaffName = x.Othernames, Rank = _bsslContext.Codestab.Where(m => m.Option1 == "f4" && m.Code == x.Positionid).FirstOrDefault().Desc1 }).ToList();
+            var staffs = _bsslContext.Stafftab.Select(x => new StaffLayoutModel { StaffCode = x.Staffid, StaffName = x.Othernames, Rank = _bsslContext.Codestab.Where(m => m.Option1 == "f4" && m.Code == x.Positionid).FirstOrDefault().Desc1 }).ToListAsync();
 
 
-            //           var  = _bsslContext.Stafftab.ToList();
+            //           var  = _bsslContext.Stafftab.ToListAsync();
             return new PartialViewResult
             {
                 ViewName = "_StaffLayout",

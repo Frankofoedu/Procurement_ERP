@@ -9,7 +9,7 @@
 <div class="row mt-5">
     <div class="col-md-1"></div>
     <div class="col-md-11">
-        <form method="post" class="panel panel-login">
+        <div class="panel panel-login">
             <div class="panel-heading">
                 <div class="row">
                     <p class="header-text">Requisition Tasks</p>
@@ -33,36 +33,57 @@
                 </div>
             }
 
-
-            @*<button class="btn btn-primary pt-2" asp-page="NewRequisition">Add New</button>*@
-
-            @*<a asp-page="NewRequisition" role="button" class="btn btn-primary">New Requisition</a>*@
-
+            <form method="post" class="row">
+                <div class="form-group">
+                    <div class="input-group ml-4 mb-2">
+                        <div class="input-group-prepend">
+                            <label class="input-group-text">Filter Action Type</label>
+                        </div>
+                        <select class="form-control" asp-items="Model.RequisitionWorkFlows" asp-for="WorkflowId">
+                            <option value="0">All</option>
+                        </select>
+                        <div class="input-group-append">
+                            <button class="btn btn-outline-dark" type="submit">Filter</button>
+                        </div>
+                    </div>
+                </div>
+            </form>
             <div class="row pt-3 " style="">
                 <div class="col-12 table-responsive table-responsive-sm">
-                    <table class="table  table-striped">
+                    <table class="table table-striped" id="jobsTable">
                         <thead>
                             <tr class="table-primary">
                                 <th>S/N</th>
                                 <th>Job Action Type</th>
+                                <th>PR No</th>
+                                <th>Request Description</th>
+                                <th>No of Items</th>
+                                <th>Prepared by</th>
+                                <th>Prepared for</th>
+                                <th>Approval Staff</th>
                                 <th>Date Assigned</th>
                                 <th>Action</th>
                             </tr>
                         </thead>
 
-
                         <tbody>
-
                             @if (Model.RequisitionJobs.Any())
                             {
-
                                 @for (int i = 0; i < Model.RequisitionJobs.Count(); i++)
                                 {
                                     var Item = Model.RequisitionJobs[i];
+                                    var PrevItem = Model.PreviousRequisitionJobs[i];
 
                                     <tr>
                                         <td>@(i + 1).</td>
                                         <td>@Item.Workflow.WorkflowAction.Name</td>
+                                        <td>@Item.Requisition.PRNumber</td>
+                                        <td>@Item.Requisition.Description</td>
+                                        <td>@Item.Requisition.RequisitionItems.Count</td>
+                                        <td>@Item.Requisition.PreparedBy</td>
+                                        <td>@Item.Requisition.PreparedFor</td>
+                                        @if (PrevItem.Id > 0) {<td> @PrevItem.Staff.Name </td>}
+                                        else { <td></td>}
                                         <td>@Item.CreationDate.ToShortDateString()</td>
                                         <td><a asp-page="/Staff/Itemrequisition/DetailRequisition" asp-route-Id="@Item.RequisitionId" asp-route-returnUrl="@Url.Page("/Staff/Jobviews/requisitionjobs", new { area = "" })" style="color: #007bff">View</a></td>
                                     </tr>
@@ -74,6 +95,12 @@
                     </table>
                 </div>
             </div>
-        </form>
+        </div>
     </div>
 </div>
+
+<script>
+    $(document).ready(function () {
+        $("#jobsTable").DataTable();
+    });
+</script>

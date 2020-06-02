@@ -13,7 +13,7 @@ namespace BsslProcurement.Interfaces
 
         Task<List<WorkFlowTypesViewModel>> GetCurrentWorkActionflowStepsAsync(int workFlowId, int workflowTypeId);
 
-        Task<List<WorkFlowTypesViewModel>> GetPreviousWorkActionflowStepsAsync(int workFlowId, int workflowTypeId);
+        Task<List<WorkFlowTypesViewModel>> GetPreviousWorkActionflowStepsAsync(int requisitionId);
 
         Task<WorkFlowTypesViewModel> GetFirstWorkActionflowStepAsync(int workflowTypeId);
 

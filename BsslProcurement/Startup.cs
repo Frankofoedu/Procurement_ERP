@@ -66,7 +66,7 @@ namespace BsslProcurement
             //conn = Configuration.GetValue<string>("OnlineITFTestConnection");
             // }
 
-            services.AddDbContext<ProcurementDBContext>(options => options.UseSqlServer(connection, b => b.MigrationsAssembly("BsslProcurement")));
+            services.AddDbContext<ProcurementDBContext>(options => options.UseSqlServer(connection, b => b.MigrationsAssembly("BsslProcurement")).EnableSensitiveDataLogging(true));
 
             services.AddDbContext<BSSLSYS_ITF_DEMOContext>(options => options.UseSqlServer(conn, b => b.MigrationsAssembly("BsslProcurement")));
 

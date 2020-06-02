@@ -9,12 +9,12 @@ namespace DcProcurement.Jobs
     {
         private RequisitionJob() { }
 
-        public RequisitionJob(int reqId, string staffId,int workflowId, string remark) 
+        public RequisitionJob(int reqId, string staffId,int workflowId) 
         {
             RequisitionId = reqId;
             CreationDate = DateTime.Now;
             StaffId = staffId;
-            Remark = remark;
+            Remark = "";
             WorkFlowId = workflowId;
             JobStatus = Enums.JobState.NotDone;
         }
@@ -22,6 +22,9 @@ namespace DcProcurement.Jobs
         [ForeignKey("RequisitionId")]
         public Requisition Requisition { get; private set; }
 
-      
+        public static RequisitionJob Empty()
+        {
+            return new RequisitionJob();
+        }
     }
 }

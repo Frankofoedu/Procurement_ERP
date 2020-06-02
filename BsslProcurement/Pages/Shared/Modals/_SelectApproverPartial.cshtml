@@ -41,7 +41,7 @@
     {
         <div class="row">
             <div class="col-12">
-                <div class="form-group mb-0">
+                <div class="form-group mb-0 d-flex justify-content-around">
                     <label class="btn btn-outline-dark"><input type="radio" asp-for="SelectedAction" checked value="Next" /> Send to Next Process</label>
                     <label class="btn btn-outline-dark"><input type="radio" asp-for="SelectedAction" value="Further" /> Send for Further Processing</label>
                     <label class="btn btn-outline-dark"><input type="radio" asp-for="SelectedAction" value="Previous" /> Send to Previous Process</label>
@@ -123,23 +123,29 @@ else
 }
 
 <script>
+    var workflowdata = [];
+
     $(document).ready(function () {
         FillSelectActions();
 
         $("input[name='SelectedAction']").change(function () {
             FillSelectActions();
         });
+
+
     });
 
     function FillSelectActions() {
 
         var action = $('input[name="SelectedAction"]:checked').val();
+        var reqId = $('#reqId').val();
 
         $.ajax({
-            url: window.location.origin + "/api/workflow/WorkflowForAction?action=" +
-                action + "&workflowId=" + @Model.WorkFlowId + "&workflowTypeId=" + @Model.WorkFlowTypeId.Value,
+            url: window.location.origin + "/api/workflow/WorkflowForAction?action=" + action + "&workflowId="
+                + @Model.WorkFlowId + "&workflowTypeId=" + @Model.WorkFlowTypeId.Value + "&reqId=" + reqId,
 
         }).done(function (data) {
+            workflowdata = data;
 
             var options = '';
             for (var i = 0; i < data.length; i++) {
@@ -147,10 +153,57 @@ else
             }
 
             $("#selectAction").html(options);
+
+            $('.loadWorkflowStaffModal').prop('disabled', action.toLowerCase() === 'previous');
+
+            $('#selectAction').change();
         });
 
     }
+    
+    //to load staff modal for selecting next workflow staff
+    $(function () {
+        $('#selectAction').change(function () {
+            var selCheck = $('input[name="SelectedAction"]:checked').val();
+            if (selCheck.toLowerCase() === 'previous') {
+                var selActionId = $('#selectAction').val();
+                var v = workflowdata;
+                for (var i = 0; i < workflowdata.length; i++) {
+                    if (selActionId == workflowdata[i].id) {
 
+                        //assign staff name textbox
+                        $('#txtWorkflowStaffName').val(workflowdata[i].staffName);
+
+                        //assign staff code textbox
+                        $('#txtWorkflowStaffCode').val(workflowdata[i].staffCode);
+
+
+                        var rankURL = window.location.origin + "/api/Users/GetStaffRank/" + workflowdata[i].staffCode;
+
+                        $.ajax({
+                            url: rankURL,
+
+                        }).done(function (data) {
+                            //assign rank to rank textbox
+                            $('#txtWorkflowStaffDesignation').val(data);
+                        });
+
+                        break;
+                    }
+                }
+            }
+            else {
+                //empty staff name textbox
+                $('#txtWorkflowStaffName').val('');
+
+                //empty staff code textbox
+                $('#txtWorkflowStaffCode').val('');
+
+                //empty rank to rank textbox
+                $('#txtWorkflowStaffDesignation').val('');
+            }
+        });
+    });
     //to load staff modal for selecting next workflow staff
     $(function () {
         $('.loadWorkflowStaffModal').on('click', function () {

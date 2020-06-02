@@ -40,7 +40,7 @@ namespace BsslProcurement.Services
             if (oldReqJob != null)
             {
                 //update old requisitions jobs to done
-                oldReqJob.SetAsDone(DateTime.Now);
+                oldReqJob.SetAsDone(DateTime.Now, remark);
 
                 //checks if job is at final stage for that requistion
                 var maxWorkFlow = reqWorkFlow.Last();
@@ -52,7 +52,7 @@ namespace BsslProcurement.Services
 
                     if (requisition != null)
                     {
-                        requisition.isApproved = true;
+                        requisition.RequisitionState = Enums.RequisitionState.Approved;
                     }
 
                 }
@@ -60,7 +60,7 @@ namespace BsslProcurement.Services
                 {
                     //send to next step
                     //create new job for next stage
-                    var newReqJob = new ProcurementJob(requisitionId, staffId, newWorkflowId, remark);
+                    var newReqJob = new ProcurementJob(requisitionId, staffId, newWorkflowId);
                     _procurementDBContext.ProcurementJobs.Add(newReqJob);
                 }
 
@@ -69,7 +69,7 @@ namespace BsslProcurement.Services
             {
 
                 //create new job for next stage
-                var newReqJob = new ProcurementJob(requisitionId, staffId, newWorkflowId, remark);
+                var newReqJob = new ProcurementJob(requisitionId, staffId, newWorkflowId);
                 _procurementDBContext.ProcurementJobs.Add(newReqJob);
             }
 
@@ -80,12 +80,12 @@ namespace BsslProcurement.Services
 
         public async Task<List<Requisition>> GetApprovedRequisitions()
         {
-            return await _procurementDBContext.Requisitions.Include(x => x.RequisitionItems).Where(p => p.isApproved == true).ToListAsync();
+            return await _procurementDBContext.Requisitions.Include(x => x.RequisitionItems).Where(p => p.RequisitionState == Enums.RequisitionState.Approved).ToListAsync();
         }
 
         public async Task<List<Requisition>> GetRequisitionsForPricing()
         {
-            return await _procurementDBContext.Requisitions.Include(x => x.RequisitionItems).Where(p => p.isPriced == false && p.isApproved == true).ToListAsync();
+            return await _procurementDBContext.Requisitions.Include(x => x.RequisitionItems).Where(p => p.isPriced == false && p.RequisitionState == Enums.RequisitionState.Approved).ToListAsync();
         }
 
         public Task SendRequisitionToPreviousStage(int requisitionId, string currStaffCode, string newStaffCode, int newStage, string remark)

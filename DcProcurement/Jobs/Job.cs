@@ -29,14 +29,16 @@ namespace DcProcurement
 
 
 
-        public void SetAsDone(DateTime doneDate)
+        public void SetAsDone(DateTime doneDate, string remark)
         {
+            Remark = remark;
             JobStatus = Enums.JobState.Done;
             DoneDate = doneDate;
         }
 
-        public void SetAsCancelled(DateTime doneDate)
+        public void SetAsCancelled(DateTime doneDate, string remark)
         {
+            Remark = remark;
             JobStatus = Enums.JobState.Cancelled;
             DoneDate = doneDate;
         }
