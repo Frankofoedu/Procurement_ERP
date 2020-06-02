@@ -29,55 +29,66 @@ namespace BsslProcurement.Pages.Staff.Workflow
         public List<WorkflowAction> workflowActions { get; set; }
         public List<bool> workflowActionDeletable { get; set; }
 
-        public void OnGet(int? id)
+        public async Task OnGetAsync(int? id)
         {
             if (id != null)
             {
-                workflowAction = _context.WorkflowActions.Find(id.Value);
+                workflowAction = await _context.WorkflowActions.FirstOrDefaultAsync(m => m.Id == id.Value);
             }
             else workflowAction = new WorkflowAction();
 
-            workflowActions = _context.WorkflowActions.Include(m=>m.Workflows).ToList();
+            workflowActions = await _context.WorkflowActions.Include(m => m.Workflows).Where(m => m.Name != Constants.RequisitionInitiatorActionName).ToListAsync();
         }
 
-        public async void OnPost(int? id)
+        public async Task OnPost(int? id)
         {
-            if (!ModelState.IsValid)
+            try
             {
-                Error = "Invalid Data!";
-            }
-            else if (id.HasValue && workflowAction.Id == id.Value)
-            {
-                var wfa = _context.WorkflowActions.Find(id.Value);
-
-                if (wfa != null)
+                if (!ModelState.IsValid)
                 {
-                    wfa.Description = workflowAction.Description;
-                    wfa.Name = workflowAction.Name;
-                    _context.SaveChanges();
+                    Error = "Invalid Data!";
+                }
+                else if (id.HasValue && workflowAction.Id == id.Value)
+                {
+                    var wfa = await _context.WorkflowActions.FirstOrDefaultAsync(m => m.Id == id.Value);
 
-                    Message = "Update was successful.";
+                    if (wfa != null)
+                    {
+                        wfa.Description = workflowAction.Description;
+                        wfa.Name = workflowAction.Name;
+                        await _context.SaveChangesAsync();
+
+                        Message = "Update was successful.";
+                    }
+                    else
+                    {
+                        Error = "Action Not Found!";
+                    }
                 }
                 else
                 {
-                    Error = "Action Not Found!";
+                    var check = await _context.WorkflowActions.AnyAsync(m => m.Name == workflowAction.Name);
+                    if (check)
+                    {
+                        Error = "The Workflow Action Name already exists.";
+                    }
+                    else
+                    {
+                        _context.WorkflowActions.Add(workflowAction);
+                        await _context.SaveChangesAsync();
+                        Message = "Workflow Action added successfully.";
+                    }
                 }
             }
-            else
+            catch (Exception)
             {
-                try
-                {
-                    _context.WorkflowActions.Add(workflowAction);
-                    _context.SaveChanges();
-                    Message = "Workflow Action added successfully.";
-                }
-                catch (Exception)
-                {
-                    Error = "An error occured during save. Please check the data and try again.";
-                }
+                Error = "An error occured during save. Please check the data and try again.";
+            }
+            finally
+            {
+                workflowActions = await _context.WorkflowActions.Include(m => m.Workflows).Where(m => m.Name != Constants.RequisitionInitiatorActionName).ToListAsync();
             }
 
-            workflowActions = _context.WorkflowActions.Include(m => m.Workflows).ToList();
         }
     }
 }
