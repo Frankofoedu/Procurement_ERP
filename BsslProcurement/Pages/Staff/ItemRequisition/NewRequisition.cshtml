@@ -238,6 +238,7 @@
 
                                                             <input asp-for="gridVm[i].Attachment" data-attachment="@i" accept=".pdf" class="fileItem" />
                                                             <button data-preview="@i" hidden class="btnPreviewItemAttachment">Preview</button>
+                                                            <button data-remove="@i" hidden class="btnRemoveFile btn btn-outline-danger"><i class="fa fa-times"></i></button>
                                                         }
                                                     </div>
                                                 </td>
@@ -274,6 +275,7 @@
                                                 <div class="d-flex flex-row">
                                                     <input asp-for="gridVm[0].Attachment" data-attachment="0" accept=".pdf" class="fileItem" />
                                                     <button data-preview="0" hidden class="btnPreviewItemAttachment">Preview</button>
+                                                    <button data-remove="0" hidden class="btnRemoveFile btn btn-outline-danger"><i class="fa fa-times"></i></button>
                                                 </div>
                                             </td>
                                             <td>
@@ -438,9 +440,37 @@
                             <button type="button" class="btn btn-lg btn-primary" data-toggle="modal" data-target="#approverModal">Send to Next Process</button>
                             @if (Model.Requisition != null)
                             {
+                                <div class="modal fade" id="quarantineModal" role="dialog" aria-hidden="true">
+                                    <div class="modal-dialog modal-lg modal-dialog-centered" role="document">
+                                        <div class="modal-content">
+                                            <div class="modal-header">
+                                                <h5 class="modal-title">Quarantine</h5>
+                                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                                    <span aria-hidden="true">&times;</span>
+                                                </button>
+                                            </div>
+                                            <div class="modal-body">
+                                                <div class="row">
+                                                    <div class="col-sm-12">
+                                                        <label>Reason : </label>
+                                                        <span class="d-flex flex-row">
+                                                            <textarea class="form-control" asp-for="QuarantineRemark"></textarea>
+                                                        </span>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="modal-footer justify-content-around">
+                                                <input id="btnQuarantine" type="submit" asp-route-id="@Model.Requisition.Id" asp-page-handler="Quarantine" class="btn btn-lg btn-outline-danger" value="Quarantine" />
+
+                                                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
                                 <input type="hidden" asp-for="Requisition.Id" />
 
-                                <input id="btnQuarantine" type="submit" asp-route-id="@Model.Requisition.Id" asp-page-handler="Quarantine" class="btn btn-lg btn-outline-danger" value="Quarantine" />
+                                <input data-toggle="modal" data-target="#quarantineModal" class="btn btn-lg btn-primary" value="Quarantine" type="button" placeholder="" />
                             }
                             <button id="printBtn" class="btn btn-lg btn-info" onclick="print(); return false;">Print/Preview</button>
                         </div>
@@ -683,6 +713,8 @@
                     var previewBtn = $(`button[data-preview=${id}]`);
                     previewBtn.removeAttr('hidden');
                     previewBtn.attr('src', e.target.result)
+                    var removeBtn = $(`button[data-remove=${id}]`);
+                    removeBtn.removeAttr('hidden');
                 }
 
                 reader.readAsDataURL(input.files[0]);
@@ -693,6 +725,17 @@
         $('#requisitionBody').on('click', '.btnPreviewItemAttachment', function (e) {
             var url = $(this).attr('src');
             displayPhotos(url);
+            e.preventDefault();
+        });
+
+        //remove attachment button
+        $('#requisitionBody').on('click', '.btnRemoveFile', function (e) {
+            var id = $(this).attr('data-remove');
+            $(`input[data-attachment=${id}]`).val('');
+
+            $(`button[data-preview=${id}]`).prop("hidden", true);
+            $(`button[data-remove=${id}]`).prop("hidden", true);
+
             e.preventDefault();
         });
         function displayPhotos(url) {
@@ -939,35 +982,35 @@
 
 
         function newStepRow(index) {
-
             var html = `<tr class="row${index}">
-                        <td>
-                            <input type="text" required="" id="gridVm_${index}__RequisitionItem_Description" name="gridVm[${index}].RequisitionItem.Description" value="">
-                                                    </td>
                             <td>
-                                <input type="number" required="" oninput="this.value=this.value.replace(/[^${index}-9]/g,'');" data-val="true" data-val-required="The Quantity field is required." id="gridVm_${index}__RequisitionItem_Quantity" name="gridVm[${index}].RequisitionItem.Quantity" value="">
-
-                                                    </td>
+                                <input type="text" required="" id="gridVm_${index}__RequisitionItem_Description" name="gridVm[${index}].RequisitionItem.Description" value="">
+                                                        </td>
                                 <td>
-                                    <div class="d-flex flex-row">
-                                        <input type="text" readonly="" required="" data-value="forUOM ${index}" id="gridVm_${index}__RequisitionItem_UnitOfMeasurement" name="gridVm[${index}].RequisitionItem.UnitOfMeasurement" value="">
+                                    <input type="number" required="" oninput="this.value=this.value.replace(/[^0-9]/g,'');" data-val="true" data-val-required="The Quantity field is required." id="gridVm_${index}__RequisitionItem_Quantity" name="gridVm[${index}].RequisitionItem.Quantity" value="">
 
-                                            <button class="btn loadUOMModal ml-1" value="forUOM ${index}" data-toggle="modal" data-target="#uomModal"><i class="fa fa-search"></i></button>
-                                                        </div>
-                                                    </td>
+                                                        </td>
                                     <td>
                                         <div class="d-flex flex-row">
-                                            <input data-attachment="${index}" accept=".pdf" class="fileItem" type="file" id="gridVm_${index}__Attachment" name="gridVm[${index}].Attachment">
-                                                <button data-preview="${index}" hidden="" class="btnPreviewItemAttachment">Preview</button>
-                                                        </div>
-                                                    </td>
-                                        <td>
-                                            <label class="del" delRow="${index}">
-                                                <i class="fa fa-trash-alt"></i>
-                                            </label>
-                                        </td>
+                                            <input type="text" readonly="" required="" data-value="forUOM ${index}" id="gridVm_${index}__RequisitionItem_UnitOfMeasurement" name="gridVm[${index}].RequisitionItem.UnitOfMeasurement" value="">
 
-                                                </tr>` ;
+                                                <button class="btn loadUOMModal ml-1" value="forUOM ${index}" data-toggle="modal" data-target="#uomModal"><i class="fa fa-search"></i></button>
+                                                            </div>
+                                                        </td>
+                                        <td>
+                                            <div class="d-flex flex-row">
+                                                <input data-attachment="${index}" accept=".pdf" class="fileItem" type="file" id="gridVm_${index}__Attachment" name="gridVm[${index}].Attachment">
+                                                    <button data-preview="${index}" hidden="" class="btnPreviewItemAttachment">Preview</button>
+                                                    <button data-remove="${index}" hidden class="btnRemoveFile btn btn-outline-danger"><i class="fa fa-times"></i></button>
+                                                            </div>
+                                                        </td>
+                                            <td>
+                                                <label class="del" delRow="${index}">
+                                                    <i class="fa fa-trash-alt"></i>
+                                                </label>
+                                            </td>
+
+                                                    </tr>` ;
             $('#requisitionBody').append(html);
         }
     </script>
