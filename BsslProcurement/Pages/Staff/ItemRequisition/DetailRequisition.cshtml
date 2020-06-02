@@ -85,7 +85,7 @@ else
                 <div class="panel-heading">
                     <div class="row">
                         <p class="header-text">Purchase Requisition For @Model.Requisition.PRNumber</p>
-
+                        <input id="reqId" type="hidden" value="@Model.Requisition.Id" placeholder="" />
                     </div>
                     <hr>
                 </div>
@@ -271,11 +271,40 @@ else
 
 
                             @*<div class="col-sm-4">
-            <div class="form-group">
-                <input class="btn btn-block btn-danger fa-print" value="Print" type="button" placeholder="Enter Resgistration Number" />
-            </div>
-        </div>*@
+                <div class="form-group">
+                    <input class="btn btn-block btn-danger fa-print" value="Print" type="button" placeholder="Enter Resgistration Number" />
+                </div>
+            </div>*@
                         </div>
+
+                        <div class="modal fade" id="quarantineModal" role="dialog" aria-hidden="true">
+                            <div class="modal-dialog modal-lg modal-dialog-centered" role="document">
+                                <div class="modal-content">
+                                    <div class="modal-header">
+                                        <h5 class="modal-title">Quarantine</h5>
+                                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                            <span aria-hidden="true">&times;</span>
+                                        </button>
+                                    </div>
+                                    <div class="modal-body">
+                                        <div class="row">
+                                            <div class="col-sm-12">
+                                                <label>Quarantine Reason : </label>
+                                                <span class="d-flex flex-row">
+                                                    <input class="form-control" asp-for="QuarantineRemark" />
+                                                </span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="modal-footer justify-content-around">
+                                        <input id="btnQuarantine" type="submit" asp-route-returnUrl="@Model.ReturnUrl" asp-page-handler="Quarantine" class="btn btn-lg btn-outline-danger" value="Quarantine" />
+
+                                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
                         @if (Model.WfVm != null)
                         {
                             <div class="modal fade" id="approverModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
@@ -304,7 +333,7 @@ else
 
                                 <input data-toggle="modal" data-target="#approverModal" class="btn btn-lg btn-primary" value="Send to Next Process" type="button" placeholder="" />
 
-                                <input id="btnQuarantine" type="submit" asp-route-returnUrl="@Model.ReturnUrl" asp-page-handler="Quarantine" class="btn btn-lg btn-outline-danger" value="Quarantine" />
+                                <input data-toggle="modal" data-target="#quarantineModal" class="btn btn-lg btn-primary" value="Quarantine" type="button" placeholder="" />
 
                                 <button id="printBtn" class="btn btn-lg btn-info" onclick="print(); return false;">Print/Preview</button>
                             </div>
