@@ -32,10 +32,6 @@ namespace BsslProcurement.Services
 
             return null;
         }
-        public async Task<List<Workflow>> GetRequisitionWorkflows()
-        {
-            return await _procurementDBContext.Workflows.Include(m=>m.WorkflowAction).Where(x => x.WorkflowTypeId == DcProcurement.Constants.RequisitionWorkflowId).OrderBy(x => x.Step).ToListAsync();
-        }
         public async Task<List<Requisition>> GetRequisitionsForLoggedInUser(string userId)
         {
             return await _procurementDBContext.Requisitions.Include(x => x.RequisitionItems).Where(p => p.LoggedInUserId == userId).ToListAsync();
@@ -197,12 +193,12 @@ namespace BsslProcurement.Services
         }
         public async Task<List<Requisition>> GetSubmittedRequisitionsForLoggedInUser(string userId)
         {
-            return await _procurementDBContext.Requisitions.Include(x => x.RequisitionItems).Where(p => p.LoggedInUserId == userId && p.isSubmitted == true).ToListAsync();
+            return await _procurementDBContext.Requisitions.Include(x => x.RequisitionItems).Where(p => p.LoggedInUserId == userId && p.RequisitionState== Enums.RequisitionState.Submitted).ToListAsync();
 
         }
         public async Task<List<Requisition>> GetApprovedRequisitionsForLoggedInUser(string userId)
         {
-            return await _procurementDBContext.Requisitions.Include(x => x.RequisitionItems).Where(p => p.LoggedInUserId == userId && p.isSubmitted == true && p.isApproved == true).ToListAsync();
+            return await _procurementDBContext.Requisitions.Include(x => x.RequisitionItems).Where(p => p.LoggedInUserId == userId && p.RequisitionState == Enums.RequisitionState.Approved).ToListAsync();
 
         }
 
