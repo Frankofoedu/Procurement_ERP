@@ -202,13 +202,13 @@ namespace BsslProcurement.Pages.Staff.ItemRequisition
                     {
                         await SaveOrSubmitRequisition(false, true);
                         Message = "Requisition Updated and Saved successfully";
-                        return RedirectToPage("SavedRequisitions", new {message= Message });
+                        return RedirectToPage(new { message = Message });
                     }
                     else
                     {
                         await SaveOrSubmitRequisition(false, false);
 
-                        return RedirectToPage("SavedRequisitions", new { message = "Requisition Saved" });
+                        return RedirectToPage(new { message = "Requisition Saved" });
                     }
                 }
                 catch (Exception ex)
