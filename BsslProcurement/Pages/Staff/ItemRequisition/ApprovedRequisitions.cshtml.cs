@@ -13,7 +13,7 @@ using Microsoft.AspNetCore.Mvc.RazorPages;
 
 namespace BsslProcurement
 {
-    [DisplayName("Saved Requisitions")]
+    [DisplayName("Approved Requisitions")]
     [Authorize]
     [NoDiscovery]
     public class ApprovedRequisitionsModel : PageModel
