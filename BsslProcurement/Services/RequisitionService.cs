@@ -197,12 +197,12 @@ namespace BsslProcurement.Services
         }
         public async Task<List<Requisition>> GetSubmittedRequisitionsForLoggedInUser(string userId)
         {
-            return await _procurementDBContext.Requisitions.Include(x => x.RequisitionItems).Where(p => p.LoggedInUserId == userId && p.isSubmitted == true).ToListAsync();
+            return await _procurementDBContext.Requisitions.Include(x => x.RequisitionItems).Where(p => p.LoggedInUserId == userId && p.RequisitionState == Enums.RequisitionState.Submitted).ToListAsync();
 
         }
         public async Task<List<Requisition>> GetApprovedRequisitionsForLoggedInUser(string userId)
         {
-            return await _procurementDBContext.Requisitions.Include(x => x.RequisitionItems).Where(p => p.LoggedInUserId == userId && p.isSubmitted == true && p.isApproved == true).ToListAsync();
+            return await _procurementDBContext.Requisitions.Include(x => x.RequisitionItems).Where(p => p.LoggedInUserId == userId && p.RequisitionState == Enums.RequisitionState.Approved).ToListAsync();
 
         }
 
