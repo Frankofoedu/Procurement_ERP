@@ -298,6 +298,15 @@ namespace BsslProcurement.Pages.Staff.ItemRequisition
             }
             else
             {
+                while (_procContext.Requisitions.Any(m=>m.PRNumber == Requisition.PRNumber))
+                {
+                    var arr = Requisition.PRNumber.Split('/');
+                    var SN = int.Parse(arr[4]);
+                    arr[4] = (SN + 1).ToString();
+
+                    Requisition.PRNumber = string.Join("/", arr);
+                }
+
                 _procContext.Requisitions.Add(Requisition);
 
                 SaveRequisitionNumber(Requisition.PRNumber);
