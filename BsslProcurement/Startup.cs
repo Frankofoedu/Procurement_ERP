@@ -77,6 +77,7 @@ namespace BsslProcurement
             services.AddScoped<IRequisitionService, RequisitionService>();
             services.AddScoped<IProcurementService, ProcurementService>();
             services.AddScoped<IGroupManagement, GroupManagementService>();
+            services.AddScoped<IJobService, JobService>();
             services.AddSingleton<IRazorPagesControllerDiscovery, RazorPagesControllerDiscovery>();
             services.AddSingleton(new DynamicAuthorizationOptions { DefaultAdminUser = Constants.AdminEmail });
 
