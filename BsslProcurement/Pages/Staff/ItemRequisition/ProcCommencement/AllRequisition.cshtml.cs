@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Linq;
 using System.Threading.Tasks;
 using BsslProcurement.Filters.Attributes;
@@ -17,6 +18,7 @@ namespace BsslProcurement.Pages.Staff.ItemRequisition.ProcCommencement
 {
     [Authorize]
     [NoDiscovery]
+    [DisplayName("Approved Requisitions")]
     public class AllRequisitionModel : PageModel
     {
         private readonly ProcurementDBContext _context;

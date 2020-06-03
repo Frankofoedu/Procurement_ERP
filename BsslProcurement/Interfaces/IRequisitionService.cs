@@ -13,6 +13,8 @@ namespace BsslProcurement.Interfaces
         Task<List<RequisitionJob>> GetRequisitionsJobsAssignedToLoggedInUser(string userId);
         Task<List<Requisition>> GetRequisitionsForLoggedInUser(string userId);
         Task<List<Requisition>> GetSavedRequisitionsForLoggedInUser(string userId);
+        Task<List<Requisition>> GetSubmittedRequisitionsForLoggedInUser(string userId);
+        Task<List<Requisition>> GetApprovedRequisitionsForLoggedInUser(string userId);
         Task<List<Requisition>> GetBudgetClearedRequisitions();
         Task<List<Workflow>> GetRequisitionWorkflows();
 
