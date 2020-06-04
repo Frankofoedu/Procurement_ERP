@@ -23,7 +23,7 @@ namespace BsslProcurement.Services
             var jobs = _procurementDBContext.RequisitionJobs
                 .Include(req=> req.Workflow).ThenInclude(wk => wk.WorkflowAction)
                 .Include(r=> r.Requisition).ThenInclude(ri=>ri.RequisitionItems)
-                .Where(x => x.StaffId == userId && x.JobStatus == Enums.JobState.NotDone);
+                .Where(x => x.StaffId == userId && ( x.JobStatus == Enums.JobState.NotDone || x.JobStatus == Enums.JobState.Rejected));
 
             if (jobs != null)
             {
@@ -107,14 +107,22 @@ namespace BsslProcurement.Services
         }
 
         //Create initiator job
-        public async Task CreateInitiatorJobAsync(int requisitionId, string staffId, string remark)
+        public async Task CreateInitiatorJobAsync(int requisitionId, string staffId, string remark, bool isRejected)
         {
             //get Initiator workflow
             var InitiatorWorkflow = await _procurementDBContext.Workflows.Include(m=>m.WorkflowAction).Include(n=>n.WorkflowType)
                 .FirstOrDefaultAsync(IW => IW.WorkflowType.Name == Constants.RequisitionWorkflow && IW.WorkflowAction.Name == Constants.RequisitionInitiatorActionName);
 
             var newReq = new RequisitionJob(requisitionId, staffId, InitiatorWorkflow.Id);
-            newReq.SetAsDone(DateTime.Now, remark);
+            if (isRejected)
+            {
+                newReq.SetAsRejected(DateTime.Now, remark);
+            }
+            else
+            {
+                newReq.SetAsDone(DateTime.Now, remark);
+            }
+            
 
             _procurementDBContext.RequisitionJobs.Add(newReq);
 
@@ -147,7 +155,30 @@ namespace BsslProcurement.Services
 
             await _procurementDBContext.SaveChangesAsync();
         }
+        public async Task RejectRequisition(int requisitionId, string rejectionRemark)
+        {
+            //get current job
+            var currJob = await _procurementDBContext.RequisitionJobs.FirstOrDefaultAsync(x => x.JobStatus == Enums.JobState.NotDone && x.RequisitionId == requisitionId);
 
+            if (currJob == null)
+            {
+                throw new ArgumentNullException("Job does not exist");
+            }
+            //set current job as done
+            currJob.SetAsDone(DateTime.Now, rejectionRemark);
+
+            //send requisition back to initiator
+            //get initiator from requisition
+            var staffId = (await _procurementDBContext.Requisitions.FirstOrDefaultAsync(x => x.Id == requisitionId))?.LoggedInUserId;
+
+            if (staffId != null)
+            {
+                //create rejected job for initiator
+                await CreateInitiatorJobAsync(requisitionId, staffId, "", true);
+
+            }
+
+        }
         public async Task SendToQuarantine(int requisitionId, string remark)
         {
             //get current job
@@ -189,7 +220,7 @@ namespace BsslProcurement.Services
 
         public async Task<WorkFlowApproverViewModel> GetCurrentWorkFlowOFRequisition(Requisition requisition)
         {
-            var job = await _procurementDBContext.RequisitionJobs.FirstOrDefaultAsync(x => x.RequisitionId == requisition.Id && x.JobStatus == Enums.JobState.NotDone);
+            var job = await _procurementDBContext.RequisitionJobs.FirstOrDefaultAsync(x => x.RequisitionId == requisition.Id && (x.JobStatus == Enums.JobState.NotDone || x.JobStatus == Enums.JobState.Rejected));
 
             var staffCode = await GetStaffCodeFromIdAsync(job.StaffId);
 
@@ -210,6 +241,6 @@ namespace BsslProcurement.Services
         private async Task<string> GetStaffIdFromCodeAsync(string staffCode) => (await _procurementDBContext.Staffs.FirstOrDefaultAsync(x => x.StaffCode == staffCode)).Id;
         private async Task<string> GetStaffCodeFromIdAsync(string staffId) => (await _procurementDBContext.Staffs.FindAsync(staffId)).Id;
 
-    
+      
     }
 }

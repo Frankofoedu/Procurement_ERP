@@ -51,10 +51,13 @@ namespace BsslProcurement.Pages.Staff.ItemRequisition
         public WorkFlowApproverViewModel WfVm { get; set; }
         [BindProperty]
         public string QuarantineRemark { get; set; }
+        [BindProperty]
+        public string RejectionRemark { get; set; }
+        public bool CanEdit { get; set; }
 
-        public async Task OnGetAsync(string returnUrl = null)
+        public async Task OnGetAsync(bool isRejected, string returnUrl = null)
         {
-
+            CanEdit = isRejected;
             returnUrl ??= Url.Content("~/");
 
             await LoadData();
@@ -144,5 +147,32 @@ namespace BsslProcurement.Pages.Staff.ItemRequisition
             return LocalRedirect(returnUrl);
         }
 
+        /// <summary>
+        /// Rejects a Requisition
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
+        public async Task<ActionResult> OnPostRejectAsync(string returnUrl = null)
+        {
+
+            returnUrl ??= Url.Content("~/");
+
+
+            try
+            {
+                await _requisitionService.RejectRequisition(Id, $"Rejected - {RejectionRemark}");
+
+                Message = "Requisition Rejected";
+            }
+            catch (Exception ex)
+            {
+                Error = "An error has occurred." + Environment.NewLine + ex.Message;
+                await LoadData();
+                return Page();
+            }
+
+
+            return LocalRedirect(returnUrl);
+        }
     }
 }
