@@ -1,4 +1,5 @@
 ﻿using BsslProcurement.ViewModels;
+using DcProcurement;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -16,6 +17,8 @@ namespace BsslProcurement.Interfaces
         Task<List<WorkFlowTypesViewModel>> GetPreviousWorkActionflowStepsAsync(int requisitionId);
 
         Task<WorkFlowTypesViewModel> GetFirstWorkActionflowStepAsync(int workflowTypeId);
+
+        Task<List<Workflow>> GetRequisitionWorkflows();
 
 
 

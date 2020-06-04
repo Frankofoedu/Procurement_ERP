@@ -23,12 +23,14 @@ namespace BsslProcurement.Pages.Staff.ItemRequisition.ProcCommencement
     {
         private readonly ProcurementDBContext _context;
         private readonly IProcurementService _procurementService;
+        private readonly IJobService _jobService;
 
         private readonly UserManager<User> _userManager;
-        public AllRequisitionModel(ProcurementDBContext context, IProcurementService procurementService, UserManager<User> userManager)
+        public AllRequisitionModel(ProcurementDBContext context, IProcurementService procurementService, IJobService jobService, UserManager<User> userManager)
         {
             _context = context;
             _procurementService = procurementService;
+            _jobService = jobService;
             _userManager = userManager;
         }
         public string Message { get; set; }
@@ -41,18 +43,10 @@ namespace BsslProcurement.Pages.Staff.ItemRequisition.ProcCommencement
 
         public async Task OnGetAsync()
         {
-
             Requisitions = await _procurementService.GetApprovedRequisitions();
 
-            LastRequisitionJobs = new List<RequisitionJob>();
-            foreach (var item in Requisitions)
-            {
-                var prj = await _context.RequisitionJobs.Include(n => n.Staff).Where(m => m.RequisitionId == item.Id)
-                    .OrderByDescending(l => l.Id).FirstOrDefaultAsync();
-
-                if (prj != null) { LastRequisitionJobs.Add(prj); }
-                else { LastRequisitionJobs.Add(RequisitionJob.Empty()); }
-            }
+            LastRequisitionJobs = await _jobService.GetApprovalJobsForRequisitionsAsync(Requisitions);
+            
         }
 
         //private Task<User> GetCurrentUserAsync() => _userManager.GetUserAsync(HttpContext.User);

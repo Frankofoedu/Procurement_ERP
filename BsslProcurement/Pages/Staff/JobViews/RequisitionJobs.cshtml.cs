@@ -23,13 +23,15 @@ namespace BsslProcurement
     {
         private readonly ProcurementDBContext _context;
         private readonly IRequisitionService requisitionService;
+        private readonly IWorkFlowService workFlowService;
 
         private readonly UserManager<User> _userManager;
 
-        public RequisitionJobsModel(ProcurementDBContext context, IRequisitionService _requisitionService, UserManager<User> userManager)
+        public RequisitionJobsModel(ProcurementDBContext context, IRequisitionService _requisitionService, IWorkFlowService _workFlowService, UserManager<User> userManager)
         {
             _context = context;
             requisitionService = _requisitionService;
+            workFlowService = _workFlowService;
             _userManager = userManager;
         }
 
@@ -59,7 +61,7 @@ namespace BsslProcurement
                     else { PreviousRequisitionJobs.Add(RequisitionJob.Empty()); }
                 }
 
-                RequisitionWorkFlows = (await requisitionService.GetRequisitionWorkflows()).Select(
+                RequisitionWorkFlows = (await workFlowService.GetRequisitionWorkflows()).Select(
                     m=> new SelectListItem() { 
                         Value = m.Id.ToString(), 
                         Text=m.WorkflowAction.Name
@@ -78,7 +80,7 @@ namespace BsslProcurement
                 var user = await GetCurrentUserAsync();
 
                 RequisitionJobs = (await requisitionService.GetRequisitionsJobsAssignedToLoggedInUser(user.Id)).OrderBy(m => m.Workflow.WorkflowActionId).ToList();
-                RequisitionWorkFlows = (await requisitionService.GetRequisitionWorkflows()).Select(
+                RequisitionWorkFlows = (await workFlowService.GetRequisitionWorkflows()).Select(
                     m => new SelectListItem()
                     {
                         Value = m.Id.ToString(),

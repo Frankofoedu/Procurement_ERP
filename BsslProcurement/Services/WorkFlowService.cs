@@ -136,6 +136,10 @@ namespace BsslProcurement.Services
 
             return data;
         }
-            
+
+        public async Task<List<Workflow>> GetRequisitionWorkflows()
+        {
+            return await _procurementDBContext.Workflows.Include(m => m.WorkflowAction).Where(x => x.WorkflowTypeId == DcProcurement.Constants.RequisitionWorkflowId).OrderBy(x => x.Step).ToListAsync();
+        }
     }
 }
