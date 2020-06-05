@@ -65,13 +65,13 @@
                                 <td>@(i + 1)</td>
                                 <td>@item.PRNumber</td>
                                 <td>@item.Description</td>
-                                <td>@(((DateTime)item.DeliveryDate).ToShortDateString())</td>
+                                <td>@(((DateTime)item.DeliveryDate).ToString("d/M/yyyy"))</td>
                                 <td>@item.RequisitionItems.Count</td>
                                 <td>@item.RequiredAtDepartment</td>
                                 <td>@item.PreparedBy</td>
                                 <td>@item.PreparedFor</td>
                                 <td>@itemJob.Staff.Name</td>
-                                <td>@item.Date</td>
+                                <td>@item.Date.Value.ToString("d/M/yyyy")</td>
                                 <td><a asp-page="./DetailRequisition" asp-route-id="@item.Id" style="color: #007bff">View</a></td>
                             </tr>
                             }
