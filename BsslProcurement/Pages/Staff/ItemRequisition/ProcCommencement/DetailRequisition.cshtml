@@ -9,6 +9,7 @@
 @section Styles{
 
     <link href="~/css/jquery.dataTables.min.css" rel="stylesheet" />
+    <link href="~/css/quill.snow.css" rel="stylesheet" />
     <style>
         .loader {
             border: 16px solid #f3f3f3;
@@ -128,30 +129,37 @@ else
                             </div>
                             <div class="col-sm-4">
                                 <div class="form-group">
-                                    <label>Date : </label>
+                                    <label>PR Date : </label>
                                     <input class="form-control" readonly value="@Model.Requisition.Date.Value.ToString("dd/MM/yyyy")" placeholder="Pick Date" />
                                 </div>
                             </div>
                             <div class="col-sm-4">
                                 <div class="form-group">
-                                    <label>Delivery Date : </label>
+                                    <label>Expected Delivery Date : </label>
                                     <input class="form-control" readonly value="@Model.Requisition.DeliveryDate.Value.ToString("dd/MM/yyyy")" placeholder="Pick Delivery Date" />
                                 </div>
                             </div>
 
                             <div class="col-sm-6">
                                 <div class="form-group">
-                                    <label>Requesting Dept/Section : </label>
+                                    <label>@($"Requesting {Model.Requisition.RequesterType} : ")</label>
                                     <input class="form-control" readonly value="@Model.Requisition.RequesterValue" placeholder="Enter Department" />
                                 </div>
                             </div>
                             <div class="col-sm-6">
                                 <div class="form-group">
-                                    <label>Required At : </label>
-                                    <input class="form-control" readonly value=@Model.Requisition.RequiredAtDepartment />
+                                    <label>Delivery Destination : </label>
+                                    <input class="form-control" readonly value="@Model.Requisition.RequiredAtDepartment" />
 
                                 </div>
                             </div>
+                            <div class="col-sm-12">
+                                <div class="form-group">
+                                    <label>Request Description : </label>
+                                    <textarea readonly class="form-control" rows="3">@Model.Requisition.Description</textarea>
+                                </div>
+                            </div>
+
                             <div class="col-sm-4">
                                 <div class="form-group">
                                     <label>Procurement Method : </label>
@@ -194,6 +202,8 @@ else
                                             <th>Description Of <br />Goods/Services <i class="fa fa-asterisk fa-xs faRedColour"></i></th>
                                             <th>Quantity <i class="fa fa-asterisk fa-xs faRedColour"></i></th>
                                             <th>Unit Of<br />Measurement</th>
+                                            <th>Category</th>
+                                            <th>Subcategory</th>
                                             <th>Attachment</th>
                                         </tr>
                                     </thead>
@@ -202,57 +212,69 @@ else
                                         {
                                             var item = Model.ItemGridViewModels[i].RequisitionItem;
 
-                                            <tr class="">
+                                        <tr class="">
 
-                                                <td class="">
-                                                    <label>@(i + 1)</label>
-                                                </td>
+                                            <td class="">
+                                                <label>@(i + 1)</label>
+                                                <input type="hidden" asp-for="ItemGridViewModels[i].RequisitionItem.Id"/>
+                                            </td>
+                                            <td>
+                                                <label class="font-weight-bold">@item.Description</label>
+                                            </td>
+                                            <td>
+                                                <label class="font-weight-bold">@item.Quantity</label>
+                                            </td>
+                                            <td>
+                                                <label class="font-weight-bold">@item.UnitOfMeasurement</label>
+                                            </td>
+                                            <td>
+                                                <select id="catField" class="form-control-sm" asp-for="ItemGridViewModels[i].RequisitionItem.CategoryCode" asp-items="Model.CategoryList">
+                                                    <option value="">--Select--</option>
+                                                </select>
+                                                <input id="catNameField" type="hidden" asp-for="ItemGridViewModels[i].RequisitionItem.Category" />
+                                            </td>
+                                            <td>
+                                                <select id="subCatField" class="form-control-sm" asp-for="ItemGridViewModels[i].RequisitionItem.SubCategoryCode">
+                                                    <option value="">--Select--</option>
+                                                </select>
+                                                <input id="subCatNameField" type="hidden" asp-for="ItemGridViewModels[i].RequisitionItem.SubCategory" />
+                                            </td>
+                                            @if (item.Attachment != null)
+                                            {
+
                                                 <td>
-                                                    <label class="font-weight-bold">@item.Description</label>
+                                                    <partial name="~/Pages/Shared/Modals/_AttachmentViewPartial.cshtml" model="item.Attachment.FilePath" />
+                                                    <button data-preview="@i" class="btnPreviewItemAttachment">View File</button>
                                                 </td>
+                                            }
+                                            else
+                                            {
                                                 <td>
-                                                    <label class="font-weight-bold">@item.Quantity</label>
+                                                    <label>No Attachment</label>
                                                 </td>
-                                                <td>
-                                                    <label class="font-weight-bold">@item.UnitOfMeasurement</label>
+                                            }
 
-                                                </td>
-                                                @if (item.Attachment != null)
-                                                {
-
-                                                    <td>
-                                                        <partial name="~/Pages/Shared/Modals/_AttachmentViewPartial.cshtml" model="item.Attachment.FilePath" />
-                                                        <button data-preview="@i" class="btnPreviewItemAttachment">View File</button>
-                                                    </td>
-                                                }
-                                                else
-                                                {
-                                                    <td>
-                                                        <label>No Attachment</label>
-                                                    </td>
-                                                }
-
-                                            </tr>
+                                        </tr>
 
                                         }
                                         @*<tfoot>
-                            <tr>
-                                <td></td>
-                                <td class="font-weight-bold text-right">Total Amount : </td>
-                                <td class="font-weight-bold text-lg-center">@NairaFormat.GetNairaValue(Model.Requisition.RequisitionItems.Sum(x => Convert.ToInt32(x.Amount)))</td>
-                                <td></td>
-                            </tr>
-                        </tfoot>*@
+                                                <tr>
+                                                    <td></td>
+                                                    <td class="font-weight-bold text-right">Total Amount : </td>
+                                                    <td class="font-weight-bold text-lg-center">@NairaFormat.GetNairaValue(Model.Requisition.RequisitionItems.Sum(x => Convert.ToInt32(x.Amount)))</td>
+                                                    <td></td>
+                                                </tr>
+                                            </tfoot>*@
                                 </table>
                                 <input type="hidden" id="lastIndex" value="0" />
                                 @*<div class="form-group">
-                    <div class="row">
-                        <div class="col-sm-3"> </div>
-                        <div class="col-sm-6 text-center">
-                            <button id="btnMore" class="btn btn-outline-primary">New Item</button>
-                        </div>
-                    </div>
-                </div>*@
+                                        <div class="row">
+                                            <div class="col-sm-3"> </div>
+                                            <div class="col-sm-6 text-center">
+                                                <button id="btnMore" class="btn btn-outline-primary">New Item</button>
+                                            </div>
+                                        </div>
+                                    </div>*@
                             </div>
 
 
@@ -298,46 +320,19 @@ else
 
                                 </div>
                             </div>
-                            <div class="col-sm-12 m-4 ">
-                                @*@if (Model.Requisition.Attachments.Count > 0)
-                {
-                    <h5 class="font-weight-bold">Attachments</h5>
-                    <br>
-                    <div class="d-flex flex-column">
-                        <p>
-                            @foreach (var file in Model.Requisition.Attachments)
-                            {
-                                if (file.FilePath.EndsWith("pdf"))
-                                {
-                                    <a class="fancybox m-5 btn btn-link fas fa-file-pdf" data-fancybox-type="iframe" href="@Url.Content("~/Attachments/" + file.FilePath)">Open PDf Attachment</a>
-                                }
-                                else
-                                {
-                                    <a class="fancybox m-5" href="@Url.Content("~/Attachments/" + file.FilePath)"><img src="@Url.Content("~/Attachments/" + file.FilePath)" class="img-thumbnail" style="max-width : 10% !important" asp-append-version="true" /></a>
 
-                                }
-
-                            }
-                        </p>
-
-                    </div>
-                }*@
-
-                            </div>
-
-
-                            <div class="col-sm-12 m-4">
+                            <div class="col-sm-12 mt-2">
                                 <div class="form-group">
-                                    <h5 class="font-weight-bold">Purpose : </h5>
+                                    <h5 class="font-weight-bold">Justification : </h5>
                                     <input type="hidden" id="purpose" value="@Model.Requisition.Purpose" />
                                     <div id="editor">
 
                                     </div>
                                 </div>
                             </div>
-                           
+
                         </div>
-                     
+
 
                         @if (Model.WfVm != null)
                         {
@@ -364,7 +359,7 @@ else
                             <div class="d-flex justify-content-around no-print">
                                 @*  <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>*@
 
-                                <input data-toggle="modal" data-target="#approverModal" class="btn btn-lg btn-primary" value="Submit" type="button" placeholder="" />
+                                <input data-toggle="modal" data-target="#approverModal" class="btn btn-lg btn-primary" value="Send to Next Process" type="button" placeholder="" />
 
                                 <button id="printBtn" class="btn btn-lg btn-info" onclick="print(); return false;">Print/Preview</button>
                             </div>
@@ -398,7 +393,7 @@ else
             </div>
         </div>
     </div>
-   
+
 }
 
 @section Scripts{
@@ -406,7 +401,6 @@ else
     <script src="~/js/quill.js"></script>
     <script src="~/js/jquery.dataTables.min.js"></script>
     <script src="~/js/jquery.fancybox.pack.js"></script>
-    <script src="~/js/quill.js"></script>
     <script>
 
         //to load staff modal
@@ -444,22 +438,60 @@ else
             });
         });
 
+        $(function () {
+            $('#catField').on('change', function () {
+                $('#catNameField').val($('#catField option:selected').text());
+                var categorycode = $('#catField').val()
+                var Url = window.location.origin + "/api/Bsslitf/Subcategory/" + categorycode;
+                $.ajax({
+                    url: Url,
+                    success: function (result) {
+                        var option = '<option value="">--Select--</option>';
+
+                        for (var i = 0; i < result.length; i++) {
+                            var item = result[i];
+                            option += `<option value="${item.buscode}">${item.busdescr}</option>`;
+                        }
+
+                        $('#subCatField').html(option);
+                    },
+                    error: function (error) {
+                        console.log(error);
+                    }
+
+                })
+            });
+        });
+        
+        $(function () {
+            $('#subCatField').on('change', function () {
+                $('#subCatNameField').val($('#subCatField option:selected').text());
+            });
+        });
+
         $(document).ready(function () {
-            $(".fancybox").fancybox({
-                openEffect: 'none',
-                closeEffect: 'none',
-                iframe: {
-                    preload: false
+            //$(".fancybox").fancybox({
+            //    openEffect: 'none',
+            //    closeEffect: 'none',
+            //    iframe: {
+            //        preload: false
+            //    }
+            //});
+
+
+            //to create a custom memo field/ textbox
+            var quill = new Quill('#editor', {
+                theme: 'snow',
+                format: {
+                    color: 'red'
                 }
             });
 
-
-
-
             //set purpose field
             var purposeValue = $("#purpose").val();
-            var purposeField = document.getElementById('editor');
-            purposeField.innerHTML = purposeValue;
+            quill.enable(false);
+            quill.setText(purposeValue);
+
 
         })
 
@@ -474,10 +506,10 @@ else
                 $('#Vm_Erfx').attr('hidden', false);
                 $('#staffErfx').attr('hidden', true);
                 $('#Vm_Erfx').append(
-                    $('<option>', { value: 'RFQ ID', text: 'RFQ ID – Request for Quotation' }),
-                    $('<option>', { value: 'RFP ID', text: 'RFP ID – Request for Proposal ' }),
-                    $('<option>', { value: 'RFI ID', text: 'RFI ID – Request for Information' }),
-                    $('<option>', { value: 'RFT ID', text: 'RFT ID – Request for Tender' })
+                    $('<option>', { value: 'RFQ', text: 'RFQ – Request for Quotation' }),
+                    $('<option>', { value: 'RFP', text: 'RFP – Request for Proposal ' }),
+                    $('<option>', { value: 'RFI', text: 'RFI – Request for Information' }),
+                    $('<option>', { value: 'RFT', text: 'RFT – Request for Tender' })
                 );
             }
         }
