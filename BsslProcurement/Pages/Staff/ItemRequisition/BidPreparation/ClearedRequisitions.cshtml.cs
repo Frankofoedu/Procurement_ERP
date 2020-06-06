@@ -15,9 +15,9 @@ namespace BsslProcurement.Pages.Staff.ItemRequisition.BidPreparation
     public class ClearedRequisitionsModel : PageModel
     {
         private readonly ProcurementDBContext _context;
-        private readonly IRequisitionService _service;
+        private readonly IProcurementService _service;
 
-        public ClearedRequisitionsModel(ProcurementDBContext context, IRequisitionService service)
+        public ClearedRequisitionsModel(ProcurementDBContext context, IProcurementService service)
         {
             _context = context;
             _service = service;
