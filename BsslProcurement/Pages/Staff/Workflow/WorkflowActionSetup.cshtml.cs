@@ -37,7 +37,7 @@ namespace BsslProcurement.Pages.Staff.Workflow
             }
             else workflowAction = new WorkflowAction();
 
-            workflowActions = await _context.WorkflowActions.Include(m => m.Workflows).Where(m => m.Name != Constants.RequisitionInitiatorActionName).ToListAsync();
+            workflowActions = await _context.WorkflowActions.Include(m => m.Workflows).Where(m => m.Name != Constants.InitiatorActionName).ToListAsync();
         }
 
         public async Task OnPost(int? id)
@@ -86,7 +86,7 @@ namespace BsslProcurement.Pages.Staff.Workflow
             }
             finally
             {
-                workflowActions = await _context.WorkflowActions.Include(m => m.Workflows).Where(m => m.Name != Constants.RequisitionInitiatorActionName).ToListAsync();
+                workflowActions = await _context.WorkflowActions.Include(m => m.Workflows).Where(m => m.Name != Constants.InitiatorActionName).ToListAsync();
             }
 
         }
