@@ -35,6 +35,12 @@ namespace DcProcurement
             JobStatus = Enums.JobState.Done;
             DoneDate = doneDate;
         }
+        public void SetAsRejected(DateTime rejectedDate, string remark)
+        {
+            Remark = remark;
+            JobStatus = Enums.JobState.Rejected;
+            DoneDate = rejectedDate;
+        }
 
         public void SetAsCancelled(DateTime doneDate, string remark)
         {

@@ -40,7 +40,8 @@ namespace BsslProcurement.Pages.Staff.ItemRequisition
         public string Error { get; set; }
         [BindProperty]
         public string PrNo { get; set; }
-
+        [BindProperty]
+        public bool IsRejected { get; set; }
         #region Properties
         [BindProperty]
         public List<ItemGridViewModel> gridVm { get; set; }
@@ -78,17 +79,18 @@ namespace BsslProcurement.Pages.Staff.ItemRequisition
             _requisitionService = requisitionService;
         }
 
-        public async Task<ActionResult> OnGetAsync(int? id, string message)
+        public async Task<ActionResult> OnGetAsync(int? id, string message, bool isRejected)
         {
             try
             {
                 Message = message;
+                IsRejected = isRejected;
                 await LoadData();
 
                 if (id != null)
                 {
-                    Requisition = _procContext.Requisitions.Include(x => x.RequisitionItems).ThenInclude(c => c.Attachment).FirstOrDefault( c => c.Id == id);
-                    
+                    Requisition = _procContext.Requisitions.Include(x => x.RequisitionItems).ThenInclude(c => c.Attachment).FirstOrDefault(c => c.Id == id);
+
                     if (Requisition == null)
                     {
                         Error = "No requisition found";
@@ -107,6 +109,15 @@ namespace BsslProcurement.Pages.Staff.ItemRequisition
 
 
         }
+        private async Task ClearRejectedTasks(int id, string remark)
+        {
+            var rejectedJob = await _procContext.RequisitionJobs.FirstOrDefaultAsync(x => x.RequisitionId == id && x.JobStatus == Enums.JobState.Rejected);
+
+            if (rejectedJob != null)
+            {
+                rejectedJob.SetAsDone(DateTime.Now, remark);
+            }
+        }
 
         public async Task<ActionResult> OnPostSubmitAsync(int? id)
         {
@@ -115,50 +126,57 @@ namespace BsslProcurement.Pages.Staff.ItemRequisition
                 await LoadData();
                 return Page();
             }
-               
 
 
-                try
+
+            try
+            {
+                //check if its a saved requisition
+
+                if (id != null)
                 {
-                    //check if its a saved requisition
-
-                    if (id != null)
+                    //check if it is a rejected requisition
+                    if (IsRejected)
                     {
-                        if (Requisition.DateCreated == null)
-                        {
-                            Requisition.DateCreated = DateTime.Now;
-                        }
-
-                        await SaveOrSubmitRequisition(true, true);
+                        await ClearRejectedTasks(id.Value, WfVm.Remark);
                     }
-                    else
-                    {
-                        //save requisition
-                        await SaveOrSubmitRequisition(true, false);
-                    }
+                    Requisition.UpdateRequisitionCreationDate(DateTime.Now);
 
+                    await SaveOrSubmitRequisition(true, true);
+                }
+                else
+                {
+                    //save requisition
+                    await SaveOrSubmitRequisition(true, false);
+                }
+
+                //dont create initiator job for rejected requisitions
+                if (!IsRejected)
+                {
                     //create and mark done initiator requisition job
-                    await _requisitionService.CreateInitiatorJobAsync(Requisition.Id, (await GetCurrentUserAsync()).Id, WfVm.Remark);
+                    await _requisitionService.CreateInitiatorJobAsync(Requisition.Id, (await GetCurrentUserAsync()).Id, WfVm.Remark, false);
 
-                    //create and assign next requisition job
-                    await _requisitionService.SendRequisitionToNextStageAsync(Requisition.Id,
+                }
+
+                //create and assign next requisition job
+                await _requisitionService.SendRequisitionToNextStageAsync(Requisition.Id,
                         WfVm.AssignedStaffCode, WfVm.WorkFlowId, WfVm.Remark);
 
-                    Message = "Requisition Submitted successfully";
+                Message = "Requisition Submitted successfully";
 
 
-                   return RedirectToPage(new { message="Requisition submitted successfully"});
+                return RedirectToPage(new { message = "Requisition submitted successfully" });
 
-                }
-                catch (Exception ex)
-                {
-                    Error = "An error has occurred." + Environment.NewLine + ex.Message;
-                    await LoadData();
-                    return Page();
-                }
-            
+            }
+            catch (Exception ex)
+            {
+                Error = "An error has occurred." + Environment.NewLine + ex.Message;
+                await LoadData();
+                return Page();
+            }
 
-           
+
+
         }
 
         /// <summary>
@@ -226,15 +244,15 @@ namespace BsslProcurement.Pages.Staff.ItemRequisition
         {
 
             //load requisition workflow
-            var workflow = _procContext.WorkflowTypes.Include(c=> c.Workflows).FirstOrDefault(x => x.Name == DcProcurement.Constants.RequisitionWorkflow);
+            var workflow = _procContext.WorkflowTypes.Include(c => c.Workflows).FirstOrDefault(x => x.Name == DcProcurement.Constants.RequisitionWorkflow);
 
             if (workflow.Workflows.Count > 0)
             {
-                WfVm = new WorkFlowApproverViewModel { WorkFlowTypeId = workflow.Id};
+                WfVm = new WorkFlowApproverViewModel { WorkFlowTypeId = workflow.Id };
             }
             //get current logged in user
             var loggedInUserId = (await GetCurrentUserAsync()).Id;
-            UserCode  = (await GetCurrentUserAsync()).UserName;
+            UserCode = (await GetCurrentUserAsync()).UserName;
 
 
 
@@ -243,10 +261,10 @@ namespace BsslProcurement.Pages.Staff.ItemRequisition
 
         private async Task<List<ItemGridViewModel>> LoadGridViewItemsFromRequisition(Requisition requisition, IWebHostEnvironment env)
         {
-             FormFile CreateFormFile(string filename)
+            FormFile CreateFormFile(string filename)
             {
-              var fn = System.IO.Path.Combine(env.WebRootPath,filename);
-              
+                var fn = System.IO.Path.Combine(env.WebRootPath, filename);
+
                 using var stream = System.IO.File.OpenRead(fn);
                 var file = new FormFile(stream, 0, stream.Length, null, Path.GetFileName(stream.Name))
                 {
@@ -271,8 +289,8 @@ namespace BsslProcurement.Pages.Staff.ItemRequisition
         private async Task SaveOrSubmitRequisition(bool isSubmitted, bool isUpdate)
         {
             //save requisition items
-            Requisition.RequisitionItems = await GetRequisitionItemsFromViewModel(gridVm);   
-                       
+            Requisition.RequisitionItems = await GetRequisitionItemsFromViewModel(gridVm);
+
             Requisition.RequisitionState = isSubmitted ? Enums.RequisitionState.Submitted : Enums.RequisitionState.Saved;
 
             Requisition.Status = isSubmitted ? "Sent For Processing" : "Saved";
@@ -292,8 +310,8 @@ namespace BsslProcurement.Pages.Staff.ItemRequisition
                             _procContext.Attachments.Update(item.Attachment);
                         }
                     }
-                }            
-                
+                }
+
                 _procContext.Requisitions.Update(Requisition);
             }
             else
@@ -314,7 +332,7 @@ namespace BsslProcurement.Pages.Staff.ItemRequisition
 
 
             await _procContext.SaveChangesAsync();
-            
+
         }
 
         private async Task<List<RequisitionItem>> GetRequisitionItemsFromViewModel(List<ItemGridViewModel> gridVm)
@@ -344,13 +362,13 @@ namespace BsslProcurement.Pages.Staff.ItemRequisition
             return reList;
         }
 
-        
+
 
         private async Task<(string prNo, string requestDeptCode, string requestDept, List<SelectListItem> dept)> GeneratePRNo(string userId)
         {
 
             //get staff object
-            var user = await _procContext.Staffs.FirstOrDefaultAsync(m=>m.Id==userId);
+            var user = await _procContext.Staffs.FirstOrDefaultAsync(m => m.Id == userId);
 
 
             //get current user details from staff table. From the fucking staff table
@@ -366,7 +384,7 @@ namespace BsslProcurement.Pages.Staff.ItemRequisition
             var compPrefix = comp.Names;
 
             var deptCode = _bsslContext.Stafftab.FirstOrDefault(st => st.Staffid == staff.Userid).Deptcode;
-            
+
 
 
             var Depts = _bsslContext.Codestab.Where(opt => opt.Option1 == "F5");
@@ -377,13 +395,13 @@ namespace BsslProcurement.Pages.Staff.ItemRequisition
 
             var year = DateTime.Now.Year.ToString();
 
-              
+
 
             //get last req no
             var lastReqNo = _procContext.PRNos.OrderByDescending(x => x.SerialNo).FirstOrDefault(x => x.CompCode == compPrefix && x.DeptCode == deptCode && x.DeptPrefix == DeptPrefix && x.Year == year);
             if (lastReqNo != null)
             {
-              return ($"{compPrefix.Trim()}/{deptCode.Trim()}/{DeptPrefix.Trim()}/{year}/{(Convert.ToInt32(lastReqNo.SerialNo) + 1).ToString("00000")}", deptCode, Dept.Desc1, Depts.Select(depts => new SelectListItem { Text = depts.Desc1 }).ToList());
+                return ($"{compPrefix.Trim()}/{deptCode.Trim()}/{DeptPrefix.Trim()}/{year}/{(Convert.ToInt32(lastReqNo.SerialNo) + 1).ToString("00000")}", deptCode, Dept.Desc1, Depts.Select(depts => new SelectListItem { Text = depts.Desc1 }).ToList());
 
             }
             else
@@ -392,7 +410,7 @@ namespace BsslProcurement.Pages.Staff.ItemRequisition
                 return ($"{compPrefix.Trim()}/{deptCode.Trim()}/{DeptPrefix.Trim()}/{year}/00001", deptCode, Dept.Desc1, Depts.Select(depts => new SelectListItem { Text = depts.Desc1 }).ToList());
 
             }
-            
+
             //itf/deptcode/deptprefix/year/serial no
 
 
@@ -410,6 +428,6 @@ namespace BsslProcurement.Pages.Staff.ItemRequisition
             _procContext.Add(prno);
         }
 
-       
+
     }
 }

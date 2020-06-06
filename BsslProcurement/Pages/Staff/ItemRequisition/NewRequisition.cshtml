@@ -83,6 +83,7 @@
 <div class="row mt-5">
     <div class="col-md-12">
         <form id="formX" class="panel panel-login" method="post" enctype="multipart/form-data">
+            <input asp-for="IsRejected" type="hidden" />
             <div class="panel-heading">
                 <div class="row">
                     <p class="header-text">Purchase Requisition</p>
@@ -436,7 +437,11 @@
 
                         <div class="d-flex justify-content-around no-print">
                             @*  <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>*@
-                            <input id="btnSave" class="btn btn-lg btn-outline-info float-left" asp-page-handler="Save" value="Save as Draft" asp-route-id="@((Model.Requisition != null) ? Model.Requisition.Id : (int?)null)" type="submit" placeholder="" />
+                            @if (!Model.IsRejected)
+                            {
+                                <input id="btnSave" class="btn btn-lg btn-outline-info float-left" asp-page-handler="Save" value="Save as Draft" asp-route-id="@((Model.Requisition != null) ? Model.Requisition.Id : (int?)null)" type="submit" placeholder="" />
+                                
+                            }
                             <button type="button" class="btn btn-lg btn-primary" data-toggle="modal" data-target="#approverModal">Send to Next Process</button>
                             @if (Model.Requisition != null)
                             {

@@ -77,11 +77,15 @@
 }
 else
 {
+    @if (Model.CanEdit)
+    {
+        <a asp-page="./NewRequisition" asp-route-isRejected="True" asp-route-id="@Model.Id" style="color: #007bff">Edit Requisition</a>
 
+    }
 
     <div class="row mt-5">
         <div class="col-md-12">
-            <form id="reqForm" class="panel panel-login" method="post"  enctype="multipart/form-data">
+            <form id="reqForm" class="panel panel-login" method="post" enctype="multipart/form-data">
                 <div class="panel-heading">
                     <div class="row">
                         <p class="header-text">Purchase Requisition For @Model.Requisition.PRNumber</p>
@@ -271,10 +275,10 @@ else
 
 
                             @*<div class="col-sm-4">
-                <div class="form-group">
-                    <input class="btn btn-block btn-danger fa-print" value="Print" type="button" placeholder="Enter Resgistration Number" />
-                </div>
-            </div>*@
+                                    <div class="form-group">
+                                        <input class="btn btn-block btn-danger fa-print" value="Print" type="button" placeholder="Enter Resgistration Number" />
+                                    </div>
+                                </div>*@
                         </div>
 
                         <div class="modal fade" id="quarantineModal" role="dialog" aria-hidden="true">
@@ -298,6 +302,33 @@ else
                                     </div>
                                     <div class="modal-footer justify-content-around">
                                         <input id="btnQuarantine" type="submit" asp-route-returnUrl="@Model.ReturnUrl" asp-page-handler="Quarantine" class="btn btn-lg btn-outline-danger" value="Quarantine" />
+
+                                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="modal fade" id="rejectModal" role="dialog" aria-hidden="true">
+                            <div class="modal-dialog modal-lg modal-dialog-centered" role="document">
+                                <div class="modal-content">
+                                    <div class="modal-header">
+                                        <h5 class="modal-title">Reject Requisition</h5>
+                                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                            <span aria-hidden="true">&times;</span>
+                                        </button>
+                                    </div>
+                                    <div class="modal-body">
+                                        <div class="row">
+                                            <div class="col-sm-12">
+                                                <label>Rejection Reason : </label>
+                                                <span class="d-flex flex-row">
+                                                    <input class="form-control" asp-for="RejectionRemark" />
+                                                </span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="modal-footer justify-content-around">
+                                        <input id="btnReject" type="submit" asp-route-returnUrl="@Model.ReturnUrl" asp-page-handler="Reject" class="btn btn-lg btn-outline-danger" value="Reject" />
 
                                         <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
                                     </div>
@@ -333,6 +364,7 @@ else
 
                                 <input data-toggle="modal" data-target="#approverModal" class="btn btn-lg btn-primary" value="Send to Next Process" type="button" placeholder="" />
 
+                                <input data-toggle="modal" data-target="#rejectModal" class="btn btn-lg btn-primary" value="Reject" type="button" placeholder="" />
                                 <input data-toggle="modal" data-target="#quarantineModal" class="btn btn-lg btn-primary" value="Quarantine" type="button" placeholder="" />
 
                                 <button id="printBtn" class="btn btn-lg btn-info" onclick="print(); return false;">Print/Preview</button>
@@ -367,13 +399,13 @@ else
             var quill = new Quill('#editor', {
                 theme: 'snow',
                 format: {
-                    color :'red'
+                    color: 'red'
                 }
             });
 
             //set purpose field
             var purposeValue = $("#purpose").val();
-             quill.enable(false);
+            quill.enable(false);
             quill.setText(purposeValue);
 
 

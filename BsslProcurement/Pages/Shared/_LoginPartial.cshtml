@@ -11,7 +11,7 @@
     var aspUser = await UserManager.GetUserAsync(User);
     if (aspUser.Email == Constants.AdminEmail)
     {
-        <form asp-area="Identity" asp-page="/Account/Logout" asp-route-returnUrl="@Url.Page("/", new { area = "" })" method="post" id="logoutForm" class="w-100">
+        <form asp-area="Identity" asp-page="/Account/Logout" asp-route-returnUrl="@Url.Page("/Staff", new { area = "" })" method="post" id="logoutForm" class="w-100">
 
             <li class="dropdown float-right list-unstyled">
                 <a href="#" class="dropdown-toggle btn" data-toggle="dropdown">
@@ -68,7 +68,7 @@
 
         var notificationNum = await _context.PrequalificationJobs.Where(x => x.JobStatus == Enums.JobState.NotDone).CountAsync(m => m.StaffId == curUser.Id || m.StaffId == null);
 
-        var reqNotificationNum = await _context.RequisitionJobs.Where(x => x.JobStatus == Enums.JobState.NotDone && x.StaffId == curUser.Id).CountAsync();
+        var reqNotificationNum = await _context.RequisitionJobs.Where(x =>( x.JobStatus == Enums.JobState.NotDone || x.JobStatus == Enums.JobState.Rejected ) && x.StaffId == curUser.Id).CountAsync();
 
         var procNotificationNum = await _context.ProcurementJobs.Where(x => x.JobStatus == Enums.JobState.NotDone && x.StaffId == curUser.Id).CountAsync();
 

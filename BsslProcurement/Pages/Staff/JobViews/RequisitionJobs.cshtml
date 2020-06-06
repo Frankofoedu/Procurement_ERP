@@ -37,7 +37,7 @@
                 <div class="form-group">
                     <div class="input-group ml-4 mb-2">
                         <div class="input-group-prepend">
-                            <label class="input-group-text">Filter Action Type</label>
+                            <label class="input-group-text">Filter By Action Type</label>
                         </div>
                         <select class="form-control" asp-items="Model.RequisitionWorkFlows" asp-for="WorkflowId">
                             <option value="0">All</option>
@@ -62,6 +62,7 @@
                                 <th>Prepared for</th>
                                 <th>Approval Staff</th>
                                 <th>Date Assigned</th>
+                                <th>Requisition State</th>
                                 <th>Action</th>
                             </tr>
                         </thead>
@@ -73,20 +74,27 @@
                                 {
                                     var Item = Model.RequisitionJobs[i];
                                     var PrevItem = Model.PreviousRequisitionJobs[i];
-
-                                    <tr>
-                                        <td>@(i + 1).</td>
-                                        <td>@Item.Workflow.WorkflowAction.Name</td>
-                                        <td>@Item.Requisition.PRNumber</td>
-                                        <td>@Item.Requisition.Description</td>
-                                        <td>@Item.Requisition.RequisitionItems.Count</td>
-                                        <td>@Item.Requisition.PreparedBy</td>
-                                        <td>@Item.Requisition.PreparedFor</td>
-                                        @if (PrevItem.Id > 0) {<td> @PrevItem.Staff.Name </td>}
-                                        else { <td></td>}
-                                        <td>@Item.CreationDate.ToShortDateString()</td>
-                                        <td><a asp-page="/Staff/Itemrequisition/DetailRequisition" asp-route-Id="@Item.RequisitionId" asp-route-returnUrl="@Url.Page("/Staff/Jobviews/requisitionjobs", new { area = "" })" style="color: #007bff">View</a></td>
-                                    </tr>
+                                    var isRejected = (Item.JobStatus == Enums.JobState.Rejected);
+                            <tr>
+                                <td>@(i + 1).</td>
+                                <td>@Item.Workflow.WorkflowAction.Name</td>
+                                <td>@Item.Requisition.PRNumber</td>
+                                <td>@Item.Requisition.Description</td>
+                                <td>@Item.Requisition.RequisitionItems.Count</td>
+                                <td>@Item.Requisition.PreparedBy</td>
+                                <td>@Item.Requisition.PreparedFor</td>
+                                @if (PrevItem.Id > 0)
+                                {
+                                    <td> @PrevItem.Staff.Name </td>
+                                }
+                                else
+                                {
+                                    <td></td>
+                                }
+                                <td>@Item.CreationDate.ToShortDateString()</td>
+                                <td>@Enum.GetName(typeof(Enums.JobState), @Item.JobStatus)</td>
+                                <td><a asp-page="/Staff/Itemrequisition/DetailRequisition" asp-route-isRejected="@isRejected" asp-route-Id="@Item.RequisitionId" asp-route-returnUrl="@Url.Page("/Staff/Jobviews/requisitionjobs", new { area = "" })" style="color: #007bff">View</a></td>
+                            </tr>
                                 }
                             }
                         </tbody>
