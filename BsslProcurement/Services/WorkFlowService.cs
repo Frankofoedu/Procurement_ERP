@@ -53,7 +53,9 @@ namespace BsslProcurement.Services
             else
             {
                 //new jobs e.g new requisition tasks not yet assigned a task
-                var workflows = await _procurementDBContext.Workflows.Include(y => y.WorkflowAction).Where(x => x.WorkflowTypeId == workflowTypeId).OrderBy(x=> x.Step).ToListAsync();
+                var workflows = await _procurementDBContext.Workflows.Include(y => y.WorkflowAction)
+                    .Where(x => x.WorkflowTypeId == workflowTypeId && x.WorkflowAction.Name != Constants.InitiatorActionName)
+                    .OrderBy(x=> x.Step).ToListAsync();
 
                 var nextTwoWorkflows = workflows.Take(1);
 
@@ -98,7 +100,7 @@ namespace BsslProcurement.Services
         {
             //new jobs e.g new requisition tasks not yet assigned a task
             var workflows = await _procurementDBContext.Workflows.Include(y => y.WorkflowAction)
-                .Where(x => x.WorkflowTypeId == workflowTypeId && x.WorkflowAction.Name != Constants.RequisitionInitiatorActionName)
+                .Where(x => x.WorkflowTypeId == workflowTypeId && x.WorkflowAction.Name != Constants.InitiatorActionName)
                 .OrderBy(x => x.Step).ToListAsync();
 
             var nextTwoWorkflows = workflows.Take(1);
