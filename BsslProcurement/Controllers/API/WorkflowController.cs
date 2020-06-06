@@ -32,7 +32,7 @@ namespace BsslProcurement.Controllers.API
             }
 
             var Workflows = await _context.Workflows.Include(m => m.WorkflowAction).Include(m => m.WorkflowType)
-                .Where(m => m.WorkflowTypeId == id && m.WorkflowAction.Name != Constants.RequisitionInitiatorActionName).ToListAsync();
+                .Where(m => m.WorkflowTypeId == id && m.WorkflowAction.Name != Constants.InitiatorActionName).ToListAsync();
 
             if (Workflows.Count < 1)
             {
