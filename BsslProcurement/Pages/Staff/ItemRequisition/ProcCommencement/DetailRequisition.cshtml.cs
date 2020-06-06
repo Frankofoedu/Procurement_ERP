@@ -8,6 +8,7 @@ using BsslProcurement.Services;
 using BsslProcurement.ViewModels;
 using DcProcurement;
 using DcProcurement.Contexts;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.AspNetCore.Mvc.Rendering;
@@ -33,6 +34,7 @@ namespace BsslProcurement.Pages.Staff.ItemRequisition.ProcCommencement
         private readonly BSSLSYS_ITF_DEMOContext _bsslContext;
         private readonly IItemGridViewModelService _itemGridViewModelService;
         private readonly IProcurementService _procurementService;
+        private readonly UserManager<User> _userManager;
 
         [BindProperty]
         public int ReqId { get; set; }
@@ -42,10 +44,13 @@ namespace BsslProcurement.Pages.Staff.ItemRequisition.ProcCommencement
         public ProcCommencementViewModel Vm { get; set; }
         [BindProperty]
         public List<ItemGridViewModel> ItemGridViewModels { get; set; }
-        public DetailRequisitionModel(ProcurementDBContext context, BSSLSYS_ITF_DEMOContext bsslContext, IItemGridViewModelService itemGridViewModelService, IProcurementService procurementService)
+        public DetailRequisitionModel(UserManager<User> userManager, 
+            ProcurementDBContext context, BSSLSYS_ITF_DEMOContext bsslContext, 
+            IItemGridViewModelService itemGridViewModelService, IProcurementService procurementService)
         {
             _context = context;
             _bsslContext = bsslContext;
+            _userManager = userManager;
             _itemGridViewModelService = itemGridViewModelService;
             _procurementService = procurementService;
         }
@@ -78,6 +83,8 @@ namespace BsslProcurement.Pages.Staff.ItemRequisition.ProcCommencement
                     req.ProcessType = Vm.ProcType;
                     req.ProcurementMethod = Vm.ProcMethod;
                     req.ERFx = Vm.Erfx;
+                    req.ProcurementState = Enums.ProcurementState.Started;
+
                     foreach (var item in ItemGridViewModels)
                     {
                         var reqItem = req.RequisitionItems.FirstOrDefault(m => m.Id == item.RequisitionItem.Id);
@@ -92,7 +99,10 @@ namespace BsslProcurement.Pages.Staff.ItemRequisition.ProcCommencement
                     }
                     await _context.SaveChangesAsync();
 
-                    //create and assign requisition job
+                    //create and mark done initiator procurement job
+                    await _procurementService.CreateInitiatorJobAsync(Requisition.Id, (await GetCurrentUserAsync()).Id, WfVm.Remark);
+
+                    //create and assign procurement job
                     await _procurementService.SendRequisitionToNextStageAsync(ReqId, WfVm.AssignedStaffCode, WfVm.WorkFlowId, WfVm.Remark);
 
 
@@ -134,6 +144,7 @@ namespace BsslProcurement.Pages.Staff.ItemRequisition.ProcCommencement
            
         }
 
+        private Task<User> GetCurrentUserAsync() => _userManager.GetUserAsync(HttpContext.User);
 
 
         public PartialViewResult OnGetStaffPartial()
