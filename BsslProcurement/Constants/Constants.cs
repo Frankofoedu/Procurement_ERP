@@ -11,7 +11,7 @@ namespace BsslProcurement.Const
             new SelectListItem { Text = "DSP – Direct Shopping Procurement", Value = "1" },
             new SelectListItem { Text = "NSB – National Competitive Procurement", Value = "2" },
             new SelectListItem { Text = "ICB – International Competitive Procurement", Value = "3" },
-            new SelectListItem { Text = "DSP – Direct Selective Procurement", Value = "4" },
+            new SelectListItem { Text = "SDP - Selective Direct Procurement", Value = "4" },
         };
 
         public const string AttachmentFolder = "Attachments";

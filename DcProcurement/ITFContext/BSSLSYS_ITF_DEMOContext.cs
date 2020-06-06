@@ -15,8 +15,10 @@ namespace DcProcurement.Contexts
         {
         }
 
-        public virtual DbSet<Codestab> Codestab { get; set; }
         public virtual DbSet<Accust> Accusts { get; set; }
+        public virtual DbSet<Busline> Busline { get; set; }
+        public virtual DbSet<Category> Category { get; set; }
+        public virtual DbSet<Codestab> Codestab { get; set; }
         public virtual DbSet<CodestabRel> CodestabRel { get; set; }
         public virtual DbSet<Joborder> Joborder { get; set; }
         public virtual DbSet<Procreq1> Procreq1 { get; set; }
@@ -68,6 +70,7 @@ namespace DcProcurement.Contexts
                     .HasMaxLength(10)
                     .IsUnicode(false);
             });
+
             modelBuilder.Entity<Compdata>(entity =>
             {
                 entity.HasKey(e => e.Compcode);
@@ -259,6 +262,7 @@ namespace DcProcurement.Contexts
                     .HasMaxLength(100)
                     .IsUnicode(false);
             });
+
             modelBuilder.Entity<Useracct>(entity =>
             {
                 entity.HasKey(e => e.Pkvalue);
@@ -381,6 +385,57 @@ namespace DcProcurement.Contexts
                     .HasMaxLength(10)
                     .IsUnicode(false);
             });
+
+            modelBuilder.Entity<Busline>(entity =>
+            {
+                entity.HasNoKey();
+
+                entity.ToTable("BUSLINE");
+
+                entity.Property(e => e.Buscode)
+                    .HasMaxLength(10)
+                    .IsUnicode(false);
+
+                entity.Property(e => e.Busdescr)
+                    .HasMaxLength(150)
+                    .IsUnicode(false);
+
+                entity.Property(e => e.CatCodes)
+                    .HasMaxLength(10)
+                    .IsUnicode(false);
+
+                entity.Property(e => e.Copny)
+                    .HasColumnName("COPNY")
+                    .HasMaxLength(10)
+                    .IsUnicode(false);
+
+                entity.Property(e => e.Description)
+                    .HasMaxLength(150)
+                    .IsUnicode(false);
+            });
+
+            modelBuilder.Entity<Category>(entity =>
+            {
+                entity.HasNoKey();
+
+                entity.Property(e => e.Code)
+                    .HasColumnName("code")
+                    .HasMaxLength(10)
+                    .IsUnicode(false)
+                    .IsFixedLength();
+
+                entity.Property(e => e.Copny)
+                    .HasColumnName("copny")
+                    .HasMaxLength(10)
+                    .IsUnicode(false);
+
+                entity.Property(e => e.Descr)
+                    .HasColumnName("descr")
+                    .HasMaxLength(150)
+                    .IsUnicode(false)
+                    .IsFixedLength();
+            });
+
             modelBuilder.Entity<Codestab>(entity =>
             {
                 entity.HasKey(e => e.Codeid);

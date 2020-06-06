@@ -10,6 +10,7 @@ using DcProcurement;
 using DcProcurement.Contexts;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
+using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.AspNetCore.Mvc.ViewFeatures;
 using Microsoft.EntityFrameworkCore;
 
@@ -39,6 +40,8 @@ namespace BsslProcurement.Pages.Staff.ItemRequisition.ProcCommencement
         public WorkFlowApproverViewModel WfVm { get; set; }
         [BindProperty]
         public ProcCommencementViewModel Vm { get; set; }
+        [BindProperty]
+        public List<ItemGridViewModel> ItemGridViewModels { get; set; }
         public DetailRequisitionModel(ProcurementDBContext context, BSSLSYS_ITF_DEMOContext bsslContext, IItemGridViewModelService itemGridViewModelService, IProcurementService procurementService)
         {
             _context = context;
@@ -49,7 +52,7 @@ namespace BsslProcurement.Pages.Staff.ItemRequisition.ProcCommencement
         public string Message { get; set; }
         public string Error { get; set; }
         public Requisition Requisition { get; set; }
-        public List<ItemGridViewModel> ItemGridViewModels { get; set; }
+        public List<SelectListItem> CategoryList { get; set; }
 
 
         public async Task<IActionResult> OnGetAsync(int? id)
@@ -71,11 +74,22 @@ namespace BsslProcurement.Pages.Staff.ItemRequisition.ProcCommencement
                 {
                     //update requisition
                     //get requisition
-                    var req = _context.Requisitions.Find(ReqId);
+                    var req = await _context.Requisitions.Include(n=>n.RequisitionItems).FirstOrDefaultAsync(m=>m.Id == ReqId);
                     req.ProcessType = Vm.ProcType;
                     req.ProcurementMethod = Vm.ProcMethod;
                     req.ERFx = Vm.Erfx;
+                    foreach (var item in ItemGridViewModels)
+                    {
+                        var reqItem = req.RequisitionItems.FirstOrDefault(m => m.Id == item.RequisitionItem.Id);
 
+                        if (reqItem!=null)
+                        {
+                            reqItem.Category = item.RequisitionItem.Category;
+                            reqItem.CategoryCode = item.RequisitionItem.CategoryCode;
+                            reqItem.SubCategory = item.RequisitionItem.SubCategory;
+                            reqItem.SubCategoryCode = item.RequisitionItem.SubCategoryCode;
+                        }
+                    }
                     await _context.SaveChangesAsync();
 
                     //create and assign requisition job
@@ -102,6 +116,7 @@ namespace BsslProcurement.Pages.Staff.ItemRequisition.ProcCommencement
             Requisition = await _context.Requisitions.FirstOrDefaultAsync(x => x.Id == id);
             ItemGridViewModels = await _itemGridViewModelService.GetItemsInRequisition(id.Value);
             //   ItemGridViewModels = Requisition.RequisitionItems.Select(x=> new ItemGridViewModel { Attachment = x.Attachment, RequisitionItem = x });
+            CategoryList = await _bsslContext.Category.Select(cat => new SelectListItem { Value = cat.Code, Text=cat.Descr }).ToListAsync();
 
             if (Requisition == null)
             {

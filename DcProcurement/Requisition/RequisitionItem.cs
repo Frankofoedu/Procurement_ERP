@@ -9,6 +9,10 @@ namespace DcProcurement
         public int Id { get; set; }
         public string StoreItemCode { get; set; }
         public string Description { get; set; }
+        public string Category { get; set; }
+        public string CategoryCode { get; set; }
+        public string SubCategory { get; set; }
+        public string SubCategoryCode { get; set; }
         public int Quantity { get; set; }
         public string UnitOfMeasurement { get; set; }
         /// <summary>
