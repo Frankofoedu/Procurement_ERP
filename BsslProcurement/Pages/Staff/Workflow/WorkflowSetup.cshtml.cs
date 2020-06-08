@@ -48,7 +48,7 @@ namespace BsslProcurement.Pages.Staff.Workflow
 
         public async Task OnGetAsync()
         {
-            WorkflowActions = await _context.WorkflowActions.Where(m=>m.Name != Constants.RequisitionInitiatorActionName).ToListAsync();
+            WorkflowActions = await _context.WorkflowActions.Where(m=>m.Name != Constants.InitiatorActionName).ToListAsync();
             foreach (var item in WorkflowActions) item.Workflows = null;
 
             ViewData["Categories"] = new SelectList(_context.WorkflowTypes, "Id", "Name");
@@ -59,7 +59,7 @@ namespace BsslProcurement.Pages.Staff.Workflow
             if (!ModelState.IsValid)
             {
                 Error = "An Error occured. Please check the data and try again.";
-                WorkflowActions = await _context.WorkflowActions.Where(m => m.Name != Constants.RequisitionInitiatorActionName).ToListAsync();
+                WorkflowActions = await _context.WorkflowActions.Where(m => m.Name != Constants.InitiatorActionName).ToListAsync();
                 foreach (var item in WorkflowActions) item.Workflows = null;
 
                 ViewData["Categories"] = new SelectList(_context.WorkflowTypes, "Id", "Name");
@@ -71,7 +71,7 @@ namespace BsslProcurement.Pages.Staff.Workflow
 
             if (CategoryName == Constants.RequisitionWorkflow)
             {
-                var initiatorAction = await _context.WorkflowActions.FirstOrDefaultAsync(m=>m.Name == Constants.RequisitionInitiatorActionName);
+                var initiatorAction = await _context.WorkflowActions.FirstOrDefaultAsync(m=>m.Name == Constants.InitiatorActionName);
                 count++;
 
                 var initiatorWf = new DcProcurement.Workflow()
@@ -102,7 +102,7 @@ namespace BsslProcurement.Pages.Staff.Workflow
             if (newPWF.Count < 1)
             {
                 Error = "An Error Occured. Make sure make sure one or more workflow steps are added.";
-                WorkflowActions = await _context.WorkflowActions.Where(m => m.Name != Constants.RequisitionInitiatorActionName).ToListAsync();
+                WorkflowActions = await _context.WorkflowActions.Where(m => m.Name != Constants.InitiatorActionName).ToListAsync();
                 foreach (var item in WorkflowActions) item.Workflows = null;
 
                 ViewData["Categories"] = new SelectList(_context.WorkflowTypes, "Id", "Name");
@@ -116,7 +116,7 @@ namespace BsslProcurement.Pages.Staff.Workflow
             _context.SaveChanges();
 
             InputModel = null;
-            WorkflowActions = await _context.WorkflowActions.Where(m => m.Name != Constants.RequisitionInitiatorActionName).ToListAsync();
+            WorkflowActions = await _context.WorkflowActions.Where(m => m.Name != Constants.InitiatorActionName).ToListAsync();
             foreach (var item in WorkflowActions) item.Workflows = null;
 
             ViewData["Categories"] = new SelectList(_context.WorkflowTypes, "Id", "Name", CategoryId);

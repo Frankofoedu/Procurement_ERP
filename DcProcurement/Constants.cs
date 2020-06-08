@@ -33,8 +33,8 @@ namespace DcProcurement
         #endregion
 
         #region Constants for Other Important Workflow Action
-        public const string RequisitionInitiatorActionName = "Requisition Initiator";
-        public const int RequisitionInitiatorActionId = 700;
+        public const string InitiatorActionName = "Initiator";
+        public const int InitiatorActionId = 700;
         public const string ApproverActionName = "Approval";
         public const int ApproverActionId = 800;
         #endregion

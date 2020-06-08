@@ -42,10 +42,8 @@ namespace DcProcurement
         public string ERFx { get; set; }
 
         public Enums.RequisitionState RequisitionState { get; set; } = Enums.RequisitionState.Saved;
-        //== true when requisition items has been priced
-        public bool isPriced { get; set; }
-        //== true when requisition has passed budget clearing stage
-        public bool? isBudgetCleared { get; set; }
+        public Enums.ProcurementState ProcurementState { get; set; } = Enums.ProcurementState.NotStarted;
+
         public string Status { get; set; }
         public string LoggedInUserId { get; set; }
 

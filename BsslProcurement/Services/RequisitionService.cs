@@ -40,10 +40,6 @@ namespace BsslProcurement.Services
         {
             return await _procurementDBContext.Requisitions.Include(x => x.RequisitionItems).ThenInclude(x=> x.Attachment).Where(p => p.LoggedInUserId == userId && p.RequisitionState == Enums.RequisitionState.Saved).OrderBy(x => x.DateCreated).ToListAsync();
         }
-        public async Task<List<Requisition>> GetBudgetClearedRequisitions()
-        {
-            return await _procurementDBContext.Requisitions.Include(x => x.RequisitionItems).Where(p => p.isBudgetCleared==true).ToListAsync();
-        }
 
 
         public async Task SendRequisitionToNextStageAsync(int requisitionId,string staffCode, int newWorkflowId, string remark)
@@ -107,7 +103,7 @@ namespace BsslProcurement.Services
         {
             //get Initiator workflow
             var InitiatorWorkflow = await _procurementDBContext.Workflows.Include(m=>m.WorkflowAction).Include(n=>n.WorkflowType)
-                .FirstOrDefaultAsync(IW => IW.WorkflowType.Name == Constants.RequisitionWorkflow && IW.WorkflowAction.Name == Constants.RequisitionInitiatorActionName);
+                .FirstOrDefaultAsync(IW => IW.WorkflowType.Name == Constants.RequisitionWorkflow && IW.WorkflowAction.Name == Constants.InitiatorActionName);
 
             var newReq = new RequisitionJob(requisitionId, staffId, InitiatorWorkflow.Id);
             if (isRejected)

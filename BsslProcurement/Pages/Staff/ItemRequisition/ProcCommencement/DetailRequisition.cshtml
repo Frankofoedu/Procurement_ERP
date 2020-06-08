@@ -199,7 +199,9 @@ else
                                     <thead>
                                         <tr class="table-primary">
                                             <th>S/No</th>
-                                            <th>Description Of <br />Goods/Services <i class="fa fa-asterisk fa-xs faRedColour"></i></th>
+                                            <th class="text-center">Store Item Code</th>
+                                            <th>Description Of <br />Goods/Services</th>
+                                            <th class="text-center">Supplier</th>
                                             <th>Quantity <i class="fa fa-asterisk fa-xs faRedColour"></i></th>
                                             <th>Unit Of<br />Measurement</th>
                                             <th>Category</th>
@@ -212,49 +214,63 @@ else
                                         {
                                             var item = Model.ItemGridViewModels[i].RequisitionItem;
 
-                                        <tr class="">
+                                            <tr class="">
 
-                                            <td class="">
-                                                <label>@(i + 1)</label>
-                                                <input type="hidden" asp-for="ItemGridViewModels[i].RequisitionItem.Id"/>
-                                            </td>
-                                            <td>
-                                                <label class="font-weight-bold">@item.Description</label>
-                                            </td>
-                                            <td>
-                                                <label class="font-weight-bold">@item.Quantity</label>
-                                            </td>
-                                            <td>
-                                                <label class="font-weight-bold">@item.UnitOfMeasurement</label>
-                                            </td>
-                                            <td>
-                                                <select id="catField" class="form-control-sm" asp-for="ItemGridViewModels[i].RequisitionItem.CategoryCode" asp-items="Model.CategoryList">
-                                                    <option value="">--Select--</option>
-                                                </select>
-                                                <input id="catNameField" type="hidden" asp-for="ItemGridViewModels[i].RequisitionItem.Category" />
-                                            </td>
-                                            <td>
-                                                <select id="subCatField" class="form-control-sm" asp-for="ItemGridViewModels[i].RequisitionItem.SubCategoryCode">
-                                                    <option value="">--Select--</option>
-                                                </select>
-                                                <input id="subCatNameField" type="hidden" asp-for="ItemGridViewModels[i].RequisitionItem.SubCategory" />
-                                            </td>
-                                            @if (item.Attachment != null)
-                                            {
-
-                                                <td>
-                                                    <partial name="~/Pages/Shared/Modals/_AttachmentViewPartial.cshtml" model="item.Attachment.FilePath" />
-                                                    <button data-preview="@i" class="btnPreviewItemAttachment">View File</button>
+                                                <td class="">
+                                                    <label>@(i + 1)</label>
+                                                    <input type="hidden" asp-for="ItemGridViewModels[i].RequisitionItem.Id" />
                                                 </td>
-                                            }
-                                            else
-                                            {
                                                 <td>
-                                                    <label>No Attachment</label>
+                                                    <div class="flex-row d-flex">
+                                                        <input type="text" codeID="@i" value=@item.StoreItemCode inputclass="code @i" />
+                                                        <input type="hidden" codeID="@i" asp-for="Requisition.RequisitionItems[i].StoreItemCode" inputclass="hiddencode @i" />
+                                                        <button class="btn loadItemModal" inputclass="@i"><i class="fa fa-search"></i></button>
+                                                    </div>
                                                 </td>
-                                            }
+                                                <td>
+                                                    <label class="font-weight-bold"><input id="@($"desc{i}")" type="text" asp-for="ItemGridViewModels[i].RequisitionItem.Description" /></label>
+                                                </td>
+                                                <td>
+                                                    <div class="flex-row d-flex">
+                                                        <input type="text" class="txtsupinput @i" />
+                                                        <input class="supinput @i" type="hidden" readonly asp-for="Requisition.RequisitionItems[i].VendorId" />
+                                                        <button class="btn loadVendorModal" inputclass="supinput @i" data-toggle="modal" data-target="#vendorModal"><i class="fa fa-search"></i></button>
+                                                    </div>
+                                                </td>
+                                                <td>
+                                                    <label class="font-weight-bold">@item.Quantity</label>
+                                                </td>
+                                                <td>
+                                                    <label class="font-weight-bold">@item.UnitOfMeasurement</label>
+                                                </td>
+                                                <td>
+                                                    <select id="catField" class="form-control-sm" asp-for="ItemGridViewModels[i].RequisitionItem.CategoryCode" asp-items="Model.CategoryList">
+                                                        <option value="">--Select--</option>
+                                                    </select>
+                                                    <input id="catNameField" type="hidden" asp-for="ItemGridViewModels[i].RequisitionItem.Category" />
+                                                </td>
+                                                <td>
+                                                    <select id="subCatField" class="form-control-sm" asp-for="ItemGridViewModels[i].RequisitionItem.SubCategoryCode">
+                                                        <option value="">--Select--</option>
+                                                    </select>
+                                                    <input id="subCatNameField" type="hidden" asp-for="ItemGridViewModels[i].RequisitionItem.SubCategory" />
+                                                </td>
+                                                @if (item.Attachment != null)
+                                                {
 
-                                        </tr>
+                                                    <td>
+                                                        <partial name="~/Pages/Shared/Modals/_AttachmentViewPartial.cshtml" model="item.Attachment.FilePath" />
+                                                        <button data-preview="@i" class="btnPreviewItemAttachment">View File</button>
+                                                    </td>
+                                                }
+                                                else
+                                                {
+                                                    <td>
+                                                        <label>No Attachment</label>
+                                                    </td>
+                                                }
+
+                                            </tr>
 
                                         }
                                         @*<tfoot>
@@ -349,7 +365,7 @@ else
                                             <partial name="~/Pages/Shared/Modals/_SelectApproverPartial.cshtml" model="Model.WfVm" />
                                         </div>
                                         <div class="modal-footer justify-content-around">
-                                            <input id="btnSubmit" class="btn btn-lg btn-primary" asp-page-handler="Submit" value="Ok" type="submit" placeholder="" />
+                                            <input id="btnSubmit" class="btn btn-lg btn-primary" asp-page-handler="Submit" value="Submit" type="submit" placeholder="" />
 
                                             <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
                                         </div>
@@ -357,8 +373,6 @@ else
                                 </div>
                             </div>
                             <div class="d-flex justify-content-around no-print">
-                                @*  <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>*@
-
                                 <input data-toggle="modal" data-target="#approverModal" class="btn btn-lg btn-primary" value="Send to Next Process" type="button" placeholder="" />
 
                                 <button id="printBtn" class="btn btn-lg btn-info" onclick="print(); return false;">Print/Preview</button>
@@ -394,6 +408,29 @@ else
         </div>
     </div>
 
+    <div class="modal" id="itemModal">
+        <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h4 class="modal-title">Item Details</h4>
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                </div>
+                <div class="modal-body">
+                    <div id="Itemgrid"></div>
+                </div>
+                <div id="Itemspinner" class="d-flex justify-content-center">
+                    <div class="loader">
+                    </div>
+                </div>
+
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <input type="hidden" id="itemHiddenURL" value="@Url.Action("GetItemPartial", "Items")" />
 }
 
 @section Scripts{
@@ -462,10 +499,44 @@ else
                 })
             });
         });
-        
+
         $(function () {
             $('#subCatField').on('change', function () {
                 $('#subCatNameField').val($('#subCatField option:selected').text());
+            });
+        });
+
+        //loads item modal
+        $(function () {
+            $('.loadItemModal').on('click', function () {
+                $('#itemModal').modal("show");
+
+                //get item name textbox
+                var index = $(this).attr('inputclass');
+                var fieldToAssign = $('[inputclass="' + 'hiddencode ' + index + '"]');
+                var txtToAssign = $('[inputclass="' + 'code ' + index + '"]');
+                //var txtToAssign = $('inputclass = '('.code.' + + ''))
+                //    ;
+                var baseUrl = $('#itemHiddenURL').val();
+                $('#Itemgrid').load(baseUrl, function () {
+                    $('#Itemspinner').removeClass('d-flex');
+                    $('#Itemspinner').hide();
+                    $('#itemTable').dataTable();
+
+                    $('#itemModal').on('click','.btnItemName', function () {
+                        //assign staff name textbox
+                        var btn = $(this);
+                        fieldToAssign.val(btn.val());
+                        txtToAssign.val(btn.val() + ' -- ' + btn.attr('itemName'));
+
+
+                        $('#itemModal').modal("hide");
+                        return false;
+                    });
+                });
+
+                return false;
+
             });
         });
 

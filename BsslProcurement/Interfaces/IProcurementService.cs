@@ -11,9 +11,12 @@ namespace BsslProcurement.Interfaces
     {
         Task SendRequisitionToNextStageAsync(int requisitionId, string staffCode, int newStage, string remark);
         Task SendRequisitionToPreviousStage(int requisitionId, string currStaffCode, string newStaffCode, int newStage, string remark);
+        Task CreateInitiatorJobAsync(int requisitionId, string staffId, string remark);
+
         Task<List<ProcurementJobViewModel>> GetProcurementRequisitionsJobsAssignedToLoggedInUser(string id);
 
         Task<List<Requisition>> GetRequisitionsForPricing();
+        Task<List<Requisition>> GetBudgetClearedRequisitions();
         Task<List<Requisition>> GetRequisitionsForPricingAssignedToUser(string userId);
 
         Task<List<Requisition>> GetApprovedRequisitions();
