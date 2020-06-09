@@ -8,6 +8,7 @@ namespace DcProcurement
     {
         public int Id { get; set; }
         public string StoreItemCode { get; set; }
+        public string StoreItemDescription { get; set; }
         public string Description { get; set; }
         public string Category { get; set; }
         public string CategoryCode { get; set; }
@@ -16,9 +17,9 @@ namespace DcProcurement
         public int Quantity { get; set; }
         public string UnitOfMeasurement { get; set; }
         /// <summary>
-        /// The identity User attached to this company. (User of type vendor)
+        /// From accust table
         /// </summary>
-        public string VendorId { get; set; }
+        public string AccustId { get; set; }
         public double UnitPrice { get; set; }
 
         public string Amount => (Convert.ToInt32(Quantity) * Convert.ToInt32(UnitPrice)).ToString();
@@ -26,7 +27,6 @@ namespace DcProcurement
         public Attachment Attachment { get; set; }
 
 
-        public VendorUser Vendor { get; set; }
         public Requisition Requisition { get; set; }
     }
 }
