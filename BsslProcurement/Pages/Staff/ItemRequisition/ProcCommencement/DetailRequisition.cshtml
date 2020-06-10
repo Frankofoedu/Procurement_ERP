@@ -262,7 +262,7 @@ else
 
                                                     <td>
                                                         <partial name="~/Pages/Shared/Modals/_AttachmentViewPartial.cshtml" model="item.Attachment.FilePath" />
-                                                        <button data-preview="@i" class="btnPreviewItemAttachment">View File</button>
+                                                        <button data-preview="@i" data-url="@item.Attachment.FilePath" class="btnPreviewItemAttachment">View File</button>
                                                     </td>
                                                 }
                                                 else
