@@ -68,19 +68,6 @@ namespace BsslProcurement.Pages.Staff.ItemRequisition
             await LoadDataAsync(id);
         }
 
-        public PartialViewResult OnGetItemPartial()
-        {
-
-           // get all vendor
-            var items = bsslContext.Stock.ToList();
-
-            return new PartialViewResult
-            {
-                ViewName = "Modals/_ItemLayout",
-                ViewData = new ViewDataDictionary<List<DcProcurement.Contexts.Stock>>(ViewData, items)
-            };
-        }
-
        
     }
 }
