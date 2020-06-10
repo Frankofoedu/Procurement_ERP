@@ -25,6 +25,8 @@ namespace BsslProcurement.Pages.Staff.ItemRequisition.ProcCommencement
         public string ProcType { get; set; }
         [Required(ErrorMessage = "Please select Erfx Type")]
         public string Erfx { get; set; }
+        [Required(ErrorMessage = "Please select Procurement Type")]
+        public string ProcurementType { get; set; }
 
     }
     public class DetailRequisitionModel : PageModel
@@ -85,6 +87,8 @@ namespace BsslProcurement.Pages.Staff.ItemRequisition.ProcCommencement
                     req.ProcessType = Vm.ProcType;
                     req.ProcurementMethod = Vm.ProcMethod;
                     req.ERFx = Vm.Erfx;
+                    req.ProcurementType = Vm.ProcurementType;
+
                     req.ProcurementState = Enums.ProcurementState.Started;
 
                     foreach (var item in ItemGridViewModels)
