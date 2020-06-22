@@ -1,0 +1,37 @@
+﻿@page
+@model BsslProcurement.CategorySetup.Main.DetailsModel
+
+@{
+    ViewData["Title"] = "Details";
+}
+
+<h2>Details</h2>
+
+<div>
+    <h4>Category</h4>
+    <hr />
+    <dl class="dl-horizontal">
+        <dt>
+            @Html.DisplayNameFor(model => model.Category.Code)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.Category.Code)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.Category.Descr)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.Category.Descr)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.Category.Copny)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.Category.Copny)
+        </dd>
+    </dl>
+</div>
+<div>
+    <a asp-page="./Edit" asp-route-id="@Model.Category.Id">Edit</a> |
+    <a asp-page="./Index">Back to List</a>
+</div>

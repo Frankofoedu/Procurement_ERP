@@ -1,0 +1,68 @@
+﻿@page
+@model BsslProcurement.CategorySetup.Sub.EditModel
+
+@{
+    ViewData["Title"] = "Edit SubCategory";
+}
+
+
+
+
+<div class="row mt-5">
+    <div class="col-md-3"></div>
+    <div class="col-md-6">
+        <form method="post" class="panel panel-login">
+            <div class="panel-heading">
+                <div class="row">
+                    <p class="header-text">@ViewData["Title"]</p>
+                </div>
+                <hr>
+            </div>
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <input type="hidden" asp-for="Busline.Id" />
+            <div class="form-group">
+                <label asp-for="Busline.CatCodes" class="control-label"></label>
+                <input asp-for="Busline.CatCodes" class="form-control" />
+                <span asp-validation-for="Busline.CatCodes" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Busline.Description" class="control-label"></label>
+                <input asp-for="Busline.Description" class="form-control" />
+                <span asp-validation-for="Busline.Description" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Busline.Buscode" class="control-label"></label>
+                <input asp-for="Busline.Buscode" class="form-control" />
+                <span asp-validation-for="Busline.Buscode" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Busline.Busdescr" class="control-label"></label>
+                <input asp-for="Busline.Busdescr" class="form-control" />
+                <span asp-validation-for="Busline.Busdescr" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Busline.Copny" class="control-label"></label>
+                <input asp-for="Busline.Copny" class="form-control" />
+                <span asp-validation-for="Busline.Copny" class="text-danger"></span>
+            </div>
+
+            <div class="form-group">
+                <div class="row">
+                    <div class="col-sm-3"> </div>
+                    <div class="col-sm-6">
+                        <input type="submit" value="Update" class="btn form-btn" />
+                    </div>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-12 text-center">
+                    <a asp-page="Index" class="btn btn-outline-dark">Back to List</a>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}
