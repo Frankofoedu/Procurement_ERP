@@ -176,13 +176,13 @@ namespace BsslProcurement.Services
             //get current job
             var currJob = await _procurementDBContext.RequisitionJobs.FirstOrDefaultAsync(x => x.JobStatus == Enums.JobState.NotDone && x.RequisitionId == requisitionId);
 
-            if (currJob == null)
+            if (currJob != null)
             {
-                throw new ArgumentNullException("Job does not exist");
+
+                //set current job as done
+                currJob.SetAsDone(DateTime.Now, remark);
             }
 
-            //set current job as done
-            currJob.SetAsDone(DateTime.Now, remark);
 
             var req = await _procurementDBContext.Requisitions.FirstOrDefaultAsync(m => m.Id == requisitionId);
             req.RequisitionState = Enums.RequisitionState.Quarantined;

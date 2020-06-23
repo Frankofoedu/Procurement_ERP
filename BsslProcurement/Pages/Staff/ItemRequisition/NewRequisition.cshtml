@@ -224,8 +224,9 @@
                                                         @if (gridItem.Attachment != null)
                                                         {
                                                             <span class="attachexist @i">
-                                                                <partial name="~/Pages/Shared/Modals/_AttachmentViewPartial.cshtml" model="gridItem.Attachment.FileName" />
-                                                                <button data-preview="@i" data-url="@gridItem.Attachment.FileName" class="btnPreviewItemAttachment">View File</button>
+                                                                @{var path = $"Attachment/{gridItem.Attachment.FileName}";}
+                                                                <partial name="~/Pages/Shared/Modals/_AttachmentViewPartial.cshtml" model="path" />
+                                                                <button data-preview="@i" data-url="@path" class="btnPreviewItemAttachment">View File</button>
                                                                 <input type="hidden" asp-for="gridVm[i].isAttachmentChanged" value="True" />
                                                                 <input type="hidden" asp-for="gridVm[i].AttachmentId" />
                                                                 <label class="del ml-1 @i" title="Delete Attachment" onclick="deleteAttachment(@i);">
