@@ -200,6 +200,7 @@
 
                                             <tr class="@("row" + i)">
                                                 <td>
+                                                    <input type="hidden" value="@i" name="gridVm.Index" />
                                                     <input type="hidden" asp-for="gridVm[i].RequisitionItem.Id" />
                                                     <input type="hidden" asp-for="gridVm[i].RequisitionItem.RequisitionId" />
                                                     <input type="text" required asp-for="gridVm[i].RequisitionItem.Description" />
@@ -259,6 +260,7 @@
                                     {
                                         <tr class="row0">
                                             <td>
+                                                <input type="hidden" value="0" name="gridVm.Index" />
                                                 <input type="text" required asp-for="gridVm[0].RequisitionItem.Description" />
                                             </td>
                                             <td>
@@ -987,35 +989,36 @@
 
 
         function newStepRow(index) {
-            var html = `<tr class="row${index}">
-                            <td>
-                                <input type="text" required="" id="gridVm_${index}__RequisitionItem_Description" name="gridVm[${index}].RequisitionItem.Description" value="">
-                                                        </td>
-                                <td>
-                                    <input type="number" required="" oninput="this.value=this.value.replace(/[^0-9]/g,'');" data-val="true" data-val-required="The Quantity field is required." id="gridVm_${index}__RequisitionItem_Quantity" name="gridVm[${index}].RequisitionItem.Quantity" value="">
-
-                                                        </td>
-                                    <td>
-                                        <div class="d-flex flex-row">
-                                            <input type="text" readonly="" required="" data-value="forUOM ${index}" id="gridVm_${index}__RequisitionItem_UnitOfMeasurement" name="gridVm[${index}].RequisitionItem.UnitOfMeasurement" value="">
-
-                                                <button class="btn loadUOMModal ml-1" value="forUOM ${index}" data-toggle="modal" data-target="#uomModal"><i class="fa fa-search"></i></button>
-                                                            </div>
-                                                        </td>
-                                        <td>
-                                            <div class="d-flex flex-row">
-                                                <input data-attachment="${index}" accept=".pdf" class="fileItem" type="file" id="gridVm_${index}__Attachment" name="gridVm[${index}].Attachment">
-                                                    <button data-preview="${index}" hidden="" class="btnPreviewItemAttachment">Preview</button>
-                                                    <button data-remove="${index}" hidden class="btnRemoveFile btn btn-outline-danger"><i class="fa fa-times"></i></button>
-                                                            </div>
-                                                        </td>
+            var html =`<tr class="row${index}">
                                             <td>
-                                                <label class="del" delRow="${index}">
+                                                <input type="hidden" value="${index}" name="gridVm.Index">
+                                                <input type="text" required="" id="gridVm_${index}__RequisitionItem_Description" name="gridVm[${index}].RequisitionItem.Description" value="">
+                                            </td>
+                                            <td>
+                                                <input type="number" required="" oninput="this.value=this.value.replace(/[^${index}-9]/g,'');" data-val="true" data-val-required="The Quantity field is required." id="gridVm_${index}__RequisitionItem_Quantity" name="gridVm[${index}].RequisitionItem.Quantity" value="">
+
+                                            </td>
+                                            <td>
+                                                <div class="d-flex flex-row">
+                                                    <input type="text" readonly="" required="" data-value="forUOM ${index}" id="gridVm_${index}__RequisitionItem_UnitOfMeasurement" name="gridVm[${index}].RequisitionItem.UnitOfMeasurement" value="">
+
+                                                    <button class="btn loadUOMModal ml-1" value="forUOM ${index}" data-toggle="modal" data-target="#uomModal"><i class="fa fa-search"></i></button>
+                                                </div>
+                                            </td>
+                                            <td>
+                                                <div class="d-flex flex-row">
+                                                    <input data-attachment="${index}" accept=".pdf" class="fileItem" type="file" id="gridVm_${index}__Attachment" name="gridVm[${index}].Attachment">
+                                                    <button data-preview="${index}" hidden="" class="btnPreviewItemAttachment">Preview</button>
+                                                    <button data-remove="${index}" hidden="" class="btnRemoveFile btn btn-outline-danger"><i class="fa fa-times"></i></button>
+                                                </div>
+                                            </td>
+                                            <td>
+                                                <label class="del" delrow="${index}">
                                                     <i class="fa fa-trash-alt"></i>
                                                 </label>
                                             </td>
 
-                                                    </tr>` ;
+                                        </tr>`;
             $('#requisitionBody').append(html);
         }
     </script>
