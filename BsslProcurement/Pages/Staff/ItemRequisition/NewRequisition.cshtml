@@ -168,7 +168,9 @@
                         <div class="col-sm-6">
                             <div class="form-group">
                                 <label>Delivery Destination : </label>
-                                <select asp-items="Model.Departments" asp-for="Requisition.RequiredAtDepartment" class="form-control"></select>
+                                <select asp-items="Model.Departments" required asp-for="Requisition.RequiredAtDepartment" class="form-control">
+                                    <option value="">--Select a Department--</option>
+                                </select>
                             </div>
                         </div>
 
