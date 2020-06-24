@@ -15,7 +15,7 @@ namespace DcProcurement.Jobs
             StaffId = staffId;
             Remark = "";
             WorkFlowId = workflowId;
-            JobStatus = Enums.JobState.NotDone;
+            JobStatus = Enums.JobState.Open;
         }
         public int? RequisitionProcId { get; set; }
 

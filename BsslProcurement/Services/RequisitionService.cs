@@ -22,8 +22,8 @@ namespace BsslProcurement.Services
         {
             var jobs = _procurementDBContext.RequisitionJobs
                 .Include(req=> req.Workflow).ThenInclude(wk => wk.WorkflowAction)
-                .Include(r=> r.Requisition).ThenInclude(ri=>ri.RequisitionItems)
-                .Where(x => x.StaffId == userId && ( x.JobStatus == Enums.JobState.NotDone || x.JobStatus == Enums.JobState.Rejected));
+                .Include(r=> r.Requisition).ThenInclude(ri=>ri.RequisitionItems).ThenInclude(x=> x.Attachment)
+                .Where(x => x.StaffId == userId && ( x.JobStatus == Enums.JobState.Open || x.JobStatus == Enums.JobState.Rejected));
 
             if (jobs != null)
             {
@@ -53,7 +53,7 @@ namespace BsslProcurement.Services
             }
             
             //get old job
-            var oldReqJob = await _procurementDBContext.RequisitionJobs.Where(req => req.RequisitionId == requisitionId && req.JobStatus == Enums.JobState.NotDone).FirstOrDefaultAsync();
+            var oldReqJob = await _procurementDBContext.RequisitionJobs.Where(req => req.RequisitionId == requisitionId && req.JobStatus == Enums.JobState.Open).FirstOrDefaultAsync();
 
             //get requisition workflow stages
             var reqWorkFlow = _procurementDBContext.Workflows.Where(x => x.WorkflowTypeId == DcProcurement.Constants.RequisitionWorkflowId).OrderBy(x => x.Step);
@@ -130,7 +130,7 @@ namespace BsslProcurement.Services
 
 
             //get current job
-            var currJob = await _procurementDBContext.RequisitionJobs.FirstOrDefaultAsync(x => x.JobStatus == Enums.JobState.NotDone && x.RequisitionId == requisitionId && x.StaffId == currStaffId);
+            var currJob = await _procurementDBContext.RequisitionJobs.FirstOrDefaultAsync(x => x.JobStatus == Enums.JobState.Open && x.RequisitionId == requisitionId && x.StaffId == currStaffId);
 
             if (currJob == null)
             {
@@ -150,7 +150,7 @@ namespace BsslProcurement.Services
         public async Task RejectRequisition(int requisitionId, string rejectionRemark)
         {
             //get current job
-            var currJob = await _procurementDBContext.RequisitionJobs.FirstOrDefaultAsync(x => x.JobStatus == Enums.JobState.NotDone && x.RequisitionId == requisitionId);
+            var currJob = await _procurementDBContext.RequisitionJobs.FirstOrDefaultAsync(x => x.JobStatus == Enums.JobState.Open && x.RequisitionId == requisitionId);
 
             if (currJob == null)
             {
@@ -174,7 +174,7 @@ namespace BsslProcurement.Services
         public async Task SendToQuarantine(int requisitionId, string remark)
         {
             //get current job
-            var currJob = await _procurementDBContext.RequisitionJobs.FirstOrDefaultAsync(x => x.JobStatus == Enums.JobState.NotDone && x.RequisitionId == requisitionId);
+            var currJob = await _procurementDBContext.RequisitionJobs.FirstOrDefaultAsync(x => x.JobStatus == Enums.JobState.Open && x.RequisitionId == requisitionId);
 
             if (currJob != null)
             {
@@ -198,7 +198,7 @@ namespace BsslProcurement.Services
             var newStaffId = await GetStaffIdFromCodeAsync(newStaffCode);
 
             //get current job
-            var currJob = await _procurementDBContext.RequisitionJobs.FirstOrDefaultAsync(x => x.JobStatus == Enums.JobState.NotDone && x.RequisitionId == requisition.Id && x.StaffId == currStaffId);
+            var currJob = await _procurementDBContext.RequisitionJobs.FirstOrDefaultAsync(x => x.JobStatus == Enums.JobState.Open && x.RequisitionId == requisition.Id && x.StaffId == currStaffId);
 
             if (currJob == null)
             {
@@ -212,7 +212,7 @@ namespace BsslProcurement.Services
 
         public async Task<WorkFlowApproverViewModel> GetCurrentWorkFlowOFRequisition(Requisition requisition)
         {
-            var job = await _procurementDBContext.RequisitionJobs.FirstOrDefaultAsync(x => x.RequisitionId == requisition.Id && (x.JobStatus == Enums.JobState.NotDone || x.JobStatus == Enums.JobState.Rejected));
+            var job = await _procurementDBContext.RequisitionJobs.FirstOrDefaultAsync(x => x.RequisitionId == requisition.Id && (x.JobStatus == Enums.JobState.Open || x.JobStatus == Enums.JobState.Rejected));
 
             var staffCode = await GetStaffCodeFromIdAsync(job.StaffId);
 

@@ -163,9 +163,9 @@
             }
 
             //get number of prequalification jobs
-            var PreQnotificationNum = await _context.PrequalificationJobs.Where(x => x.JobStatus == Enums.JobState.NotDone).CountAsync(m => m.StaffId == curUser.Id || m.StaffId == null);
-            var reqNotificationNum = await _context.RequisitionJobs.Where(x => x.JobStatus == Enums.JobState.NotDone && x.StaffId == curUser.Id).CountAsync();
-            var procNotificationNum = await _context.ProcurementJobs.Where(x => x.JobStatus == Enums.JobState.NotDone && x.StaffId == curUser.Id).CountAsync();
+            var PreQnotificationNum = await _context.PrequalificationJobs.Where(x => x.JobStatus == Enums.JobState.Open).CountAsync(m => m.StaffId == curUser.Id || m.StaffId == null);
+            var reqNotificationNum = await _context.RequisitionJobs.Where(x => x.JobStatus == Enums.JobState.Open && x.StaffId == curUser.Id).CountAsync();
+            var procNotificationNum = await _context.ProcurementJobs.Where(x => x.JobStatus == Enums.JobState.Open && x.StaffId == curUser.Id).CountAsync();
 
 
             <div class="row">
