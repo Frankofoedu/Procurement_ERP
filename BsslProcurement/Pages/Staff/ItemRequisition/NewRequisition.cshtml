@@ -228,12 +228,12 @@
                                                                 <partial name="~/Pages/Shared/Modals/_AttachmentViewPartial.cshtml" model="path" />
                                                                 <button data-preview="@i" data-url="@path" class="btnPreviewItemAttachment">View File</button>
                                                                 <input type="hidden" asp-for="gridVm[i].isAttachmentChanged" value="True" />
-                                                                <input type="hidden" asp-for="gridVm[i].AttachmentId" />
                                                                 <label class="del ml-1 @i" title="Delete Attachment" onclick="deleteAttachment(@i);">
                                                                     <i class="fa fa-trash-alt"></i>
                                                                 </label>
                                                             </span>
                                                             <span hidden class="attachnoexist @i">
+                                                                <input type="hidden" asp-for="gridVm[i].AttachmentId" />
                                                                 <input asp-for="gridVm[i].Attachment" data-attachment="@i" accept=".pdf" class="fileItem" />
                                                                 <button data-preview="@i" class="btnPreviewItemAttachment">Preview</button>
                                                             </span>

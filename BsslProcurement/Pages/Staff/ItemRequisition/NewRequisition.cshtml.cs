@@ -346,7 +346,7 @@ namespace BsslProcurement.Pages.Staff.ItemRequisition
                     if (v.Attachment != null)
                     {
                         re.Attachment = await FileUpload.GetFilePathsFromFileAsync(v.Attachment, _environment, "Attachment");
-
+                        re.Attachment.Id = v.AttachmentId.Value;
                     }
                     else
                     {
