@@ -124,7 +124,7 @@ namespace BsslProcurement.Services
 
             //get old job
             var prevReqJobs = await _procurementDBContext.RequisitionJobs.Include(m=>m.Workflow).ThenInclude(n=>n.WorkflowAction).Include(k=>k.Staff)
-                .Where(req => req.RequisitionId == requisitionId && req.JobStatus != Enums.JobState.NotDone)
+                .Where(req => req.RequisitionId == requisitionId && req.JobStatus != Enums.JobState.Open)
                 .OrderByDescending(m=>m.Id).ToListAsync();
 
             var data = prevReqJobs.Select(x => new WorkFlowTypesViewModel

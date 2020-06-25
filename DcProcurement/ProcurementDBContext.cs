@@ -118,8 +118,6 @@ namespace DcProcurement
 
             modelBuilder.Entity<CompanyInfo>().HasOne(m => m.Vendor).WithOne(n => n.CompanyInfo).HasForeignKey<VendorUser>(l => l.CompanyInfoId);
 
-            modelBuilder.Entity<RequisitionItem>().HasOne(m => m.Vendor).WithMany(n => n.RequisitionItems).HasForeignKey(w => w.VendorId);
-
             modelBuilder.Entity<Job>().ToTable("Jobs");
             //modelBuilder.Entity<RequisitionJob>()
             // .Property(e => e.RequisitionId)

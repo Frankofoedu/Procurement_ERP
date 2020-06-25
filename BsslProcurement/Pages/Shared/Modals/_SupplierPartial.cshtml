@@ -1,0 +1,31 @@
+﻿@using DcProcurement
+@model List<DcProcurement.Contexts.Accust>
+
+@section Styles{
+}
+<table id="supplierTable" class="table table-striped">
+    <thead>
+        <tr>
+            <th>Vendor No.</th>
+            <th>Vendor Name</th>
+            <th>Email</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>
+                    <button class="btn btn-link btnSupplierName" itemid="@item.Keyid" value="@($"{item.Custcode} -- {item.Accname}")">@item.Custcode</button>
+                </td>
+                <td>@item.Accname</td>
+                <td>@item.Memail</td>
+            </tr>
+        }
+    </tbody>
+</table>
+
+@section Scripts{
+
+
+}

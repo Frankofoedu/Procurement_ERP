@@ -12,7 +12,7 @@
         <div class="panel panel-login">
             <div class="panel-heading">
                 <div class="row">
-                    <p class="header-text">Requisition Tasks</p>
+                    <p class="header-text">Purchase Requisition Tasks</p>
                 </div>
                 <hr>
             </div>
@@ -58,11 +58,12 @@
                                 <th>PR No</th>
                                 <th>Request Description</th>
                                 <th>No of Items</th>
+                                <th>Attachments</th>
                                 <th>Prepared by</th>
                                 <th>Prepared for</th>
                                 <th>Approval Staff</th>
                                 <th>Date Assigned</th>
-                                <th>Requisition State</th>
+                                <th>Requisition Status</th>
                                 <th>Action</th>
                             </tr>
                         </thead>
@@ -81,6 +82,7 @@
                                 <td>@Item.Requisition.PRNumber</td>
                                 <td>@Item.Requisition.Description</td>
                                 <td>@Item.Requisition.RequisitionItems.Count</td>
+                                <td>@(Item.Requisition.RequisitionItems.Any(x => x.Attachment != null) ? "Contains attachment(s)" : "No attachment")</td>
                                 <td>@Item.Requisition.PreparedBy</td>
                                 <td>@Item.Requisition.PreparedFor</td>
                                 @if (PrevItem.Id > 0)
@@ -91,7 +93,7 @@
                                 {
                                     <td></td>
                                 }
-                                <td>@Item.CreationDate.ToShortDateString()</td>
+                                <td>@Item.CreationDate.ToShortNigeriaDateString()</td>
                                 <td>@Enum.GetName(typeof(Enums.JobState), @Item.JobStatus)</td>
                                 <td><a asp-page="/Staff/Itemrequisition/DetailRequisition" asp-route-isRejected="@isRejected" asp-route-Id="@Item.RequisitionId" asp-route-returnUrl="@Url.Page("/Staff/Jobviews/requisitionjobs", new { area = "" })" style="color: #007bff">View</a></td>
                             </tr>

@@ -30,7 +30,7 @@ namespace BsslProcurement.Services
             }
 
             //get old job
-            var oldProcJob = await _procurementDBContext.ProcurementJobs.Where(req => req.RequisitionProcId == requisitionId && req.JobStatus == Enums.JobState.NotDone).FirstOrDefaultAsync();
+            var oldProcJob = await _procurementDBContext.ProcurementJobs.Where(req => req.RequisitionProcId == requisitionId && req.JobStatus == Enums.JobState.Open).FirstOrDefaultAsync();
 
             //get requisition workflow stages
             var reqWorkFlow = _procurementDBContext.Workflows.Where(x => x.WorkflowTypeId == DcProcurement.Constants.ProcurementWorkflowId).OrderBy(x => x.Step);
@@ -112,7 +112,7 @@ namespace BsslProcurement.Services
 
         public async Task<List<ProcurementJobViewModel>> GetProcurementRequisitionsJobsAssignedToLoggedInUser(string userId)
         {
-            var jobs = _procurementDBContext.ProcurementJobs.Include(reqJob => reqJob.Requisition).ThenInclude(req => req.RequisitionItems).Include(x=> x.Workflow).Where(x => x.StaffId == userId && x.JobStatus == Enums.JobState.NotDone);
+            var jobs = _procurementDBContext.ProcurementJobs.Include(reqJob => reqJob.Requisition).ThenInclude(req => req.RequisitionItems).Include(x=> x.Workflow).Where(x => x.StaffId == userId && x.JobStatus == Enums.JobState.Open);
 
             if (jobs != null)
             {
@@ -129,7 +129,7 @@ namespace BsslProcurement.Services
         {
             var t = _procurementDBContext.ProcurementJobs.Include(procJob => procJob.Requisition).ToList();
 
-            var jobs = _procurementDBContext.ProcurementJobs.Include(procJob => procJob.Requisition).Include(x => x.Workflow).Where(x => x.StaffId == userId && x.JobStatus == Enums.JobState.NotDone );
+            var jobs = _procurementDBContext.ProcurementJobs.Include(procJob => procJob.Requisition).Include(x => x.Workflow).Where(x => x.StaffId == userId && x.JobStatus == Enums.JobState.Open );
 
             if (jobs != null)
             {
@@ -141,7 +141,7 @@ namespace BsslProcurement.Services
 
         public async Task<WorkFlowApproverViewModel> GetCurrentWorkFlowOFRequisition(Requisition requisition)
         {
-            var job = await _procurementDBContext.ProcurementJobs.FirstOrDefaultAsync(x => x.RequisitionProcId == requisition.Id && x.JobStatus == Enums.JobState.NotDone);
+            var job = await _procurementDBContext.ProcurementJobs.FirstOrDefaultAsync(x => x.RequisitionProcId == requisition.Id && x.JobStatus == Enums.JobState.Open);
 
             var staffCode = await GetStaffCodeFromIdAsync(job.StaffId);
 

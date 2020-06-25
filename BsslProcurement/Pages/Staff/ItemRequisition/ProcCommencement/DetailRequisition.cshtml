@@ -78,7 +78,6 @@
 }
 else
 {
-
     <div class="row mt-5">
         <div class="col-md-12">
             <form id="reqForm" class="panel panel-login" method="post" enctype="multipart/form-data">
@@ -100,18 +99,20 @@ else
 
                             <div class="d-flex justify-content-center mb-3">
 
-                                <div class=" panel">
+                                <div class="panel">
                                     <div class="text-center mb-3">
                                         <div class="form-group mb-0">
+                                            <label>Procurement Type : </label>
                                             <label class="btn btn-outline-dark pl-4">
-                                                <input class="form-check-input" type="radio" asp-for="Requisition.ProcurementType" value="Capital Procurement">
+                                                <input class="form-check-input" type="radio" asp-for="Vm.ProcurementType" value="Capital Procurement">
                                                 Capital Procurement
                                             </label>
                                             <label class="btn btn-outline-dark pl-4">
-                                                <input class="form-check-input" type="radio" asp-for="Requisition.ProcurementType" value="Recurrent Procurement">
+                                                <input class="form-check-input" type="radio" asp-for="Vm.ProcurementType" value="Recurrent Procurement">
                                                 Recurrent Procurement
                                             </label>
                                         </div>
+                                        <span asp-validation-for="Vm.ProcurementType"></span>
                                     </div>
                                 </div>
 
@@ -182,7 +183,7 @@ else
                                 <div class="form-group">
                                     <label>eRFx Type : </label>
                                     <select class="form-control" required asp-for="Vm.Erfx">
-                                        <option value="">Select eRFx</option>
+                                        <option value="">-- Select eRFx --</option>
                                     </select>
                                     <div id="staffErfx" hidden style="display:flex">
                                         <input class="form-control" asp-for="Vm.Erfx" readonly id="forStaffText" rows="6" placeholder="Pick Staff" />
@@ -222,19 +223,20 @@ else
                                                 </td>
                                                 <td>
                                                     <div class="flex-row d-flex">
-                                                        <input type="text" codeID="@i" value=@item.StoreItemCode inputclass="code @i" />
-                                                        <input type="hidden" codeID="@i" asp-for="Requisition.RequisitionItems[i].StoreItemCode" inputclass="hiddencode @i" />
+                                                        <input id="@($"code{i}")" type="text" value=@item.StoreItemCode />
+                                                        <input id="@($"hiddencode{i}")" type="hidden" asp-for="ItemGridViewModels[i].RequisitionItem.StoreItemCode" />
                                                         <button class="btn loadItemModal" inputclass="@i"><i class="fa fa-search"></i></button>
                                                     </div>
                                                 </td>
                                                 <td>
-                                                    <label class="font-weight-bold"><input id="@($"desc{i}")" type="text" asp-for="ItemGridViewModels[i].RequisitionItem.Description" /></label>
+                                                    <input id="@($"descInput{i}")" type="hidden" asp-for="ItemGridViewModels[i].RequisitionItem.StoreItemDescription" />
+                                                    <label id="@($"desc{i}")" class="font-weight-bold">@item.Description</label>
                                                 </td>
                                                 <td>
                                                     <div class="flex-row d-flex">
-                                                        <input type="text" class="txtsupinput @i" />
-                                                        <input class="supinput @i" type="hidden" readonly asp-for="Requisition.RequisitionItems[i].VendorId" />
-                                                        <button class="btn loadVendorModal" inputclass="supinput @i" data-toggle="modal" data-target="#vendorModal"><i class="fa fa-search"></i></button>
+                                                        <input type="text" class="@($"txtsupfield{i}")" />
+                                                        <input class="@($"txtsupinput{i}")" type="hidden" readonly asp-for="Requisition.RequisitionItems[i].AccustId" />
+                                                        <button class="btn loadSupplierModal" data-toggle="modal" indexClass="@i" ><i class="fa fa-search"></i></button>
                                                     </div>
                                                 </td>
                                                 <td>
@@ -244,23 +246,23 @@ else
                                                     <label class="font-weight-bold">@item.UnitOfMeasurement</label>
                                                 </td>
                                                 <td>
-                                                    <select id="catField" class="form-control-sm" asp-for="ItemGridViewModels[i].RequisitionItem.CategoryCode" asp-items="Model.CategoryList">
+                                                    <select class="form-control form-control-sm catField @($"catField{i}")" catId="@i" asp-for="ItemGridViewModels[i].RequisitionItem.CategoryCode" asp-items="Model.CategoryList">
                                                         <option value="">--Select--</option>
                                                     </select>
-                                                    <input id="catNameField" type="hidden" asp-for="ItemGridViewModels[i].RequisitionItem.Category" />
+                                                    <input id="@($"catNameField{i}")" type="hidden" asp-for="ItemGridViewModels[i].RequisitionItem.Category" />
                                                 </td>
                                                 <td>
-                                                    <select id="subCatField" class="form-control-sm" asp-for="ItemGridViewModels[i].RequisitionItem.SubCategoryCode">
+                                                    <select class="form-control-sm subCatField @($"subCatField{i}")" subcatId="@i" asp-for="ItemGridViewModels[i].RequisitionItem.SubCategoryCode">
                                                         <option value="">--Select--</option>
                                                     </select>
-                                                    <input id="subCatNameField" type="hidden" asp-for="ItemGridViewModels[i].RequisitionItem.SubCategory" />
+                                                    <input id="@($"subCatNameField{i}")" type="hidden" asp-for="ItemGridViewModels[i].RequisitionItem.SubCategory" />
                                                 </td>
                                                 @if (item.Attachment != null)
                                                 {
 
                                                     <td>
                                                         <partial name="~/Pages/Shared/Modals/_AttachmentViewPartial.cshtml" model="item.Attachment.FilePath" />
-                                                        <button data-preview="@i" class="btnPreviewItemAttachment">View File</button>
+                                                        <button data-preview="@i" data-url="@item.Attachment.FilePath" class="btnPreviewItemAttachment">View File</button>
                                                     </td>
                                                 }
                                                 else
@@ -283,14 +285,6 @@ else
                                             </tfoot>*@
                                 </table>
                                 <input type="hidden" id="lastIndex" value="0" />
-                                @*<div class="form-group">
-                                        <div class="row">
-                                            <div class="col-sm-3"> </div>
-                                            <div class="col-sm-6 text-center">
-                                                <button id="btnMore" class="btn btn-outline-primary">New Item</button>
-                                            </div>
-                                        </div>
-                                    </div>*@
                             </div>
 
 
@@ -320,8 +314,6 @@ else
                                             <label>For : </label>
                                             <span class="d-flex flex-row">
                                                 <input class="form-control" value="@Model.Requisition.PreparedFor" readonly id="forStaffText" rows="6" placeholder="" />
-                                                @*<button class="btn loadStaffModal" value="forStaffText" data-toggle="modal" data-target="#staffModal"><i class="fa fa-search"></i></button>*@
-
                                             </span>
 
                                         </div>
@@ -430,7 +422,30 @@ else
         </div>
     </div>
 
+    <div class="modal" id="supplierModal">
+        <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h4 class="modal-title">Item Details</h4>
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                </div>
+                <div class="modal-body">
+                    <div id="suppliergrid"></div>
+                </div>
+                <div id="supplierspinner" class="d-flex justify-content-center">
+                    <div class="loader">
+                    </div>
+                </div>
+
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
     <input type="hidden" id="itemHiddenURL" value="@Url.Action("GetItemPartial", "Items")" />
+    <input type="hidden" id="supplierHiddenURL" value="@Url.Action("GetSupplierPartial", "Vendor")" />
 }
 
 @section Scripts{
@@ -476,9 +491,11 @@ else
         });
 
         $(function () {
-            $('#catField').on('change', function () {
-                $('#catNameField').val($('#catField option:selected').text());
-                var categorycode = $('#catField').val()
+            $('.catField').on('change', function () {
+                var catindex = $(this).attr('catid');
+
+                $(`#catNameField${catindex}`).val($(`.catField${catindex} option:selected`).text());
+                var categorycode = $(`.catField${catindex}`).val()
                 var Url = window.location.origin + "/api/Bsslitf/Subcategory/" + categorycode;
                 $.ajax({
                     url: Url,
@@ -490,7 +507,7 @@ else
                             option += `<option value="${item.buscode}">${item.busdescr}</option>`;
                         }
 
-                        $('#subCatField').html(option);
+                        $(`.subCatField${catindex}`).html(option);
                     },
                     error: function (error) {
                         console.log(error);
@@ -501,10 +518,13 @@ else
         });
 
         $(function () {
-            $('#subCatField').on('change', function () {
-                $('#subCatNameField').val($('#subCatField option:selected').text());
+            $(`.subCatField`).on('change', function () {
+                var subcatindex = $(this).attr('subcatid');
+                $(`#subCatNameField${subcatindex}`).val($(`.subCatField${subcatindex} option:selected`).text());
             });
         });
+
+        var index = '';
 
         //loads item modal
         $(function () {
@@ -512,31 +532,69 @@ else
                 $('#itemModal').modal("show");
 
                 //get item name textbox
-                var index = $(this).attr('inputclass');
-                var fieldToAssign = $('[inputclass="' + 'hiddencode ' + index + '"]');
-                var txtToAssign = $('[inputclass="' + 'code ' + index + '"]');
-                //var txtToAssign = $('inputclass = '('.code.' + + ''))
-                //    ;
+                index = $(this).attr('inputclass');
+
                 var baseUrl = $('#itemHiddenURL').val();
+                $('#Itemgrid').html('');
+
                 $('#Itemgrid').load(baseUrl, function () {
                     $('#Itemspinner').removeClass('d-flex');
                     $('#Itemspinner').hide();
                     $('#itemTable').dataTable();
 
-                    $('#itemModal').on('click','.btnItemName', function () {
-                        //assign staff name textbox
-                        var btn = $(this);
-                        fieldToAssign.val(btn.val());
-                        txtToAssign.val(btn.val() + ' -- ' + btn.attr('itemName'));
-
-
-                        $('#itemModal').modal("hide");
-                        return false;
-                    });
                 });
 
                 return false;
 
+            });
+
+            $('#itemModal').on('click', '.btnItemName', function () {
+                //assign staff name textbox
+                var btn = $(this);
+                var x = index;
+
+                $(`#hiddencode${index}`).val(btn.val());
+                $(`#code${index}`).val(btn.val());
+                $(`#desc${index}`).text(btn.attr('itemName'));
+                $(`#descInput${index}`).val(btn.attr('itemName'));
+
+                $('#itemModal').modal("hide");
+                return false;
+            });
+        });
+
+        var supindex = '';
+        //loads supplier modal
+        $(function () {
+            $('.loadSupplierModal').on('click', function () {
+                $('#supplierModal').modal("show");
+
+                //get item name textbox
+                supindex = $(this).attr('indexclass');
+
+                var baseUrl = $('#supplierHiddenURL').val();
+                $('#suppliergrid').html('');
+
+                $('#suppliergrid').load(baseUrl, function () {
+                    $('#supplierspinner').removeClass('d-flex');
+                    $('#supplierspinner').hide();
+                    $('#supplierTable').dataTable();
+
+                });
+
+                return false;
+
+            });
+
+            $('#supplierModal').on('click', '.btnSupplierName', function () {
+                //assign staff name textbox
+                var btn = $(this);
+
+                $(`.txtsupfield${supindex}`).val(btn.val());
+                $(`.txtsupinput${supindex}`).val(btn.attr('itemid'));
+
+                $('#supplierModal').modal("hide");
+                return false;
             });
         });
 
@@ -575,8 +633,11 @@ else
             } else if (processType == "External") {
 
                 $('#Vm_Erfx').attr('hidden', false);
+                $('#Vm_Erfx').empty();
                 $('#staffErfx').attr('hidden', true);
                 $('#Vm_Erfx').append(
+                    
+                    $('<option>', { value: '', text: '-- Select Erfx--' }),
                     $('<option>', { value: 'RFQ', text: 'RFQ – Request for Quotation' }),
                     $('<option>', { value: 'RFP', text: 'RFP – Request for Proposal ' }),
                     $('<option>', { value: 'RFI', text: 'RFI – Request for Information' }),

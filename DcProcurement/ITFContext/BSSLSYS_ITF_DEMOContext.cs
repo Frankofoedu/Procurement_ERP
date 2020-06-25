@@ -388,7 +388,11 @@ namespace DcProcurement.Contexts
 
             modelBuilder.Entity<Busline>(entity =>
             {
-                entity.HasNoKey();
+                entity.Property<int>("Id")
+                  .ValueGeneratedOnAdd()
+                  .HasColumnType("int")
+                  .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
 
                 entity.ToTable("BUSLINE");
 
@@ -412,11 +416,21 @@ namespace DcProcurement.Contexts
                 entity.Property(e => e.Description)
                     .HasMaxLength(150)
                     .IsUnicode(false);
+
+
+                entity.HasKey("Id");
             });
 
             modelBuilder.Entity<Category>(entity =>
             {
-                entity.HasNoKey();
+
+                entity.Property<int>("Id")
+                   .ValueGeneratedOnAdd()
+                   .HasColumnType("int")
+                   .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+               
+
 
                 entity.Property(e => e.Code)
                     .HasColumnName("code")
@@ -434,6 +448,9 @@ namespace DcProcurement.Contexts
                     .HasMaxLength(150)
                     .IsUnicode(false)
                     .IsFixedLength();
+                
+                entity.HasKey("Id");
+
             });
 
             modelBuilder.Entity<Codestab>(entity =>

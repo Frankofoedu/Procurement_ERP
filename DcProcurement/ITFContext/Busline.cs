@@ -5,6 +5,7 @@ namespace DcProcurement.Contexts
 {
     public partial class Busline
     {
+        public int Id { get; set; }
         public string CatCodes { get; set; }
         public string Description { get; set; }
         public string Buscode { get; set; }

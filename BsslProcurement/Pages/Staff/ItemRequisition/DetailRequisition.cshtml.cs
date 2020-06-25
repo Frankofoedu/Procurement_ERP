@@ -71,7 +71,7 @@ namespace BsslProcurement.Pages.Staff.ItemRequisition
             Requisition = await _context.Requisitions.FirstOrDefaultAsync(x => x.Id == Id);
 
             var RequisitionJobs = await _context.RequisitionJobs.Include(n=>n.Workflow).ThenInclude(n=>n.WorkflowAction)
-                .Include(m=>m.Staff).Where(x => x.RequisitionId == Requisition.Id && x.JobStatus!= Enums.JobState.NotDone)
+                .Include(m=>m.Staff).Where(x => x.RequisitionId == Requisition.Id && x.JobStatus!= Enums.JobState.Open)
                 .OrderByDescending(m=>m.Id).ToListAsync();
 
             foreach (var item in RequisitionJobs)
@@ -106,7 +106,7 @@ namespace BsslProcurement.Pages.Staff.ItemRequisition
         }
         public async Task<IActionResult> OnPostAsync(string returnUrl = null)
         {
-            returnUrl ??= Url.Content("~/");
+            returnUrl ??= Url.Content("~/Staff");
 
             var staffCode = WfVm.AssignedStaffCode;
             var newStage = WfVm.WorkFlowId;

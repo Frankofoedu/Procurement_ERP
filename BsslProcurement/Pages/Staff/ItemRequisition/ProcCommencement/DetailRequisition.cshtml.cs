@@ -25,6 +25,8 @@ namespace BsslProcurement.Pages.Staff.ItemRequisition.ProcCommencement
         public string ProcType { get; set; }
         [Required(ErrorMessage = "Please select Erfx Type")]
         public string Erfx { get; set; }
+        [Required(ErrorMessage = "Please select Procurement Type")]
+        public string ProcurementType { get; set; }
 
     }
     public class DetailRequisitionModel : PageModel
@@ -44,6 +46,8 @@ namespace BsslProcurement.Pages.Staff.ItemRequisition.ProcCommencement
         public ProcCommencementViewModel Vm { get; set; }
         [BindProperty]
         public List<ItemGridViewModel> ItemGridViewModels { get; set; }
+
+
         public DetailRequisitionModel(UserManager<User> userManager, 
             ProcurementDBContext context, BSSLSYS_ITF_DEMOContext bsslContext, 
             IItemGridViewModelService itemGridViewModelService, IProcurementService procurementService)
@@ -83,6 +87,8 @@ namespace BsslProcurement.Pages.Staff.ItemRequisition.ProcCommencement
                     req.ProcessType = Vm.ProcType;
                     req.ProcurementMethod = Vm.ProcMethod;
                     req.ERFx = Vm.Erfx;
+                    req.ProcurementType = Vm.ProcurementType;
+
                     req.ProcurementState = Enums.ProcurementState.Started;
 
                     foreach (var item in ItemGridViewModels)
@@ -91,6 +97,8 @@ namespace BsslProcurement.Pages.Staff.ItemRequisition.ProcCommencement
 
                         if (reqItem!=null)
                         {
+                            reqItem.StoreItemCode = item.RequisitionItem.StoreItemCode;
+                            reqItem.StoreItemDescription = item.RequisitionItem.StoreItemDescription;
                             reqItem.Category = item.RequisitionItem.Category;
                             reqItem.CategoryCode = item.RequisitionItem.CategoryCode;
                             reqItem.SubCategory = item.RequisitionItem.SubCategory;
@@ -100,7 +108,7 @@ namespace BsslProcurement.Pages.Staff.ItemRequisition.ProcCommencement
                     await _context.SaveChangesAsync();
 
                     //create and mark done initiator procurement job
-                    await _procurementService.CreateInitiatorJobAsync(Requisition.Id, (await GetCurrentUserAsync()).Id, WfVm.Remark);
+                    await _procurementService.CreateInitiatorJobAsync(ReqId, (await GetCurrentUserAsync()).Id, WfVm.Remark);
 
                     //create and assign procurement job
                     await _procurementService.SendRequisitionToNextStageAsync(ReqId, WfVm.AssignedStaffCode, WfVm.WorkFlowId, WfVm.Remark);
@@ -141,7 +149,8 @@ namespace BsslProcurement.Pages.Staff.ItemRequisition.ProcCommencement
             {
                 WfVm = new WorkFlowApproverViewModel { WorkFlowTypeId = workflow.Id };
             }
-           
+
+
         }
 
         private Task<User> GetCurrentUserAsync() => _userManager.GetUserAsync(HttpContext.User);

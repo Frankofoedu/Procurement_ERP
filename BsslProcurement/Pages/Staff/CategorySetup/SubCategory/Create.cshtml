@@ -1,0 +1,112 @@
+﻿@page
+@model BsslProcurement.CategorySetup.Sub.CreateModel
+
+@{
+    ViewData["Title"] = "Create";
+}
+
+
+<h2>Create Sub Category</h2>
+<hr />
+<div class="row">
+    <div class="col-md-4">
+        <form method="post">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <div class="form-group">
+                <label asp-for="Busline.CatCodes" class="control-label"></label>
+                <input type="text" readonly required data-value="forCatCode" />
+
+                <button class="btn loadCatCodeModal ml-1" value="forCatCode" data-toggle="modal" data-target="#catCodeModal"><i class="fa fa-search"></i></button>
+
+                <input type="hidden" data-hidden="forCatCode" asp-for="Busline.CatCodes"/>
+                <span asp-validation-for="Busline.CatCodes" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Busline.Description" class="control-label"></label>
+                <input asp-for="Busline.Description" class="form-control" />
+                <span asp-validation-for="Busline.Description" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Busline.Buscode" class="control-label"></label>
+                <input asp-for="Busline.Buscode" class="form-control" />
+                <span asp-validation-for="Busline.Buscode" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Busline.Busdescr" class="control-label"></label>
+                <input asp-for="Busline.Busdescr" class="form-control" />
+                <span asp-validation-for="Busline.Busdescr" class="text-danger"></span>
+            </div>
+
+            <div class="form-group">
+                <input type="submit" value="Create" class="btn btn-default" />
+            </div>
+        </form>
+    </div>
+</div>
+
+<div class="modal" id="catCodeModal">
+    <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title">Category Codes</h4>
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+            </div>
+            <div class="modal-body">
+                <div id="catCodegrid"></div>
+            </div>
+            <div id="catCodespinner" class="d-flex justify-content-center">
+                <div class="loader">
+                </div>
+            </div>
+
+            <div class="modal-footer">
+                <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div>
+    <a asp-page="Index">Back to List</a>
+</div>
+
+<input type="hidden" id="catCodeHiddenURL" value="@Url.Action("GetCatCode", "Category")" />
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+
+
+    <script>
+        $(function () {
+            $('.loadCatCodeModal').on('click', function () {
+                $('#catCodegrid').empty();
+                $('#catCodespinner').addClass('d-flex');
+                $('#catCodespinner').show();
+                $('#catCodeModal').modal("show");
+
+                //get unit name textbox
+                var value = $(this).val();
+                var txtToAssign = $('input[data-value="' + value + '"]');                
+                var hiddenToAssign = $('input[data-hidden="' + value + '"]');
+
+                var url = $('#catCodeHiddenURL').val();
+
+                $('#catCodegrid').load(url, function () {
+                    $('#catCodespinner').removeClass('d-flex');
+                    $('#catCodespinner').hide();
+                    $('#catCodeTable').dataTable();
+
+                    $('#catCodeTable').on('click', '.btncatCodeName', function () {
+                        //assign unit of measurement name textbox
+                        var ctrl = $(this);
+                        txtToAssign.val(ctrl.attr('itemName'));
+                        hiddenToAssign.val(ctrl.val());
+                        $('#catCodeModal').modal("hide");
+                        return false;
+                    });
+                });
+                return false;
+            });
+        });
+    </script>
+}

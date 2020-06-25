@@ -51,10 +51,10 @@
                                 <secure-content proc-nodiscovery="true" asp-page="/Staff/ItemRequisition/NewRequisition"><i class="fas fa-shopping-cart"></i>Create Purchase Requisition</secure-content>
 
 
-                                <secure-content proc-nodiscovery="true" asp-page="/Staff/ItemRequisition/SavedRequisitions"><i class="fas fa-shopping-cart"></i> View Saved Requisition</secure-content>
-                                <secure-content proc-nodiscovery="true" asp-page="/Staff/ItemRequisition/SentRequisition"><i class="fas fa-shopping-cart"></i> View Submitted Requisition</secure-content>
-                                <secure-content proc-nodiscovery="true" asp-page="/Staff/ItemRequisition/ApprovedRequisition"><i class="fas fa-shopping-cart"></i> View Approved Requisition</secure-content>
-                                <secure-content proc-nodiscovery="true" asp-page="/Staff/ItemRequisition/AllRequisition"><i class="fas fa-shopping-cart"></i> View All Requisition</secure-content>
+                                <secure-content proc-nodiscovery="true" asp-page="/Staff/ItemRequisition/SavedRequisitions"><i class="fas fa-shopping-cart"></i> View Saved Requisitions</secure-content>
+                                <secure-content proc-nodiscovery="true" asp-page="/Staff/ItemRequisition/SentRequisitions"><i class="fas fa-shopping-cart"></i> View Sent Requisitions</secure-content>
+                                <secure-content proc-nodiscovery="true" asp-page="/Staff/ItemRequisition/ApprovedRequisitions"><i class="fas fa-shopping-cart"></i> View Approved Requisitions</secure-content>
+                                <secure-content proc-nodiscovery="true" asp-page="/Staff/ItemRequisition/AllRequisition"><i class="fas fa-shopping-cart"></i> View All Requisitions</secure-content>
                                 <secure-content proc-nodiscovery="true"><i class="fas fa-shopping-cart"></i>Import Requisition</secure-content>
                             </li>
                         </ul>
@@ -155,6 +155,12 @@
                                     <a asp-page="/Staff/UoM/Index"><i class="fas fa-file-invoice mr-1"></i> Unit of Measurement</a>
                                 </li>
                                 <li>
+                                    <a asp-page="/Staff/CategorySetup/MainCategory/Index"><i class="fas fa-file-invoice mr-1"></i> Main Category</a>
+                                </li>
+                                <li>
+                                    <a asp-page="/Staff/CategorySetup/SubCategory/Index"><i class="fas fa-file-invoice mr-1"></i> Sub Category</a>
+                                </li>
+                                <li>
                                     <a asp-page="/Staff/Administration/GroupManagement"><i class="fas fa-file-archive mr-1"></i>User Management</a>
                                 </li>
                                 <li>
@@ -164,7 +170,7 @@
                                     <a asp-page="/Staff/PreQSetup"><i class="fas fa-file-invoice mr-1"></i> Prequalification Setup</a>
                                 </li>
 
-                               </ul>
+                            </ul>
                     </li>
                 </ul>
             </nav>
@@ -188,6 +194,11 @@
                         <i class="fas fa-bars"></i>
                     </button>
                     <div class="collapse navbar-collapse w-100" id="navbarSupportedContent">
+                        <ul class="nav navbar-nav mr-auto ml-4">
+                            <li class="float-right mr-3 my-2">
+                                <a class="navbar-brand" asp-page="/Staff/Index"><i class="fa fa-home" aria-hidden="true"></i> Dashboard</a>
+                            </li>
+                        </ul>
                         <ul class="nav navbar-nav ml-auto">
                             <partial name="_LoginPartial" />
                         </ul>

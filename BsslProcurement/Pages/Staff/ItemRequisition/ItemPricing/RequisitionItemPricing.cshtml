@@ -9,6 +9,7 @@
 
     <link rel="stylesheet" href="~/css/jquery.fancybox.css" type="text/css" />
     <link href="~/css/jquery.dataTables.min.css" rel="stylesheet" />
+    <link href="~/css/quill.snow.css" rel="stylesheet" />
 
     <style>
         .loader {
@@ -30,8 +31,26 @@
                 transform: rotate(360deg);
             }
         }
-    </style>
 
+        .faRedColour {
+            color: red;
+        }
+
+        .ql-editor {
+            min-height: 200px;
+        }
+
+        @@media (min-width: 768px) {
+            .modal-xl {
+                width: 90%;
+                max-width: 1200px;
+            }
+        }
+
+        .del {
+            cursor: pointer;
+        }
+    </style>
 }
 
 @if (!string.IsNullOrWhiteSpace(Model.Message))
@@ -81,12 +100,21 @@ else
                                 <div class=" panel">
                                     <div class="text-center mb-3">
                                         <div class="form-group mb-0">
+                                            <label>Procurement Type : </label>
                                             <label class="btn btn-outline-dark pl-4">
-                                                <input class="form-check-input" type="radio" onclick="return false;" asp-for="Requisition.ProcurementType" value="Capital Procurement">
+                                                @if (Model.Requisition.ProcurementType.ToLower() == ("Capital Procurement").ToLower())
+                                                {<input class="form-check-input" type="radio" onclick="return false;" asp-for="Requisition.ProcurementType" value="Capital Procurement" Checked> }
+                                                else
+                                                { <input class="form-check-input" type="radio" onclick="return false;" asp-for="Requisition.ProcurementType" value="Capital Procurement">}
+
                                                 Capital Procurement
                                             </label>
                                             <label class="btn btn-outline-dark pl-4">
-                                                <input class="form-check-input" type="radio" onclick="return false;" asp-for="Requisition.ProcurementType" value="Recurrent Procurement">
+                                                @if (Model.Requisition.ProcurementType.ToLower() == ("Recurrent Procurement").ToLower())
+                                                {<input class="form-check-input" type="radio" onclick="return false;" asp-for="Requisition.ProcurementType" value="Recurrent Procurement" Checked> }
+                                                else
+                                                { <input class="form-check-input" type="radio" onclick="return false;" asp-for="Requisition.ProcurementType" value="Recurrent Procurement">}
+
                                                 Recurrent Procurement
                                             </label>
                                         </div>
@@ -161,9 +189,10 @@ else
                                         <tr class="table-primary">
                                             <th>S/No</th>
                                             <th class="text-center">Store Item Code</th>
-                                            <th class="text-center">Supplier</th>
                                             <th class="text-center">Description Of <br />Goods/Services</th>
                                             <th class="text-center">Unit Of<br />Measurement</th>
+                                            <th class="text-center">Category</th>
+                                            <th class="text-center">Subcategory</th>
                                             <th class="text-center">Unit Price</th>
                                             <th class="text-center">Quantity </th>
                                             <th class="text-center">Amount</th>
@@ -179,62 +208,44 @@ else
 
                                                 <td class="">
                                                     <label>@(i + 1)</label>
-                                                    <input type="hidden" />
                                                 </td>
 
                                                 <td>
-                                                    <div class="flex-row d-flex">
-                                                        <input type="text" codeID="@i" value=@item.StoreItemCode inputclass="code @i" />
-                                                        <input type="hidden" codeID="@i" asp-for="Requisition.RequisitionItems[i].StoreItemCode" inputclass="hiddencode @i" />
-                                                        <button class="btn loadItemModal" inputclass="@i" @*data-toggle="modal" data-target="#itemModal"*@><i class="fa fa-search"></i></button>
-                                                    </div>
+                                                    @item.StoreItemCode"
                                                 </td>
                                                 <td>
-                                                    <div class="flex-row d-flex">
-                                                        <input type="text" class="txtsupinput @i" />
-                                                        <input class="supinput @i" type="hidden" readonly asp-for="Requisition.RequisitionItems[i].VendorId" />
-                                                        <button class="btn loadVendorModal" inputclass="supinput @i" data-toggle="modal" data-target="#vendorModal"><i class="fa fa-search"></i></button>
-                                                    </div>
+                                                    @(string.IsNullOrWhiteSpace(item.StoreItemDescription) ? item.Description : item.StoreItemDescription)
                                                 </td>
                                                 <td>
-                                                    <input type="text" required asp-for="Requisition.RequisitionItems[i].Description" value="@item.Description" />
+                                                    @item.UnitOfMeasurement
                                                 </td>
                                                 <td>
-                                                    <input type="text" required asp-for="Requisition.RequisitionItems[i].UnitOfMeasurement" value="@item.UnitOfMeasurement" />
+                                                    @item.Category
+                                                </td>
+                                                <td>
+                                                    @item.SubCategory
                                                 </td>
                                                 <td>
                                                     <input class="text-right" data-type="unitPrice @i" type="number" onkeyup="Sum(@i);" asp-for="Requisition.RequisitionItems[i].UnitPrice" value="@item.UnitPrice" />
-
                                                 </td>
                                                 <td>
                                                     <input class="text-right" data-type="quantity @i" type="number" onkeyup="Sum(@i);" required asp-for="Requisition.RequisitionItems[i].Quantity" value="@item.Quantity" />
                                                 </td>
-
                                                 <td>
                                                     <input class="text-right" data-type="amount @i" type="number" asp-for="Requisition.RequisitionItems[i].Amount" />
-
                                                 </td>
                                             </tr>
 
                                         }
                                     <tfoot>
                                         <tr>
-                                            <td></td>
-                                            <td class="font-weight-bold text-right">Total Amount : </td>
-                                            <td class="font-weight-bold text-lg-center">@NairaFormat.GetNairaValue(Model.Requisition.RequisitionItems.Sum(x => Convert.ToInt32(x.Amount)))</td>
+                                            <td class="font-weight-bold text-right" colspan="2">Total Amount : </td>
+                                            <td class="font-weight-bold text-left" colspan="2">@NairaFormat.GetNairaValue(Model.Requisition.RequisitionItems.Sum(x => Convert.ToInt32(x.Amount)))</td>
                                             <td></td>
                                         </tr>
                                     </tfoot>
                                 </table>
                                 <input type="hidden" id="lastIndex" value="0" />
-                                @*<div class="form-group">
-                <div class="row">
-                    <div class="col-sm-3"> </div>
-                    <div class="col-sm-6 text-center">
-                        <button id="btnMore" class="btn btn-outline-primary">New Item</button>
-                    </div>
-                </div>
-            </div>*@
                             </div>
 
 
@@ -245,18 +256,13 @@ else
                                             <label>Prepared By : </label>
                                             <span class="d-flex flex-row">
                                                 <input id="txtprepared" asp-for="Requisition.PreparedBy" class="form-control" readonly rows="6" placeholder="" />
-                                                @*<button class="btn loadStaffModal" value="txtprepared" data-toggle="modal" data-target="#staffModal"><i class="fa fa-search"></i></button>*@
-
                                             </span>
-
-
                                         </div>
                                         <div class="col-sm-12 mt-2">
                                             <label>Rank : </label>
                                             <span class="d-flex flex-row">
                                                 <input class="form-control" asp-for="Requisition.PreparedByRank" readonly id="txtpreparedRank" rows="6" placeholder="" />
                                             </span>
-
                                         </div>
                                     </div>
                                     <div class="my-2 col-sm-6">
@@ -264,10 +270,7 @@ else
                                             <label>For : </label>
                                             <span class="d-flex flex-row">
                                                 <input class="form-control" asp-for="Requisition.PreparedFor" readonly id="forStaffText" rows="6" placeholder="" />
-                                                @*<button class="btn loadStaffModal" value="forStaffText" data-toggle="modal" data-target="#staffModal"><i class="fa fa-search"></i></button>*@
-
                                             </span>
-
                                         </div>
                                         <div class="col-sm-12 mt-2">
                                             <label>Rank : </label>
@@ -280,14 +283,10 @@ else
 
                                 </div>
                             </div>
-                            <div class="col-sm-12 m-4 ">
 
-                            </div>
-
-
-                            <div class="col-sm-12 m-4">
+                            <div class="col-sm-12 mt-2">
                                 <div class="form-group">
-                                    <h5 class="font-weight-bold">Purpose : </h5>
+                                    <h5 class="font-weight-bold">Justification : </h5>
                                     <input type="hidden" id="purpose" value="@Model.Requisition.Purpose" />
                                     <div id="editor">
 
@@ -297,72 +296,56 @@ else
 
                         </div>
 
-                        <div class="col-sm-12">
-                            <div class="form-group">
-                                <label>Send to Next Staff :</label>
-                                <div class="panel border border-dark rounded p-2">
-                                    <partial name="~/Pages/Shared/Modals/_SelectApproverPartial.cshtml" model="Model.WfVm" />
-                                </div>
-                            </div>
-
-
-                        </div>
                         @if (Model.WfVm != null)
                         {
+                            <div class="modal fade" id="approverModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+                                <div class="modal-dialog modal-lg modal-dialog-centered" role="document">
+                                    <div class="modal-content">
+                                        <div class="modal-header">
+                                            <h5 class="modal-title" id="exampleModalLongTitle">Send to Next Staff :</h5>
+                                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                                <span aria-hidden="true">&times;</span>
+                                            </button>
+                                        </div>
+                                        <div class="modal-body">
+                                            <partial name="~/Pages/Shared/Modals/_SelectApproverPartial.cshtml" model="Model.WfVm" />
+                                        </div>
+                                        <div class="modal-footer justify-content-around">
+                                            <input id="btnSubmit" class="btn btn-lg btn-primary" asp-page-handler="Submit" value="Submit" type="submit" placeholder="" />
 
+                                            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
                             <div class="d-flex justify-content-around no-print">
-                                @*  <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>*@
-                                <input id="btnSave" class="btn btn-lg btn-outline-info float-left" asp-page-handler="Save" value="Save For Later" type="submit" placeholder="" />
-
-                                <input id="btnSubmit" class="btn btn-lg btn-primary" asp-page-handler="Submit" value="Submit" type="submit" placeholder="" />
+                                <input data-toggle="modal" data-target="#approverModal" class="btn btn-lg btn-primary" value="Send to Next Process" type="button" placeholder="" />
 
                                 <button id="printBtn" class="btn btn-lg btn-info" onclick="print(); return false;">Print/Preview</button>
                             </div>
 
                         }
+
                     </div>
                 </div>
-                <partial name="~/Pages/Shared/Modals/_VendorWithEmailPartial.cshtml" model="Model.VendorEmailListObj" />
             </form>
         </div>
     </div>
 
-    <div class="modal" id="itemModal">
-        <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable modal-lg">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h4 class="modal-title">Item Details</h4>
-                    <button type="button" class="close" data-dismiss="modal">&times;</button>
-                </div>
-                <div class="modal-body">
-                    <div id="Itemgrid"></div>
-                </div>
-                <div id="Itemspinner" class="d-flex justify-content-center">
-                    <div class="loader">
-                    </div>
-                </div>
-
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <input type="hidden" id="itemHiddenURL" value="@Url.Action("GetItemPartial", "Items")" />
 }
 @section Scripts{
 
-    <script src="~/js/jquery.fancybox.pack.js"></script>
     <script src="~/js/quill.js"></script>
+    <script src="~/js/jquery.dataTables.min.js"></script>
+    <script src="~/js/jquery.fancybox.pack.js"></script>
     <script>
 
         //amount sum in textbox
         function Sum(index) {
-            var unitPriceTextBoxValue = $('[data-type="unitPrice '+ index + '"]').first().val();
-            var quantitytextBoxValue = $('[data-type="quantity '+ index + '"]').first().val();
+            var unitPriceTextBoxValue = $('[data-type="unitPrice ' + index + '"]').first().val();
+            var quantitytextBoxValue = $('[data-type="quantity ' + index + '"]').first().val();
 
-            var amountTextBox = $('[data-type="amount '+ index + '"]').first();
+            var amountTextBox = $('[data-type="amount ' + index + '"]').first();
 
             amountTextBox.val(unitPriceTextBoxValue * quantitytextBoxValue);
         }
@@ -394,56 +377,22 @@ else
                 });
             });
 
+            
+            //to create a custom memo field/ textbox
+            var quill = new Quill('#editor', {
+                theme: 'snow',
+                format: {
+                    color: 'red'
+                }
+            });
 
             //set purpose field
             var purposeValue = $("#purpose").val();
-            var purposeField = document.getElementById('editor');
-            purposeField.innerHTML = purposeValue;
+            quill.enable(false);
+            quill.setText(purposeValue);
 
         });
 
-        //loads item modal
-        $(function () {
-            $('.loadItemModal').on('click', function () {
-                $('#itemModal').modal("show");
-
-                //get item name textbox
-                var index = $(this).attr('inputclass');
-                var fieldToAssign = $('[inputclass="' + 'hiddencode ' + index + '"]');
-                var txtToAssign = $('[inputclass="' + 'code ' + index + '"]');
-                //var txtToAssign = $('inputclass = '('.code.' + + ''))
-                //    ;
-                var baseUrl = $('#hiddenURLRank').val();
-                $('#Itemgrid').load(baseUrl, function () {
-                    $('#Itemspinner').removeClass('d-flex');
-                    $('#Itemspinner').hide();
-                    $('#itemTable').dataTable();
-
-                    $('.btnItemName').on('click', function () {
-                        //assign staff name textbox
-                        var btn = $(this);
-                        fieldToAssign.val(btn.val());
-                        txtToAssign.val(btn.val() + ' -- ' + btn.attr('itemName'));
-
-
-                        $('#itemModal').modal("hide");
-                        return false;
-                    });
-                });
-
-                return false;
-
-            });
-        });
-
-
-        //loads vendor modal
-        $('.loadVendorModal').on('click', function () {
-            event.preventDefault();
-            loadVendorWithEmailModal();
-        });
-
-     
     </script>
 
 }

@@ -1,0 +1,66 @@
+﻿@page
+@model BsslProcurement.CategorySetup.Main.IndexModel
+
+@{
+    ViewData["Title"] = "Index";
+}
+<div class="row mt-3">
+    <div class="col-md-2"></div>
+    <div class="col-md-8">
+        <div class="panel panel-login">
+            <div class="panel-heading">
+                <div class="row">
+                    <p class="header-text">@ViewData["Title"]</p>
+                </div>
+                <hr>
+            </div>
+            <div class="mt-1">
+                <p>
+                    <a asp-page="Create" class="btn btn-outline-primary">Create New</a>
+                    <a asp-page="Index" class="btn btn-outline-dark ml-2">Refresh</a>
+                </p>
+                <table class="table table-responsive-sm table-striped table-bordered">
+                    <thead>
+                        <tr>
+                            <th>
+                                @Html.DisplayNameFor(model => model.Category[0].Code)
+                            </th>
+                            <th>
+                                @Html.DisplayNameFor(model => model.Category[0].Descr)
+                            </th>
+                            <th>
+                                @Html.DisplayNameFor(model => model.Category[0].Copny)
+                            </th>
+                            <th></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var item in Model.Category)
+                        {
+                            <tr>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.Code)
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.Descr)
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.Copny)
+                                </td>
+                                <td>
+                                    <a asp-page="./Edit" asp-route-id="@item.Id">Edit</a> |
+                                    <a asp-page="./Delete" asp-route-id="@item.Id">Delete</a>
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+@section Scripts{
+    <script>
+        $('.table').DataTable();
+    </script>
+}

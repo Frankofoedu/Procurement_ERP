@@ -1,0 +1,88 @@
+﻿@page
+@model BsslProcurement.CategorySetup.Sub.IndexModel
+
+@{
+    ViewData["Title"] = "Index";
+}
+
+    <div class="row mt-3">
+        <div class="col-1"></div>
+        <div class="col-11">
+            <div class="panel panel-login">
+                <div class="panel-heading">
+                    <div class="row">
+                        <p class="header-text">SubCategory List</p>
+                    </div>
+                    <hr>
+                </div>
+
+                <div class="mt-1">
+                    <p>
+                        <a asp-page="Create" class="btn btn-outline-primary">Create New</a>
+                        <a asp-page="Index" class="btn btn-outline-dark ml-2">Refresh</a>
+                    </p>
+                    <table class="table table-responsive-sm table-striped table-bordered">
+                        <thead>
+                            <tr>
+                                <th>
+                                    @Html.DisplayNameFor(model => model.Busline[0].CatCodes)
+                                </th>
+                                <th>
+                                    @Html.DisplayNameFor(model => model.Busline[0].Description)
+                                </th>
+                                <th>
+                                    @Html.DisplayNameFor(model => model.Busline[0].Buscode)
+                                </th>
+                                <th>
+                                    @Html.DisplayNameFor(model => model.Busline[0].Busdescr)
+                                </th>
+                                <th>
+                                    @Html.DisplayNameFor(model => model.Busline[0].Copny)
+                                </th>
+                                <th></th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (var item in Model.Busline)
+                            {
+                                <tr>
+                                    <td>
+                                        @Html.DisplayFor(modelItem => item.CatCodes)
+                                    </td>
+                                    <td>
+                                        @Html.DisplayFor(modelItem => item.Description)
+                                    </td>
+                                    <td>
+                                        @Html.DisplayFor(modelItem => item.Buscode)
+                                    </td>
+                                    <td>
+                                        @Html.DisplayFor(modelItem => item.Busdescr)
+                                    </td>
+                                    <td>
+                                        @Html.DisplayFor(modelItem => item.Copny)
+                                    </td>
+                                    <td>
+                                        <a asp-page="./Edit" asp-route-id="@item.Id">Edit</a> |
+                                        <a asp-page="./Delete" asp-route-id="@item.Id">Delete</a>
+                                    </td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+
+                </div>
+
+            </div>
+        </div>
+
+        <div class="col-md-1"></div>
+    </div>
+@section Scripts{
+    <script>
+        $(document).ready(function () {
+            $('.table').DataTable();
+
+        });
+    </script>
+
+}

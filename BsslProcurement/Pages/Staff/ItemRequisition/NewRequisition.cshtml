@@ -123,7 +123,7 @@
                             <div class="form-group">
                                 <label>PR Date : </label>
                                 @*<input class="form-control" data-date="date" data-id="Rdate" />*@
-                                <input class="form-control" data-date="date" data-id="Rdate" value=@(Model.Requisition != null ? Model.Requisition.Date.ToString() : null) />
+                                <input class="form-control" data-date="date" data-id="Rdate" value=@(Model.Requisition != null ? Model.Requisition.Date.Value.ToShortNigeriaDateString() : null) />
                                 <input asp-for="Requisition.Date" type="hidden" data-id="Rdate" />
 
                             </div>
@@ -136,7 +136,7 @@
                             <div class="form-group">
                                 <label>Expected Delivery Date : </label>
 
-                                <input class="form-control" data-date="date" data-id="Deliverydate" value=@(Model.Requisition != null ? Model.Requisition.DeliveryDate.ToString() : null) />
+                                <input class="form-control" data-date="date" data-id="Deliverydate" value=@(Model.Requisition != null ? Model.Requisition.DeliveryDate.Value.ToShortNigeriaDateString() : null) />
                                 <input type="hidden" data-id="Deliverydate" asp-for="Requisition.DeliveryDate" />
                             </div>
                         </div>
@@ -170,7 +170,9 @@
                             <div class="form-group">
                                 <label>Delivery Destination : </label>
                                 <select curDept="@(Model.Requisition != null ? Model.Requisition.RequiredAtDepartment : "")"
-                                        asp-for="Requisition.RequiredAtDepartment" class="form-control departmentInput" ></select>
+                                        asp-for="Requisition.RequiredAtDepartment" class="form-control departmentInput" >
+                                    <option value="">--Select a Department--</option>
+                                </select>
                             </div>
                         </div>
 
@@ -202,6 +204,7 @@
 
                                             <tr class="@("row" + i)">
                                                 <td>
+                                                    <input type="hidden" value="@i" name="gridVm.Index" />
                                                     <input type="hidden" asp-for="gridVm[i].RequisitionItem.Id" />
                                                     <input type="hidden" asp-for="gridVm[i].RequisitionItem.RequisitionId" />
                                                     <input type="text" required asp-for="gridVm[i].RequisitionItem.Description" />
@@ -223,15 +226,16 @@
                                                         @if (gridItem.Attachment != null)
                                                         {
                                                             <span class="attachexist @i">
-                                                                <partial name="~/Pages/Shared/Modals/_AttachmentViewPartial.cshtml" model="gridItem.Attachment.FileName" />
-                                                                <button data-preview="@i" data-url="@gridItem.Attachment.FileName" class="btnPreviewItemAttachment">View File</button>
+                                                                @{var path = $"Attachment/{gridItem.Attachment.FileName}";}
+                                                                <partial name="~/Pages/Shared/Modals/_AttachmentViewPartial.cshtml" model="path" />
+                                                                <button data-preview="@i" data-url="@path" class="btnPreviewItemAttachment">View File</button>
                                                                 <input type="hidden" asp-for="gridVm[i].isAttachmentChanged" value="True" />
-                                                                <input type="hidden" asp-for="gridVm[i].AttachmentId" />
                                                                 <label class="del ml-1 @i" title="Delete Attachment" onclick="deleteAttachment(@i);">
                                                                     <i class="fa fa-trash-alt"></i>
                                                                 </label>
                                                             </span>
                                                             <span hidden class="attachnoexist @i">
+                                                                <input type="hidden" asp-for="gridVm[i].AttachmentId" />
                                                                 <input asp-for="gridVm[i].Attachment" data-attachment="@i" accept=".pdf" class="fileItem" />
                                                                 <button data-preview="@i" class="btnPreviewItemAttachment">Preview</button>
                                                             </span>
@@ -261,6 +265,7 @@
                                     {
                                         <tr class="row0">
                                             <td>
+                                                <input type="hidden" value="0" name="gridVm.Index" />
                                                 <input type="text" required asp-for="gridVm[0].RequisitionItem.Description" />
                                             </td>
                                             <td>
@@ -438,12 +443,9 @@
                         </div>
 
                         <div class="d-flex justify-content-around no-print">
-                            @*  <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>*@
-                            @if (!Model.IsRejected)
-                            {
-                                <input id="btnSave" class="btn btn-lg btn-outline-info float-left" asp-page-handler="Save" value="Save as Draft" asp-route-id="@((Model.Requisition != null) ? Model.Requisition.Id : (int?)null)" type="submit" placeholder="" />
+                            <input id="btnSave" class="btn btn-lg btn-outline-info float-left" asp-page-handler="Save" value="Save as Draft" asp-route-id="@((Model.Requisition != null) ? Model.Requisition.Id : (int?)null)" type="submit" placeholder="" />
                                 
-                            }
+                           
                             <button type="button" class="btn btn-lg btn-primary" data-toggle="modal" data-target="#approverModal">Send to Next Process</button>
                             @if (Model.Requisition != null)
                             {
@@ -1030,35 +1032,36 @@
 
 
         function newStepRow(index) {
-            var html = `<tr class="row${index}">
-                            <td>
-                                <input type="text" required="" id="gridVm_${index}__RequisitionItem_Description" name="gridVm[${index}].RequisitionItem.Description" value="">
-                                                        </td>
-                                <td>
-                                    <input type="number" required="" oninput="this.value=this.value.replace(/[^0-9]/g,'');" data-val="true" data-val-required="The Quantity field is required." id="gridVm_${index}__RequisitionItem_Quantity" name="gridVm[${index}].RequisitionItem.Quantity" value="">
-
-                                                        </td>
-                                    <td>
-                                        <div class="d-flex flex-row">
-                                            <input type="text" readonly="" required="" data-value="forUOM ${index}" id="gridVm_${index}__RequisitionItem_UnitOfMeasurement" name="gridVm[${index}].RequisitionItem.UnitOfMeasurement" value="">
-
-                                                <button class="btn loadUOMModal ml-1" value="forUOM ${index}" data-toggle="modal" data-target="#uomModal"><i class="fa fa-search"></i></button>
-                                                            </div>
-                                                        </td>
-                                        <td>
-                                            <div class="d-flex flex-row">
-                                                <input data-attachment="${index}" accept=".pdf" class="fileItem" type="file" id="gridVm_${index}__Attachment" name="gridVm[${index}].Attachment">
-                                                    <button data-preview="${index}" hidden="" class="btnPreviewItemAttachment">Preview</button>
-                                                    <button data-remove="${index}" hidden class="btnRemoveFile btn btn-outline-danger"><i class="fa fa-times"></i></button>
-                                                            </div>
-                                                        </td>
+            var html =`<tr class="row${index}">
                                             <td>
-                                                <label class="del" delRow="${index}">
+                                                <input type="hidden" value="${index}" name="gridVm.Index">
+                                                <input type="text" required="" id="gridVm_${index}__RequisitionItem_Description" name="gridVm[${index}].RequisitionItem.Description" value="">
+                                            </td>
+                                            <td>
+                                                <input type="number" required="" oninput="this.value=this.value.replace(/[^${index}-9]/g,'');" data-val="true" data-val-required="The Quantity field is required." id="gridVm_${index}__RequisitionItem_Quantity" name="gridVm[${index}].RequisitionItem.Quantity" value="">
+
+                                            </td>
+                                            <td>
+                                                <div class="d-flex flex-row">
+                                                    <input type="text" readonly="" required="" data-value="forUOM ${index}" id="gridVm_${index}__RequisitionItem_UnitOfMeasurement" name="gridVm[${index}].RequisitionItem.UnitOfMeasurement" value="">
+
+                                                    <button class="btn loadUOMModal ml-1" value="forUOM ${index}" data-toggle="modal" data-target="#uomModal"><i class="fa fa-search"></i></button>
+                                                </div>
+                                            </td>
+                                            <td>
+                                                <div class="d-flex flex-row">
+                                                    <input data-attachment="${index}" accept=".pdf" class="fileItem" type="file" id="gridVm_${index}__Attachment" name="gridVm[${index}].Attachment">
+                                                    <button data-preview="${index}" hidden="" class="btnPreviewItemAttachment">Preview</button>
+                                                    <button data-remove="${index}" hidden="" class="btnRemoveFile btn btn-outline-danger"><i class="fa fa-times"></i></button>
+                                                </div>
+                                            </td>
+                                            <td>
+                                                <label class="del" delrow="${index}">
                                                     <i class="fa fa-trash-alt"></i>
                                                 </label>
                                             </td>
 
-                                                    </tr>` ;
+                                        </tr>`;
             $('#requisitionBody').append(html);
         }
     </script>
