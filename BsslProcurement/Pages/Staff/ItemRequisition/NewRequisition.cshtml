@@ -123,7 +123,7 @@
                             <div class="form-group">
                                 <label>PR Date : </label>
                                 @*<input class="form-control" data-date="date" data-id="Rdate" />*@
-                                <input class="form-control" data-date="date" data-id="Rdate" value=@(Model.Requisition != null ? Model.Requisition.Date.ToString() : null) />
+                                <input class="form-control" data-date="date" data-id="Rdate" value=@(Model.Requisition != null ? Model.Requisition.Date.Value.ToShortNigeriaDateString() : null) />
                                 <input asp-for="Requisition.Date" type="hidden" data-id="Rdate" />
 
                             </div>
@@ -135,7 +135,7 @@
                             <div class="form-group">
                                 <label>Expected Delivery Date : </label>
 
-                                <input class="form-control" data-date="date" data-id="Deliverydate" value=@(Model.Requisition != null ? Model.Requisition.DeliveryDate.ToString() : null) />
+                                <input class="form-control" data-date="date" data-id="Deliverydate" value=@(Model.Requisition != null ? Model.Requisition.DeliveryDate.Value.ToShortNigeriaDateString() : null) />
                                 <input type="hidden" data-id="Deliverydate" asp-for="Requisition.DeliveryDate" />
                             </div>
                         </div>
