@@ -106,7 +106,7 @@ namespace BsslProcurement.Pages.Staff.ItemRequisition
         }
         public async Task<IActionResult> OnPostAsync(string returnUrl = null)
         {
-            returnUrl ??= Url.Content("~/");
+            returnUrl ??= Url.Content("~/Staff");
 
             var staffCode = WfVm.AssignedStaffCode;
             var newStage = WfVm.WorkFlowId;

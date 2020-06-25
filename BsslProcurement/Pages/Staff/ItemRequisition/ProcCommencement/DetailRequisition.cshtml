@@ -183,7 +183,7 @@ else
                                 <div class="form-group">
                                     <label>eRFx Type : </label>
                                     <select class="form-control" required asp-for="Vm.Erfx">
-                                        <option value="">Select eRFx</option>
+                                        <option value="">-- Select eRFx --</option>
                                     </select>
                                     <div id="staffErfx" hidden style="display:flex">
                                         <input class="form-control" asp-for="Vm.Erfx" readonly id="forStaffText" rows="6" placeholder="Pick Staff" />
@@ -633,8 +633,11 @@ else
             } else if (processType == "External") {
 
                 $('#Vm_Erfx').attr('hidden', false);
+                $('#Vm_Erfx').empty();
                 $('#staffErfx').attr('hidden', true);
                 $('#Vm_Erfx').append(
+                    
+                    $('<option>', { value: '', text: '-- Select Erfx--' }),
                     $('<option>', { value: 'RFQ', text: 'RFQ – Request for Quotation' }),
                     $('<option>', { value: 'RFP', text: 'RFP – Request for Proposal ' }),
                     $('<option>', { value: 'RFI', text: 'RFI – Request for Information' }),
