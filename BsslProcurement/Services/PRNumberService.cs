@@ -5,6 +5,7 @@ using DcProcurement.Contexts;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using System;
+using System.Globalization;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -67,7 +68,7 @@ namespace BsslProcurement.Services
 
             //Generate next requisition number : Pattern = itf/deptcode/deptprefix/year/serial no
             if (lastReqNo != null)
-            { nextSerialNo = (Convert.ToInt32(lastReqNo.SerialNo) + 1).ToString("00000"); }
+            { nextSerialNo = (Convert.ToInt32(lastReqNo.SerialNo, CultureInfo.InvariantCulture) + 1).ToString("00000", CultureInfo.InvariantCulture); }
             else { nextSerialNo = "00001"; }
 
 
