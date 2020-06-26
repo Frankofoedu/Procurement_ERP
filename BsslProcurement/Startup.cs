@@ -68,7 +68,7 @@ namespace BsslProcurement
 
             services.AddDbContext<ProcurementDBContext>(options => options.UseSqlServer(connection, b => b.MigrationsAssembly("BsslProcurement")).EnableSensitiveDataLogging(true));
 
-            services.AddDbContext<BSSLSYS_ITF_DEMOContext>(options => options.UseSqlServer(conn, b => b.MigrationsAssembly("BsslProcurement")));
+            services.AddDbContext<BSSLSYS_ITF_DEMOContext>(options => options.UseSqlServer(conn, b => b.MigrationsAssembly("BsslProcurement")).EnableSensitiveDataLogging(true));
 
             services.AddSingleton<IEmailSenderService, EmailSenderService>();
             services.AddScoped<IStaffLayoutViewModelService, StaffLayoutViewModelService>();
@@ -77,6 +77,7 @@ namespace BsslProcurement
             services.AddScoped<IRequisitionService, RequisitionService>();
             services.AddScoped<IProcurementService, ProcurementService>();
             services.AddScoped<IGroupManagement, GroupManagementService>();
+            services.AddScoped<IPRNumberService, PRNumberService>();
             services.AddScoped<IJobService, JobService>();
             services.AddSingleton<IRazorPagesControllerDiscovery, RazorPagesControllerDiscovery>();
             services.AddSingleton(new DynamicAuthorizationOptions { DefaultAdminUser = Constants.AdminEmail });

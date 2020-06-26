@@ -34,49 +34,45 @@ namespace BsslProcurement.Pages.Staff.ItemRequisition
         private readonly ProcurementDBContext _procContext;
         private readonly IWebHostEnvironment _environment;
         private readonly IRequisitionService _requisitionService;
+        private readonly IPRNumberService _pRNumberService;
 
 
         public string Message { get; set; }
         public string Error { get; set; }
-        [BindProperty]
-        public string PrNo { get; set; }
-        [BindProperty]
-        public bool IsRejected { get; set; }
+        public string UserCode { get; set; }
+        //public string PrNo { get; set; }
+        //public string RequestingDept { get; set; }
+        //public string RequestingDeptCode { get; set; }
+
+        //public List<SelectListItem> Departments { get; set; }
+
+
         #region Properties
         [BindProperty]
+        public bool IsRejected { get; set; }
+        [BindProperty]
         public List<ItemGridViewModel> gridVm { get; set; }
-
-        //[BindProperty]
-        //public IFormFile File { get; set; }
-
-        [BindProperty]
-        public string RequestingDept { get; set; }
-
-        [BindProperty]
-        public string RequestingDeptCode { get; set; }
-
-        [BindProperty]
-        public List<SelectListItem> Departments { get; set; }
-
         [BindProperty]
         public Requisition Requisition { get; set; }
         [BindProperty]
         public WorkFlowApproverViewModel WfVm { get; set; }
-        [BindProperty]
-        public string UserCode { get; set; }
         [BindProperty]
         public string QuarantineRemark { get; set; }
         #endregion
 
         public NewRequisitionModel(UserManager<User> userManager,
             BSSLSYS_ITF_DEMOContext bsslContext,
-            ProcurementDBContext procContext, IRequisitionService requisitionService, IWebHostEnvironment environment)
+            ProcurementDBContext procContext, 
+            IRequisitionService requisitionService, 
+            IPRNumberService pRNumberService, 
+            IWebHostEnvironment environment)
         {
             _userManager = userManager;
             _bsslContext = bsslContext;
             _procContext = procContext;
             _environment = environment;
             _requisitionService = requisitionService;
+            _pRNumberService = pRNumberService;
         }
 
         public async Task<ActionResult> OnGetAsync(int? id, string message, bool isRejected)
@@ -162,10 +158,7 @@ namespace BsslProcurement.Pages.Staff.ItemRequisition
                 await _requisitionService.SendRequisitionToNextStageAsync(Requisition.Id,
                         WfVm.AssignedStaffCode, WfVm.WorkFlowId, WfVm.Remark);
 
-                Message = "Requisition Submitted successfully";
-
-
-                return RedirectToPage(new { message = "Requisition submitted successfully" });
+                return RedirectToPage(new { message = $"Requisition submitted successfully. PR Number = '{Requisition.PRNumber}'" });
 
             }
             catch (Exception ex)
@@ -226,7 +219,7 @@ namespace BsslProcurement.Pages.Staff.ItemRequisition
                     {
                         await SaveOrSubmitRequisition(false, false);
 
-                        return RedirectToPage(new { message = "Requisition Saved" });
+                        return RedirectToPage(new { message = $"Requisition Saved. PR Number = '{Requisition.PRNumber}'" });
                     }
                 }
                 catch (Exception ex)
@@ -242,6 +235,9 @@ namespace BsslProcurement.Pages.Staff.ItemRequisition
 
         private async Task LoadData()
         {
+            //get current logged in user
+            var curUser = await GetCurrentUserAsync();
+            UserCode = curUser.UserName;
 
             //load requisition workflow
             var workflow = _procContext.WorkflowTypes.Include(c => c.Workflows).FirstOrDefault(x => x.Name == DcProcurement.Constants.RequisitionWorkflow);
@@ -250,13 +246,6 @@ namespace BsslProcurement.Pages.Staff.ItemRequisition
             {
                 WfVm = new WorkFlowApproverViewModel { WorkFlowTypeId = workflow.Id };
             }
-            //get current logged in user
-            var loggedInUserId = (await GetCurrentUserAsync()).Id;
-            UserCode = (await GetCurrentUserAsync()).UserName;
-
-
-
-            (PrNo, RequestingDeptCode, RequestingDept, Departments) = await GeneratePRNo(loggedInUserId);
         }
 
         private async Task<List<ItemGridViewModel>> LoadGridViewItemsFromRequisition(Requisition requisition, IWebHostEnvironment env)
@@ -316,20 +305,11 @@ namespace BsslProcurement.Pages.Staff.ItemRequisition
             }
             else
             {
-                while (_procContext.Requisitions.Any(m=>m.PRNumber == Requisition.PRNumber))
-                {
-                    var arr = Requisition.PRNumber.Split('/');
-                    var SN = int.Parse(arr[4]);
-                    arr[4] = (SN + 1).ToString();
-
-                    Requisition.PRNumber = string.Join("/", arr);
-                }
+                Requisition.PRNumber = await _pRNumberService.GetNewPRNumberAsync(Requisition.PRNumber);
 
                 _procContext.Requisitions.Add(Requisition);
 
-                SaveRequisitionNumber(Requisition.PRNumber);
             }
-
 
             await _procContext.SaveChangesAsync();
 
@@ -362,71 +342,7 @@ namespace BsslProcurement.Pages.Staff.ItemRequisition
             return reList;
         }
 
-
-
-        private async Task<(string prNo, string requestDeptCode, string requestDept, List<SelectListItem> dept)> GeneratePRNo(string userId)
-        {
-
-            //get staff object
-            var user = await _procContext.Staffs.FirstOrDefaultAsync(m => m.Id == userId);
-
-
-            //get current user details from staff table. From the fucking staff table
-            var staff = await _bsslContext.Useracct.FirstOrDefaultAsync(x => x.Userid == user.StaffCode);
-
-            if (staff == null) throw new Exception("Staff Not Setup");
-            //get company prefix 
-            var companyCode = staff.Compcode;
-            var comp = _bsslContext.Compdata.FirstOrDefault(m => m.Compcode == companyCode);
-
-            if (comp == null) throw new Exception("No Company Prefix found");
-
-            var compPrefix = comp.Names;
-
-            var deptCode = _bsslContext.Stafftab.FirstOrDefault(st => st.Staffid == staff.Userid).Deptcode;
-
-
-
-            var Depts = _bsslContext.Codestab.Where(opt => opt.Option1 == "F5");
-
-            var Dept = Depts.FirstOrDefault(cd => cd.Code == deptCode);
-
-            var DeptPrefix = Dept.Prefixcode;
-
-            var year = DateTime.Now.Year.ToString();
-
-
-
-            //get last req no
-            var lastReqNo = _procContext.PRNos.OrderByDescending(x => x.SerialNo).FirstOrDefault(x => x.CompCode == compPrefix && x.DeptCode == deptCode && x.DeptPrefix == DeptPrefix && x.Year == year);
-            if (lastReqNo != null)
-            {
-                return ($"{compPrefix.Trim()}/{deptCode.Trim()}/{DeptPrefix.Trim()}/{year}/{(Convert.ToInt32(lastReqNo.SerialNo) + 1).ToString("00000")}", deptCode, Dept.Desc1, Depts.Select(depts => new SelectListItem { Text = depts.Desc1 }).ToList());
-
-            }
-            else
-            {
-
-                return ($"{compPrefix.Trim()}/{deptCode.Trim()}/{DeptPrefix.Trim()}/{year}/00001", deptCode, Dept.Desc1, Depts.Select(depts => new SelectListItem { Text = depts.Desc1 }).ToList());
-
-            }
-
-            //itf/deptcode/deptprefix/year/serial no
-
-
-
-        }
-
         private Task<User> GetCurrentUserAsync() => _userManager.GetUserAsync(HttpContext.User);
-
-        private void SaveRequisitionNumber(string reqNo)
-        {
-            var arr = reqNo.Split('/');
-
-            var prno = new PRNo { CompCode = arr[0], DeptCode = arr[1], DeptPrefix = arr[2], Year = arr[3], SerialNo = arr[4] };
-
-            _procContext.Add(prno);
-        }
 
 
     }

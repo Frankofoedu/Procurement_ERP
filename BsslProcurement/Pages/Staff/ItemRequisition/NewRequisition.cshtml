@@ -115,8 +115,8 @@
                         <div class="col-sm-4">
                             <div class="form-group">
                                 <label>PR No : </label>
-                                <input class="form-control" readonly asp-for="Requisition.PRNumber" value="@(Model.Requisition != null ? Model.Requisition.PRNumber :  Model.PrNo)" placeholder="" />
-
+                                <input class="form-control prnumberInput" readonly asp-for="Requisition.PRNumber" 
+                                       value="@(Model.Requisition != null ? Model.Requisition.PRNumber :  "")" placeholder="" />
                             </div>
                         </div>
                         <div class="col-sm-4">
@@ -130,6 +130,7 @@
                         </div>
 
                         <input asp-for="Requisition.DateCreated" type="hidden" />
+                        <input id="userCodeInput" value="@Model.UserCode" type="hidden" />
 
                         <div class="col-sm-4">
                             <div class="form-group">
@@ -154,9 +155,9 @@
                                         </div>
                                         <div class="col-sm-6">
                                             <div class="form-group mb-0">
-                                                <input readonly type="text" class="requesterCode form-control-sm" asp-for="Requisition.RequesterCode" value="@(Model.Requisition != null ? Model.Requisition.RequesterCode : Model.RequestingDeptCode)" />
+                                                <input readonly type="text" class="requesterCode form-control-sm" asp-for="Requisition.RequesterCode" value="@(Model.Requisition != null ? Model.Requisition.RequesterCode : "")" />
                                                 <button id="btnRequester" class="btn btn-default btn-sm"><i class="fas fa-search"></i></button>
-                                                <input class="requesterValue form-control-sm" readonly asp-for="Requisition.RequesterValue" value="@(Model.Requisition != null ? Model.Requisition.RequesterValue : Model.RequestingDept)" placeholder="Enter Department" />
+                                                <input class="requesterValue form-control-sm" readonly asp-for="Requisition.RequesterValue" value="@(Model.Requisition != null ? Model.Requisition.RequesterValue : "")" placeholder="Enter Department" />
                                             </div>
                                         </div>
                                     </div>
@@ -168,7 +169,8 @@
                         <div class="col-sm-6">
                             <div class="form-group">
                                 <label>Delivery Destination : </label>
-                                <select asp-items="Model.Departments" required asp-for="Requisition.RequiredAtDepartment" class="form-control">
+                                <select curDept="@(Model.Requisition != null ? Model.Requisition.RequiredAtDepartment : "")"
+                                        asp-for="Requisition.RequiredAtDepartment" class="form-control departmentInput" >
                                     <option value="">--Select a Department--</option>
                                 </select>
                             </div>
@@ -336,18 +338,18 @@
                                 </div>
                             </div>
                             @*<div class="custom-file-container" data-upload-id="myUniqueUploadId">
-                                    <label>
-                                        Attach Multiple Files <a href="javascript:void(0)" class="custom-file-container__image-clear"
-                                                                 title="Clear Image">&times;</a>
-                                    </label>
-                                    <label class="custom-file-container__custom-file">
-                                        <input type="file" name="files" class="custom-file-container__custom-file__custom-file-input" accept="*" multiple
-                                               aria-label="Choose File">
-                                        <input type="hidden" name="MAX_FILE_SIZE" value="10485760" />
-                                        <span class="custom-file-container__custom-file__custom-file-control"></span>
-                                    </label>
-                                    <div class="custom-file-container__image-preview"></div>
-                                </div>*@
+                <label>
+                    Attach Multiple Files <a href="javascript:void(0)" class="custom-file-container__image-clear"
+                                             title="Clear Image">&times;</a>
+                </label>
+                <label class="custom-file-container__custom-file">
+                    <input type="file" name="files" class="custom-file-container__custom-file__custom-file-input" accept="*" multiple
+                           aria-label="Choose File">
+                    <input type="hidden" name="MAX_FILE_SIZE" value="10485760" />
+                    <span class="custom-file-container__custom-file__custom-file-control"></span>
+                </label>
+                <div class="custom-file-container__image-preview"></div>
+            </div>*@
                         </div>
 
                         <div class="col-sm-6">
@@ -671,6 +673,47 @@
                 $("#remarkValidation").text("");
             }
         }
+        
+        //fils the prepared by fields
+        (function () {
+            var userCode = $('#userCodeInput').val();
+            var Url = window.location.origin + "/api/PRNumberData/" + userCode;
+            $.ajax({
+                url: Url,
+                success: function (result) {
+                    if ($(".prnumberInput").val() == '')
+                    { $(".prnumberInput").val(result['prnumber']); }
+
+                    if ($(".requesterCode").val() == '')
+                    { $(".requesterCode").val(result['requestDeptCode']); }
+
+                    if ($(".requesterValue").val() == '')
+                    { $(".requesterValue").val(result['requestDept']); }
+
+                    var curDept = $('.departmentInput').attr('curDept');
+
+                    var options = "";
+
+                    for (var i = 0; i < result['departments'].length; i++) {
+                        var item = result['departments'][i];
+
+                        if (curDept == item) {
+                            options += `<option selected>${item}</option>`;
+                        } else {
+                            options += `<option>${item}</option>`;
+                        }
+                    }
+
+                    $('.departmentInput').html(options);
+                    
+                },
+                error: function (error) {
+                    console.log(error);
+                }
+
+            })
+
+        })();
 
         //fils the prepared by fields
         (function () {
