@@ -995,7 +995,7 @@
                                                 <input type="text" required="" id="gridVm_${index}__RequisitionItem_Description" name="gridVm[${index}].RequisitionItem.Description" value="">
                                             </td>
                                             <td>
-                                                <input type="number" required="" oninput="this.value=this.value.replace(/[^${index}-9]/g,'');" data-val="true" data-val-required="The Quantity field is required." id="gridVm_${index}__RequisitionItem_Quantity" name="gridVm[${index}].RequisitionItem.Quantity" value="">
+                                                <input type="number" required="" oninput="this.value=this.value.replace(/[^0-9]/g,'');" data-val="true" data-val-required="The Quantity field is required." id="gridVm_${index}__RequisitionItem_Quantity" name="gridVm[${index}].RequisitionItem.Quantity" value="">
 
                                             </td>
                                             <td>

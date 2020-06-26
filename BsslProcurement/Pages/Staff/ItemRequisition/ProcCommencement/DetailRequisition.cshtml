@@ -246,13 +246,13 @@ else
                                                     <label class="font-weight-bold">@item.UnitOfMeasurement</label>
                                                 </td>
                                                 <td>
-                                                    <select class="form-control form-control-sm catField @($"catField{i}")" catId="@i" asp-for="ItemGridViewModels[i].RequisitionItem.CategoryCode" asp-items="Model.CategoryList">
+                                                    <select required class="form-control form-control-sm catField @($"catField{i}")" catId="@i" asp-for="ItemGridViewModels[i].RequisitionItem.CategoryCode" asp-items="Model.CategoryList">
                                                         <option value="">--Select--</option>
                                                     </select>
                                                     <input id="@($"catNameField{i}")" type="hidden" asp-for="ItemGridViewModels[i].RequisitionItem.Category" />
                                                 </td>
                                                 <td>
-                                                    <select class="form-control-sm subCatField @($"subCatField{i}")" subcatId="@i" asp-for="ItemGridViewModels[i].RequisitionItem.SubCategoryCode">
+                                                    <select required class="form-control-sm subCatField @($"subCatField{i}")" subcatId="@i" asp-for="ItemGridViewModels[i].RequisitionItem.SubCategoryCode">
                                                         <option value="">--Select--</option>
                                                     </select>
                                                     <input id="@($"subCatNameField{i}")" type="hidden" asp-for="ItemGridViewModels[i].RequisitionItem.SubCategory" />
