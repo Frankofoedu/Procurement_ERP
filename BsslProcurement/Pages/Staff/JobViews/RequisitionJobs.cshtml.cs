@@ -50,7 +50,7 @@ namespace BsslProcurement
             {
                 var user = await GetCurrentUserAsync();
 
-                RequisitionJobs = (await requisitionService.GetRequisitionsJobsAssignedToLoggedInUser(user.Id)).OrderBy(m=>m.Workflow.WorkflowActionId).ToList();
+                RequisitionJobs = await requisitionService.GetRequisitionsJobsAssignedToLoggedInUser(user.Id);
                 PreviousRequisitionJobs = new List<RequisitionJob>();
                 foreach (var item in RequisitionJobs)
                 {
@@ -79,7 +79,7 @@ namespace BsslProcurement
             {
                 var user = await GetCurrentUserAsync();
 
-                RequisitionJobs = (await requisitionService.GetRequisitionsJobsAssignedToLoggedInUser(user.Id)).OrderBy(m => m.Workflow.WorkflowActionId).ToList();
+                RequisitionJobs = await requisitionService.GetRequisitionsJobsAssignedToLoggedInUser(user.Id);
                 RequisitionWorkFlows = (await workFlowService.GetRequisitionWorkflows()).Select(
                     m => new SelectListItem()
                     {
