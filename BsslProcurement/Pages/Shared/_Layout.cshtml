@@ -23,7 +23,9 @@
                 display: none !important;
             }
 
-            @@page { size: Letter landscape; }
+            @@page {
+                size: Letter landscape;
+            }
         }
     </style>
     @RenderSection("Styles", required: false)
@@ -109,68 +111,68 @@
                         </ul>
                     </li>
                     <li is-admin-control="true">
-                            <a href="#workflowSubmenu" data-toggle="collapse" aria-expanded="true" class="dropdown-toggle">
-                                <i class="fas fa-user-alt mr-1"></i> Manage Workflow
-                            </a>
-                            <ul class="collapse list-unstyled" id="workflowSubmenu">
-                                @*<li>
-                <a asp-page="/Staff/Workflow/Prequalification"><i class="fas fa-file-archive mr-1"></i> Prequalification</a>
-            </li>*@
-                                <li>
-                                    <a asp-page="/Staff/Workflow/WorkflowSetup"><i class="fas fa-file-archive mr-1"></i> Workflow Setup</a>
-                                </li>
-                                <li>
-                                    <a asp-page="/Staff/Workflow/WorkflowActionSetup"><i class="fas fa-file-archive mr-1"></i> Workflow Actions</a>
-                                </li>
-                                <li>
-                                    <a asp-page="/Staff/Workflow/WorkflowCategory"><i class="fas fa-file-archive mr-1"></i> Workflow Categories</a>
-                                </li>
-                            </ul>
-                    </li>
-                    @*<li is-admin-control="true">
-                        <a href="#criteriaSubmenu" data-toggle="collapse" aria-expanded="true" class="dropdown-toggle">
-                            <i class="fas fa-list mr-1"></i> Manage Criteria
+                        <a href="#workflowSubmenu" data-toggle="collapse" aria-expanded="true" class="dropdown-toggle">
+                            <i class="fas fa-user-alt mr-1"></i> Manage Workflow
                         </a>
-                        <ul class="collapse list-unstyled" id="criteriaSubmenu">
+                        <ul class="collapse list-unstyled" id="workflowSubmenu">
+                            @*<li>
+                                    <a asp-page="/Staff/Workflow/Prequalification"><i class="fas fa-file-archive mr-1"></i> Prequalification</a>
+                                </li>*@
                             <li>
-                                <a asp-page="/Staff/Criteria/General"><i class="fas fa-file-archive mr-1"></i> General Criteria</a>
+                                <a asp-page="/Staff/Workflow/WorkflowSetup"><i class="fas fa-file-archive mr-1"></i> Workflow Setup</a>
                             </li>
                             <li>
-                                <a asp-page="/Staff/Criteria/Category"><i class="fas fa-file-archive mr-1"></i> Category Criteria</a>
+                                <a asp-page="/Staff/Workflow/WorkflowActionSetup"><i class="fas fa-file-archive mr-1"></i> Workflow Actions</a>
                             </li>
                             <li>
-                                <a asp-page="/Staff/Criteria/SubCategory"><i class="fas fa-file-archive mr-1"></i> Sub-category Criteria</a>
-                            </li>
-                            <li>
-                                <a asp-page="/Staff/Criteria/Item"><i class="fas fa-file-archive mr-1"></i> Item Criteria</a>
+                                <a asp-page="/Staff/Workflow/WorkflowCategory"><i class="fas fa-file-archive mr-1"></i> Workflow Categories</a>
                             </li>
                         </ul>
-                    </li>*@
-                    <li is-admin-control="true">
-                            <a href="#pagesSubmenu" data-toggle="collapse" aria-expanded="true" class="dropdown-toggle">
-                                <i class="fas fa-file-alt mr-1"></i> Setup
+                    </li>
+                    @*<li is-admin-control="true">
+                            <a href="#criteriaSubmenu" data-toggle="collapse" aria-expanded="true" class="dropdown-toggle">
+                                <i class="fas fa-list mr-1"></i> Manage Criteria
                             </a>
-                            <ul class="collapse list-unstyled" id="pagesSubmenu">
+                            <ul class="collapse list-unstyled" id="criteriaSubmenu">
                                 <li>
-                                    <a asp-page="/Staff/UoM/Index"><i class="fas fa-file-invoice mr-1"></i> Unit of Measurement</a>
+                                    <a asp-page="/Staff/Criteria/General"><i class="fas fa-file-archive mr-1"></i> General Criteria</a>
                                 </li>
                                 <li>
-                                    <a asp-page="/Staff/CategorySetup/MainCategory/Index"><i class="fas fa-file-invoice mr-1"></i> Main Category</a>
+                                    <a asp-page="/Staff/Criteria/Category"><i class="fas fa-file-archive mr-1"></i> Category Criteria</a>
                                 </li>
                                 <li>
-                                    <a asp-page="/Staff/CategorySetup/SubCategory/Index"><i class="fas fa-file-invoice mr-1"></i> Sub Category</a>
+                                    <a asp-page="/Staff/Criteria/SubCategory"><i class="fas fa-file-archive mr-1"></i> Sub-category Criteria</a>
                                 </li>
                                 <li>
-                                    <a asp-page="/Staff/Administration/GroupManagement"><i class="fas fa-file-archive mr-1"></i>User Management</a>
+                                    <a asp-page="/Staff/Criteria/Item"><i class="fas fa-file-archive mr-1"></i> Item Criteria</a>
                                 </li>
-                                <li>
-                                    <a asp-page="/Staff/Administration/UserMigration"><i class="fas fa-file-invoice mr-1"></i> User Migration</a>
-                                </li>
-                                <li>
-                                    <a asp-page="/Staff/PreQSetup"><i class="fas fa-file-invoice mr-1"></i> Prequalification Setup</a>
-                                </li>
-
                             </ul>
+                        </li>*@
+                    <li is-admin-control="true">
+                        <a href="#pagesSubmenu" data-toggle="collapse" aria-expanded="true" class="dropdown-toggle">
+                            <i class="fas fa-file-alt mr-1"></i> Setup
+                        </a>
+                        <ul class="collapse list-unstyled" id="pagesSubmenu">
+                            <li>
+                                <a asp-page="/Staff/UoM/Index"><i class="fas fa-file-invoice mr-1"></i> Unit of Measurement</a>
+                            </li>
+                            <li>
+                                <a asp-page="/Staff/CategorySetup/MainCategory/Index"><i class="fas fa-file-invoice mr-1"></i> Main Category</a>
+                            </li>
+                            <li>
+                                <a asp-page="/Staff/CategorySetup/SubCategory/Index"><i class="fas fa-file-invoice mr-1"></i> Sub Category</a>
+                            </li>
+                            <li>
+                                <a asp-page="/Staff/Administration/GroupManagement"><i class="fas fa-file-archive mr-1"></i>User Management</a>
+                            </li>
+                            <li>
+                                <a asp-page="/Staff/Administration/UserMigration"><i class="fas fa-file-invoice mr-1"></i> User Migration</a>
+                            </li>
+                            <li>
+                                <a asp-page="/Staff/PreQSetup"><i class="fas fa-file-invoice mr-1"></i> Prequalification Setup</a>
+                            </li>
+
+                        </ul>
                     </li>
                 </ul>
             </nav>
@@ -229,17 +231,17 @@
     <script src="~/lib/DataTables/datatables.js"></script>
     <script>
         // Use datepicker on the date inputs
-        
+
       @* 1. add a date input tag e.g for a sample mydate property <input class="form-control" data-date="date" data-id="mydate" value=@(Model.mydate != null ? Model.mydate.ToString() : null) />
         2. add a hidden field for posting the form e.g < input type = "hidden" data-id="mydate" asp-for= "Requisition.mydate" />
-         
-          
-          N.B 
+
+
+          N.B
           a. the data-date="date" attribute is used by the jquery ui library to format the visible control as a date field using the GB culture
           b. the data-id="mydate" links the hidden element with the visible
           *@
 
-         
+
         $("input[data-date=date]").datepicker({
             dateFormat: "dd/mm/yy",
             minDate: new Date(),
@@ -253,10 +255,23 @@
                 var d = $(this).datepicker('getDate');
 
                 //format the date in asp format
-                var e = $.datepicker.formatDate("mm/dd/yy", d);
+                var e = $.datepicker.formatDate("dd/mm/yy", d);
+
+                var dt = new Date(); // for current date
+
+                var h = dt.getHours();
+                h = (h < 10) ? ("0" + h) : h;
+
+                var m = dt.getMinutes();
+                m = (m < 10) ? ("0" + m) : m;
+
+                var s = dt.getSeconds();
+                s = (s < 10) ? ("0" + s) : s;
+
+                datetext = `${e} ${h}:${m}:${s}`;
 
                 //set asp date field
-                hidDateField.val(e);
+                hidDateField.val(datetext);
             }
         });
         $(document).on('keydown', 'input[pattern]', function(e){
@@ -267,7 +282,7 @@
           setTimeout(function(){
             var newVal = input.val();
             if(!regex.test(newVal)){
-              input.val(oldVal); 
+              input.val(oldVal);
             }
           }, 0);
         });
