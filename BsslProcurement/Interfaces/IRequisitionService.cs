@@ -19,6 +19,7 @@ namespace BsslProcurement.Interfaces
 
         Task<WorkFlowApproverViewModel> GetCurrentWorkFlowOFRequisition(Requisition requisition);
 
+        Task DeleteRequisitionItem(int reqItemId);
         Task SendRequisitionToNextStageAsync(int requisitionId, string staffCode, int newStage, string remark);
         Task CreateInitiatorJobAsync(int requisitionId, string staffId, string remark, bool isRejected);
         Task SendRequisitionToPreviousStage(int requisitionId, string currStaffCode, string newStaffCode, int newStage, string remark);

@@ -250,7 +250,7 @@
                                                     </div>
                                                 </td>
                                                 <td>
-                                                    <label class="del" delRow="@(i)">
+                                                    <label class="del" reqId="@gridItem.RequisitionItem.Id" delRow="@(i)">
                                                         <i class="fa fa-trash-alt"></i>
                                                     </label>
                                                 </td>
@@ -1011,22 +1011,38 @@
             return false;
         });
 
-        //remove items from grid
-        function deleteItem() {
-            $('.table tr').click(function () {
-                $(this).remove();
-                return false;
-            });
-        }
 
         //delete row
         $(function () {
             $('#requisitionBody').on('click', '.del', function () {
                 //get row id
                 var curRowId = $(this).attr("delRow");
-                $('.row' + curRowId).remove();
 
-                return false;
+                var reqId = $(this).attr("reqId");
+
+                //checks if its an already saved item
+                if (reqId) {
+                    $.ajax({
+                        url: window.location.origin  + '/api/Requisition/DeleteItem/' + reqId.trim(),
+                        type: 'delete',
+                        xhrFields: {
+                            withCredentials: true
+                        },
+                        contentType: 'application/json',
+                        error: function () {
+                            alert('An Error occured while deleting item. Contact Admin...');
+                            return false;
+                        },
+                        success: function () {
+                            $('.row' + curRowId).remove();
+                            return false;
+                        },
+                    });
+                } else {
+                    $('.row' + curRowId).remove();
+                        return false;
+                }
+                
             });
         });
 

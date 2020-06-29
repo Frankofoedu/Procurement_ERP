@@ -230,6 +230,16 @@ namespace BsslProcurement.Services
         private async Task<string> GetStaffIdFromCodeAsync(string staffCode) => (await _procurementDBContext.Staffs.FirstOrDefaultAsync(x => x.StaffCode == staffCode)).Id;
         private async Task<string> GetStaffCodeFromIdAsync(string staffId) => (await _procurementDBContext.Staffs.FindAsync(staffId)).Id;
 
-      
+        public async Task DeleteRequisitionItem(int reqItemId)
+        {
+            var item = await _procurementDBContext.RequisitionItems.FirstOrDefaultAsync(x => x.Id == reqItemId);
+          
+            if (item != null)
+            {
+                _procurementDBContext.RequisitionItems.Remove(item);
+                await _procurementDBContext.SaveChangesAsync();
+            }          
+            
+        }
     }
 }
