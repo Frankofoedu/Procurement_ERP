@@ -454,6 +454,8 @@ else
     <script src="~/js/jquery.dataTables.min.js"></script>
     <script src="~/js/jquery.fancybox.pack.js"></script>
     <script>
+        var txtToAssign = "";
+        var txtRankToAssign = "";
 
         //to load staff modal
         $(function () {
@@ -464,30 +466,32 @@ else
                 $('#staffModal').modal("show");
 
                 //get staff name textbox
-                var txtToAssign = $('#' + $(this).val() + '');
+                txtToAssign = $('#' + $(this).val() + '');
                 //get staff rank textbox
+                txtRankToAssign = $('#' + $(this).val() + 'Rank');
 
-                var txtRankToAssign = $('#' + $(this).val() + 'Rank');
                 $('#grid').load(this.baseURI + '?handler=StaffPartial', function () {
                     $('#spinner').removeClass('d-flex');
                     $('#spinner').hide();
                     $('#staffTable').dataTable();
 
-                    $('.btnStaffName').on('click', function () {
-                        //assign staff name textbox
-                        txtToAssign.val($(this).val());
-
-                        //assign staff rank textbox
-                        txtRankToAssign.val($(this).attr('staffrank'));
-
-                        //$('#forStaffText').val();
-                        $('#staffModal').modal("hide");
-                        return false;
-                    });
                 });
 
                 return false;
             });
+
+            $('#staffModal').on('click', '.btnStaffName', function () {
+                //assign staff name textbox
+                txtToAssign.val($(this).val());
+
+                //assign staff rank textbox
+                txtRankToAssign.val($(this).attr('staffrank'));
+
+                //$('#forStaffText').val();
+                $('#staffModal').modal("hide");
+                return false;
+            });
+
         });
 
         $(function () {
