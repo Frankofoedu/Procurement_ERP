@@ -426,7 +426,7 @@ else
         <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable modal-lg">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h4 class="modal-title">Item Details</h4>
+                    <h4 class="modal-title">Select Supplier</h4>
                     <button type="button" class="close" data-dismiss="modal">&times;</button>
                 </div>
                 <div class="modal-body">
@@ -454,9 +454,6 @@ else
     <script src="~/js/jquery.dataTables.min.js"></script>
     <script src="~/js/jquery.fancybox.pack.js"></script>
     <script>
-        var txtToAssign = "";
-        var txtRankToAssign = "";
-
         //to load staff modal
         $(function () {
             $('.loadStaffModal').on('click', function () {
@@ -465,16 +462,10 @@ else
                 $('#spinner').show();
                 $('#staffModal').modal("show");
 
-                //get staff name textbox
-                txtToAssign = $('#' + $(this).val() + '');
-                //get staff rank textbox
-                txtRankToAssign = $('#' + $(this).val() + 'Rank');
-
                 $('#grid').load(this.baseURI + '?handler=StaffPartial', function () {
                     $('#spinner').removeClass('d-flex');
                     $('#spinner').hide();
                     $('#staffTable').dataTable();
-
                 });
 
                 return false;
@@ -482,10 +473,7 @@ else
 
             $('#staffModal').on('click', '.btnStaffName', function () {
                 //assign staff name textbox
-                txtToAssign.val($(this).val());
-
-                //assign staff rank textbox
-                txtRankToAssign.val($(this).attr('staffrank'));
+                $('#forStaffText').val($(this).val());
 
                 //$('#forStaffText').val();
                 $('#staffModal').modal("hide");
@@ -555,7 +543,6 @@ else
             $('#itemModal').on('click', '.btnItemName', function () {
                 //assign staff name textbox
                 var btn = $(this);
-                var x = index;
 
                 $(`#hiddencode${index}`).val(btn.val());
                 $(`#code${index}`).val(btn.val());
@@ -563,6 +550,20 @@ else
                 $(`#descInput${index}`).val(btn.attr('itemName'));
 
                 $('#itemModal').modal("hide");
+
+                //get last supplier
+                var Url = window.location.origin + "/api/Bsslitf/LastSupplier/" + btn.val();
+                $.ajax({
+                    url: Url,
+                    success: function (result) {
+                        //assign staff name textbox
+                        $(`.txtsupfield${index}`).val(result['accname']);
+                        $(`.txtsupinput${index}`).val(result['keyid']);
+                    },
+                    error: function (error) {
+                        console.log(error);
+                    }
+                })
                 return false;
             });
         });
