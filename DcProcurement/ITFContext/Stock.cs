@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace DcProcurement.Contexts
 {
@@ -45,5 +46,14 @@ namespace DcProcurement.Contexts
         public string Surdefacct { get; set; }
         public string Project2 { get; set; }
         public string Nonestock { get; set; }
+
+        [NotMapped]
+        public string ItemCode { get {
+                if (!string.IsNullOrWhiteSpace(TypeCode) || !string.IsNullOrWhiteSpace(Groupno) || !string.IsNullOrWhiteSpace(Stockno))
+                {
+                    return $"{TypeCode}-{Groupno}-{Stockno}";
+                }
+                return null;
+            } }
     }
 }

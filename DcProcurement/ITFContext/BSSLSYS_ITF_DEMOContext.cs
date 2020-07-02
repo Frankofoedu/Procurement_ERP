@@ -20,6 +20,7 @@ namespace DcProcurement.Contexts
         public virtual DbSet<Category> Category { get; set; }
         public virtual DbSet<Codestab> Codestab { get; set; }
         public virtual DbSet<CodestabRel> CodestabRel { get; set; }
+        public virtual DbSet<Gitab> Gitab { get; set; }
         public virtual DbSet<Joborder> Joborder { get; set; }
         public virtual DbSet<Procreq1> Procreq1 { get; set; }
         public virtual DbSet<Procreq2> Procreq2 { get; set; }
@@ -41,6 +42,247 @@ namespace DcProcurement.Contexts
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
+
+            modelBuilder.Entity<Gitab>(entity =>
+            {
+                entity.HasNoKey();
+
+                entity.ToTable("gitab");
+
+                entity.Property(e => e.Acctstore)
+                    .HasColumnName("acctstore")
+                    .HasMaxLength(50)
+                    .IsUnicode(false);
+
+                entity.Property(e => e.Acctsupplier)
+                    .HasColumnName("acctsupplier")
+                    .HasMaxLength(50)
+                    .IsUnicode(false);
+
+                entity.Property(e => e.Acperiod)
+                    .HasColumnName("ACPERIOD")
+                    .HasMaxLength(2)
+                    .IsUnicode(false);
+
+                entity.Property(e => e.Acyear)
+                    .HasColumnName("ACYEAR")
+                    .HasMaxLength(4)
+                    .IsUnicode(false);
+
+                entity.Property(e => e.Bincardno)
+                    .HasColumnName("bincardno")
+                    .HasMaxLength(10)
+                    .IsUnicode(false)
+                    .IsFixedLength();
+
+                entity.Property(e => e.Copny)
+                    .HasColumnName("copny")
+                    .HasMaxLength(10)
+                    .IsUnicode(false);
+
+                entity.Property(e => e.Datein)
+                    .HasColumnName("datein")
+                    .HasColumnType("date")
+                    .HasDefaultValueSql("(getdate())");
+
+                entity.Property(e => e.Descr)
+                    .HasColumnName("descr")
+                    .IsUnicode(false);
+
+                entity.Property(e => e.Discount)
+                    .HasColumnName("discount")
+                    .HasColumnType("decimal(10, 2)")
+                    .HasDefaultValueSql("('')");
+
+                entity.Property(e => e.Gdetail2)
+                    .HasMaxLength(15)
+                    .IsUnicode(false)
+                    .IsFixedLength();
+
+                entity.Property(e => e.Glfolio)
+                    .HasColumnName("GLFOLIO")
+                    .HasMaxLength(25)
+                    .IsUnicode(false)
+                    .IsFixedLength();
+
+                entity.Property(e => e.Groupno)
+                    .HasColumnName("groupno")
+                    .HasMaxLength(10)
+                    .IsUnicode(false)
+                    .IsFixedLength();
+
+                entity.Property(e => e.Inby)
+                    .HasColumnName("INBY")
+                    .HasMaxLength(10)
+                    .IsUnicode(false)
+                    .IsFixedLength();
+
+                entity.Property(e => e.Initiator)
+                    .HasColumnName("initiator")
+                    .HasMaxLength(10)
+                    .IsUnicode(false)
+                    .IsFixedLength();
+
+                entity.Property(e => e.Isrv)
+                    .HasColumnName("ISRV")
+                    .HasMaxLength(50)
+                    .IsUnicode(false);
+
+                entity.Property(e => e.Issuedqty)
+                    .HasColumnName("issuedqty")
+                    .HasColumnType("decimal(19, 2)");
+
+                entity.Property(e => e.Itemid)
+                    .HasColumnName("itemid")
+                    .HasMaxLength(15)
+                    .IsUnicode(false)
+                    .IsFixedLength();
+
+                entity.Property(e => e.Oldqty)
+                    .HasColumnName("oldqty")
+                    .HasColumnType("decimal(10, 2)")
+                    .HasDefaultValueSql("('')");
+
+                entity.Property(e => e.Orderdate)
+                    .HasColumnName("orderdate")
+                    .HasColumnType("datetime");
+
+                entity.Property(e => e.Orderloccode)
+                    .HasColumnName("orderloccode")
+                    .HasMaxLength(10)
+                    .IsUnicode(false)
+                    .IsFixedLength();
+
+                entity.Property(e => e.Orderno)
+                    .HasColumnName("orderno")
+                    .HasMaxLength(15)
+                    .IsUnicode(false)
+                    .IsFixedLength();
+
+                entity.Property(e => e.Orderqty)
+                    .HasColumnName("orderqty")
+                    .HasColumnType("decimal(10, 2)");
+
+                entity.Property(e => e.Ordertype)
+                    .HasColumnName("ordertype")
+                    .HasMaxLength(10)
+                    .IsUnicode(false)
+                    .IsFixedLength();
+
+                entity.Property(e => e.Pac)
+                    .HasColumnName("pac")
+                    .HasMaxLength(16)
+                    .IsUnicode(false)
+                    .IsFixedLength();
+
+                entity.Property(e => e.Pbdate)
+                    .HasColumnName("pbdate")
+                    .HasColumnType("datetime");
+
+                entity.Property(e => e.Pbno)
+                    .HasColumnName("pbno")
+                    .HasMaxLength(16)
+                    .IsUnicode(false)
+                    .IsFixedLength();
+
+                entity.Property(e => e.Pdetail)
+                    .HasColumnName("pdetail")
+                    .IsUnicode(false);
+
+                entity.Property(e => e.Preqno)
+                    .HasColumnName("preqno")
+                    .HasMaxLength(16)
+                    .IsUnicode(false)
+                    .IsFixedLength();
+
+                entity.Property(e => e.Price)
+                    .HasColumnName("price")
+                    .HasColumnType("decimal(12, 2)");
+
+                entity.Property(e => e.Qtysupplied)
+                    .HasColumnName("qtysupplied")
+                    .HasColumnType("decimal(10, 2)");
+
+                entity.Property(e => e.Sdetail2)
+                    .HasMaxLength(120)
+                    .IsUnicode(false)
+                    .IsFixedLength();
+
+                entity.Property(e => e.Serno)
+                    .HasColumnName("serno")
+                    .ValueGeneratedOnAdd();
+
+                entity.Property(e => e.Sqn)
+                    .HasColumnName("sqn")
+                    .HasColumnType("decimal(3, 0)");
+
+                entity.Property(e => e.Srv)
+                    .HasColumnName("SRV")
+                    .HasMaxLength(50)
+                    .IsUnicode(false);
+
+                entity.Property(e => e.Srvused)
+                    .HasColumnName("srvused")
+                    .HasMaxLength(1)
+                    .IsUnicode(false)
+                    .HasDefaultValueSql("('F')");
+
+                entity.Property(e => e.Stockno)
+                    .HasColumnName("stockno")
+                    .HasMaxLength(10)
+                    .IsUnicode(false)
+                    .IsFixedLength();
+
+                entity.Property(e => e.Suppcode)
+                    .IsRequired()
+                    .HasColumnName("suppcode")
+                    .HasMaxLength(10)
+                    .IsUnicode(false)
+                    .IsFixedLength();
+
+                entity.Property(e => e.Tos)
+                    .HasColumnName("tos")
+                    .HasMaxLength(3)
+                    .IsUnicode(false)
+                    .IsFixedLength();
+
+                entity.Property(e => e.Unitprice)
+                    .HasColumnName("unitprice")
+                    .HasColumnType("decimal(12, 2)");
+
+                entity.Property(e => e.Uofm)
+                    .HasColumnName("uofm")
+                    .HasMaxLength(10)
+                    .IsUnicode(false)
+                    .IsFixedLength();
+
+                entity.Property(e => e.VNumber)
+                    .HasColumnName("v_number")
+                    .HasMaxLength(10)
+                    .IsUnicode(false)
+                    .IsFixedLength();
+
+                entity.Property(e => e.VType)
+                    .HasColumnName("v_type")
+                    .HasMaxLength(25)
+                    .IsUnicode(false)
+                    .IsFixedLength();
+
+                entity.Property(e => e.Vat)
+                    .HasColumnName("vat")
+                    .HasColumnType("decimal(10, 2)")
+                    .HasDefaultValueSql("('')");
+
+                entity.Property(e => e.Warehouse)
+                    .HasColumnName("warehouse")
+                    .HasMaxLength(50)
+                    .IsUnicode(false);
+
+                entity.Property(e => e.Zcopny)
+                    .HasColumnName("zcopny")
+                    .HasMaxLength(10)
+                    .IsUnicode(false);
+            });
 
             modelBuilder.Entity<UnitOfMeasurement>(entity =>
             {
