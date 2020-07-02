@@ -29,8 +29,46 @@ namespace BsslProcurement.Controllers.PartialViews
             return new PartialViewResult
             {
                 ViewName = "Modals/_ItemLayout",
-                ViewData = new ViewDataDictionary<List<DcProcurement.Contexts.Stock>>(ViewData, items)
+                ViewData = new ViewDataDictionary<List<DcProcurement.Contexts.Stock>>(ViewData, items.Distinct( new StockComparer()).ToList())
             };
+        }
+    }
+
+    // Custom comparer for the Product class
+    class StockComparer : IEqualityComparer<Stock>
+    {
+        // Products are equal if their names and product numbers are equal.
+        public bool Equals(Stock x, Stock y)
+        {
+
+            //Check whether the compared objects reference the same data.
+            if (Object.ReferenceEquals(x, y)) return true;
+
+            //Check whether any of the compared objects is null.
+            if (Object.ReferenceEquals(x, null) || Object.ReferenceEquals(y, null))
+                return false;
+
+            //Check whether the products' properties are equal.
+            return x.TypeCode == y.TypeCode && x.Groupno == y.Groupno && x.Stockno == y.Stockno;
+        }
+
+        // If Equals() returns true for a pair of objects
+        // then GetHashCode() must return the same value for these objects.
+
+        public int GetHashCode(Stock stock)
+        {
+            //Check whether the object is null
+            if (Object.ReferenceEquals(stock, null)) return 0;
+
+            //Get hash code for the Name field if it is not null.
+            int hashStockTypeCode = stock.TypeCode == null ? 0 : stock.TypeCode.GetHashCode();
+            //Get hash code for the Name field if it is not null.
+            int hashStockGroupno = stock.Groupno == null ? 0 : stock.Groupno.GetHashCode();
+            //Get hash code for the Name field if it is not null.
+            int hashStockStockno = stock.Stockno == null ? 0 : stock.Groupno.GetHashCode();
+
+            //Calculate the hash code for the product.
+            return hashStockTypeCode ^ hashStockGroupno ^ hashStockStockno;
         }
     }
 }
