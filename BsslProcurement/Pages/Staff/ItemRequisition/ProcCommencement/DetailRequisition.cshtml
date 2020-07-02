@@ -172,7 +172,7 @@ else
                             <div class="col-sm-4">
                                 <div class="form-group">
                                     <label>Process Type : </label>
-                                    <select class="form-control" required onchange="getERFx(this.value);" asp-for="Vm.ProcType">
+                                    <select class="form-control" required onchange="changeERFx(this.value);" asp-for="Vm.ProcType">
                                         <option value="">Select Process Type</option>
                                         <option value="Internal">Internal</option>
                                         <option value="External">External</option>
@@ -182,14 +182,14 @@ else
                             <div class="col-sm-4">
                                 <div class="form-group">
                                     <label>eRFx Type : </label>
-                                    <select class="form-control" required asp-for="Vm.Erfx">
+                                    <input id="erfxinput" type="hidden" required  asp-for="Vm.Erfx"/>
+                                    <select id="externalErfx" class="form-control" onchange="getERFx(this.value);">
                                         <option value="">-- Select eRFx --</option>
                                     </select>
                                     <div id="staffErfx" hidden style="display:flex">
-                                        <input class="form-control" asp-for="Vm.Erfx" readonly id="forStaffText" rows="6" placeholder="Pick Staff" />
+                                        <input class="form-control" readonly id="forStaffText" placeholder="Pick Staff" />
                                         <button class="btn loadStaffModal ml-1" value="forStaffText" data-toggle="modal" data-target="#staffModal"><i class="fa fa-search"></i></button>
                                     </div>
-
                                 </div>
                             </div>
 
@@ -475,6 +475,7 @@ else
                 //assign staff name textbox
                 $('#forStaffText').val($(this).val());
 
+                getERFx($(this).val());
                 //$('#forStaffText').val();
                 $('#staffModal').modal("hide");
                 return false;
@@ -630,18 +631,17 @@ else
         })
 
 
-        function getERFx(processType) {
+        function changeERFx(processType) {
             if (processType == "Internal") {
-                $('#Vm_Erfx').attr('hidden', true);
+                $('#externalErfx').attr('hidden', true);
                 $('#staffErfx').attr('hidden', false);
 
             } else if (processType == "External") {
 
-                $('#Vm_Erfx').attr('hidden', false);
-                $('#Vm_Erfx').empty();
+                $('#externalErfx').attr('hidden', false);
+                $('#externalErfx').empty();
                 $('#staffErfx').attr('hidden', true);
-                $('#Vm_Erfx').append(
-                    
+                $('#externalErfx').append(
                     $('<option>', { value: '', text: '-- Select Erfx--' }),
                     $('<option>', { value: 'RFQ', text: 'RFQ – Request for Quotation' }),
                     $('<option>', { value: 'RFP', text: 'RFP – Request for Proposal ' }),
@@ -649,8 +649,16 @@ else
                     $('<option>', { value: 'RFT', text: 'RFT – Request for Tender' })
                 );
             }
-        }
 
+            $('#erfxinput').val("");
+            $('#forStaffText').val("");
+        }
+        
+        function getERFx(selectedValue) {
+            if (selectedValue) {
+                $('#erfxinput').val(selectedValue);
+            }
+        }
     </script>
 
 }
