@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
+using System.Globalization;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
@@ -59,6 +60,10 @@ namespace BsslProcurement.Pages.Staff.ItemRequisition
         public WorkFlowApproverViewModel WfVm { get; set; }
         [BindProperty]
         public string QuarantineRemark { get; set; }
+        [BindProperty]
+        public string PrDate { get; set; }
+        [BindProperty]
+        public string DeliveryDate { get; set; }
 
         #endregion
 
@@ -94,6 +99,9 @@ namespace BsslProcurement.Pages.Staff.ItemRequisition
                         Error = "No requisition found";
                         return Page();
                     }
+
+                    PrDate = Requisition.Date.Value.ToString("dd/MM/yyyy", CultureInfo.InvariantCulture);
+                    DeliveryDate = Requisition.DeliveryDate.Value.ToString("dd/MM/yyyy", CultureInfo.InvariantCulture);
 
                     gridVm = await LoadGridViewItemsFromRequisition(Requisition, _environment);
                 }
@@ -277,8 +285,19 @@ namespace BsslProcurement.Pages.Staff.ItemRequisition
                 throw;
             }
         }
+
         private async Task SaveOrSubmitRequisition(bool isSubmitted, bool isUpdate)
         {
+            try
+            {
+                Requisition.Date = PrDate.ToNigeriaDate();
+                Requisition.DeliveryDate = DeliveryDate.ToNigeriaDate();
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+
             //save requisition items
             Requisition.RequisitionItems = await GetRequisitionItemsFromViewModel(gridVm);
 

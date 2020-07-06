@@ -97,20 +97,6 @@
             <div>
                 <div class="">
 
-                    @*<div class=" panel">
-                            <div class="text-center mb-3">
-                                <div class="form-group mb-0">
-                                    <label class="btn btn-outline-dark pl-4">
-                                        <input class="form-check-input" type="radio" checked asp-for="Requisition.ProcurementType" value="Capital Procurement">
-                                        Capital Procurement
-                                    </label>
-                                    <label class="btn btn-outline-dark pl-4">
-                                        <input class="form-check-input" type="radio" asp-for="Requisition.ProcurementType" value="Recurrent Procurement">
-                                        Recurrent Procurement
-                                    </label>
-                                </div>
-                            </div>
-                        </div>*@
                     <div class="row p-2">
                         <div class="col-sm-4">
                             <div class="form-group">
@@ -122,10 +108,10 @@
                         <div class="col-sm-4">
                             <div class="form-group">
                                 <label>PR Date : </label>
-                                @*<input class="form-control" data-date="date" data-id="Rdate" />*@
-                                <input class="form-control" data-date="date" data-id="Rdate" value=@(Model.Requisition != null ? Model.Requisition.Date.Value.ToShortNigeriaDateString() : null) />
-                                <input asp-for="Requisition.Date" type="hidden" data-id="Rdate" />
 
+                                <input class="form-control" data-date="date" required data-id="Rdate" value=@(Model.Requisition != null ? Model.Requisition.Date.Value.ToShortNigeriaDateString() : null) />
+                                @*<input asp-for="Requisition.Date" type="hidden" data-id="Rdate" />*@
+                                <input asp-for="PrDate" type="hidden" data-id="Rdate" />
                             </div>
                         </div>
 
@@ -136,8 +122,9 @@
                             <div class="form-group">
                                 <label>Expected Delivery Date : </label>
 
-                                <input class="form-control" data-date="date" data-id="Deliverydate" value=@(Model.Requisition != null ? Model.Requisition.DeliveryDate.Value.ToShortNigeriaDateString() : null) />
-                                <input type="hidden" data-id="Deliverydate" asp-for="Requisition.DeliveryDate" />
+                                <input class="form-control" data-date="date" required data-id="Deliverydate" value=@(Model.Requisition != null ? Model.Requisition.DeliveryDate.Value.ToShortNigeriaDateString() : null) />
+                                @*<input type="hidden" data-id="Deliverydate" asp-for="Requisition.DeliveryDate" />*@
+                                <input type="hidden" data-id="Deliverydate" asp-for="DeliveryDate" />
                             </div>
                         </div>
                         <div class="col-sm-12">
