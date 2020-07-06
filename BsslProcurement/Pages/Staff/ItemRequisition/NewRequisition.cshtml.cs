@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel;
+using System.ComponentModel.DataAnnotations;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
@@ -58,6 +59,7 @@ namespace BsslProcurement.Pages.Staff.ItemRequisition
         public WorkFlowApproverViewModel WfVm { get; set; }
         [BindProperty]
         public string QuarantineRemark { get; set; }
+
         #endregion
 
         public NewRequisitionModel(UserManager<User> userManager,

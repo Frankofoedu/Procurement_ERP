@@ -18,8 +18,10 @@ namespace DcProcurement
         public string PRNumber { get; set; }
         public string ProcurementType { get; set; }
         [Required(ErrorMessage = "Select Date")]
+        [DisplayFormat(ApplyFormatInEditMode = true, DataFormatString = "{0:dd/MM/yyyy}")]
         public DateTime? Date { get; set; } = DateTime.Now;
         [Required(ErrorMessage = "Select Estimated Delivery Date")]
+        [DisplayFormat(ApplyFormatInEditMode = true, DataFormatString = "{0:dd/MM/yyyy}")]
         public DateTime? DeliveryDate { get; set; }
         [Required(ErrorMessage = "Select Requester Type")]
         public string RequesterType { get; set; }

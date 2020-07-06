@@ -115,7 +115,7 @@
                         <div class="col-sm-4">
                             <div class="form-group">
                                 <label>PR No : </label>
-                                <input class="form-control prnumberInput" readonly asp-for="Requisition.PRNumber" 
+                                <input class="form-control prnumberInput" readonly asp-for="Requisition.PRNumber"
                                        value="@(Model.Requisition != null ? Model.Requisition.PRNumber :  "")" placeholder="" />
                             </div>
                         </div>
@@ -170,7 +170,7 @@
                             <div class="form-group">
                                 <label>Delivery Destination : </label>
                                 <select curDept="@(Model.Requisition != null ? Model.Requisition.RequiredAtDepartment : "")"
-                                        asp-for="Requisition.RequiredAtDepartment" class="form-control departmentInput" >
+                                        asp-for="Requisition.RequiredAtDepartment" class="form-control departmentInput">
                                     <option value="">--Select a Department--</option>
                                 </select>
                             </div>
