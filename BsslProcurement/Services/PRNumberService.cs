@@ -62,7 +62,7 @@ namespace BsslProcurement.Services
             var DPRNarr = DashedPRno.Split('/');
 
             //get last req no
-            var lastReqNo = await _procurementDBContext.PRNos.OrderByDescending(x => x.SerialNo).
+            var lastReqNo = await _procurementDBContext.PRNos.OrderByDescending(x => x.Id).
                 FirstOrDefaultAsync(x => x.CompCode == DPRNarr[0].Trim() && x.DeptCode == DPRNarr[1].Trim() && x.DeptPrefix == DPRNarr[2].Trim() && x.Year == DPRNarr[3]);
             var nextSerialNo = "";
 
