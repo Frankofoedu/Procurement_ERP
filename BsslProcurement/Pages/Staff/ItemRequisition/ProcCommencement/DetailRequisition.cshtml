@@ -234,9 +234,8 @@ else
                                                 </td>
                                                 <td>
                                                     <div class="flex-row d-flex">
-                                                        <input type="text" class="@($"txtsupfield{i}")" />
-                                                        <input class="@($"txtsupinput{i}")" type="hidden" readonly asp-for="Requisition.RequisitionItems[i].AccustId" />
-                                                        <button class="btn loadSupplierModal" data-toggle="modal" indexClass="@i" ><i class="fa fa-search"></i></button>
+                                                        <input type="text" class="@($"txtsupfield{i}")" readonly />
+                                                        <input class="@($"txtsupinput{i}")" type="hidden" asp-for="Requisition.RequisitionItems[i].AccustId" />
                                                     </div>
                                                 </td>
                                                 <td>
@@ -422,28 +421,6 @@ else
         </div>
     </div>
 
-    <div class="modal" id="supplierModal">
-        <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable modal-lg">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h4 class="modal-title">Select Supplier</h4>
-                    <button type="button" class="close" data-dismiss="modal">&times;</button>
-                </div>
-                <div class="modal-body">
-                    <div id="suppliergrid"></div>
-                </div>
-                <div id="supplierspinner" class="d-flex justify-content-center">
-                    <div class="loader">
-                    </div>
-                </div>
-
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
-                </div>
-            </div>
-        </div>
-    </div>
-
     <input type="hidden" id="itemHiddenURL" value="@Url.Action("GetItemPartial", "Items")" />
     <input type="hidden" id="supplierHiddenURL" value="@Url.Action("GetSupplierPartial", "Vendor")" />
 }
@@ -565,41 +542,6 @@ else
                         console.log(error);
                     }
                 })
-                return false;
-            });
-        });
-
-        var supindex = '';
-        //loads supplier modal
-        $(function () {
-            $('.loadSupplierModal').on('click', function () {
-                $('#supplierModal').modal("show");
-
-                //get item name textbox
-                supindex = $(this).attr('indexclass');
-
-                var baseUrl = $('#supplierHiddenURL').val();
-                $('#suppliergrid').html('');
-
-                $('#suppliergrid').load(baseUrl, function () {
-                    $('#supplierspinner').removeClass('d-flex');
-                    $('#supplierspinner').hide();
-                    $('#supplierTable').dataTable();
-
-                });
-
-                return false;
-
-            });
-
-            $('#supplierModal').on('click', '.btnSupplierName', function () {
-                //assign staff name textbox
-                var btn = $(this);
-
-                $(`.txtsupfield${supindex}`).val(btn.val());
-                $(`.txtsupinput${supindex}`).val(btn.attr('itemid'));
-
-                $('#supplierModal').modal("hide");
                 return false;
             });
         });
