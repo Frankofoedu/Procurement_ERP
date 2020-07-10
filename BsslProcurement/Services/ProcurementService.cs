@@ -127,9 +127,9 @@ namespace BsslProcurement.Services
 
         public async Task<List<Requisition>> GetRequisitionsForPricingAssignedToUser(string userId)
         {
-            var t = _procurementDBContext.ProcurementJobs.Include(procJob => procJob.Requisition).ToList();
-
-            var jobs = _procurementDBContext.ProcurementJobs.Include(procJob => procJob.Requisition).Include(x => x.Workflow).Where(x => x.StaffId == userId && x.JobStatus == Enums.JobState.Open );
+            var jobs = _procurementDBContext.ProcurementJobs.Include(procJob => procJob.Requisition)
+                .ThenInclude(i=>i.RequisitionItems).Include(x => x.Workflow)
+                .Where(x => x.StaffId == userId && x.JobStatus == Enums.JobState.Open );
 
             if (jobs != null)
             {
