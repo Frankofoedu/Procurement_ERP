@@ -380,3 +380,7 @@ a[data-toggle="collapse"] {
 .ql-editor {
     min-height: 200px;
 }
+
+.main-card-min-height {
+    min-height : 93.8px;
+}
