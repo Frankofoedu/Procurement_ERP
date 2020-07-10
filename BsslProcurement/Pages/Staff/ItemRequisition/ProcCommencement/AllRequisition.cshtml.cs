@@ -36,7 +36,6 @@ namespace BsslProcurement.Pages.Staff.ItemRequisition.ProcCommencement
         public string Message { get; set; }
         public string Error { get; set; }
 
-        [BindProperty]
         public List<Requisition> Requisitions { get; set; }
 
         public List<RequisitionJob> LastRequisitionJobs { get; set; }
