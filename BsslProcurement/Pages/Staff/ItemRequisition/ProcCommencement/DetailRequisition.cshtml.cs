@@ -82,30 +82,7 @@ namespace BsslProcurement.Pages.Staff.ItemRequisition.ProcCommencement
                 try
                 {
                     //update requisition
-                    //get requisition
-                    var req = await _context.Requisitions.Include(n=>n.RequisitionItems).FirstOrDefaultAsync(m=>m.Id == ReqId);
-                    req.ProcessType = Vm.ProcType;
-                    req.ProcurementMethod = Vm.ProcMethod;
-                    req.ERFx = Vm.Erfx;
-                    req.ProcurementType = Vm.ProcurementType;
-
-                    req.ProcurementState = Enums.ProcurementState.Started;
-
-                    foreach (var item in ItemGridViewModels)
-                    {
-                        var reqItem = req.RequisitionItems.FirstOrDefault(m => m.Id == item.RequisitionItem.Id);
-
-                        if (reqItem!=null)
-                        {
-                            reqItem.StoreItemCode = item.RequisitionItem.StoreItemCode;
-                            reqItem.StoreItemDescription = item.RequisitionItem.StoreItemDescription;
-                            reqItem.Category = item.RequisitionItem.Category;
-                            reqItem.CategoryCode = item.RequisitionItem.CategoryCode;
-                            reqItem.SubCategory = item.RequisitionItem.SubCategory;
-                            reqItem.SubCategoryCode = item.RequisitionItem.SubCategoryCode;
-                        }
-                    }
-                    await _context.SaveChangesAsync();
+                    await UpdateRequisition();
 
                     //create and mark done initiator procurement job
                     await _procurementService.CreateInitiatorJobAsync(ReqId, (await GetCurrentUserAsync()).Id, WfVm.Remark);
@@ -125,6 +102,57 @@ namespace BsslProcurement.Pages.Staff.ItemRequisition.ProcCommencement
 
              await LoadData(ReqId);
             return Page();
+        }
+
+        public async Task<ActionResult> OnPostSaveAsync()
+        {
+            if (ModelState.IsValid)
+            {
+                try
+                {
+                    //update requisition
+                    await UpdateRequisition();
+
+                    Message = "Requisition Updated and Saved successfully";
+                    return RedirectToPage(new { message = Message });
+                }
+                catch (Exception ex)
+                {
+                    Error = "An error has occurred." + Environment.NewLine + ex.Message;
+                }
+
+            }
+
+            await LoadData(ReqId);
+            return Page();
+        }
+
+        private async Task UpdateRequisition()
+        {
+            var req = await _context.Requisitions.Include(n => n.RequisitionItems).FirstOrDefaultAsync(m => m.Id == ReqId);
+            req.ProcessType = Vm.ProcType;
+            req.ProcurementMethod = Vm.ProcMethod;
+            req.ERFx = Vm.Erfx;
+            req.ProcurementType = Vm.ProcurementType;
+
+            req.ProcurementState = Enums.ProcurementState.Started;
+
+            foreach (var item in ItemGridViewModels)
+            {
+                var reqItem = req.RequisitionItems.FirstOrDefault(m => m.Id == item.RequisitionItem.Id);
+
+                if (reqItem != null)
+                {
+                    reqItem.StoreItemCode = item.RequisitionItem.StoreItemCode;
+                    reqItem.StoreItemDescription = item.RequisitionItem.StoreItemDescription;
+                    reqItem.Category = item.RequisitionItem.Category;
+                    reqItem.CategoryCode = item.RequisitionItem.CategoryCode;
+                    reqItem.SubCategory = item.RequisitionItem.SubCategory;
+                    reqItem.SubCategoryCode = item.RequisitionItem.SubCategoryCode;
+                }
+            }
+
+            await _context.SaveChangesAsync();
         }
 
         private async Task LoadData(int? id)
@@ -155,20 +183,5 @@ namespace BsslProcurement.Pages.Staff.ItemRequisition.ProcCommencement
 
         private Task<User> GetCurrentUserAsync() => _userManager.GetUserAsync(HttpContext.User);
 
-
-        public PartialViewResult OnGetStaffPartial()
-        {
-
-            //get all staff and thier ranks
-            var staffs = _bsslContext.Stafftab.Select(x => new StaffLayoutModel { StaffName = x.Othernames, StaffCode = x.Staffid, Rank = null }).ToList();
-
-
-            //           var  = _bsslContext.Stafftab.ToList();
-            return new PartialViewResult
-            {
-                ViewName = "Modals/_StaffLayout",
-                ViewData = new ViewDataDictionary<List<StaffLayoutModel>>(ViewData, staffs)
-            };
-        }
     }
 }
