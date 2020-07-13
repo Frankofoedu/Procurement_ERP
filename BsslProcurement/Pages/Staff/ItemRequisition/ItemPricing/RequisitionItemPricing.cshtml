@@ -166,7 +166,7 @@ else
                             <div class="col-sm-4">
                                 <div class="form-group">
                                     <label>Procurement Method : </label>
-                                    <input class="form-control" readonly value="@Model.Requisition.ProcurementMethod" />
+                                    <input class="form-control" readonly value="@BsslProcurement.Const.ConstantVals.ProcurementMethod[int.Parse(Model.Requisition.ProcurementMethod)].Text" />
                                 </div>
                             </div>
                             <div class="col-sm-4">

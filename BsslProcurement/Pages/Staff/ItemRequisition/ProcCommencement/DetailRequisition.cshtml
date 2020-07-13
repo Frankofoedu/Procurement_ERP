@@ -185,6 +185,10 @@ else
                                     <input id="erfxinput" type="hidden" required  asp-for="Vm.Erfx"/>
                                     <select id="externalErfx" class="form-control" onchange="getERFx(this.value);">
                                         <option value="">-- Select eRFx --</option>
+                                        <option value="RFQ – Request for Quotation">RFQ – Request for Quotation</option>
+                                        <option value="RFP – Request for Proposal">RFP – Request for Proposal</option>
+                                        <option value="RFI – Request for Information">RFI – Request for Information</option>
+                                        <option value="RFT – Request for Tender">RFT – Request for Tender</option>
                                     </select>
                                     <div id="staffErfx" hidden style="display:flex">
                                         <input class="form-control" readonly id="forStaffText" placeholder="Pick Staff" />
@@ -583,15 +587,15 @@ else
             } else if (processType == "External") {
 
                 $('#externalErfx').attr('hidden', false);
-                $('#externalErfx').empty();
+                $('#externalErfx').val('');
                 $('#staffErfx').attr('hidden', true);
-                $('#externalErfx').append(
-                    $('<option>', { value: '', text: '-- Select Erfx--' }),
-                    $('<option>', { value: 'RFQ', text: 'RFQ – Request for Quotation' }),
-                    $('<option>', { value: 'RFP', text: 'RFP – Request for Proposal ' }),
-                    $('<option>', { value: 'RFI', text: 'RFI – Request for Information' }),
-                    $('<option>', { value: 'RFT', text: 'RFT – Request for Tender' })
-                );
+                //$('#externalErfx').append(
+                //    $('<option>', { value: '', text: '-- Select Erfx--' }),
+                //    $('<option>', { value: 'RFQ', text: 'RFQ – Request for Quotation' }),
+                //    $('<option>', { value: 'RFP', text: 'RFP – Request for Proposal ' }),
+                //    $('<option>', { value: 'RFI', text: 'RFI – Request for Information' }),
+                //    $('<option>', { value: 'RFT', text: 'RFT – Request for Tender' })
+                //);
             }
 
             $('#erfxinput').val("");
