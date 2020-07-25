@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.IO;
 using System.Threading.Tasks;
 using BsslProcurement.Interfaces;
 using BsslProcurement.ViewModels;
@@ -8,6 +9,7 @@ using DcProcurement;
 using DcProcurement.Users;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Hosting;
 
 namespace BsslProcurement.Controllers.API
 {
@@ -16,8 +18,8 @@ namespace BsslProcurement.Controllers.API
     public class GroupsController : ControllerBase
     {
         private readonly IGroupManagement _groupManagement;
-        private readonly IWebHostEnviroment _env;
-        public GroupsController(IGroupManagement groupManagement, IWebHostEnviroment env)
+        private readonly IWebHostEnvironment _env;
+        public GroupsController(IGroupManagement groupManagement, IWebHostEnvironment env)
         {
         _env=env;
             _groupManagement = groupManagement;
