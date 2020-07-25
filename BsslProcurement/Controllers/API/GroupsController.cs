@@ -16,8 +16,10 @@ namespace BsslProcurement.Controllers.API
     public class GroupsController : ControllerBase
     {
         private readonly IGroupManagement _groupManagement;
-        public GroupsController(IGroupManagement groupManagement)
+        private readonly IWebHostEnviroment _env;
+        public GroupsController(IGroupManagement groupManagement, IWebHostEnviroment env)
         {
+        _env=env;
             _groupManagement = groupManagement;
         }
         [HttpGet("GetAllGroups")]
@@ -63,6 +65,70 @@ namespace BsslProcurement.Controllers.API
                 return StatusCode(StatusCodes.Status500InternalServerError, $"An error occurred: {ex.Message}");
             }
 
+
+        }
+        
+        [HttpPost("GetPrediction")]
+        public async Task<ActionResult> GetPredictionAsync([FromForm] string page, [FromForm] IFormFile audioFile)
+        {
+            try
+            {
+                var modelPath = "";
+                if (page == "Home")
+                {
+                    modelPath = Path.Combine(_env.ContentRootPath, "data", "MLModelHome.zip");
+                }
+                else if (page == "cart")
+                {
+                    modelPath = Path.Combine(_env.ContentRootPath, "data", "MLModelCartPage.zip");
+                }
+                else if (page == "singleItem")
+                {
+                    modelPath = Path.Combine(_env.ContentRootPath, "data", "MLModelSingleItemPage.zip");
+                }
+                else if (page == "category")
+                {
+                    modelPath = Path.Combine(_env.ContentRootPath, "data", "MLModelCategory.zip");
+                }
+                else if (page == "pay")
+                {
+                    //var v = @"C:\Users\Frank\source\repos\YorubaModelML\YorubaPredictionAPI\Models\MLModelPayPage.zip";
+                    modelPath = Path.Combine(_env.ContentRootPath, "data", "MLModelPayPage.zip");
+                }
+
+
+
+                var model = new ConsumeModel(modelPath);
+
+                var uploadPath = Path.Combine(_env.ContentRootPath, "uploads");
+                Directory.CreateDirectory(uploadPath);
+
+                if (audioFile.Length > 0)
+                {
+                    var filePath = Path.Combine(uploadPath, audioFile.FileName);
+
+                    using (var fs = new FileStream(filePath, FileMode.Create))
+                    {
+                        await audioFile.CopyToAsync(fs);
+                    }
+
+                    var md = new ModelInput { ImageSource = filePath };
+
+                    var result = model.Predict(md);
+                    Directory.Delete(uploadPath, true);
+                    return Ok(new { q = result.Prediction, p = result.Score.Max() });
+                    //return Ok(_env.ContentRootPath);
+
+                }
+
+                return BadRequest();
+            }
+            catch (Exception ex)
+            {
+
+                return BadRequest(ex);
+            }
+            
 
         }
 
