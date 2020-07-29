@@ -195,6 +195,8 @@ else
                                             <th class="text-center">Subcategory</th>
                                             <th class="text-center">Unit Price</th>
                                             <th class="text-center">Quantity </th>
+                                            <th class="text-center">Currency</th>
+                                            <th class="text-center">Currency Rate</th>
                                             <th class="text-center">Amount</th>
 
                                         </tr>
@@ -204,43 +206,57 @@ else
                                         {
                                             var item = Model.Requisition.RequisitionItems[i];
 
-                                            <tr class="">
+                                        <tr class="">
 
-                                                <td class="">
-                                                    <label>@(i + 1)</label>
-                                                </td>
+                                            <td class="">
+                                                <label>@(i + 1)</label>
+                                            </td>
 
-                                                <td>
-                                                    @item.StoreItemCode"
-                                                </td>
-                                                <td>
-                                                    @(string.IsNullOrWhiteSpace(item.StoreItemDescription) ? item.Description : item.StoreItemDescription)
-                                                </td>
-                                                <td>
-                                                    @item.UnitOfMeasurement
-                                                </td>
-                                                <td>
-                                                    @item.Category
-                                                </td>
-                                                <td>
-                                                    @item.SubCategory
-                                                </td>
-                                                <td>
-                                                    <input class="text-right" data-type="unitPrice @i" type="number" onkeyup="Sum(@i);" asp-for="Requisition.RequisitionItems[i].UnitPrice" value="@item.UnitPrice" />
-                                                </td>
-                                                <td>
-                                                    <input class="text-right" data-type="quantity @i" type="number" onkeyup="Sum(@i);" required asp-for="Requisition.RequisitionItems[i].Quantity" value="@item.Quantity" />
-                                                </td>
-                                                <td>
-                                                    <input class="text-right" data-type="amount @i" type="number" asp-for="Requisition.RequisitionItems[i].Amount" />
-                                                </td>
-                                            </tr>
+                                            <td>
+                                                @item.StoreItemCode"
+                                            </td>
+                                            <td>
+                                                @(string.IsNullOrWhiteSpace(item.StoreItemDescription) ? item.Description : item.StoreItemDescription)
+                                            </td>
+                                            <td>
+                                                @item.UnitOfMeasurement
+                                            </td>
+                                            <td>
+                                                @item.Category
+                                            </td>
+                                            <td>
+                                                @item.SubCategory
+                                            </td>
+                                            <td>
+                                                <input class="text-right form-control-sm" data-type="unitPrice @i" type="number" oninput="Sum(@i);" required asp-for="Requisition.RequisitionItems[i].UnitPrice" value="@item.UnitPrice" />
+                                            </td>
+                                            <td>
+                                                <input class="text-right form-control-sm" data-type="quantity @i" type="number" oninput="Sum(@i);" readonly asp-for="Requisition.RequisitionItems[i].Quantity" value="@item.Quantity" />
+                                            </td>
+                                            <td>
+                                                <select class="form-control-sm currency" data-type="currency @i" required index="@i">
+                                                    <option value="" rate="0" symbol="0">--Select--</option>
+                                                    @foreach (var currency in Model.CurrencyList)
+                                                    {
+                                                        <option value="@currency.Curcode" rate="@currency.Raten" symbol="@currency.Symbol">
+                                                            @currency.Curname
+                                                        </option>
+                                                    }
+                                                </select>
+                                            </td>
+                                            <td>
+                                                <input class="text-right form-control-sm" data-type="rate @i" type="number" oninput="Sum(@i);" required value="1" />
+                                            </td>
+                                            <td>
+                                                <input class="text-right form-control-sm amount" data-type="amount @i" type="number" asp-for="Requisition.RequisitionItems[i].Amount" />
+                                            </td>
+                                        </tr>
 
                                         }
                                     <tfoot>
                                         <tr>
                                             <td class="font-weight-bold text-right" colspan="2">Total Amount : </td>
-                                            <td class="font-weight-bold text-left" colspan="2">@NairaFormat.GetNairaValue(Model.Requisition.RequisitionItems.Sum(x => Convert.ToInt32(x.Amount)))</td>
+                                            <td class="font-weight-bold text-left" colspan="2">₦<span id="totalAmount">0.00</span></td>
                                             <td></td>
                                         </tr>
                                     </tfoot>
@@ -344,10 +360,22 @@ else
         function Sum(index) {
             var unitPriceTextBoxValue = $('[data-type="unitPrice ' + index + '"]').first().val();
             var quantitytextBoxValue = $('[data-type="quantity ' + index + '"]').first().val();
+            var ratetextBoxValue = $('[data-type="rate ' + index + '"]').first().val();
 
             var amountTextBox = $('[data-type="amount ' + index + '"]').first();
 
-            amountTextBox.val(unitPriceTextBoxValue * quantitytextBoxValue);
+            amountTextBox.val(unitPriceTextBoxValue * quantitytextBoxValue * ratetextBoxValue);
+
+            calcTotal();
+        }
+
+        function calcTotal() {
+            var total = 0;
+            $('.amount').each(function () {
+                total = total + Number(this.value);
+            });
+
+            $('#totalAmount').text(total.toFixed(2));
         }
 
         $(document).ready(function () {
@@ -390,7 +418,15 @@ else
             var purposeValue = $("#purpose").val();
             quill.enable(false);
             quill.setText(purposeValue);
+            
+            $('select.currency').change(function () {
+                var index = $(this).attr('index');
+                var selectedOption = $(this).children("option:selected");
 
+                $('[data-type="rate ' + index + '"]').first().val(selectedOption.attr('rate'));
+
+                Sum(index);
+            });
         });
 
     </script>

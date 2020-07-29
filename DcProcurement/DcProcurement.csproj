@@ -5,13 +5,10 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Compile Remove="models\**" />
     <Compile Remove="modelTest\**" />
     <Compile Remove="testModels\**" />
-    <EmbeddedResource Remove="models\**" />
     <EmbeddedResource Remove="modelTest\**" />
     <EmbeddedResource Remove="testModels\**" />
-    <None Remove="models\**" />
     <None Remove="modelTest\**" />
     <None Remove="testModels\**" />
   </ItemGroup>

@@ -16,16 +16,18 @@ namespace DcProcurement.Contexts
         }
 
         public virtual DbSet<Accust> Accusts { get; set; }
+        public virtual DbSet<Actax> Actax { get; set; }
         public virtual DbSet<Busline> Busline { get; set; }
         public virtual DbSet<Category> Category { get; set; }
         public virtual DbSet<Codestab> Codestab { get; set; }
         public virtual DbSet<CodestabRel> CodestabRel { get; set; }
+        public virtual DbSet<Compdata> Compdata { get; set; }
+        public virtual DbSet<Curtab> Curtab { get; set; }
         public virtual DbSet<Gitab> Gitab { get; set; }
         public virtual DbSet<Joborder> Joborder { get; set; }
         public virtual DbSet<Procreq1> Procreq1 { get; set; }
         public virtual DbSet<Procreq2> Procreq2 { get; set; }
         public virtual DbSet<Useracct> Useracct { get; set; }
-        public virtual DbSet<Compdata> Compdata { get; set; }
         public virtual DbSet<Stafftab> Stafftab { get; set; }
         public virtual DbSet<Stock> Stock { get; set; }
         public virtual DbSet<UnitOfMeasurement> UnitOfMeasurements { get; set; }
@@ -1095,6 +1097,7 @@ namespace DcProcurement.Contexts
                     .HasMaxLength(10)
                     .IsUnicode(false);
             });
+
             modelBuilder.Entity<Procreq2>(entity =>
             {
                 entity.ToTable("procreq2");
@@ -1272,6 +1275,7 @@ namespace DcProcurement.Contexts
                     .HasMaxLength(10)
                     .IsUnicode(false);
             });
+
             modelBuilder.Entity<Stafftab>(entity =>
             {
                 entity.ToTable("stafftab");
@@ -1898,6 +1902,7 @@ namespace DcProcurement.Contexts
                     .HasMaxLength(10)
                     .IsUnicode(false);
             });
+
             modelBuilder.Entity<Accust>(entity =>
             {
                 entity.HasNoKey();
@@ -2146,6 +2151,105 @@ namespace DcProcurement.Contexts
                     .HasMaxLength(10)
                     .IsUnicode(false)
                     .IsFixedLength();
+            });
+
+            modelBuilder.Entity<Curtab>(entity =>
+            {
+                entity.HasNoKey();
+
+                entity.ToTable("CURTAB");
+
+                entity.Property(e => e.Curcode)
+                    .IsRequired()
+                    .HasColumnName("CURCODE")
+                    .HasMaxLength(10)
+                    .IsUnicode(false);
+
+                entity.Property(e => e.Curname)
+                    .HasColumnName("CURNAME")
+                    .HasMaxLength(250)
+                    .IsUnicode(false);
+
+                entity.Property(e => e.Exequacct)
+                    .HasColumnName("EXEQUACCT")
+                    .HasMaxLength(30)
+                    .IsUnicode(false);
+
+                entity.Property(e => e.Ratedate)
+                    .HasColumnName("RATEDATE")
+                    .HasColumnType("datetime");
+
+                entity.Property(e => e.Raten)
+                    .HasColumnName("RATEN")
+                    .HasColumnType("numeric(9, 4)");
+
+                entity.Property(e => e.Symbol)
+                    .HasColumnName("SYMBOL")
+                    .HasMaxLength(5)
+                    .IsUnicode(false);
+            });
+
+            modelBuilder.Entity<Actax>(entity =>
+            {
+                entity.HasNoKey();
+
+                entity.ToTable("ACTAX");
+
+                entity.Property(e => e.Accountid)
+                    .HasColumnName("ACCOUNTID")
+                    .HasMaxLength(20)
+                    .IsUnicode(false)
+                    .HasDefaultValueSql("('')");
+
+                entity.Property(e => e.Bankdescr)
+                    .HasColumnName("BANKDESCR")
+                    .IsUnicode(false)
+                    .HasDefaultValueSql("('')");
+
+                entity.Property(e => e.Bankid)
+                    .HasColumnName("BANKID")
+                    .HasMaxLength(20)
+                    .IsUnicode(false)
+                    .HasDefaultValueSql("('')");
+
+                entity.Property(e => e.Copny)
+                    .HasColumnName("COPNY")
+                    .HasMaxLength(10)
+                    .IsUnicode(false);
+
+                entity.Property(e => e.Intrdate)
+                    .HasColumnName("INTRDATE")
+                    .HasColumnType("datetime");
+
+                entity.Property(e => e.Paidto)
+                    .HasColumnName("PAIDTO")
+                    .HasMaxLength(55)
+                    .IsUnicode(false);
+
+                entity.Property(e => e.Taxac)
+                    .IsRequired()
+                    .HasColumnName("TAXAC")
+                    .HasMaxLength(10)
+                    .IsUnicode(false);
+
+                entity.Property(e => e.Taxcode)
+                    .IsRequired()
+                    .HasColumnName("TAXCODE")
+                    .HasMaxLength(10)
+                    .IsUnicode(false);
+
+                entity.Property(e => e.Taxdesc)
+                    .HasColumnName("TAXDESC")
+                    .HasMaxLength(55)
+                    .IsUnicode(false);
+
+                entity.Property(e => e.Taxrate)
+                    .HasColumnName("TAXRATE")
+                    .HasColumnType("numeric(6, 2)");
+
+                entity.Property(e => e.Taxtype)
+                    .HasColumnName("TAXTYPE")
+                    .HasColumnType("numeric(1, 0)");
             });
 
         }

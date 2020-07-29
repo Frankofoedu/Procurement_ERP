@@ -65,7 +65,7 @@ namespace BsslProcurement.Controllers.PartialViews
             //Get hash code for the Name field if it is not null.
             int hashStockGroupno = stock.Groupno == null ? 0 : stock.Groupno.GetHashCode();
             //Get hash code for the Name field if it is not null.
-            int hashStockStockno = stock.Stockno == null ? 0 : stock.Groupno.GetHashCode();
+            int hashStockStockno = stock.Stockno == null ? 0 : stock.Stockno.GetHashCode();
 
             //Calculate the hash code for the product.
             return hashStockTypeCode ^ hashStockGroupno ^ hashStockStockno;

@@ -116,8 +116,8 @@
                         </a>
                         <ul class="collapse list-unstyled" id="workflowSubmenu">
                             @*<li>
-                                    <a asp-page="/Staff/Workflow/Prequalification"><i class="fas fa-file-archive mr-1"></i> Prequalification</a>
-                                </li>*@
+                    <a asp-page="/Staff/Workflow/Prequalification"><i class="fas fa-file-archive mr-1"></i> Prequalification</a>
+                </li>*@
                             <li>
                                 <a asp-page="/Staff/Workflow/WorkflowSetup"><i class="fas fa-file-archive mr-1"></i> Workflow Setup</a>
                             </li>
@@ -130,24 +130,24 @@
                         </ul>
                     </li>
                     @*<li is-admin-control="true">
-                            <a href="#criteriaSubmenu" data-toggle="collapse" aria-expanded="true" class="dropdown-toggle">
-                                <i class="fas fa-list mr-1"></i> Manage Criteria
-                            </a>
-                            <ul class="collapse list-unstyled" id="criteriaSubmenu">
-                                <li>
-                                    <a asp-page="/Staff/Criteria/General"><i class="fas fa-file-archive mr-1"></i> General Criteria</a>
-                                </li>
-                                <li>
-                                    <a asp-page="/Staff/Criteria/Category"><i class="fas fa-file-archive mr-1"></i> Category Criteria</a>
-                                </li>
-                                <li>
-                                    <a asp-page="/Staff/Criteria/SubCategory"><i class="fas fa-file-archive mr-1"></i> Sub-category Criteria</a>
-                                </li>
-                                <li>
-                                    <a asp-page="/Staff/Criteria/Item"><i class="fas fa-file-archive mr-1"></i> Item Criteria</a>
-                                </li>
-                            </ul>
-                        </li>*@
+            <a href="#criteriaSubmenu" data-toggle="collapse" aria-expanded="true" class="dropdown-toggle">
+                <i class="fas fa-list mr-1"></i> Manage Criteria
+            </a>
+            <ul class="collapse list-unstyled" id="criteriaSubmenu">
+                <li>
+                    <a asp-page="/Staff/Criteria/General"><i class="fas fa-file-archive mr-1"></i> General Criteria</a>
+                </li>
+                <li>
+                    <a asp-page="/Staff/Criteria/Category"><i class="fas fa-file-archive mr-1"></i> Category Criteria</a>
+                </li>
+                <li>
+                    <a asp-page="/Staff/Criteria/SubCategory"><i class="fas fa-file-archive mr-1"></i> Sub-category Criteria</a>
+                </li>
+                <li>
+                    <a asp-page="/Staff/Criteria/Item"><i class="fas fa-file-archive mr-1"></i> Item Criteria</a>
+                </li>
+            </ul>
+        </li>*@
                     <li is-admin-control="true">
                         <a href="#pagesSubmenu" data-toggle="collapse" aria-expanded="true" class="dropdown-toggle">
                             <i class="fas fa-file-alt mr-1"></i> Setup
@@ -172,6 +172,65 @@
                                 <a asp-page="/Staff/PreQSetup"><i class="fas fa-file-invoice mr-1"></i> Prequalification Setup</a>
                             </li>
 
+                        </ul>
+                    </li>
+                    <li is-admin-control="true">
+                        <a href="#otherVendor" data-toggle="collapse" aria-expanded="true" class="dropdown-toggle">
+                            <i class="fas fa-file-alt mr-1"></i> Other Vendor Pages
+                        </a>
+                        <ul class="collapse list-unstyled" id="otherVendor">
+                            <li>
+                                <a asp-page="/Vendor/PreBidding"><i class="fas fa-file-invoice mr-1"></i> Vendor Prebidding</a>
+                            </li>
+                            <li>
+                                <a asp-page="/Vendor/Bidding"><i class="fas fa-file-invoice mr-1"></i> Vendor Bidding</a>
+                            </li>
+                        </ul>
+                    </li>
+                    <li is-admin-control="true">
+                        <a href="#otherstaff" data-toggle="collapse" aria-expanded="true" class="dropdown-toggle">
+                            <i class="fas fa-file-alt mr-1"></i> Other Staff Pages
+                        </a>
+                        <ul class="collapse list-unstyled" id="otherstaff">
+                            <li>
+                                <a asp-page="/Staff/CCSG"><i class="fas fa-file-invoice mr-1"></i> CCSG</a>
+                            </li>
+                            <li>
+                                <a asp-page="/Staff/CoC"><i class="fas fa-file-invoice mr-1"></i> COC</a>
+                            </li>
+                            <li>
+                                <a asp-page="/Staff/Item"><i class="fas fa-file-invoice mr-1"></i> Item</a>
+                            </li>
+                            <li>
+                                <a asp-page="/Staff/PreQSetup"><i class="fas fa-file-invoice mr-1"></i> Preq. Setup</a>
+                            </li>
+                            <li>
+                                <a asp-page="/Staff/ProPolicy"><i class="fas fa-file-invoice mr-1"></i> Proq. Policy</a>
+                            </li>
+                            <li>
+                                <a asp-page="/Staff/PSISS"><i class="fas fa-file-invoice mr-1"></i> PSISS</a>
+                            </li>
+                            <li>
+                                <a asp-page="/Staff/PurchaseItem"><i class="fas fa-file-invoice mr-1"></i> Purchase Item</a>
+                            </li>
+                            <li>
+                                <a asp-page="/Staff/WPSetup"><i class="fas fa-file-invoice mr-1"></i> WPSetup</a>
+                            </li>
+                            <li>
+                                <a asp-page="/Staff/Reports/Preq/PreqReport"><i class="fas fa-file-invoice mr-1"></i> Preq Report</a>
+                            </li>
+                            <li>
+                                <a asp-page="/Staff/Criteria/Category"><i class="fas fa-file-invoice mr-1"></i> Category Criteria</a>
+                            </li>
+                            <li>
+                                <a asp-page="/Staff/Criteria/General"><i class="fas fa-file-invoice mr-1"></i> General Criteria</a>
+                            </li>
+                            <li>
+                                <a asp-page="/Staff/Criteria/Item"><i class="fas fa-file-invoice mr-1"></i> Item Criteria</a>
+                            </li>
+                            <li>
+                                <a asp-page="/Staff/Criteria/SubCategory"><i class="fas fa-file-invoice mr-1"></i> SubCategory Criteria</a>
+                            </li>
                         </ul>
                     </li>
                 </ul>

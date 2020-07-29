@@ -11,6 +11,7 @@ using Microsoft.AspNetCore.Mvc.ViewFeatures;
 using BsslProcurement.ViewModels;
 using DcProcurement.Contexts;
 using BsslProcurement.Interfaces;
+using Microsoft.AspNetCore.Mvc.Rendering;
 
 namespace BsslProcurement.Pages.Staff.ItemRequisition
 {
@@ -31,6 +32,8 @@ namespace BsslProcurement.Pages.Staff.ItemRequisition
         [BindProperty]
         public WorkFlowApproverViewModel WfVm { get; set; }
 
+        public List<Curtab> CurrencyList { get; set; }
+
         private readonly DcProcurement.Contexts.BSSLSYS_ITF_DEMOContext bsslContext;
         public RequisitionItemPricingModel(ProcurementDBContext _context, DcProcurement.Contexts.BSSLSYS_ITF_DEMOContext _bsslContext, IRequisitionService requisitionService, IProcurementService procurementService)
         {
@@ -47,11 +50,11 @@ namespace BsslProcurement.Pages.Staff.ItemRequisition
             //load workflow of requisition
             WfVm = await _procurementService.GetCurrentWorkFlowOFRequisition(Requisition);
 
-
-
             VendorEmailListObj = new VendorWithEmailViewModel();
 
             VendorEmailListObj.VendorWithEmailList = VendorEmailListObj.GetVendorWithEmailList(bsslContext.Accusts.ToList());
+
+            CurrencyList = await bsslContext.Curtab.ToListAsync();
         }
         public async Task OnGet(int id)
         {

@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using BsslProcurement.Interfaces;
 using DcProcurement.Contexts;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -13,10 +14,10 @@ namespace BsslProcurement.Controllers.API
     [ApiController]
     public class BsslitfController : ControllerBase
     {
-        private readonly BSSLSYS_ITF_DEMOContext _bsslcontext;
-        public BsslitfController(BSSLSYS_ITF_DEMOContext context)
+        private readonly IBsslITFService bsslITFService;
+        public BsslitfController(IBsslITFService bsslITFService)
         {
-            _bsslcontext = context;
+            this.bsslITFService = bsslITFService;
         }
 
         [HttpGet("Subcategory/{categoryCode}")]
@@ -27,7 +28,7 @@ namespace BsslProcurement.Controllers.API
                 return BadRequest(ModelState);
             }
 
-            var subcategories = await _bsslcontext.Busline.Where(m => m.CatCodes == categoryCode).ToListAsync();
+            var subcategories = await bsslITFService.GetSubcategoriesAsync(categoryCode);
 
             return Ok(subcategories);
         }
@@ -39,22 +40,12 @@ namespace BsslProcurement.Controllers.API
             {
                 return BadRequest(ModelState);
             }
-            var arr = itemCode.Split('-');
 
-            var lastSupply = await _bsslcontext.Gitab.Where(m => m.Groupno == arr[0] + arr[1] && m.Stockno == arr[2])
-                .OrderByDescending(m=> m.Serno).FirstOrDefaultAsync();
-            if (lastSupply != null)
+            var rtn = await bsslITFService.GetLastSupplierAsync(itemCode);
+
+            if (rtn != null)
             {
-                var lastSupplier = await _bsslcontext.Accusts.Select(n=> new Accust { 
-                    Keyid = n.Keyid,
-                    Custcode = n.Custcode,
-                    Accname = n.Accname
-                }).FirstOrDefaultAsync(m => m.Custcode == lastSupply.Suppcode);
-
-                if (lastSupplier != null)
-                {
-                    return Ok(lastSupplier);
-                }
+                Ok(rtn);
             }
 
             return NotFound("Supplier not found.");
