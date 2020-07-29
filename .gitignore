@@ -346,6 +346,7 @@ healthchecksdb
 /testCbt
 /BsslProcurement/wwwroot/Attachments
 /BsslProcurement.Test
+/BsslProcurement/data
 /ramblings.txt
 /BsslProcurement/wwwroot/Attachment
 /BsslProcurement/appsettings.json
